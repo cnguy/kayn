@@ -1,4 +1,5 @@
-var request = require('request')
+const request = require('request')
+const chalk = require('chalk')
 
 import VERSIONS from './constants/versions'
 import REGIONS from './constants/regions'
@@ -17,23 +18,24 @@ class Kindred {
        return `https://${region}.api.riotgames.com/api/lol/${region}/${url}?api_key=${this.key}`
     }
     
-    _baseRequest({url, region, staticReq = false, options = {} }, cb) {
+    _baseRequest({ url, region, staticReq = false, options = {} }, cb) {
         if (!region) region = this.defaultRegion
         const proxy = (staticReq) ? 'global' : region
-
         const reqUrl = this._makeUrl(url, proxy)
-        console.log(reqUrl)
+        if (!cb) return console.log(chalk.red(
+            `error: No callback passed in for the method call regarding \`${chalk.yellow(reqUrl)}\``
+            ))
+        
         request({ url: reqUrl, qs: options }, function (error, response, body) {
             // if (error) console.log('ERROR:', error)
             console.log('statusCode:', response && response.statusCode);
             
             if (cb) return cb(error, body)
-            else console.log('ERROR: No callback passed in!')
             // console.log('body:', body);
         })
     }
 
-    _summonerRequest({endUrl, region }, cb) {
+    _summonerRequest({ endUrl, region }, cb) {
         return this._baseRequest({
             url: `v${VERSIONS['summoner']}/summoner/${endUrl}`, region
         }, cb)

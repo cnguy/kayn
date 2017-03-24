@@ -1,16 +1,16 @@
 (function (global, factory) {
     if (typeof define === "function" && define.amd) {
-        define("kindred-api", ["module", 'request'], factory);
+        define("kindred-api", ["module", 'request', 'chalk'], factory);
     } else if (typeof exports !== "undefined") {
-        factory(module, require('request'));
+        factory(module, require('request'), require('chalk'));
     } else {
         var mod = {
             exports: {}
         };
-        factory(mod, global.request);
+        factory(mod, global.request, global.chalk);
         global.kindredApi = mod.exports;
     }
-})(this, function (module, request) {
+})(this, function (module, request, chalk) {
     'use strict';
 
     function _classCallCheck(instance, Constructor) {
@@ -98,13 +98,13 @@
 
                 if (!region) region = this.defaultRegion;
                 var proxy = staticReq ? 'global' : region;
-
                 var reqUrl = this._makeUrl(url, proxy);
-                console.log(reqUrl);
+                if (!cb) return console.log(chalk.red("error: No callback passed in for the method call regarding `" + chalk.yellow(reqUrl) + "`"));
+
                 request({ url: reqUrl, qs: options }, function (error, response, body) {
                     console.log('statusCode:', response && response.statusCode);
 
-                    if (cb) return cb(error, body);else console.log('ERROR: No callback passed in!');
+                    if (cb) return cb(error, body);
                 });
             }
         }, {

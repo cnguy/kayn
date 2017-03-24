@@ -26,3 +26,5 @@ k.getSummoners({ region: 'na', names: ['caaaaaaaaaria', 'Ri chelle'] }, function
 k.getSummoners({ region: 'na', names: 'caaaaaaaaaria' }, function(err, data) {
     console.log('caaaaaaaaarIa data:', data)
 })
+
+k.getSummoners({ region: 'na', names: 'caaaaaaaaaria' })
