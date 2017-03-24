@@ -1,0 +1,59 @@
+{
+  "name": "kindred-api",
+  "description": "A wrapper",
+  "main": "index.js",
+  "jsnext:main": "src/index.js",
+  "scripts": {
+    "go": "yarn eslint && yarn build && node index.js",
+    "test": "node make test",
+    "serve": "node make serve",
+    "eslint": "node make eslint",
+    "build": "node make build",
+    "watch": "node make watch",
+    "minify": "node make minify",
+    "saucelabs": "node make saucelabs",
+    "default": "node make",
+    "prepublish": "node make"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ChauTNguyen/kindred-api.git"
+  },
+  "keywords": [
+    "javascript",
+    "es6",
+    "es2015",
+    "babel",
+    "riot api",
+    "league of legends",
+    "riot api wrapper"
+  ],
+  "devDependencies": {
+    "babel-core": "^6.21.0",
+    "babel-plugin-transform-es2015-modules-umd": "^6.18.0",
+    "babel-preset-es2015": "^6.18.0",
+    "chai": "^3.5.0",
+    "chokidar": "^1.6.1",
+    "eslint": "^3.13.0",
+    "karma": "^1.3.0",
+    "karma-babel-preprocessor": "^6.0.1",
+    "karma-coverage": "^1.1.1",
+    "karma-mocha": "^1.3.0",
+    "karma-phantomjs-launcher": "^1.0.2",
+    "karma-sauce-launcher": "^1.1.0",
+    "mkdirp": "^0.5.1",
+    "rollup": "^0.41.1",
+    "serve": "^5.0.3",
+    "sinon": "^2.1.0",
+    "sinon-chai": "^2.8.0",
+    "uglify-js": "^2.7.5",
+    "mocha": "^3.2.0",
+    "phantomjs-prebuilt": "^2.1.14"
+  },
+  "author": "Chau Nguyen (http://chautnguyen.surge.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ChauTNguyen/kindred-api/issues"
+  },
+  "homepage": "https://github.com/ChauTNguyen/kindred-api"
+}
