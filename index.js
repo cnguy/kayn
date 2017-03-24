@@ -14,15 +14,15 @@ var k = new Kindred('RGAPI-296F4E17-4CDC-46BD-A4D7-30EAAAE4D78C')
 //     // k.getChallengers('na', 'RANKED_SOLO_5x5', function())
 // })
 
-k.getMasters({ region: 'na', cb: function(err,data) {
+k.getMasters({ region: 'na' }, function(err,data) {
     if (err) console.log(err)
     console.log('got the data')
-}})
+})
 
-k.getSummoners({ region: 'na', names: ['caaaaaaaaaria', 'Ri chelle'], cb: function(err, data) {
+k.getSummoners({ region: 'na', names: ['caaaaaaaaaria', 'Ri chelle'] }, function(err, data) {
     console.log(data)
-}})
+})
 
-k.getSummoners({ region: 'na', names: 'caaaaaaaaaria', cb: function(err, data) {
+k.getSummoners({ region: 'na', names: 'caaaaaaaaaria' }, function(err, data) {
     console.log('caaaaaaaaarIa data:', data)
-}})
+})

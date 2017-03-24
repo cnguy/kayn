@@ -17,7 +17,7 @@ class Kindred {
        return `https://${region}.api.riotgames.com/api/lol/${region}/${url}?api_key=${this.key}`
     }
     
-    _baseRequest({url, region, staticReq = false, options = {}, cb}) {
+    _baseRequest({url, region, staticReq = false, options = {} }, cb) {
         if (!region) region = this.defaultRegion
         const proxy = (staticReq) ? 'global' : region
 
@@ -33,39 +33,39 @@ class Kindred {
         })
     }
 
-    _summonerRequest({endUrl, region, cb}) {
+    _summonerRequest({endUrl, region }, cb) {
         return this._baseRequest({
-            url: `v${VERSIONS['summoner']}/summoner/${endUrl}`, region, cb
-        })
+            url: `v${VERSIONS['summoner']}/summoner/${endUrl}`, region
+        }, cb)
     }
 
-    _leagueRequest({endUrl, region, options = {}, cb}) {
+    _leagueRequest({ endUrl, region, options = {} }, cb) {
         return this._baseRequest({
-            url: `v${VERSIONS['league']}/league/${endUrl}`, region, options, cb
-            })
+            url: `v${VERSIONS['league']}/league/${endUrl}`, region, options
+            }, cb)
     }
 
-    getChallengers({region, type = 'RANKED_SOLO_5x5', cb}) {
+    getChallengers({ region, type = 'RANKED_SOLO_5x5' }, cb) {
         return this._leagueRequest({
-            endUrl: 'challenger', region, options: { type }, cb
-        })
+            endUrl: 'challenger', region, options: { type }
+        }, cb)
     }
 
-    getMasters({region, type = 'RANKED_SOLO_5x5', cb}) {
+    getMasters({ region, type = 'RANKED_SOLO_5x5' }, cb) {
         return this._leagueRequest({
-            endUrl: 'master', region, options: { type }, cb
-        })
+            endUrl: 'master', region, options: { type }
+        }, cb)
     }
 
-    getSummoners({region, names, ids=null, cb}) {
+    getSummoners({region, names, ids=null}, cb) {
         if (Array.isArray(names)) {
             return this._summonerRequest({
-                endUrl: `by-name/${names.map(name => this._sanitizeName(name)).join(',')}`, cb
-            })
+                endUrl: `by-name/${names.map(name => this._sanitizeName(name)).join(',')}`
+            }, cb)
         } else if (typeof names === 'string') {
             return this._summonerRequest({
-                endUrl: `by-name/${names}`, cb
-            })
+                endUrl: `by-name/${names}`
+            }, cb)
         }
     }
 }

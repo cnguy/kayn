@@ -88,14 +88,13 @@
             }
         }, {
             key: "_baseRequest",
-            value: function _baseRequest(_ref) {
+            value: function _baseRequest(_ref, cb) {
                 var url = _ref.url,
                     region = _ref.region,
                     _ref$staticReq = _ref.staticReq,
                     staticReq = _ref$staticReq === undefined ? false : _ref$staticReq,
                     _ref$options = _ref.options,
-                    options = _ref$options === undefined ? {} : _ref$options,
-                    cb = _ref.cb;
+                    options = _ref$options === undefined ? {} : _ref$options;
 
                 if (!region) region = this.defaultRegion;
                 var proxy = staticReq ? 'global' : region;
@@ -110,73 +109,68 @@
             }
         }, {
             key: "_summonerRequest",
-            value: function _summonerRequest(_ref2) {
+            value: function _summonerRequest(_ref2, cb) {
                 var endUrl = _ref2.endUrl,
-                    region = _ref2.region,
-                    cb = _ref2.cb;
+                    region = _ref2.region;
 
                 return this._baseRequest({
-                    url: "v" + versions['summoner'] + "/summoner/" + endUrl, region: region, cb: cb
-                });
+                    url: "v" + versions['summoner'] + "/summoner/" + endUrl, region: region
+                }, cb);
             }
         }, {
             key: "_leagueRequest",
-            value: function _leagueRequest(_ref3) {
+            value: function _leagueRequest(_ref3, cb) {
                 var endUrl = _ref3.endUrl,
                     region = _ref3.region,
                     _ref3$options = _ref3.options,
-                    options = _ref3$options === undefined ? {} : _ref3$options,
-                    cb = _ref3.cb;
+                    options = _ref3$options === undefined ? {} : _ref3$options;
 
                 return this._baseRequest({
-                    url: "v" + versions['league'] + "/league/" + endUrl, region: region, options: options, cb: cb
-                });
+                    url: "v" + versions['league'] + "/league/" + endUrl, region: region, options: options
+                }, cb);
             }
         }, {
             key: "getChallengers",
-            value: function getChallengers(_ref4) {
+            value: function getChallengers(_ref4, cb) {
                 var region = _ref4.region,
                     _ref4$type = _ref4.type,
-                    type = _ref4$type === undefined ? 'RANKED_SOLO_5x5' : _ref4$type,
-                    cb = _ref4.cb;
+                    type = _ref4$type === undefined ? 'RANKED_SOLO_5x5' : _ref4$type;
 
                 return this._leagueRequest({
-                    endUrl: 'challenger', region: region, options: { type: type }, cb: cb
-                });
+                    endUrl: 'challenger', region: region, options: { type: type }
+                }, cb);
             }
         }, {
             key: "getMasters",
-            value: function getMasters(_ref5) {
+            value: function getMasters(_ref5, cb) {
                 var region = _ref5.region,
                     _ref5$type = _ref5.type,
-                    type = _ref5$type === undefined ? 'RANKED_SOLO_5x5' : _ref5$type,
-                    cb = _ref5.cb;
+                    type = _ref5$type === undefined ? 'RANKED_SOLO_5x5' : _ref5$type;
 
                 return this._leagueRequest({
-                    endUrl: 'master', region: region, options: { type: type }, cb: cb
-                });
+                    endUrl: 'master', region: region, options: { type: type }
+                }, cb);
             }
         }, {
             key: "getSummoners",
-            value: function getSummoners(_ref6) {
+            value: function getSummoners(_ref6, cb) {
                 var _this = this;
 
                 var region = _ref6.region,
                     names = _ref6.names,
                     _ref6$ids = _ref6.ids,
-                    ids = _ref6$ids === undefined ? null : _ref6$ids,
-                    cb = _ref6.cb;
+                    ids = _ref6$ids === undefined ? null : _ref6$ids;
 
                 if (Array.isArray(names)) {
                     return this._summonerRequest({
                         endUrl: "by-name/" + names.map(function (name) {
                             return _this._sanitizeName(name);
-                        }).join(','), cb: cb
-                    });
+                        }).join(',')
+                    }, cb);
                 } else if (typeof names === 'string') {
                     return this._summonerRequest({
-                        endUrl: "by-name/" + names, cb: cb
-                    });
+                        endUrl: "by-name/" + names
+                    }, cb);
                 }
             }
         }]);
