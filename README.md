@@ -56,7 +56,7 @@ me = k.getSummoners({ names: 'caaaaaaaaaria' }, printDataFn)
 
 /* Or even an array of strings. */
 var names = ['beautifulkorean', 'c9gun', 'caaaaaaaaarIa']
-var players = k.getSummoners({ names }, printDataFn)
+var players = k.getSummoners({ names: names }, printDataFn)
 
 /*
   This is to simply make a more convenient API. I don't want
