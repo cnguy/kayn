@@ -102,7 +102,18 @@
                 if (!cb) return console.log(chalk.red("error: No callback passed in for the method call regarding `" + chalk.yellow(reqUrl) + "`"));
 
                 request({ url: reqUrl, qs: options }, function (error, response, body) {
-                    console.log('statusCode:', response && response.statusCode);
+                    var statusMessage = void 0;
+                    var statusCode = response.statusCode;
+
+                    if (statusCode >= 200 && statusCode < 300) {
+                        statusMessage = chalk.green(statusCode);
+                    } else if (statusCode >= 400 && statusCode < 500) {
+                        statusMessage = chalk.red(statusCode);
+                    } else if (statusCode >= 500) {
+                        statusMessage = chalk.bold.red(statusCode);
+                    }
+
+                    console.log('status code:', response && statusMessage);
 
                     if (cb) return cb(error, body);
                 });

@@ -28,7 +28,17 @@ class Kindred {
         
         request({ url: reqUrl, qs: options }, function (error, response, body) {
             // if (error) console.log('ERROR:', error)
-            console.log('statusCode:', response && response.statusCode);
+            let statusMessage
+            const { statusCode } = response
+            if (statusCode >= 200 && statusCode < 300) {
+                statusMessage = chalk.green(statusCode)
+            } else if (statusCode >= 400 && statusCode < 500) {
+                statusMessage = chalk.red(statusCode)
+            } else if (statusCode >= 500) {
+                statusMessage = chalk.bold.red(statusCode)
+            }
+
+            console.log('status code:', response && statusMessage);
             
             if (cb) return cb(error, body)
             // console.log('body:', body);
