@@ -4,6 +4,8 @@ const chalk = require('chalk')
 import VERSIONS from './constants/versions'
 import REGIONS from './constants/regions'
 
+import checkAll from './helpers/array-checkers'
+
 class Kindred {
   constructor(key, defaultRegion = REGIONS.NORTH_AMERICA) {
     this.key = key
@@ -19,16 +21,30 @@ class Kindred {
     return `https://${region}.api.riotgames.com/api/lol/${mid}${url}?api_key=${this.key}`
   }
 
-  _baseRequest({ url, region, staticReq = false, options = {} }, cb) {
-    if (!region) region = this.defaultRegion
+  _urlHandler({ region, names, name, ids, id, options = {}, endpoints }) {
+    if (checkAll.string(names)) {
+      return this._leagueRequest({})
+    } else if (typeof names === 'string') {
+
+    } else if (checkAll.int(ids)) {
+
+    } else if (Number.isInteger(ids)) {
+
+    } else {
+
+    }
+  }
+
+  _baseRequest({ url, region = this.defaultRegion, staticReq = false, options = {} }, cb) {
     const proxy = staticReq ? 'global' : region
     const reqUrl = this._makeUrl(url, proxy, staticReq)
     console.log(reqUrl)
-    if (!cb) return console.log(
-      chalk.red(
-        `error: No callback passed in for the method call regarding \`${chalk.yellow(reqUrl)}\``
+    if (!cb)
+      console.log(
+        chalk.red(
+          `error: No callback passed in for the method call regarding \`${chalk.yellow(reqUrl)}\``
+        )
       )
-    )
 
     request({ url: reqUrl, qs: options }, function (error, response, body) {
       let statusMessage
@@ -44,11 +60,12 @@ class Kindred {
 
       console.log('status code:', response && statusMessage)
 
-      return cb(error, JSON.parse(body))
+      if (error) return cb(error)
+      else return cb(error, JSON.parse(body))
     })
   }
 
-  _staticRequest({ endUrl, region, options }, cb) {
+  _staticRequest({ endUrl, region = this.defaultRegion, options }, cb) {
     return this._baseRequest({
       url: `static-data/${region}/v${VERSIONS.STATIC_DATA}/${endUrl}`,
       staticReq: true,
@@ -72,7 +89,7 @@ class Kindred {
 
   _matchListRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
-      url: `v${VERSIONS.MATCH_LIST}/matchlist/by-summoner/${endUrl}`, options
+      url: `v${VERSIONS.MATCH_LIST}/matchlist/by-summoner/${endUrl}`, region, options
     }, cb)
   }
 
@@ -84,24 +101,50 @@ class Kindred {
 
   _logError(message, expected) {
     console.log(
-      chalk.bold.red(message), chalk.red('request'), chalk.bold.red('FAILED') + chalk.red(`; ${expected}`)
+      chalk.bold.yellow(message), chalk.red('request'), chalk.bold.red('FAILED') + chalk.red(`; ${expected}`)
     )
   }
 
-  getChallengers({ region, options = { type: 'RANKED_SOLO_5x5' } }, cb) {
-    return this._leagueRequest({
-      endUrl: 'challenger', region, options
-    }, cb)
+  getLeagues({ region, ids } = {}, cb) {
+    if (checkAll.int(ids)) {
+      return this._leagueRequest({ endUrl: `by-summoner/${ids.join(',')}`, region }, cb)
+    } else if (Number.isInteger(ids)) {
+      return this._leagueRequest({ endUrl: `by-summoner/${ids}`, region }, cb)
+    } else {
+      this._logError(
+        this.getLeagues.name,
+        'ids can be either an array of integers or a single integer'
+      )
+    }
   }
 
-  getMasters({ region, options = { type: 'RANKED_SOLO_5x5' } }, cb) {
+  getLeagueEntries({ region, ids } = {}, cb) {
+    if (checkAll.int(ids)) {
+      return this._leagueRequest({ endUrl: `by-summoner/${ids.join(',')}/entry`, region }, cb)
+    } else if (Number.isInteger(ids)) {
+      return this._leagueRequest({ endUrl: `by-summoner/${ids}/entry`, region }, cb)
+    } else {
+      this._logError(
+        this.getLeagues.name,
+        'ids can be either an array of integers or a single integer'
+      )
+    }
+  }
+
+  getChallengers({ region, options = { type: 'RANKED_SOLO_5x5' } } = {}, cb) {
+    return this._leagueRequest({
+      endUrl: 'challenger', region, options
+    }, cb = region ? cb : arguments[0])
+  }
+
+  getMasters({ region, options = { type: 'RANKED_SOLO_5x5' } } = {}, cb) {
     return this._leagueRequest({
       endUrl: 'master', region, options
     }, cb)
   }
 
-  getSummoners({ region, names, ids = null }, cb) {
-    if (Array.isArray(names) && names.length > 0) {
+  getSummoners({ region, names, ids } = {}, cb) {
+    if (checkAll.string(names)) {
       return this._summonerRequest({
         endUrl: `by-name/${names.map(name => this._sanitizeName(name)).join(',')}`,
         region
@@ -111,7 +154,7 @@ class Kindred {
         endUrl: `by-name/${names}`,
         region
       }, cb)
-    } else if (Array.isArray(ids) && ids.length > 0) {
+    } else if (checkAll.int(ids)) {
       return this._summonerRequest({
         endUrl: `${ids.join(',')}`,
         region
@@ -124,14 +167,24 @@ class Kindred {
     } else {
       this._logError(
         this.getSummoners.name,
+        !names && !ids ? 'required parameters not passed' :
         ids ?
-          'ids can be either an array or a single integer' :
-          'names can be either an array or a single string'
+          'ids can be either an array of integers or a single integer' :
+          'names can be either an array of strings or a single string'
       )
     }
   }
 
-  getNames({ region, ids }, cb) {
+  getSummoner({ region, name, id } = {}, cb) {
+    if (typeof name === 'string') return this.getSummoners({ region, names: [name] }, cb)
+    if (Number.isInteger(id)) return this.getSummoners({ region, ids: [id] }, cb)
+    return this._logError(
+      this.getSummoner.name,
+      'required parameters name or id not passed in'
+    )
+  }
+
+  getNames({ region, ids } = {}, cb) {
     if (Array.isArray(ids) && ids.length > 0) {
       return this._summonerRequest({
         endUrl: `${ids.join(',')}/name`,
@@ -147,80 +200,100 @@ class Kindred {
     }
   }
 
-  getRankedStats({ region, id, options }, cb) {
-    return this._statsRequest({
-      endUrl: `${id}/ranked`,
-      region,
-      options
-    }, cb)
+  getRankedStats({ region, id, options } = {}, cb) {
+    if (!id || !Number.isInteger(id)) return this._logError(
+      this.getRankedStats.name,
+      `required params ${chalk.yellow('`id` (int)')} not passed in`
+    )
+    return this._statsRequest({ endUrl: `${id}/ranked`, region, options }, cb)
   }
 
-  getMatchList({ region, id, options = { type: 'RANKED_SOLO_5x5' } }, cb) {
-    return this._matchListRequest({
-      endUrl: `${id}`,
-      region,
-      options
-    }, cb)
+  getMatchList({ region, id, options = { type: 'RANKED_SOLO_5x5' } } = {}, cb) {
+    if (!id || !Number.isInteger(id)) return this._logError(
+      this.getMatchList.name,
+      `required params ${chalk.yellow('`id` (int)')} not passed in`
+    )
+    return this._matchListRequest({ endUrl: `${id}`, region, options }, cb)
   }
 
-  getChampionList({ region, options }, cb)  {
-    return this._staticRequest({ endUrl: 'champion', region, options }, cb)
+  getChampionList({ region, options } = {}, cb) {
+    return this._staticRequest({ endUrl: 'champion', region, options }, cb = region || options ? cb : arguments[0])
   }
 
-  getChampion({ region, id, options }, cb) {
+  getChampion({ region, id, options } = {}, cb) {
+    if (!id || !Number.isInteger(id)) return this._logError(
+      this.getChampion.name,
+      `required params ${chalk.yellow('`id` (int)')} not passed in`
+    )
     return this._staticRequest({ endUrl: `champion/${id}`, region, options }, cb)
   }
 
-  getItems({ region, options }, cb) {
-    return this._staticRequest({ endUrl: 'item', region, options }, cb)
+  getItems({ region, options } = {}, cb) {
+    return this._staticRequest({ endUrl: 'item', region, options }, cb = region || options ? cb : arguments[0])
   }
 
-  getItem({ region, id, options }, cb) {
+  getItem({ region, id, options } = {}, cb) {
+    if (!id || !Number.isInteger(id)) return this._logError(
+      this.getItem.name,
+      `required params ${chalk.yellow('`id` (int)')} not passed in`
+    )
     return this._staticRequest({ endUrl: `item/${id}`, region, options }, cb)
   }
 
-  getLanguageStrings({ region, options }, cb) {
-    return this._staticRequest({ endUrl: 'language-strings', region, options }, cb)
+  getLanguageStrings({ region, options } = {}, cb) {
+    return this._staticRequest({ endUrl: 'language-strings', region, options }, cb = region ? cb : arguments[0])
   }
 
-  getLanguages({ region }, cb) {
-    return this._staticRequest({ endUrl: 'languages', region }, cb)
+  getLanguages({ region } = {}, cb) {
+    return this._staticRequest({ endUrl: 'languages', region }, cb = region ? cb : arguments[0])
   }
 
-  getMap({ region, options }, cb) {
-    return this._staticRequest({ endUrl: 'map', region, options }, cb)
+  getMap({ region, options } = {}, cb) {
+    return this._staticRequest({ endUrl: 'map', region, options }, cb = region || options ? cb : arguments[0])
   }
 
-  getMasteryList({ region, options }, cb) {
-    return this._staticRequest({ endUrl: 'mastery', region, options }, cb)
+  getMasteryList({ region, options } = {}, cb) {
+    return this._staticRequest({ endUrl: 'mastery', region, options }, cb = region || options ? cb : arguments[0])
   }
 
-  getMastery({ region, id, options }, cb) {
+  getMastery({ region, id, options } = {}, cb) {
+    if (!id || !Number.isInteger(id)) return this._logError(
+      this.getMastery.name,
+      `required params ${chalk.yellow('`id` (int)')} not passed in`
+    )
     return this._staticRequest({ endUrl: `mastery/${id}`, region, options }, cb)
   }
 
-  getRealm({ region }, cb) {
-    return this._staticRequest({ endUrl: 'realm', region }, cb)
+  getRealm({ region } = {}, cb) {
+    return this._staticRequest({ endUrl: 'realm', region }, cb = region ? cb : arguments[0])
   }
 
-  getRuneList({ region, options }, cb) {
-    return this._staticRequest({ endUrl: 'rune', region, options }, cb)
+  getRuneList({ region, options } = {}, cb) {
+    return this._staticRequest({ endUrl: 'rune', region, options }, cb = region || options ? cb : arguments[0])
   }
 
-  getRune({ region, id, options }, cb) {
-    return this._staticRequest({ endUrl: `rune/${rune}`, region, options }, cb)
+  getRune({ region, id, options } = {}, cb) {
+    if (!id || !Number.isInteger(id)) return this._logError(
+      this.getRune.name,
+      `required params ${chalk.yellow('`id` (int)')} not passed in`
+    )
+    return this._staticRequest({ endUrl: `rune/${id}`, region, options }, cb)
   }
 
-  getSummonerSpellsList({ region, options }, cb) {
-    return this._staticRequest({ endUrl: 'summoner-spell', region, options }, cb)
+  getSummonerSpellsList({ region, options } = {}, cb) {
+    return this._staticRequest({ endUrl: 'summoner-spell', region, options }, cb = region || options ? cb : arguments[0])
   }
 
-  getSummonerSpell({ region, id, options }, cb) {
+  getSummonerSpell({ region, id, options } = {}, cb) {
+    if (!id || !Number.isInteger(id)) return this._logError(
+      this.getSummonerSpell.name,
+      `required params ${chalk.yellow('`id` (int)')} not passed in`
+    )
     return this._staticRequest({ endUrl: 'summoner-spell/${id}', region, options }, cb)
   }
 
-  getVersions({ region, options }, cb) {
-    return this._staticRequest({ endUrl: 'versions', region, options }, cb)
+  getVersions({ region, options } = {}, cb) {
+    return this._staticRequest({ endUrl: 'versions', region, options }, cb = region || options ? cb : arguments[0])
   }
 }
 
