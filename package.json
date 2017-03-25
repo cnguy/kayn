@@ -4,10 +4,10 @@
   "main": "index.js",
   "jsnext:main": "src/index.js",
   "scripts": {
-    "go": "yarn eslint && yarn build && node index.js",
+    "go": "yarn lint && yarn build && node index.js",
     "test": "node make test",
     "serve": "node make serve",
-    "eslint": "node make eslint",
+    "lint": "node make eslint",
     "build": "node make build",
     "watch": "node make watch",
     "minify": "node make minify",

@@ -14,15 +14,16 @@ class Kindred {
     return name.replace(/\s/g, '').toLowerCase()
   }
 
-  _makeUrl(url, region) {
-    return `https://${region}.api.riotgames.com/api/lol/${region}/${url}?api_key=${this.key}`
+  _makeUrl(url, region, staticReq) {
+    const mid = staticReq ? '' : `${region}/`
+    return `https://${region}.api.riotgames.com/api/lol/${mid}${url}?api_key=${this.key}`
   }
 
   _baseRequest({ url, region, staticReq = false, options = {} }, cb) {
     if (!region) region = this.defaultRegion
     const proxy = staticReq ? 'global' : region
-    const reqUrl = this._makeUrl(url, proxy)
-
+    const reqUrl = this._makeUrl(url, proxy, staticReq)
+    console.log(reqUrl)
     if (!cb) return console.log(
       chalk.red(
         `error: No callback passed in for the method call regarding \`${chalk.yellow(reqUrl)}\``
@@ -47,15 +48,37 @@ class Kindred {
     })
   }
 
+  _staticRequest({ endUrl, region, options }, cb) {
+    return this._baseRequest({
+      url: `static-data/${region}/v${VERSIONS.STATIC_DATA}/${endUrl}`,
+      staticReq: true,
+      region,
+      options
+    }, cb)
+  }
+
+
+  _leagueRequest({ endUrl, region, options }, cb) {
+    return this._baseRequest({
+      url: `v${VERSIONS.LEAGUE}/league/${endUrl}`, region, options
+    }, cb)
+  }
+
   _summonerRequest({ endUrl, region }, cb) {
     return this._baseRequest({
       url: `v${VERSIONS.SUMMONER}/summoner/${endUrl}`, region
     }, cb)
   }
 
-  _leagueRequest({ endUrl, region, options = {} }, cb) {
+  _matchListRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
-      url: `v${VERSIONS.LEAGUE}/league/${endUrl}`, region, options
+      url: `v${VERSIONS.MATCH_LIST}/matchlist/by-summoner/${endUrl}`, options
+    }, cb)
+  }
+
+  _statsRequest({ endUrl, region }, cb) {
+    return this._baseRequest({
+      url: `v${VERSIONS.STATS}/stats/by-summoner/${endUrl}`, region
     }, cb)
   }
 
@@ -65,34 +88,38 @@ class Kindred {
     )
   }
 
-  getChallengers({ region, type = 'RANKED_SOLO_5x5' }, cb) {
+  getChallengers({ region, options = { type: 'RANKED_SOLO_5x5' } }, cb) {
     return this._leagueRequest({
-      endUrl: 'challenger', region, options: { type }
+      endUrl: 'challenger', region, options
     }, cb)
   }
 
-  getMasters({ region, type = 'RANKED_SOLO_5x5' }, cb) {
+  getMasters({ region, options = { type: 'RANKED_SOLO_5x5' } }, cb) {
     return this._leagueRequest({
-      endUrl: 'master', region, options: { type }
+      endUrl: 'master', region, options
     }, cb)
   }
 
   getSummoners({ region, names, ids = null }, cb) {
     if (Array.isArray(names) && names.length > 0) {
       return this._summonerRequest({
-        endUrl: `by-name/${names.map(name => this._sanitizeName(name)).join(',')}`
+        endUrl: `by-name/${names.map(name => this._sanitizeName(name)).join(',')}`,
+        region
       }, cb)
     } else if (typeof names === 'string') {
       return this._summonerRequest({
-        endUrl: `by-name/${names}`
+        endUrl: `by-name/${names}`,
+        region
       }, cb)
-    } else if (Array.isArray(ids)) {
+    } else if (Array.isArray(ids) && ids.length > 0) {
       return this._summonerRequest({
-        endUrl: `${ids.join(',')}`
+        endUrl: `${ids.join(',')}`,
+        region
       }, cb)
     } else if (Number.isInteger(ids)) {
       return this._summonerRequest({
-        endUrl: `${ids}`
+        endUrl: `${ids}`,
+        region
       }, cb)
     } else {
       this._logError(
@@ -104,18 +131,96 @@ class Kindred {
     }
   }
 
-  getNames({ ids }, cb) {
+  getNames({ region, ids }, cb) {
     if (Array.isArray(ids) && ids.length > 0) {
       return this._summonerRequest({
-        endUrl: `${ids.join(',')}/name`
+        endUrl: `${ids.join(',')}/name`,
+        region
       }, cb)
     } else if (Number.isInteger(ids)) {
       return this._summonerRequest({
-        endUrl: `${ids}/name`
+        endUrl: `${ids}/name`,
+        region
       }, cb)
     } else {
       this._logError(this.getNames.name, 'ids can be either an array or a single integer')
     }
+  }
+
+  getRankedStats({ region, id, options }, cb) {
+    return this._statsRequest({
+      endUrl: `${id}/ranked`,
+      region,
+      options
+    }, cb)
+  }
+
+  getMatchList({ region, id, options = { type: 'RANKED_SOLO_5x5' } }, cb) {
+    return this._matchListRequest({
+      endUrl: `${id}`,
+      region,
+      options
+    }, cb)
+  }
+
+  getChampionList({ region, options }, cb)  {
+    return this._staticRequest({ endUrl: 'champion', region, options }, cb)
+  }
+
+  getChampion({ region, id, options }, cb) {
+    return this._staticRequest({ endUrl: `champion/${id}`, region, options }, cb)
+  }
+
+  getItems({ region, options }, cb) {
+    return this._staticRequest({ endUrl: 'item', region, options }, cb)
+  }
+
+  getItem({ region, id, options }, cb) {
+    return this._staticRequest({ endUrl: `item/${id}`, region, options }, cb)
+  }
+
+  getLanguageStrings({ region, options }, cb) {
+    return this._staticRequest({ endUrl: 'language-strings', region, options }, cb)
+  }
+
+  getLanguages({ region }, cb) {
+    return this._staticRequest({ endUrl: 'languages', region }, cb)
+  }
+
+  getMap({ region, options }, cb) {
+    return this._staticRequest({ endUrl: 'map', region, options }, cb)
+  }
+
+  getMasteryList({ region, options }, cb) {
+    return this._staticRequest({ endUrl: 'mastery', region, options }, cb)
+  }
+
+  getMastery({ region, id, options }, cb) {
+    return this._staticRequest({ endUrl: `mastery/${id}`, region, options }, cb)
+  }
+
+  getRealm({ region }, cb) {
+    return this._staticRequest({ endUrl: 'realm', region }, cb)
+  }
+
+  getRuneList({ region, options }, cb) {
+    return this._staticRequest({ endUrl: 'rune', region, options }, cb)
+  }
+
+  getRune({ region, id, options }, cb) {
+    return this._staticRequest({ endUrl: `rune/${rune}`, region, options }, cb)
+  }
+
+  getSummonerSpellsList({ region, options }, cb) {
+    return this._staticRequest({ endUrl: 'summoner-spell', region, options }, cb)
+  }
+
+  getSummonerSpell({ region, id, options }, cb) {
+    return this._staticRequest({ endUrl: 'summoner-spell/${id}', region, options }, cb)
+  }
+
+  getVersions({ region, options }, cb) {
+    return this._staticRequest({ endUrl: 'versions', region, options }, cb)
   }
 }
 

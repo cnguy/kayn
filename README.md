@@ -74,20 +74,55 @@ var p1 = k.getSummoners(options, printDataFn) // peanut's data
 
 k.setRegion(REGIONS.KOREA) // Change default region
 
+/* Note that you can use spaces in the name. */
 var fakerIgn = { names: 'hide no bush' }
 var p2 = k.getSummoners(fakerIgn, printDataFn) // faker's data
 
-/* Note that you can use spaces in the name. */
-
-var myStats = k.getRankedStats({ players: me['id'] }, printDataFn)
-var fakerOptions = { players: p2[fakerIgn.names]['id'], region: REGIONS.NORTH_AMERICA }
-var fakerStats = k.getRankedStats(fakerOptions, printDataFn)
+var fakerOptions = {
+  players: p2[fakerIgn.names]['id'],
+  region: REGIONS.NORTH_AMERICA
+}
 /*
-    Default ranked mode is 'RANKED_SOLO_5X5'
-    naturally. This is all configurable though,
+    Default ranked mode is 'RANKED_SOLO_5x5' for all
+    methods naturally. This is all configurable though,
     and this pattern will stay constant
     throughout all my methods.
 */
+var fakerStats = k.getRankedStats(fakerOptions, printDataFn)
+
+/*
+  Functions will have an options parameter that you can pass in query
+  strings when applicable. Values of options should match the
+  endpoint's 'Query Parameters'. Check the methods to see which methods
+  you can pass in options to.
+
+  Some are required, and some are not. I often take care of the ones
+  that are required.
+
+  For example, the required parameter is type.
+  I made it so that the default is 'RANKED_SOLO_5x5' if a type is not passed
+  in.
+
+  The client will give off warnings if there are required parameters that you did
+  not pass in though (that I haven't taken care of).
+*/
+k.getChallengers({ region: 'na' }, rprint) // get solo queue games
+k.getChallengers({ region: 'na', options: {
+  type: 'RANKED_FLEX_SR'
+}}, rprint) // get flex games
+
+/*
+  However, for getMatchList, the endpoint uses an optional
+  'rankedQueues' instead of 'type' to allow multiple options.
+  I still set the default to RANKED_SOLO_5x5 though.
+*/
+var name = 'caaaaaaaaaria'
+k.getSummoners({ region: 'na', names: name }, function (err, data) {
+  k.getMatchList({ region: 'na', id: data[name].id, options: {
+    rankedQueues: 'RANKED_SOLO_5x5, RANKED_FLEX_SR',
+    championIds: '67'
+  } }, rprint)
+})
 ```
 
 ### Full Documentation

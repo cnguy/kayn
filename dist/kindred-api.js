@@ -83,8 +83,9 @@
       }
     }, {
       key: '_makeUrl',
-      value: function _makeUrl(url, region) {
-        return 'https://' + region + '.api.riotgames.com/api/lol/' + region + '/' + url + '?api_key=' + this.key;
+      value: function _makeUrl(url, region, staticReq) {
+        var mid = staticReq ? '' : region + '/';
+        return 'https://' + region + '.api.riotgames.com/api/lol/' + mid + url + '?api_key=' + this.key;
       }
     }, {
       key: '_baseRequest',
@@ -98,8 +99,8 @@
 
         if (!region) region = this.defaultRegion;
         var proxy = staticReq ? 'global' : region;
-        var reqUrl = this._makeUrl(url, proxy);
-
+        var reqUrl = this._makeUrl(url, proxy, staticReq);
+        console.log(reqUrl);
         if (!cb) return console.log(chalk.red('error: No callback passed in for the method call regarding `' + chalk.yellow(reqUrl) + '`'));
 
         request({ url: reqUrl, qs: options }, function (error, response, body) {
@@ -121,13 +122,17 @@
         });
       }
     }, {
-      key: '_summonerRequest',
-      value: function _summonerRequest(_ref2, cb) {
+      key: '_staticRequest',
+      value: function _staticRequest(_ref2, cb) {
         var endUrl = _ref2.endUrl,
-            region = _ref2.region;
+            region = _ref2.region,
+            options = _ref2.options;
 
         return this._baseRequest({
-          url: 'v' + versions.SUMMONER + '/summoner/' + endUrl, region: region
+          url: 'static-data/' + region + '/v' + versions.STATIC_DATA + '/' + endUrl,
+          staticReq: true,
+          region: region,
+          options: options
         }, cb);
       }
     }, {
@@ -135,11 +140,41 @@
       value: function _leagueRequest(_ref3, cb) {
         var endUrl = _ref3.endUrl,
             region = _ref3.region,
-            _ref3$options = _ref3.options,
-            options = _ref3$options === undefined ? {} : _ref3$options;
+            options = _ref3.options;
 
         return this._baseRequest({
           url: 'v' + versions.LEAGUE + '/league/' + endUrl, region: region, options: options
+        }, cb);
+      }
+    }, {
+      key: '_summonerRequest',
+      value: function _summonerRequest(_ref4, cb) {
+        var endUrl = _ref4.endUrl,
+            region = _ref4.region;
+
+        return this._baseRequest({
+          url: 'v' + versions.SUMMONER + '/summoner/' + endUrl, region: region
+        }, cb);
+      }
+    }, {
+      key: '_matchListRequest',
+      value: function _matchListRequest(_ref5, cb) {
+        var endUrl = _ref5.endUrl,
+            region = _ref5.region,
+            options = _ref5.options;
+
+        return this._baseRequest({
+          url: 'v' + versions.MATCH_LIST + '/matchlist/by-summoner/' + endUrl, options: options
+        }, cb);
+      }
+    }, {
+      key: '_statsRequest',
+      value: function _statsRequest(_ref6, cb) {
+        var endUrl = _ref6.endUrl,
+            region = _ref6.region;
+
+        return this._baseRequest({
+          url: 'v' + versions.STATS + '/stats/by-summoner/' + endUrl, region: region
         }, cb);
       }
     }, {
@@ -149,53 +184,57 @@
       }
     }, {
       key: 'getChallengers',
-      value: function getChallengers(_ref4, cb) {
-        var region = _ref4.region,
-            _ref4$type = _ref4.type,
-            type = _ref4$type === undefined ? 'RANKED_SOLO_5x5' : _ref4$type;
+      value: function getChallengers(_ref7, cb) {
+        var region = _ref7.region,
+            _ref7$options = _ref7.options,
+            options = _ref7$options === undefined ? { type: 'RANKED_SOLO_5x5' } : _ref7$options;
 
         return this._leagueRequest({
-          endUrl: 'challenger', region: region, options: { type: type }
+          endUrl: 'challenger', region: region, options: options
         }, cb);
       }
     }, {
       key: 'getMasters',
-      value: function getMasters(_ref5, cb) {
-        var region = _ref5.region,
-            _ref5$type = _ref5.type,
-            type = _ref5$type === undefined ? 'RANKED_SOLO_5x5' : _ref5$type;
+      value: function getMasters(_ref8, cb) {
+        var region = _ref8.region,
+            _ref8$options = _ref8.options,
+            options = _ref8$options === undefined ? { type: 'RANKED_SOLO_5x5' } : _ref8$options;
 
         return this._leagueRequest({
-          endUrl: 'master', region: region, options: { type: type }
+          endUrl: 'master', region: region, options: options
         }, cb);
       }
     }, {
       key: 'getSummoners',
-      value: function getSummoners(_ref6, cb) {
+      value: function getSummoners(_ref9, cb) {
         var _this = this;
 
-        var region = _ref6.region,
-            names = _ref6.names,
-            _ref6$ids = _ref6.ids,
-            ids = _ref6$ids === undefined ? null : _ref6$ids;
+        var region = _ref9.region,
+            names = _ref9.names,
+            _ref9$ids = _ref9.ids,
+            ids = _ref9$ids === undefined ? null : _ref9$ids;
 
         if (Array.isArray(names) && names.length > 0) {
           return this._summonerRequest({
             endUrl: 'by-name/' + names.map(function (name) {
               return _this._sanitizeName(name);
-            }).join(',')
+            }).join(','),
+            region: region
           }, cb);
         } else if (typeof names === 'string') {
           return this._summonerRequest({
-            endUrl: 'by-name/' + names
+            endUrl: 'by-name/' + names,
+            region: region
           }, cb);
-        } else if (Array.isArray(ids)) {
+        } else if (Array.isArray(ids) && ids.length > 0) {
           return this._summonerRequest({
-            endUrl: '' + ids.join(',')
+            endUrl: '' + ids.join(','),
+            region: region
           }, cb);
         } else if (Number.isInteger(ids)) {
           return this._summonerRequest({
-            endUrl: '' + ids
+            endUrl: '' + ids,
+            region: region
           }, cb);
         } else {
           this._logError(this.getSummoners.name, ids ? 'ids can be either an array or a single integer' : 'names can be either an array or a single string');
@@ -203,20 +242,173 @@
       }
     }, {
       key: 'getNames',
-      value: function getNames(_ref7, cb) {
-        var ids = _ref7.ids;
+      value: function getNames(_ref10, cb) {
+        var region = _ref10.region,
+            ids = _ref10.ids;
 
         if (Array.isArray(ids) && ids.length > 0) {
           return this._summonerRequest({
-            endUrl: ids.join(',') + '/name'
+            endUrl: ids.join(',') + '/name',
+            region: region
           }, cb);
         } else if (Number.isInteger(ids)) {
           return this._summonerRequest({
-            endUrl: ids + '/name'
+            endUrl: ids + '/name',
+            region: region
           }, cb);
         } else {
           this._logError(this.getNames.name, 'ids can be either an array or a single integer');
         }
+      }
+    }, {
+      key: 'getRankedStats',
+      value: function getRankedStats(_ref11, cb) {
+        var region = _ref11.region,
+            id = _ref11.id,
+            options = _ref11.options;
+
+        return this._statsRequest({
+          endUrl: id + '/ranked',
+          region: region,
+          options: options
+        }, cb);
+      }
+    }, {
+      key: 'getMatchList',
+      value: function getMatchList(_ref12, cb) {
+        var region = _ref12.region,
+            id = _ref12.id,
+            _ref12$options = _ref12.options,
+            options = _ref12$options === undefined ? { type: 'RANKED_SOLO_5x5' } : _ref12$options;
+
+        return this._matchListRequest({
+          endUrl: '' + id,
+          region: region,
+          options: options
+        }, cb);
+      }
+    }, {
+      key: 'getChampionList',
+      value: function getChampionList(_ref13, cb) {
+        var region = _ref13.region,
+            options = _ref13.options;
+
+        return this._staticRequest({ endUrl: 'champion', region: region, options: options }, cb);
+      }
+    }, {
+      key: 'getChampion',
+      value: function getChampion(_ref14, cb) {
+        var region = _ref14.region,
+            id = _ref14.id,
+            options = _ref14.options;
+
+        return this._staticRequest({ endUrl: 'champion/' + id, region: region, options: options }, cb);
+      }
+    }, {
+      key: 'getItems',
+      value: function getItems(_ref15, cb) {
+        var region = _ref15.region,
+            options = _ref15.options;
+
+        return this._staticRequest({ endUrl: 'item', region: region, options: options }, cb);
+      }
+    }, {
+      key: 'getItem',
+      value: function getItem(_ref16, cb) {
+        var region = _ref16.region,
+            id = _ref16.id,
+            options = _ref16.options;
+
+        return this._staticRequest({ endUrl: 'item/' + id, region: region, options: options }, cb);
+      }
+    }, {
+      key: 'getLanguageStrings',
+      value: function getLanguageStrings(_ref17, cb) {
+        var region = _ref17.region,
+            options = _ref17.options;
+
+        return this._staticRequest({ endUrl: 'language-strings', region: region, options: options }, cb);
+      }
+    }, {
+      key: 'getLanguages',
+      value: function getLanguages(_ref18, cb) {
+        var region = _ref18.region;
+
+        return this._staticRequest({ endUrl: 'languages', region: region }, cb);
+      }
+    }, {
+      key: 'getMap',
+      value: function getMap(_ref19, cb) {
+        var region = _ref19.region,
+            options = _ref19.options;
+
+        return this._staticRequest({ endUrl: 'map', region: region, options: options }, cb);
+      }
+    }, {
+      key: 'getMasteryList',
+      value: function getMasteryList(_ref20, cb) {
+        var region = _ref20.region,
+            options = _ref20.options;
+
+        return this._staticRequest({ endUrl: 'mastery', region: region, options: options }, cb);
+      }
+    }, {
+      key: 'getMastery',
+      value: function getMastery(_ref21, cb) {
+        var region = _ref21.region,
+            id = _ref21.id,
+            options = _ref21.options;
+
+        return this._staticRequest({ endUrl: 'mastery/' + id, region: region, options: options }, cb);
+      }
+    }, {
+      key: 'getRealm',
+      value: function getRealm(_ref22, cb) {
+        var region = _ref22.region;
+
+        return this._staticRequest({ endUrl: 'realm', region: region }, cb);
+      }
+    }, {
+      key: 'getRuneList',
+      value: function getRuneList(_ref23, cb) {
+        var region = _ref23.region,
+            options = _ref23.options;
+
+        return this._staticRequest({ endUrl: 'rune', region: region, options: options }, cb);
+      }
+    }, {
+      key: 'getRune',
+      value: function getRune(_ref24, cb) {
+        var region = _ref24.region,
+            id = _ref24.id,
+            options = _ref24.options;
+
+        return this._staticRequest({ endUrl: 'rune/' + rune, region: region, options: options }, cb);
+      }
+    }, {
+      key: 'getSummonerSpellsList',
+      value: function getSummonerSpellsList(_ref25, cb) {
+        var region = _ref25.region,
+            options = _ref25.options;
+
+        return this._staticRequest({ endUrl: 'summoner-spell', region: region, options: options }, cb);
+      }
+    }, {
+      key: 'getSummonerSpell',
+      value: function getSummonerSpell(_ref26, cb) {
+        var region = _ref26.region,
+            id = _ref26.id,
+            options = _ref26.options;
+
+        return this._staticRequest({ endUrl: 'summoner-spell/${id}', region: region, options: options }, cb);
+      }
+    }, {
+      key: 'getVersions',
+      value: function getVersions(_ref27, cb) {
+        var region = _ref27.region,
+            options = _ref27.options;
+
+        return this._staticRequest({ endUrl: 'versions', region: region, options: options }, cb);
       }
     }]);
 
