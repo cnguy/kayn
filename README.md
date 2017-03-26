@@ -51,15 +51,17 @@ k.getSummoner({ name: 'caaaaaaaaaria' }, rprint)
   getSummoners & getSummoner target many endpoints. In the case
   of the summoner endpoints, it made a lot more sense for them
   to target other endpoints.
-  
+
   The example above targets the by-name endpoint, while
   the example below targets the by-id endpoint.
 */
 k.getSummoner({ id: 32823699 }, rprint)
 
 /*
-  Note, I don't prefix the id parameter with something such as
-  matchId or summonerId or runeId.
+  Note, I don't name the id parameter per endpoint.
+  The 'id', 'ids', 'name', and 'names' parameters
+  stay consistent throughout the API.
+  (matchId, summonerId, runeId, etc).
 */
 k.getMatch({ id: 2459973154 }, rprint)
 
