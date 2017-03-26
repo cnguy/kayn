@@ -86,9 +86,6 @@ k.getSummoner(fakerIgn, function (err, data) {
 
 /*
   What if an endpoint only accepts ids?
-  This client will let you pass in names as parameters, too.
-  Of course, this will send additional requests, but it saves
-  you a lot of code.
 
   ex: the player runes endpoint only accepts a comma-separated
       list of integers
@@ -99,7 +96,7 @@ k.getRunes({ ids: [354959, 21542029] }, rprint)
 k.getRunes({ id: 354959 }, rprint)
 k.getRunes({ ids: 354959 }, rprint)
 // but what if you're given a list of names instead of ids?
-// You'd chain it
+// You'd chain it like in many other clients.
 var names2 = ['Richelle', 'Grigne']
 k.getSummoners({ names: names2 }, function (err, data) {
   var args = []
