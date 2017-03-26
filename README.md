@@ -49,8 +49,8 @@ k.getSummoner({ name: 'caaaaaaaaaria' }, rprint)
 
 /*
   getSummoners & getSummoner target many endpoints. In the case
-  of the summoner endpoints, it made a lot more sense for them
-  to target other endpoints.
+  of the summoner endpoints, it made a lot more sense for the two
+  functions to target both the by-name and by-id summoner endpoints.
 
   The example above targets the by-name endpoint, while
   the example below targets the by-id endpoint.
