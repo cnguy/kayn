@@ -184,7 +184,7 @@ to each endpoint!
 
 | Type | Endpoint | Description | Covered |
 | -------- | -------- | ----------- | ------- |
-| GET | /api/lol/{region}/v1.3/game/by-summoner/{summonerId}/recent | Get recent games by summoner ID. (REST) | no |
+| GET | /api/lol/{region}/v1.3/game/by-summoner/{summonerId}/recent | Get recent games by summoner ID. (REST) | yes |
 
 ### LEAGUE-V2.5
 [docs](https://developer.riotgames.com/api-methods/#league-v2.5)
