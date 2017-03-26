@@ -149,12 +149,22 @@ class Kindred {
     }, cb = region ? cb : arguments[0])
   }
 
-  getRecentGames({ region, id } = {}, cb) {
-    if (!id || !Number.isInteger(id)) return this._logError(
+  getRecentGames({ region, id, name } = {}, cb) {
+    if ((!id || !Number.isInteger(id)) && !name) return this._logError(
       this.getRecentGames.name,
-      `required params ${chalk.yellow('`id` (int)')} not passed in`
+      `required params ${chalk.yellow('`id` (int)')} or ${chalk.yellow('`name` (string)')} not passed in`
     )
-    return this._gameRequest({ endUrl: `by-summoner/${id}/recent`, region }, cb)
+
+    if (id && Number.isInteger(id))
+      return this._gameRequest({ endUrl: `by-summoner/${id}/recent`, region }, cb)
+
+    if (typeof name === 'string') {
+      return this.getSummoner({ name }, (err, data) => {
+        return this._gameRequest({
+          endUrl: `by-summoner/${data[this._sanitizeName(name)].id}/recent`, region
+        }, cb)
+      })
+    }
   }
 
   getLeagues({ region, ids } = {}, cb) {

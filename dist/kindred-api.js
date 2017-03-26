@@ -336,14 +336,26 @@
     }, {
       key: 'getRecentGames',
       value: function getRecentGames() {
+        var _this = this;
+
         var _ref15 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref15.region,
-            id = _ref15.id;
+            id = _ref15.id,
+            name = _ref15.name;
 
         var cb = arguments[1];
 
-        if (!id || !Number.isInteger(id)) return this._logError(this.getRecentGames.name, 'required params ' + chalk.yellow('`id` (int)') + ' not passed in');
-        return this._gameRequest({ endUrl: 'by-summoner/' + id + '/recent', region: region }, cb);
+        if ((!id || !Number.isInteger(id)) && !name) return this._logError(this.getRecentGames.name, 'required params ' + chalk.yellow('`id` (int)') + ' or ' + chalk.yellow('`name` (string)') + ' not passed in');
+
+        if (id && Number.isInteger(id)) return this._gameRequest({ endUrl: 'by-summoner/' + id + '/recent', region: region }, cb);
+
+        if (typeof name === 'string') {
+          return this.getSummoner({ name: name }, function (err, data) {
+            return _this._gameRequest({
+              endUrl: 'by-summoner/' + data[_this._sanitizeName(name)].id + '/recent', region: region
+            }, cb);
+          });
+        }
       }
     }, {
       key: 'getLeagues',
@@ -410,7 +422,7 @@
     }, {
       key: 'getSummoners',
       value: function getSummoners() {
-        var _this = this;
+        var _this2 = this;
 
         var _ref20 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref20.region,
@@ -422,7 +434,7 @@
         if (checkAll.string(names)) {
           return this._summonerRequest({
             endUrl: 'by-name/' + names.map(function (name) {
-              return _this._sanitizeName(name);
+              return _this2._sanitizeName(name);
             }).join(','),
             region: region
           }, cb);
@@ -710,7 +722,7 @@
     }, {
       key: 'getRunes',
       value: function getRunes() {
-        var _this2 = this;
+        var _this3 = this;
 
         var _ref43 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref43.region,
@@ -741,7 +753,7 @@
               for (var _iterator = names[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                 var _name = _step.value;
 
-                args.push(data[_this2._sanitizeName(_name)].id);
+                args.push(data[_this3._sanitizeName(_name)].id);
               }
             } catch (err) {
               _didIteratorError = true;
@@ -758,7 +770,7 @@
               }
             }
 
-            return _this2._runesMasteriesRequest({
+            return _this3._runesMasteriesRequest({
               endUrl: args.join(',') + '/runes',
               region: region
             }, cb);
@@ -767,8 +779,8 @@
 
         if (typeof name === 'string') {
           return this.getSummoner({ name: name, region: region }, function (err, data) {
-            return _this2._runesMasteriesRequest({
-              endUrl: data[_this2._sanitizeName(name)].id + '/runes',
+            return _this3._runesMasteriesRequest({
+              endUrl: data[_this3._sanitizeName(name)].id + '/runes',
               region: region
             }, cb);
           });
