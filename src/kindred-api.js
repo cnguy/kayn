@@ -115,7 +115,11 @@ class Kindred {
     )
   }
 
-  getCurrentGame({ region = this.defaultRegion, id }, cb) {
+  getCurrentGame({ region = this.defaultRegion, id } = {}, cb) {
+    if (!id || !Number.isInteger(id)) return this._logError(
+      this.getCurrentGame.name,
+      `required params ${chalk.yellow('`id` (int)')} not passed in`
+    )
     const platformId = PLATFORM_IDS[REGIONS_BACK[region]]
     return this._currentGameRequest({ endUrl: `${id}`, platformId, region }, cb)
   }

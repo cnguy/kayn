@@ -267,11 +267,15 @@
       }
     }, {
       key: 'getCurrentGame',
-      value: function getCurrentGame(_ref9, cb) {
-        var _ref9$region = _ref9.region,
+      value: function getCurrentGame() {
+        var _ref9 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            _ref9$region = _ref9.region,
             region = _ref9$region === undefined ? this.defaultRegion : _ref9$region,
             id = _ref9.id;
 
+        var cb = arguments[1];
+
+        if (!id || !Number.isInteger(id)) return this._logError(this.getCurrentGame.name, 'required params ' + chalk.yellow('`id` (int)') + ' not passed in');
         var platformId = platformIds[regions$1[region]];
         return this._currentGameRequest({ endUrl: '' + id, platformId: platformId, region: region }, cb);
       }
