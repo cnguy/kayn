@@ -138,30 +138,29 @@ k.getRune({ id: msRuneId }, rprint)
 ```
 
 ## Endpoints Covered
-
-
+Make sure to check the [official Riot Documentation](https://developer.riotgames.com/api-methods/) to see what query parameters you can pass in
+to each endpoint!
 
 ### CHAMPION-V1.2
-
-
+[docs](https://developer.riotgames.com/api-methods/#champion-v1.2)
 
 ### CHAMPIONMASTERY
-
-
+[docs](https://developer.riotgames.com/api-methods/#championmastery)
 
 ### CURRENT-GAME-V1.0
-
-
+[docs](https://developer.riotgames.com/api-methods/#current-game-v1.0)
+| Type | Endpoint | Description | Covered |
+| -------- | -------- | ----------- | ------- |
+| GET | /observer-mode/rest/consumer/getSpectatorGameInfo/{platformId}/{summonerId} | Get current game information for the given summoner ID. (REST) | yes |
 
 ### FEATURED-GAMES-V1.0
-
-
+[docs](https://developer.riotgames.com/api-methods/#featured-games-v1.0)
 
 ### GAME-V1.3
-
-
+[docs](https://developer.riotgames.com/api-methods/#game-v1.3)
 
 ### LEAGUE-V2.5
+[docs](https://developer.riotgames.com/api-methods/#league-v2.5)
 | Type | Endpoint | Description | Covered |
 | -------- | -------- | ----------- | ------- |
 | GET | /api/lol/{region}/v2.5/league/by-summoner/{summonerIds} | Get leagues mapped by summoner ID for a given list of summoner IDs. (REST) | yes |
@@ -170,6 +169,7 @@ k.getRune({ id: msRuneId }, rprint)
 | GET | /api/lol/{region}/v2.5/league/master | Get master tier leagues. (REST) | yes |
 
 ### LOL-STATIC-DATA-V1.2
+[docs](https://developer.riotgames.com/api-methods/#lol-static-data-v1.2)
 | Type | Endpoint | Description | Covered |
 | -------- | -------- | ----------- | ------- |
 | GET | /api/lol/static-data/{region}/v1.2/champion | Retrieves champion list. (REST) | yes |
@@ -189,28 +189,26 @@ k.getRune({ id: msRuneId }, rprint)
 | GET | /api/lol/static-data/{region}/v1.2/versions | Retrieve version data. (REST) | yes |
 
 ### LOL-STATUS-V1.0
-
-
+[docs](https://developer.riotgames.com/api-methods/#lol-status-v1.0)
 
 ### MATCH-V.2.2
-
-
+[docs](https://developer.riotgames.com/api-methods/#match-v2.2)
 
 ### MATCHLIST-V2.2
-
-
+[docs](https://developer.riotgames.com/api-methods/#matchlist-v2.2)
 
 ### RUNES-MASTERIES-V1.4
-
-
+[docs](https://developer.riotgames.com/api-methods/#runes-masteries-v1.4)
 
 ### STATS-V1.3
+[docs](https://developer.riotgames.com/api-methods/#stats-v1.3)
 | Type | Endpoint | Description | Covered |
 | -------- | -------- | ----------- | ------- |
 | GET | /api/lol/{region}/v1.3/stats/by-summoner/{summonerId}/ranked | Get ranked stats by summoner ID. (REST) | yes |
 | GET | /api/lol/{region}/v1.3/stats/by-summoner/{summonerId}/summary | Get player stats summaries by summoner ID. (REST) | no |
 
 ### SUMMONER-V1.4
+[docs](https://developer.riotgames.com/api-methods/#summoner-v1.4)
 
 
 
