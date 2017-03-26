@@ -43,15 +43,15 @@ var k = Kindred(RIOT_API_KEY, regions.NORTH_AMERICA)
   You can also use getSummoner(), though.
 */
 function rprint(err, data) { console.log(data) }
-var me = k.getSummoners({ name: 'caaaaaaaaaria' }, rprint)
-var otherMe = k.getSummoner({ name: 'caaaaaaaaaria' }, rprint)
+k.getSummoners({ name: 'caaaaaaaaaria' }, rprint)
+k.getSummoner({ name: 'caaaaaaaaaria' }, rprint)
 
 /*
   When 'names' and/or 'ids' parameters are available, you
   can pass in an array.
 */
 var names = ['beautifulkorean', 'c9gun', 'caaaaaaaaarIa']
-var players = k.getSummoners({ names: names }, rprint)
+k.getSummoners({ names: names }, rprint)
 
 /*
   But I won't stop you from passing in a single string
