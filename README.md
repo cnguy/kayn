@@ -1,19 +1,46 @@
-### Kindred
+# Kindred
 
-Kindred is a thin Node.js wrapper on top of [Riot Games API for League of Legends](http://www.developer.riotgames.com).
+Kindred is a thin Node.js wrapper on top of [Riot Games API for League of Legends](http://www.developer.riotgames.com)
 
-### Philosophy
+## Table of Contents
+* [Philosophy](#philosophy)
+* [Endpoints Covered](#endpoints-covered)
+* [Installation](#installation)
+* [Quick Usage Examples](#quick-usage-examples)
+* [Full Documentation](#full-documentation)
 
+## Philosophy
 My goal is to make a wrapper that is convenient and sensisible. This project is heavily inspired by [psuedonym117's Python wrapper](https://github.com/pseudonym117/Riot-Watcher). My goal is to make the API as consistent as possible and also make the rate-limiting as robust as possible.
 
 For function methods, ```get``` implies a request.
-### Installation
+
+## Endpoints Covered
+### LOL-STATIC-DATA-V1.2
+| Type | Endpoint | Description | Covered |
+| -------- | -------- | ----------- | ------- |
+| GET | /api/lol/static-data/{region}/v1.2/champion | Retrieves champion list. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/champion/{id} | Retrieves a champion by its id. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/item | Retrieves item list. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/item/{id} | Retrieves item by its unique id. (REST) | | GET yes |
+| GET | /api/lol/static-data/{region}/v1.2/language-strings | Retrieve language strings data. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/languages | Retrieve supported languages data. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/map | Retrieve map data. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/mastery | Retrieve mastery list. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/mastery/{id} | Retrieves mastery item by its unique id. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/realm | Retrieve realm data. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/rune | Retrieves rune list. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/rune/{id} | Retrieves rune by its unique id. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/summoner-spell | Retrieves summoner spell list. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/summoner-spell/{id} | Retrieves summoner spell by its unique id. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/versions | Retrieve version data. (REST) | yes |
+
+## Installation
 
 ```
 yarn add kindred-api
 ```
 
-### Quick Usage Examples
+## Quick Usage Examples
 
 ```javascript
 var Kindred = require('kindred-api')
@@ -129,4 +156,4 @@ var msRuneId = 10002
 k.getRune({ id: msRuneId }, rprint)
 ```
 
-### Full Documentation
+## Full Documentation
