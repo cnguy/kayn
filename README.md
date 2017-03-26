@@ -57,19 +57,38 @@ var players = k.getSummoners({ names: names }, rprint)
   But I won't stop you from passing in a single string
   to the plural version of the parameter.
 */
-var me2 = k.getSummoners({ names: 'caaaaaaaaaria' }, rprint)
+k.getSummoners({ names: 'caaaaaaaaaria' }, rprint)
 
 /* Every method has an optional region parameter. */
 var options = { name: 'sktt1peanut', region: REGIONS.KOREA }
-var p1 = k.getSummoner(options, rprint) // peanut's data
+k.getSummoner(options, rprint) // peanut's data
 
 /* Changing the default region! */
 k.setRegion(REGIONS.KOREA)
 
 /* Note that you can use spaces in the name. */
 var fakerIgn = { name: 'hide on bush' }
-var p2 = k.getSummoner(fakerIgn, rprint) // faker's data
-var fakerId = { id: p2[fakerIgn.name]['id'] }
+var fakerId
+k.getSummoner(fakerIgn, function (err, data) {
+  fakerId = p2[fakerIgn.name]['id']
+}) // faker's data
+
+var fakerIgn = { name: 'hide on bush' }
+var fakerId
+k.getSummoner(fakerIgn, function (err, data) {
+  /*
+    But you should sanitize the name if you want to access the dictionary.
+
+    { hideonbush:
+      { id: 4460427,
+        name: 'Hide on bush',
+        profileIconId: 6,
+        revisionDate: 1490355284000,
+        summonerLevel: 30 } }
+  */
+  fakerId = data[fakerIgn.name.replace(/\s/g, '').toLowerCase()].id
+  console.log('fakerId:', fakerId)
+}) // faker's data
 
 /*
     Default ranked mode is 'RANKED_SOLO_5x5' for all
@@ -77,7 +96,7 @@ var fakerId = { id: p2[fakerIgn.name]['id'] }
     and this pattern will stay constant
     throughout all my methods.
 */
-var fakerStats = k.getRankedStats(fakerId, rprint)
+k.getRankedStats(fakerId, rprint)
 
 /*
   Functions will have an options parameter that you can pass in query
