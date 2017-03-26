@@ -59,7 +59,7 @@ k.getSummoners({ names: names }, rprint)
 */
 k.getSummoners({ names: 'caaaaaaaaaria' }, rprint)
 
-/* Every method has an optional region parameter. */
+/* Every method has an optional 'region' parameter. */
 var options = { name: 'sktt1peanut', region: REGIONS.KOREA }
 k.getSummoner(options, rprint) // peanut's data
 
@@ -67,12 +67,6 @@ k.getSummoner(options, rprint) // peanut's data
 k.setRegion(REGIONS.KOREA)
 
 /* Note that you can use spaces in the name. */
-var fakerIgn = { name: 'hide on bush' }
-var fakerId
-k.getSummoner(fakerIgn, function (err, data) {
-  fakerId = p2[fakerIgn.name]['id']
-}) // faker's data
-
 var fakerIgn = { name: 'hide on bush' }
 var fakerId
 k.getSummoner(fakerIgn, function (err, data) {
