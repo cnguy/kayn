@@ -364,19 +364,61 @@ class Kindred {
     return this._staticRequest({ endUrl: 'versions', region, options }, cb = region || options ? cb : arguments[0])
   }
 
-  getRunes({ region, ids, id } = {}, cb) {
-    if (!ids || !id) return this._logError(
+  getRunes({ region, ids, id, names, name } = {}, cb) {
+    if (!ids && !id && !names && !name) return this._logError(
       this.getRunes.name,
+      `required params ${chalk.yellow('`ids` (array of ints)')}, ${chalk.yellow('`id` (int)')}, ${chalk.yellow('`names` (array of strings)')}, or ${chalk.yellow('`name` (string)')} not passed in`
+    )
+
+    let param
+
+    if (checkAll.int(ids)) param = ids.join(',')
+    if (Number.isInteger(ids)) param = [ids]
+    if (id && !Number.isInteger(id)) param = [id]
+
+    if (checkAll.string(names)) {
+      return this.getSummoners({ names, region }, (err, data) => {
+        let args = []
+
+        for (let name of names)
+          args.push(data[this._sanitizeName(name)].id)
+
+        return this._runesMasteriesRequest({
+          endUrl: `${args.join(',')}/runes`,
+          region
+        }, cb)
+      })
+    }
+
+    if (typeof name === 'string') {
+      return this.getSummoner({ name, region }, (err, data) => {
+        return this._runesMasteriesRequest({
+          endUrl: `${data[this._sanitizeName(name)].id}/runes`,
+          region
+        }, cb)
+      })
+    }
+
+    return this._runesMasteriesRequest({
+      endUrl: `${param}/runes`,
+      region
+    }, cb)
+  }
+
+  getMasteries({ regions, ids, id } = {}, cb) {
+    if (!ids && !id) return this._logError(
+      this.getMasteries.name,
       `required params ${chalk.yellow('`ids` (array of ints)')} or ${chalk.yellow('`id` (int)')} not passed in`
     )
 
     let param
 
     if (checkAll.int(ids)) param = ids.join(',')
+    if (Number.isInteger(ids)) param = [ids]
     if (id && !Number.isInteger(id)) param = [id]
 
     return this._runesMasteriesRequest({
-      endUrl: `${param}/runes`,
+      endUrl: `${param}/masteries`,
       region
     }, cb)
   }
