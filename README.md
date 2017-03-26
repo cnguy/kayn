@@ -21,7 +21,7 @@ For function methods, ```get``` implies a request.
 | GET | /api/lol/static-data/{region}/v1.2/champion | Retrieves champion list. (REST) | yes |
 | GET | /api/lol/static-data/{region}/v1.2/champion/{id} | Retrieves a champion by its id. (REST) | yes |
 | GET | /api/lol/static-data/{region}/v1.2/item | Retrieves item list. (REST) | yes |
-| GET | /api/lol/static-data/{region}/v1.2/item/{id} | Retrieves item by its unique id. (REST) | | GET yes |
+| GET | /api/lol/static-data/{region}/v1.2/item/{id} | Retrieves item by its unique id. (REST) | yes |
 | GET | /api/lol/static-data/{region}/v1.2/language-strings | Retrieve language strings data. (REST) | yes |
 | GET | /api/lol/static-data/{region}/v1.2/languages | Retrieve supported languages data. (REST) | yes |
 | GET | /api/lol/static-data/{region}/v1.2/map | Retrieve map data. (REST) | yes |
@@ -33,6 +33,12 @@ For function methods, ```get``` implies a request.
 | GET | /api/lol/static-data/{region}/v1.2/summoner-spell | Retrieves summoner spell list. (REST) | yes |
 | GET | /api/lol/static-data/{region}/v1.2/summoner-spell/{id} | Retrieves summoner spell by its unique id. (REST) | yes |
 | GET | /api/lol/static-data/{region}/v1.2/versions | Retrieve version data. (REST) | yes |
+
+### STATS-V1.3
+| Type | Endpoint | Description | Covered |
+| -------- | -------- | ----------- | ------- |
+| GET | /api/lol/{region}/v1.3/stats/by-summoner/{summonerId}/ranked | Get ranked stats by summoner ID. (REST) | yes |
+| GET | /api/lol/{region}/v1.3/stats/by-summoner/{summonerId}/summary | Get player stats summaries by summoner ID. (REST) | no |
 
 ## Installation
 
