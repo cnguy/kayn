@@ -149,6 +149,7 @@ to each endpoint!
 
 ### CURRENT-GAME-V1.0
 [docs](https://developer.riotgames.com/api-methods/#current-game-v1.0)
+
 | Type | Endpoint | Description | Covered |
 | -------- | -------- | ----------- | ------- |
 | GET | /observer-mode/rest/consumer/getSpectatorGameInfo/{platformId}/{summonerId} | Get current game information for the given summoner ID. (REST) | yes |
