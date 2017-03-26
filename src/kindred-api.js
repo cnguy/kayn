@@ -107,6 +107,10 @@ class Kindred {
     }, cb)
   }
 
+  _runesMasteriesRequest({ endUrl, region }, cb) {
+    return this._summonerRequest({ endUrl, region }, cb)
+  }
+
   _statsRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
       url: `v${VERSIONS.STATS}/stats/by-summoner/${endUrl}`, region, options
@@ -358,6 +362,23 @@ class Kindred {
 
   getVersions({ region, options } = {}, cb) {
     return this._staticRequest({ endUrl: 'versions', region, options }, cb = region || options ? cb : arguments[0])
+  }
+
+  getRunes({ region, ids, id } = {}, cb) {
+    if (!ids || !id) return this._logError(
+      this.getRunes.name,
+      `required params ${chalk.yellow('`ids` (array of ints)')} or ${chalk.yellow('`id` (int)')} not passed in`
+    )
+
+    let param
+
+    if (checkAll.int(ids)) param = ids.join(',')
+    if (id && !Number.isInteger(id)) param = [id]
+
+    return this._runesMasteriesRequest({
+      endUrl: `${param}/runes`,
+      region
+    }, cb)
   }
 }
 
