@@ -128,8 +128,9 @@ k.getSummoners({ names: names2 }, function (err, data) {
 })
 
 /*
-  I find that inconvenient... and so I just chain it for you in my code.
-  So now you can just do this..
+  I find that inconvenient, and so I just chain it for you in my code.
+  It will naturally send additional requests though.
+  So now you can just do this:
 */
 k.getRunes({ names: ['Richelle', 'Grigne'] }, rprint)
 k.getRune({ name: ['Richelle'] }, rprint)
