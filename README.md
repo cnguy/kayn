@@ -115,8 +115,12 @@ k.setRegion(REGIONS.NORTH_AMERICA)
 k.getRunes({ ids: [354959, 21542029] }, rprint)
 k.getRunes({ id: 354959 }, rprint)
 k.getRunes({ ids: 354959 }, rprint)
-// but what if you're given a list of names instead of ids?
-// You'd chain it like in many other clients.
+
+/*
+  But what if you're given a list of names instead of ids?
+  You'd chain it like in many other clients:
+  Get the ids from the names, get the runes from the ids.
+*/
 var names2 = ['Richelle', 'Grigne']
 k.getSummoners({ names: names2 }, function (err, data) {
   var args = []
