@@ -99,7 +99,7 @@ k.getRankedStats(fakerId, rprint)
   you can pass in options to.
 
   Some are required, and some are not. I often take care of the ones
-  that are required.
+  that are required by using the most sensible defaults.
 
   For example, the required parameter is 'type'.
   I made it so that the default is 'RANKED_SOLO_5x5' if 'type' is not passed
