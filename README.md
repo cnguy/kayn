@@ -10,7 +10,7 @@ Kindred is a thin Node.js wrapper on top of [Riot Games API for League of Legend
 * [Full Documentation](#full-documentation)
 
 ## Philosophy
-My goal is to make a wrapper that is convenient and sensisible. This project is heavily inspired by [psuedonym117's Python wrapper](https://github.com/pseudonym117/Riot-Watcher). My goal is to make the API as consistent as possible and also make the rate-limiting as robust as possible.
+My goal is to make a wrapper that is convenient and sensisible. This project is heavily inspired by [psuedonym117's Python wrapper](https://github.com/pseudonym117/Riot-Watcher). My goal is to make the API as consistent as possible and also make the rate-limiting as robust as possible. However, I also wish to provide users flexibility and detailed errors so they don't have to look at the documentation as much. Look at the [Quick Usage Examples](#quick-usage-examples) to see what I mean.
 
 For function methods, ```get``` implies a request.
 
