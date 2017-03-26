@@ -391,7 +391,7 @@
 
         if (typeof name === 'string') return this.getSummoners({ region: region, names: [name] }, cb);
         if (Number.isInteger(id)) return this.getSummoners({ region: region, ids: [id] }, cb);
-        return this._logError(this.getSummoner.name, 'required parameters name or id not passed in');
+        return this._logError(this.getSummoner.name, 'required parameters ' + chalk.yellow('`name` (string)') + ' or ' + chalk.yellow('`id` (int)') + ' not passed in');
       }
     }, {
       key: 'getNames',

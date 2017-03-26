@@ -199,7 +199,7 @@ class Kindred {
     if (Number.isInteger(id)) return this.getSummoners({ region, ids: [id] }, cb)
     return this._logError(
       this.getSummoner.name,
-      'required parameters name or id not passed in'
+      `required parameters ${chalk.yellow('`name` (string)')} or ${chalk.yellow('`id` (int)')} not passed in`
     )
   }
 

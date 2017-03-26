@@ -99,7 +99,8 @@ k.getChallengers({ region: 'na' }, rprint) // get challengers from ranked solo q
 k.getChallengers({ region: 'na', options: {
   type: 'RANKED_FLEX_SR'
 }}, rprint) // get challengers from ranked flex ladder
-k.getSummoner() // getSummoner request FAILED; required parameters name or id not passed in
+k.getSummoner()
+// getSummoner request FAILED; required parameters `name` (string) or `id` (int) not passed in
 
 /*
   Note that the first parameter of most methods must always be an object.
