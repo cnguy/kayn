@@ -131,7 +131,8 @@ k.getRuneList(rprint) // not passing in any optional arguments, valid
 var name = 'caaaaaaaaaria'
 k.getSummoners({ region: 'na', names: name }, function (err, data) {
   k.getMatchList({ region: 'na', id: data[name].id, options: {
-    rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'].join(), // multiples must be in an array that is joined
+    // multiple entries should be in a comma-separated spaceless list
+    rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'].join(),
     championIds: '67' // '267,67' or ['267', '67'].join(',')
   } }, rprint)
 })
