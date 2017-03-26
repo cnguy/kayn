@@ -1,8 +1,10 @@
 const request = require('request')
 const chalk = require('chalk')
 
-import VERSIONS from './constants/versions'
+import PLATFORM_IDS from './constants/platform-ids'
 import REGIONS from './constants/regions'
+import REGIONS_BACK from './constants/regions-back'
+import VERSIONS from './constants/versions'
 
 import checkAll from './helpers/array-checkers'
 
@@ -16,9 +18,10 @@ class Kindred {
     return name.replace(/\s/g, '').toLowerCase()
   }
 
-  _makeUrl(url, region, staticReq) {
+  _makeUrl(url, region, staticReq, observerMode) {
     const mid = staticReq ? '' : `${region}/`
-    return `https://${region}.api.riotgames.com/api/lol/${mid}${url}?api_key=${this.key}`
+    const spectate = observerMode ? '' : `api/lol/${mid}`
+    return `https://${region}.api.riotgames.com/${spectate}${url}?api_key=${this.key}`
   }
 
   _urlHandler({ region, names, name, ids, id, options = {}, endpoints }) {
@@ -35,9 +38,9 @@ class Kindred {
     }
   }
 
-  _baseRequest({ url, region = this.defaultRegion, staticReq = false, options = {} }, cb) {
+  _baseRequest({ url, region = this.defaultRegion, observerMode = false, staticReq = false, options = {} }, cb) {
     const proxy = staticReq ? 'global' : region
-    const reqUrl = this._makeUrl(url, proxy, staticReq)
+    const reqUrl = this._makeUrl(url, proxy, staticReq, observerMode)
     console.log(reqUrl)
     if (!cb)
       console.log(
@@ -65,6 +68,14 @@ class Kindred {
     })
   }
 
+  _currentGameRequest({ endUrl, region, platformId }, cb) {
+    return this._baseRequest({
+      url: `observer-mode/rest/consumer/getSpectatorGameInfo/${platformId}/${endUrl}`,
+      observerMode: true,
+      region
+    }, cb)
+  }
+
   _staticRequest({ endUrl, region = this.defaultRegion, options }, cb) {
     return this._baseRequest({
       url: `static-data/${region}/v${VERSIONS.STATIC_DATA}/${endUrl}`,
@@ -73,7 +84,6 @@ class Kindred {
       options
     }, cb)
   }
-
 
   _leagueRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
@@ -103,6 +113,11 @@ class Kindred {
     console.log(
       chalk.bold.yellow(message), chalk.red('request'), chalk.bold.red('FAILED') + chalk.red(`; ${expected}`)
     )
+  }
+
+  getCurrentGame({ region = this.defaultRegion, id }, cb) {
+    const platformId = PLATFORM_IDS[REGIONS_BACK[region]]
+    return this._currentGameRequest({ endUrl: `${id}`, platformId, region }, cb)
   }
 
   getLeagues({ region, ids } = {}, cb) {
