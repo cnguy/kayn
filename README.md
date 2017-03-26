@@ -1,6 +1,6 @@
 # Kindred
 
-Kindred is a thin Node.js wrapper on top of [Riot Games API for League of Legends](http://www.developer.riotgames.com)
+Kindred is a not-so-thin Node.js wrapper on top of [Riot Games API for League of Legends](http://www.developer.riotgames.com)
 
 ## Table of Contents
 * [Philosophy](#philosophy)
@@ -83,6 +83,39 @@ k.getSummoner(fakerIgn, function (err, data) {
   fakerId = data[fakerIgn.name.replace(/\s/g, '').toLowerCase()].id
   console.log('fakerId:', fakerId)
 }) // faker's data
+
+/*
+  What if an endpoint only accepts ids?
+  This client will let you pass in names as parameters, too.
+  Of course, this will send additional requests, but it saves
+  you a lot of code.
+
+  ex: the player runes endpoint only accepts a comma-separated
+      list of integers
+*/
+
+// all valid
+k.getRunes({ ids: [354959, 21542029] }, rprint)
+k.getRunes({ id: 354959 }, rprint)
+k.getRunes({ ids: 354959 }, rprint)
+// but what if you're given a list of names instead of ids?
+// You'd chain it
+var names2 = ['Richelle', 'Grigne']
+k.getSummoners({ names: names2 }, function (err, data) {
+  var args = []
+
+  for (var name of names2)
+    args.push(data[name.replace(/\s/g, '').toLowerCase()].id)
+  
+  k.getRunes({ ids: args }, rprint)
+})
+
+/*
+  I find that inconvenient... and so I just chain it for you in my code.
+  So now you can just do this..
+*/
+k.getRunes({ names: ['Richelle', 'Grigne'] }, rprint)
+k.getRune({ name: ['Richelle'] }, rprint)
 
 /*
     Default ranked mode is 'RANKED_SOLO_5x5' for all
