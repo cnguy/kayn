@@ -131,18 +131,16 @@ k.getRuneList(rprint) // not passing in any optional arguments, valid
 var name = 'caaaaaaaaaria'
 k.getSummoners({ region: 'na', names: name }, function (err, data) {
   k.getMatchList({ region: 'na', id: data[name].id, options: {
-    // multiple entries should be in a comma-separated spaceless list
+    /*
+      According to Riot API, query parameters that can accept multiple values
+      must be a comma separated list (or a single value), which is why I do the above 'join'.
+
+      You can also simply do 'RANKED_SOLO_5x5, RANKED_FLEX_SR'.
+    */
     rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'].join(),
     championIds: '67' // '267,67' or ['267', '67'].join(',')
   } }, rprint)
 })
-
-/*
-  According to Riot API, any query parameter must be a comma separated list (or a single value),
-  which is why I do the above 'join'.
-
-  You can also simply do 'RANKED_SOLO_5x5, RANKED_FLEX_SR'.
-*/
 
 var furyMasteryId = 6111
 k.getMastery({ id: furyMasteryId }, rprint)
