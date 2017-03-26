@@ -161,6 +161,7 @@ to each endpoint!
 
 ### LEAGUE-V2.5
 [docs](https://developer.riotgames.com/api-methods/#league-v2.5)
+
 | Type | Endpoint | Description | Covered |
 | -------- | -------- | ----------- | ------- |
 | GET | /api/lol/{region}/v2.5/league/by-summoner/{summonerIds} | Get leagues mapped by summoner ID for a given list of summoner IDs. (REST) | yes |
@@ -170,6 +171,7 @@ to each endpoint!
 
 ### LOL-STATIC-DATA-V1.2
 [docs](https://developer.riotgames.com/api-methods/#lol-static-data-v1.2)
+
 | Type | Endpoint | Description | Covered |
 | -------- | -------- | ----------- | ------- |
 | GET | /api/lol/static-data/{region}/v1.2/champion | Retrieves champion list. (REST) | yes |
@@ -202,6 +204,7 @@ to each endpoint!
 
 ### STATS-V1.3
 [docs](https://developer.riotgames.com/api-methods/#stats-v1.3)
+
 | Type | Endpoint | Description | Covered |
 | -------- | -------- | ----------- | ------- |
 | GET | /api/lol/{region}/v1.3/stats/by-summoner/{summonerId}/ranked | Get ranked stats by summoner ID. (REST) | yes |
