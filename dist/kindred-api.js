@@ -191,25 +191,36 @@
         });
       }
     }, {
-      key: '_currentGameRequest',
-      value: function _currentGameRequest(_ref3, cb) {
+      key: '_observerRequest',
+      value: function _observerRequest(_ref3, cb) {
         var endUrl = _ref3.endUrl,
-            region = _ref3.region,
-            platformId = _ref3.platformId;
+            region = _ref3.region;
 
         return this._baseRequest({
-          url: 'observer-mode/rest/consumer/getSpectatorGameInfo/' + platformId + '/' + endUrl,
+          url: 'observer-mode/rest/' + endUrl,
           observerMode: true,
           region: region
         }, cb);
       }
     }, {
-      key: '_staticRequest',
-      value: function _staticRequest(_ref4, cb) {
+      key: '_currentGameRequest',
+      value: function _currentGameRequest(_ref4, cb) {
         var endUrl = _ref4.endUrl,
-            _ref4$region = _ref4.region,
-            region = _ref4$region === undefined ? this.defaultRegion : _ref4$region,
-            options = _ref4.options;
+            region = _ref4.region,
+            platformId = _ref4.platformId;
+
+        return this._observerRequest({
+          endUrl: 'consumer/getSpectatorGameInfo/' + platformId + '/' + endUrl,
+          region: region
+        }, cb);
+      }
+    }, {
+      key: '_staticRequest',
+      value: function _staticRequest(_ref5, cb) {
+        var endUrl = _ref5.endUrl,
+            _ref5$region = _ref5.region,
+            region = _ref5$region === undefined ? this.defaultRegion : _ref5$region,
+            options = _ref5.options;
 
         return this._baseRequest({
           url: 'static-data/' + region + '/v' + versions.STATIC_DATA + '/' + endUrl,
@@ -220,10 +231,10 @@
       }
     }, {
       key: '_leagueRequest',
-      value: function _leagueRequest(_ref5, cb) {
-        var endUrl = _ref5.endUrl,
-            region = _ref5.region,
-            options = _ref5.options;
+      value: function _leagueRequest(_ref6, cb) {
+        var endUrl = _ref6.endUrl,
+            region = _ref6.region,
+            options = _ref6.options;
 
         return this._baseRequest({
           url: 'v' + versions.LEAGUE + '/league/' + endUrl, region: region, options: options
@@ -231,9 +242,9 @@
       }
     }, {
       key: '_summonerRequest',
-      value: function _summonerRequest(_ref6, cb) {
-        var endUrl = _ref6.endUrl,
-            region = _ref6.region;
+      value: function _summonerRequest(_ref7, cb) {
+        var endUrl = _ref7.endUrl,
+            region = _ref7.region;
 
         return this._baseRequest({
           url: 'v' + versions.SUMMONER + '/summoner/' + endUrl, region: region
@@ -241,10 +252,10 @@
       }
     }, {
       key: '_matchListRequest',
-      value: function _matchListRequest(_ref7, cb) {
-        var endUrl = _ref7.endUrl,
-            region = _ref7.region,
-            options = _ref7.options;
+      value: function _matchListRequest(_ref8, cb) {
+        var endUrl = _ref8.endUrl,
+            region = _ref8.region,
+            options = _ref8.options;
 
         return this._baseRequest({
           url: 'v' + versions.MATCH_LIST + '/matchlist/by-summoner/' + endUrl, region: region, options: options
@@ -252,9 +263,9 @@
       }
     }, {
       key: '_statsRequest',
-      value: function _statsRequest(_ref8, cb) {
-        var endUrl = _ref8.endUrl,
-            region = _ref8.region;
+      value: function _statsRequest(_ref9, cb) {
+        var endUrl = _ref9.endUrl,
+            region = _ref9.region;
 
         return this._baseRequest({
           url: 'v' + versions.STATS + '/stats/by-summoner/' + endUrl, region: region
@@ -268,10 +279,10 @@
     }, {
       key: 'getCurrentGame',
       value: function getCurrentGame() {
-        var _ref9 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            _ref9$region = _ref9.region,
-            region = _ref9$region === undefined ? this.defaultRegion : _ref9$region,
-            id = _ref9.id;
+        var _ref10 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            _ref10$region = _ref10.region,
+            region = _ref10$region === undefined ? this.defaultRegion : _ref10$region,
+            id = _ref10.id;
 
         var cb = arguments[1];
 
@@ -280,11 +291,24 @@
         return this._currentGameRequest({ endUrl: '' + id, platformId: platformId, region: region }, cb);
       }
     }, {
+      key: 'getFeaturedGames',
+      value: function getFeaturedGames() {
+        var _ref11 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref11.region;
+
+        var cb = arguments[1];
+
+        return this._observerRequest({
+          endUrl: 'featured',
+          region: region
+        }, cb = region ? cb : arguments[0]);
+      }
+    }, {
       key: 'getLeagues',
       value: function getLeagues() {
-        var _ref10 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref10.region,
-            ids = _ref10.ids;
+        var _ref12 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref12.region,
+            ids = _ref12.ids;
 
         var cb = arguments[1];
 
@@ -299,9 +323,9 @@
     }, {
       key: 'getLeagueEntries',
       value: function getLeagueEntries() {
-        var _ref11 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref11.region,
-            ids = _ref11.ids;
+        var _ref13 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref13.region,
+            ids = _ref13.ids;
 
         var cb = arguments[1];
 
@@ -316,10 +340,10 @@
     }, {
       key: 'getChallengers',
       value: function getChallengers() {
-        var _ref12 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref12.region,
-            _ref12$options = _ref12.options,
-            options = _ref12$options === undefined ? { type: 'RANKED_SOLO_5x5' } : _ref12$options;
+        var _ref14 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref14.region,
+            _ref14$options = _ref14.options,
+            options = _ref14$options === undefined ? { type: 'RANKED_SOLO_5x5' } : _ref14$options;
 
         var cb = arguments[1];
 
@@ -330,10 +354,10 @@
     }, {
       key: 'getMasters',
       value: function getMasters() {
-        var _ref13 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref13.region,
-            _ref13$options = _ref13.options,
-            options = _ref13$options === undefined ? { type: 'RANKED_SOLO_5x5' } : _ref13$options;
+        var _ref15 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref15.region,
+            _ref15$options = _ref15.options,
+            options = _ref15$options === undefined ? { type: 'RANKED_SOLO_5x5' } : _ref15$options;
 
         var cb = arguments[1];
 
@@ -346,10 +370,10 @@
       value: function getSummoners() {
         var _this = this;
 
-        var _ref14 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref14.region,
-            names = _ref14.names,
-            ids = _ref14.ids;
+        var _ref16 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref16.region,
+            names = _ref16.names,
+            ids = _ref16.ids;
 
         var cb = arguments[1];
 
@@ -382,10 +406,10 @@
     }, {
       key: 'getSummoner',
       value: function getSummoner() {
-        var _ref15 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref15.region,
-            name = _ref15.name,
-            id = _ref15.id;
+        var _ref17 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref17.region,
+            name = _ref17.name,
+            id = _ref17.id;
 
         var cb = arguments[1];
 
@@ -396,9 +420,9 @@
     }, {
       key: 'getNames',
       value: function getNames() {
-        var _ref16 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref16.region,
-            ids = _ref16.ids;
+        var _ref18 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref18.region,
+            ids = _ref18.ids;
 
         var cb = arguments[1];
 
@@ -419,10 +443,10 @@
     }, {
       key: 'getRankedStats',
       value: function getRankedStats() {
-        var _ref17 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref17.region,
-            id = _ref17.id,
-            options = _ref17.options;
+        var _ref19 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref19.region,
+            id = _ref19.id,
+            options = _ref19.options;
 
         var cb = arguments[1];
 
@@ -432,11 +456,11 @@
     }, {
       key: 'getMatchList',
       value: function getMatchList() {
-        var _ref18 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref18.region,
-            id = _ref18.id,
-            _ref18$options = _ref18.options,
-            options = _ref18$options === undefined ? { type: 'RANKED_SOLO_5x5' } : _ref18$options;
+        var _ref20 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref20.region,
+            id = _ref20.id,
+            _ref20$options = _ref20.options,
+            options = _ref20$options === undefined ? { type: 'RANKED_SOLO_5x5' } : _ref20$options;
 
         var cb = arguments[1];
 
@@ -446,9 +470,9 @@
     }, {
       key: 'getChampionList',
       value: function getChampionList() {
-        var _ref19 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref19.region,
-            options = _ref19.options;
+        var _ref21 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref21.region,
+            options = _ref21.options;
 
         var cb = arguments[1];
 
@@ -457,10 +481,10 @@
     }, {
       key: 'getChampion',
       value: function getChampion() {
-        var _ref20 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref20.region,
-            id = _ref20.id,
-            options = _ref20.options;
+        var _ref22 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref22.region,
+            id = _ref22.id,
+            options = _ref22.options;
 
         var cb = arguments[1];
 
@@ -470,9 +494,9 @@
     }, {
       key: 'getItems',
       value: function getItems() {
-        var _ref21 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref21.region,
-            options = _ref21.options;
+        var _ref23 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref23.region,
+            options = _ref23.options;
 
         var cb = arguments[1];
 
@@ -481,10 +505,10 @@
     }, {
       key: 'getItem',
       value: function getItem() {
-        var _ref22 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref22.region,
-            id = _ref22.id,
-            options = _ref22.options;
+        var _ref24 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref24.region,
+            id = _ref24.id,
+            options = _ref24.options;
 
         var cb = arguments[1];
 
@@ -494,9 +518,9 @@
     }, {
       key: 'getLanguageStrings',
       value: function getLanguageStrings() {
-        var _ref23 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref23.region,
-            options = _ref23.options;
+        var _ref25 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref25.region,
+            options = _ref25.options;
 
         var cb = arguments[1];
 
@@ -505,8 +529,8 @@
     }, {
       key: 'getLanguages',
       value: function getLanguages() {
-        var _ref24 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref24.region;
+        var _ref26 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref26.region;
 
         var cb = arguments[1];
 
@@ -515,9 +539,9 @@
     }, {
       key: 'getMap',
       value: function getMap() {
-        var _ref25 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref25.region,
-            options = _ref25.options;
+        var _ref27 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref27.region,
+            options = _ref27.options;
 
         var cb = arguments[1];
 
@@ -526,9 +550,9 @@
     }, {
       key: 'getMasteryList',
       value: function getMasteryList() {
-        var _ref26 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref26.region,
-            options = _ref26.options;
+        var _ref28 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref28.region,
+            options = _ref28.options;
 
         var cb = arguments[1];
 
@@ -537,10 +561,10 @@
     }, {
       key: 'getMastery',
       value: function getMastery() {
-        var _ref27 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref27.region,
-            id = _ref27.id,
-            options = _ref27.options;
+        var _ref29 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref29.region,
+            id = _ref29.id,
+            options = _ref29.options;
 
         var cb = arguments[1];
 
@@ -550,8 +574,8 @@
     }, {
       key: 'getRealm',
       value: function getRealm() {
-        var _ref28 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref28.region;
+        var _ref30 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref30.region;
 
         var cb = arguments[1];
 
@@ -560,9 +584,9 @@
     }, {
       key: 'getRuneList',
       value: function getRuneList() {
-        var _ref29 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref29.region,
-            options = _ref29.options;
+        var _ref31 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref31.region,
+            options = _ref31.options;
 
         var cb = arguments[1];
 
@@ -571,10 +595,10 @@
     }, {
       key: 'getRune',
       value: function getRune() {
-        var _ref30 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref30.region,
-            id = _ref30.id,
-            options = _ref30.options;
+        var _ref32 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref32.region,
+            id = _ref32.id,
+            options = _ref32.options;
 
         var cb = arguments[1];
 
@@ -584,9 +608,9 @@
     }, {
       key: 'getSummonerSpellsList',
       value: function getSummonerSpellsList() {
-        var _ref31 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref31.region,
-            options = _ref31.options;
+        var _ref33 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref33.region,
+            options = _ref33.options;
 
         var cb = arguments[1];
 
@@ -595,10 +619,10 @@
     }, {
       key: 'getSummonerSpell',
       value: function getSummonerSpell() {
-        var _ref32 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref32.region,
-            id = _ref32.id,
-            options = _ref32.options;
+        var _ref34 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref34.region,
+            id = _ref34.id,
+            options = _ref34.options;
 
         var cb = arguments[1];
 
@@ -608,9 +632,9 @@
     }, {
       key: 'getVersions',
       value: function getVersions() {
-        var _ref33 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref33.region,
-            options = _ref33.options;
+        var _ref35 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref35.region,
+            options = _ref35.options;
 
         var cb = arguments[1];
 

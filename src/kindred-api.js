@@ -68,10 +68,17 @@ class Kindred {
     })
   }
 
-  _currentGameRequest({ endUrl, region, platformId }, cb) {
+  _observerRequest({ endUrl, region }, cb) {
     return this._baseRequest({
-      url: `observer-mode/rest/consumer/getSpectatorGameInfo/${platformId}/${endUrl}`,
+      url: `observer-mode/rest/${endUrl}`,
       observerMode: true,
+      region
+    }, cb)
+  }
+
+  _currentGameRequest({ endUrl, region, platformId }, cb) {
+    return this._observerRequest({
+      endUrl: `consumer/getSpectatorGameInfo/${platformId}/${endUrl}`,
       region
     }, cb)
   }
@@ -122,6 +129,13 @@ class Kindred {
     )
     const platformId = PLATFORM_IDS[REGIONS_BACK[region]]
     return this._currentGameRequest({ endUrl: `${id}`, platformId, region }, cb)
+  }
+
+  getFeaturedGames({ region } = {}, cb) {
+    return this._observerRequest({
+      endUrl: 'featured',
+      region
+    }, cb = region ? cb : arguments[0])
   }
 
   getLeagues({ region, ids } = {}, cb) {
@@ -203,7 +217,7 @@ class Kindred {
     )
   }
 
-  getNames({ region, ids } = {}, cb) {
+  getSummonerNames({ region, ids } = {}, cb) {
     if (Array.isArray(ids) && ids.length > 0) {
       return this._summonerRequest({
         endUrl: `${ids.join(',')}/name`,
@@ -215,7 +229,7 @@ class Kindred {
         region
       }, cb)
     } else {
-      this._logError(this.getNames.name, 'ids can be either an array or a single integer')
+      this._logError(this.getSummonerNames.name, 'ids can be either an array or a single integer')
     }
   }
 
