@@ -110,6 +110,7 @@ k.getSummoner(fakerIgn, function (err, data) {
       list of integers
 */
 
+k.setRegion(REGIONS.NORTH_AMERICA)
 // all valid
 k.getRunes({ ids: [354959, 21542029] }, rprint)
 k.getRunes({ id: 354959 }, rprint)
@@ -141,8 +142,9 @@ k.getLeagues({ names: ['Richelle', 'Grigne'] }, rprint)
     and this pattern will stay constant
     throughout all my methods.
 */
+k.setRegion(REGIONS.KOREA)
 k.getRankedStats(fakerId, rprint)
-
+k.setRegion(REGIONS.NORTH_AMERICA)
 /*
   Functions will have an options parameter that you can pass in query
   strings when applicable. Values of options should match the
