@@ -18,29 +18,16 @@ class Kindred {
     return name.replace(/\s/g, '').toLowerCase()
   }
 
-  _makeUrl(url, region, staticReq, observerMode) {
-    const mid = staticReq ? '' : `${region}/`
-    const spectate = observerMode ? '' : `api/lol/${mid}`
-    return `https://${region}.api.riotgames.com/${spectate}${url}?api_key=${this.key}`
+  _makeUrl(url, region, statusReq, status, observerMode) {
+    const mid = statusReq ? '' : `${region}/`
+    const starter = (!status && !observerMode) ? `api/lol/${mid}` : observerMode ? '' : 'lol/status/'
+
+    return `https://${region}.api.riotgames.com/${starter}${url}?api_key=${this.key}`
   }
 
-  _urlHandler({ region, names, name, ids, id, options = {}, endpoints }) {
-    if (checkAll.string(names)) {
-      return this._leagueRequest({})
-    } else if (typeof names === 'string') {
-
-    } else if (checkAll.int(ids)) {
-
-    } else if (Number.isInteger(ids)) {
-
-    } else {
-
-    }
-  }
-
-  _baseRequest({ url, region = this.defaultRegion, observerMode = false, staticReq = false, options = {} }, cb) {
+  _baseRequest({ url, region = this.defaultRegion, status = false, observerMode = false, staticReq = false, options = {} }, cb) {
     const proxy = staticReq ? 'global' : region
-    const reqUrl = this._makeUrl(url, proxy, staticReq, observerMode)
+    const reqUrl = this._makeUrl(url, proxy, staticReq, status, observerMode)
     console.log(reqUrl)
     if (!cb)
       console.log(
@@ -92,13 +79,23 @@ class Kindred {
     }, cb)
   }
 
+  _gameRequest({ endUrl, region }, cb) {
+    return this._baseRequest({
+      url: `v${VERSIONS.GAME}/game/${endUrl}`, region
+    }, cb)
+  }
+
   _leagueRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
       url: `v${VERSIONS.LEAGUE}/league/${endUrl}`, region, options
     }, cb)
   }
 
-  _matchRequest({ endUrl, region, id, options }, cb) {
+  _statusRequest({ endUrl, region }, cb) {
+    return this._baseRequest({ url: `v${VERSIONS.STATUS}/${endUrl}`, region, status: true }, cb)
+  }
+
+  _matchRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
       url: `v${VERSIONS.MATCH}/match/${endUrl}`, region, options
     }, cb)
@@ -110,9 +107,9 @@ class Kindred {
     }, cb)
   }
 
-  _statsRequest({ endUrl, region }, cb) {
+  _statsRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
-      url: `v${VERSIONS.STATS}/stats/by-summoner/${endUrl}`, region
+      url: `v${VERSIONS.STATS}/stats/by-summoner/${endUrl}`, region, options
     }, cb)
   }
 
@@ -146,6 +143,14 @@ class Kindred {
       endUrl: 'featured',
       region
     }, cb = region ? cb : arguments[0])
+  }
+
+  getRecentGames({ region, id } = {}, cb) {
+    if (!id || !Number.isInteger(id)) return this._logError(
+      this.getRecentGames.name,
+      `required params ${chalk.yellow('`id` (int)')} not passed in`
+    )
+    return this._gameRequest({ endUrl: `by-summoner/${id}/recent`, region }, cb)
   }
 
   getLeagues({ region, ids } = {}, cb) {
@@ -249,6 +254,14 @@ class Kindred {
       `required params ${chalk.yellow('`id` (int)')} not passed in`
     )
     return this._statsRequest({ endUrl: `${id}/ranked`, region, options }, cb)
+  }
+
+  getShardStatus({ region }, cb) {
+    return this._statusRequest({ endUrl: 'shard', region }, cb = region ? cb : arguments[0])
+  }
+
+  getShardList({ region }, cb) {
+    return this._statusRequest({ endUrl: 'shards', region }, cb = region ? cb : arguments[0])
   }
 
   getMatch({ region, id, options = { includeTimeline: true } }, cb) {

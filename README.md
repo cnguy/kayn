@@ -222,8 +222,8 @@ to each endpoint!
 
 | Type | Endpoint | Description | Covered |
 | -------- | -------- | ----------- | ------- |
-| GET | /lol/status/v1/shard | Get shard status. Returns the data available on the status.leagueoflegends.com website for the given region. (REST) | no |
-| GET | /lol/status/v1/shards | Get shard list. (REST) | no |
+| GET | /lol/status/v1/shard | Get shard status. Returns the data available on the status.leagueoflegends.com website for the given region. (REST) | yes |
+| GET | /lol/status/v1/shards | Get shard list. (REST) | yes |
 
 ### MATCH-V.2.2
 [docs](https://developer.riotgames.com/api-methods/#match-v2.2)
