@@ -42,33 +42,33 @@ var k = Kindred(RIOT_API_KEY, regions.NORTH_AMERICA)
   Note that getSummoners() can target a specific summoner.
   You can also use getSummoner(), though.
 */
-function printDataFn(err, data) { console.log(data) }
-var me = k.getSummoners({ name: 'caaaaaaaaaria' }, printDataFn)
-var otherMe = k.getSummoner({ name: 'caaaaaaaaaria' }, printDataFn)
+function rprint(err, data) { console.log(data) }
+var me = k.getSummoners({ name: 'caaaaaaaaaria' }, rprint)
+var otherMe = k.getSummoner({ name: 'caaaaaaaaaria' }, rprint)
 
 /*
   When 'names' and/or 'ids' parameters are available, you
   can pass in an array.
 */
 var names = ['beautifulkorean', 'c9gun', 'caaaaaaaaarIa']
-var players = k.getSummoners({ names: names }, printDataFn)
+var players = k.getSummoners({ names: names }, rprint)
 
 /*
   But I won't stop you from passing in a single string
   to the plural version of the parameter.
 */
-var me2 = k.getSummoners({ names: 'caaaaaaaaaria' }, printDataFn)
+var me2 = k.getSummoners({ names: 'caaaaaaaaaria' }, rprint)
 
 /* Every method has an optional region parameter. */
 var options = { name: 'sktt1peanut', region: REGIONS.KOREA }
-var p1 = k.getSummoner(options, printDataFn) // peanut's data
+var p1 = k.getSummoner(options, rprint) // peanut's data
 
 /* Changing the default region! */
 k.setRegion(REGIONS.KOREA)
 
 /* Note that you can use spaces in the name. */
 var fakerIgn = { name: 'hide on bush' }
-var p2 = k.getSummoner(fakerIgn, printDataFn) // faker's data
+var p2 = k.getSummoner(fakerIgn, rprint) // faker's data
 var fakerId = { id: p2[fakerIgn.name]['id'] }
 
 /*
@@ -77,7 +77,7 @@ var fakerId = { id: p2[fakerIgn.name]['id'] }
     and this pattern will stay constant
     throughout all my methods.
 */
-var fakerStats = k.getRankedStats(fakerId, printDataFn)
+var fakerStats = k.getRankedStats(fakerId, rprint)
 
 /*
   Functions will have an options parameter that you can pass in query
