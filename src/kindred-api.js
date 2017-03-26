@@ -98,9 +98,9 @@ class Kindred {
     }, cb)
   }
 
-  _summonerRequest({ endUrl, region }, cb) {
+  _matchRequest({ endUrl, region, id, options }, cb) {
     return this._baseRequest({
-      url: `v${VERSIONS.SUMMONER}/summoner/${endUrl}`, region
+      url: `v${VERSIONS.MATCH}/match/${endUrl}`, region, options
     }, cb)
   }
 
@@ -116,10 +116,20 @@ class Kindred {
     }, cb)
   }
 
+  _summonerRequest({ endUrl, region }, cb) {
+    return this._baseRequest({
+      url: `v${VERSIONS.SUMMONER}/summoner/${endUrl}`, region
+    }, cb)
+  }
+
   _logError(message, expected) {
     console.log(
       chalk.bold.yellow(message), chalk.red('request'), chalk.bold.red('FAILED') + chalk.red(`; ${expected}`)
     )
+  }
+
+  setRegion(region) {
+    this.defaultRegion = region
   }
 
   getCurrentGame({ region = this.defaultRegion, id } = {}, cb) {
@@ -239,6 +249,14 @@ class Kindred {
       `required params ${chalk.yellow('`id` (int)')} not passed in`
     )
     return this._statsRequest({ endUrl: `${id}/ranked`, region, options }, cb)
+  }
+
+  getMatch({ region, id, options = { includeTimeline: true } }, cb) {
+    if (!id || !Number.isInteger(id)) return this._logError(
+      this.getMatch.name,
+      `required params ${chalk.yellow('`id` (int)')} not passed in`
+    )
+    return this._matchRequest({ endUrl: `${id}`, region, options }, cb)
   }
 
   getMatchList({ region, id, options = { type: 'RANKED_SOLO_5x5' } } = {}, cb) {

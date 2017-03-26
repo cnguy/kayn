@@ -114,7 +114,8 @@ k.getChallengers({ region: 'na', options: {
 }}, rprint) // get challengers from ranked flex ladder
 k.getSummoner()
 // getSummoner request FAILED; required parameters `name` (string) or `id` (int) not passed in
-
+k.getMatch({ id: 2459973154 }, rprint) // includes timeline by default
+k.getMatch({ id: 2459973154, options: { includeTimeline: false } }, rprint)
 /*
   Note that the first parameter of most methods must always be an object.
   But for specific methods that only have optional parameters or arguments
@@ -229,7 +230,7 @@ to each endpoint!
 
 | Type | Endpoint | Description | Covered |
 | -------- | -------- | ----------- | ------- |
-| GET | /api/lol/{region}/v2.2/match/{matchId} | Retrieve match by match ID. (REST) | no |
+| GET | /api/lol/{region}/v2.2/match/{matchId} | Retrieve match by match ID. (REST) | yes |
 
 ### MATCHLIST-V2.2
 [docs](https://developer.riotgames.com/api-methods/#matchlist-v2.2)
