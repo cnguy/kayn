@@ -39,12 +39,29 @@ var k = Kindred(RIOT_API_KEY, regions.NORTH_AMERICA)
 
 /*
   The first parameter of most methods will be an object.
+
   Note that getSummoners() can target a specific summoner.
   You can also use getSummoner(), though.
 */
 function rprint(err, data) { console.log(data) }
 k.getSummoners({ name: 'caaaaaaaaaria' }, rprint)
 k.getSummoner({ name: 'caaaaaaaaaria' }, rprint)
+
+/*
+  getSummoners & getSummoner target many endpoints. In the case
+  of the summoner endpoints, it made a lot more sense for them
+  to target other endpoints.
+  
+  The example above targets the by-name endpoint, while
+  the example below targets the by-id endpoint.
+*/
+k.getSummoner({ id: 32823699 }, rprint)
+
+/*
+  Note, I don't prefix the id parameter with something such as
+  matchId or summonerId or runeId.
+*/
+k.getMatch({ id: 2459973154 }, rprint)
 
 /*
   When 'names' and/or 'ids' parameters are available, you
@@ -113,6 +130,8 @@ k.getSummoners({ names: names2 }, function (err, data) {
 */
 k.getRunes({ names: ['Richelle', 'Grigne'] }, rprint)
 k.getRune({ name: ['Richelle'] }, rprint)
+k.getRecentGames({ name: 'Richelle' }, rprint)
+k.getLeagues({ names: ['Richelle', 'Grigne'] }, rprint)
 
 /*
     Default ranked mode is 'RANKED_SOLO_5x5' for all
