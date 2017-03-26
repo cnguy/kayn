@@ -4,41 +4,15 @@ Kindred is a thin Node.js wrapper on top of [Riot Games API for League of Legend
 
 ## Table of Contents
 * [Philosophy](#philosophy)
-* [Endpoints Covered](#endpoints-covered)
 * [Installation](#installation)
 * [Quick Usage Examples](#quick-usage-examples)
+* [Endpoints Covered](#endpoints-covered)
 * [Full Documentation](#full-documentation)
 
 ## Philosophy
 My goal is to make a wrapper that is convenient and sensisible. This project is heavily inspired by [psuedonym117's Python wrapper](https://github.com/pseudonym117/Riot-Watcher). My goal is to make the API as consistent as possible and also make the rate-limiting as robust as possible.
 
 For function methods, ```get``` implies a request.
-
-## Endpoints Covered
-### LOL-STATIC-DATA-V1.2
-| Type | Endpoint | Description | Covered |
-| -------- | -------- | ----------- | ------- |
-| GET | /api/lol/static-data/{region}/v1.2/champion | Retrieves champion list. (REST) | yes |
-| GET | /api/lol/static-data/{region}/v1.2/champion/{id} | Retrieves a champion by its id. (REST) | yes |
-| GET | /api/lol/static-data/{region}/v1.2/item | Retrieves item list. (REST) | yes |
-| GET | /api/lol/static-data/{region}/v1.2/item/{id} | Retrieves item by its unique id. (REST) | yes |
-| GET | /api/lol/static-data/{region}/v1.2/language-strings | Retrieve language strings data. (REST) | yes |
-| GET | /api/lol/static-data/{region}/v1.2/languages | Retrieve supported languages data. (REST) | yes |
-| GET | /api/lol/static-data/{region}/v1.2/map | Retrieve map data. (REST) | yes |
-| GET | /api/lol/static-data/{region}/v1.2/mastery | Retrieve mastery list. (REST) | yes |
-| GET | /api/lol/static-data/{region}/v1.2/mastery/{id} | Retrieves mastery item by its unique id. (REST) | yes |
-| GET | /api/lol/static-data/{region}/v1.2/realm | Retrieve realm data. (REST) | yes |
-| GET | /api/lol/static-data/{region}/v1.2/rune | Retrieves rune list. (REST) | yes |
-| GET | /api/lol/static-data/{region}/v1.2/rune/{id} | Retrieves rune by its unique id. (REST) | yes |
-| GET | /api/lol/static-data/{region}/v1.2/summoner-spell | Retrieves summoner spell list. (REST) | yes |
-| GET | /api/lol/static-data/{region}/v1.2/summoner-spell/{id} | Retrieves summoner spell by its unique id. (REST) | yes |
-| GET | /api/lol/static-data/{region}/v1.2/versions | Retrieve version data. (REST) | yes |
-
-### STATS-V1.3
-| Type | Endpoint | Description | Covered |
-| -------- | -------- | ----------- | ------- |
-| GET | /api/lol/{region}/v1.3/stats/by-summoner/{summonerId}/ranked | Get ranked stats by summoner ID. (REST) | yes |
-| GET | /api/lol/{region}/v1.3/stats/by-summoner/{summonerId}/summary | Get player stats summaries by summoner ID. (REST) | no |
 
 ## Installation
 
@@ -161,5 +135,82 @@ k.getMastery({ id: furyMasteryId }, rprint)
 var msRuneId = 10002
 k.getRune({ id: msRuneId }, rprint)
 ```
+
+## Endpoints Covered
+
+
+
+### CHAMPION-V1.2
+
+
+
+### CHAMPIONMASTERY
+
+
+
+### CURRENT-GAME-V1.0
+
+
+
+### FEATURED-GAMES-V1.0
+
+
+
+### GAME-V1.3
+
+
+
+### LEAGUE-V2.5
+| Type | Endpoint | Description | Covered |
+| -------- | -------- | ----------- | ------- |
+| GET | /api/lol/{region}/v2.5/league/by-summoner/{summonerIds} | Get leagues mapped by summoner ID for a given list of summoner IDs. (REST) | yes |
+| GET | /api/lol/{region}/v2.5/league/by-summoner/{summonerIds}/entry | Get league entries mapped by summoner ID for a given list of summoner IDs. (REST) | yes |
+| GET | /api/lol/{region}/v2.5/league/challenger | Get challenger tier leagues. (REST) | yes |
+| GET | /api/lol/{region}/v2.5/league/master | Get master tier leagues. (REST) | yes |
+
+### LOL-STATIC-DATA-V1.2
+| Type | Endpoint | Description | Covered |
+| -------- | -------- | ----------- | ------- |
+| GET | /api/lol/static-data/{region}/v1.2/champion | Retrieves champion list. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/champion/{id} | Retrieves a champion by its id. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/item | Retrieves item list. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/item/{id} | Retrieves item by its unique id. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/language-strings | Retrieve language strings data. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/languages | Retrieve supported languages data. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/map | Retrieve map data. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/mastery | Retrieve mastery list. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/mastery/{id} | Retrieves mastery item by its unique id. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/realm | Retrieve realm data. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/rune | Retrieves rune list. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/rune/{id} | Retrieves rune by its unique id. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/summoner-spell | Retrieves summoner spell list. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/summoner-spell/{id} | Retrieves summoner spell by its unique id. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/versions | Retrieve version data. (REST) | yes |
+
+### LOL-STATUS-V1.0
+
+
+
+### MATCH-V.2.2
+
+
+
+### MATCHLIST-V2.2
+
+
+
+### RUNES-MASTERIES-V1.4
+
+
+
+### STATS-V1.3
+| Type | Endpoint | Description | Covered |
+| -------- | -------- | ----------- | ------- |
+| GET | /api/lol/{region}/v1.3/stats/by-summoner/{summonerId}/ranked | Get ranked stats by summoner ID. (REST) | yes |
+| GET | /api/lol/{region}/v1.3/stats/by-summoner/{summonerId}/summary | Get player stats summaries by summoner ID. (REST) | no |
+
+### SUMMONER-V1.4
+
+
 
 ## Full Documentation
