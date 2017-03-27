@@ -18,17 +18,21 @@ class Kindred {
     return name.replace(/\s/g, '').toLowerCase()
   }
 
-  _makeUrl(url, region, statusReq, status, observerMode) {
-    const mid = statusReq ? '' : `${region}/`
-    const starter = (!status && !observerMode) ? `api/lol/${mid}` : observerMode ? '' : 'lol/status/'
-
-    return `https://${region}.api.riotgames.com/${starter}${url}?api_key=${this.key}`
+  _validName(name) {
+    return RegExp('^[0-9\\p{L} _\\.]+$').test(name)
   }
 
-  _baseRequest({ url, region = this.defaultRegion, status = false, observerMode = false, staticReq = false, options = {} }, cb) {
+  _makeUrl(query, region, statusReq, status, observerMode) {
+    const mid = statusReq ? '' : `${region}/`
+    const prefix = !status && !observerMode ? `api/lol/${mid}` : observerMode ? '' : 'lol/status/'
+
+    return `https://${region}.api.riotgames.com/${prefix}${encodeURI(query)}?api_key=${this.key}`
+  }
+
+  _baseRequest({ endUrl, region = this.defaultRegion, status = false, observerMode = false, staticReq = false, options = {} }, cb) {
     const proxy = staticReq ? 'global' : region
-    const reqUrl = this._makeUrl(url, proxy, staticReq, status, observerMode)
-    console.log(reqUrl)
+    const reqUrl = this._makeUrl(endUrl, proxy, staticReq, status, observerMode)
+
     if (!cb)
       console.log(
         chalk.red(
@@ -40,15 +44,14 @@ class Kindred {
       let statusMessage
       const { statusCode } = response
 
-      if (statusCode >= 200 && statusCode < 300) {
+      if (statusCode >= 200 && statusCode < 300)
         statusMessage = chalk.green(statusCode)
-      } else if (statusCode >= 400 && statusCode < 500) {
+      else if (statusCode >= 400 && statusCode < 500)
         statusMessage = chalk.red(statusCode)
-      } else if (statusCode >= 500) {
+      else if (statusCode >= 500)
         statusMessage = chalk.bold.red(statusCode)
-      }
 
-      console.log('status code:', response && statusMessage)
+      console.log(response && statusMessage, reqUrl)
 
       if (error) return cb(error)
       else return cb(error, JSON.parse(body))
@@ -57,7 +60,7 @@ class Kindred {
 
   _observerRequest({ endUrl, region }, cb) {
     return this._baseRequest({
-      url: `observer-mode/rest/${endUrl}`,
+      endUrl: `observer-mode/rest/${endUrl}`,
       observerMode: true,
       region
     }, cb)
@@ -72,7 +75,7 @@ class Kindred {
 
   _staticRequest({ endUrl, region = this.defaultRegion, options }, cb) {
     return this._baseRequest({
-      url: `static-data/${region}/v${VERSIONS.STATIC_DATA}/${endUrl}`,
+      endUrl: `static-data/${region}/v${VERSIONS.STATIC_DATA}/${endUrl}`,
       staticReq: true,
       region,
       options
@@ -81,29 +84,29 @@ class Kindred {
 
   _gameRequest({ endUrl, region }, cb) {
     return this._baseRequest({
-      url: `v${VERSIONS.GAME}/game/${endUrl}`, region
+      endUrl: `v${VERSIONS.GAME}/game/${endUrl}`, region
     }, cb)
   }
 
   _leagueRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
-      url: `v${VERSIONS.LEAGUE}/league/${endUrl}`, region, options
+      endUrl: `v${VERSIONS.LEAGUE}/league/${endUrl}`, region, options
     }, cb)
   }
 
   _statusRequest({ endUrl, region }, cb) {
-    return this._baseRequest({ url: `v${VERSIONS.STATUS}/${endUrl}`, region, status: true }, cb)
+    return this._baseRequest({ endUrl: `v${VERSIONS.STATUS}/${endUrl}`, region, status: true }, cb)
   }
 
   _matchRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
-      url: `v${VERSIONS.MATCH}/match/${endUrl}`, region, options
+      endUrl: `v${VERSIONS.MATCH}/match/${endUrl}`, region, options
     }, cb)
   }
 
   _matchListRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
-      url: `v${VERSIONS.MATCH_LIST}/matchlist/by-summoner/${endUrl}`, region, options
+      endUrl: `v${VERSIONS.MATCH_LIST}/matchlist/by-summoner/${endUrl}`, region, options
     }, cb)
   }
 
@@ -113,13 +116,13 @@ class Kindred {
 
   _statsRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
-      url: `v${VERSIONS.STATS}/stats/by-summoner/${endUrl}`, region, options
+      endUrl: `v${VERSIONS.STATS}/stats/by-summoner/${endUrl}`, region, options
     }, cb)
   }
 
   _summonerRequest({ endUrl, region }, cb) {
     return this._baseRequest({
-      url: `v${VERSIONS.SUMMONER}/summoner/${endUrl}`, region
+      endUrl: `v${VERSIONS.SUMMONER}/summoner/${endUrl}`, region
     }, cb)
   }
 
@@ -133,12 +136,21 @@ class Kindred {
     this.defaultRegion = region
   }
 
-  getCurrentGame({ region = this.defaultRegion, id } = {}, cb) {
-    if (!id || !Number.isInteger(id)) return this._logError(
+  getCurrentGame({ region = this.defaultRegion, id, name } = {}, cb) {
+    if (typeof arguments[0] !== 'object' || (!id || !Number.isInteger(id)) && !name) return this._logError(
       this.getCurrentGame.name,
-      `required params ${chalk.yellow('`id` (int)')} not passed in`
+      `required params ${chalk.yellow('`id` (int)')} or ${chalk.yellow('`name` (string)')} not passed in`
     )
+
     const platformId = PLATFORM_IDS[REGIONS_BACK[region]]
+
+    if (!id && typeof name === 'string') {
+      return this.getSummoner({ name, region }, (err, data) => {
+        console.log(data)
+        if (!err) return this._currentGameRequest({ endUrl: `${data[this._sanitizeName(name)].id}`, platformId, region }, cb)
+      })
+    }
+
     return this._currentGameRequest({ endUrl: `${id}`, platformId, region }, cb)
   }
 
@@ -159,7 +171,7 @@ class Kindred {
       return this._gameRequest({ endUrl: `by-summoner/${id}/recent`, region }, cb)
 
     if (typeof name === 'string') {
-      return this.getSummoner({ name }, (err, data) => {
+      return this.getSummoner({ name, region }, (err, data) => {
         return this._gameRequest({
           endUrl: `by-summoner/${data[this._sanitizeName(name)].id}/recent`, region
         }, cb)
@@ -167,7 +179,7 @@ class Kindred {
     }
   }
 
-  getLeagues({ region, ids } = {}, cb) {
+  getLeagues({ region, ids, id, names, name } = {}, cb) {
     if (checkAll.int(ids)) {
       return this._leagueRequest({ endUrl: `by-summoner/${ids.join(',')}`, region }, cb)
     } else if (Number.isInteger(ids)) {
@@ -205,15 +217,15 @@ class Kindred {
     }, cb)
   }
 
-  getSummoners({ region, names, ids } = {}, cb) {
+  getSummoners({ region, ids, id, names, name } = {}, cb) {
     if (checkAll.string(names)) {
       return this._summonerRequest({
         endUrl: `by-name/${names.map(name => this._sanitizeName(name)).join(',')}`,
         region
       }, cb)
-    } else if (typeof names === 'string') {
+    } else if (typeof names === 'string' || typeof name === 'string') {
       return this._summonerRequest({
-        endUrl: `by-name/${names}`,
+        endUrl: `by-name/${names || name}`,
         region
       }, cb)
     } else if (checkAll.int(ids)) {
@@ -221,18 +233,15 @@ class Kindred {
         endUrl: `${ids.join(',')}`,
         region
       }, cb)
-    } else if (Number.isInteger(ids)) {
+    } else if (Number.isInteger(ids) || Number.isInteger(id)) {
       return this._summonerRequest({
-        endUrl: `${ids}`,
+        endUrl: `${ids || id}`,
         region
       }, cb)
     } else {
       this._logError(
         this.getSummoners.name,
-        !names && !ids ? 'required parameters not passed' :
-        ids ?
-          'ids can be either an array of integers or a single integer' :
-          'names can be either an array of strings or a single string'
+        `required params ${chalk.yellow('`ids` (array of ints)')}, ${chalk.yellow('`id` (int)')}, ${chalk.yellow('`names` (array of strings)')}, or ${chalk.yellow('`name` (string)')} not passed in`
       )
     }
   }

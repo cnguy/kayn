@@ -4,7 +4,8 @@
   "main": "index.js",
   "jsnext:main": "src/index.js",
   "scripts": {
-    "go": "yarn lint && yarn build && node index.js",
+    "go": "yarn lint && yarn build && yarn minify && node index.js",
+    "prepare": "yarn build && yarn minify",
     "test": "node make test",
     "serve": "node make serve",
     "lint": "node make eslint",
