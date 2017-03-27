@@ -9,9 +9,10 @@ import VERSIONS from './constants/versions'
 import checkAll from './helpers/array-checkers'
 
 class Kindred {
-  constructor(key, defaultRegion = REGIONS.NORTH_AMERICA) {
+  constructor({ key, defaultRegion = REGIONS.NORTH_AMERICA, debug = false }) {
     this.key = key
     this.defaultRegion = defaultRegion
+    this.debug = debug
   }
 
   _sanitizeName(name) {
@@ -40,7 +41,7 @@ class Kindred {
         )
       )
 
-    request({ url: reqUrl, qs: options }, function (error, response, body) {
+    request({ url: reqUrl, qs: options }, (error, response, body) => {
       let statusMessage
       const { statusCode } = response
 
@@ -51,7 +52,13 @@ class Kindred {
       else if (statusCode >= 500)
         statusMessage = chalk.bold.red(statusCode)
 
-      console.log(response && statusMessage, reqUrl)
+      if (this.debug) {
+        console.log(response && statusMessage, reqUrl)
+        console.log('x-app-rate-limit-count', response.headers['x-app-rate-limit-count'])
+        console.log('x-method-rate-limit-count', response.headers['x-method-rate-limit-count'])
+        console.log('x-rate-limit-count', response.headers['x-rate-limit-count'])
+        console.log('retry-after', response.headers['retry-after'])
+      }
 
       if (error) return cb(error)
       else return cb(error, JSON.parse(body))

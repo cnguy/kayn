@@ -35,7 +35,11 @@ var REGIONS = require('regions')
     Default region for every method call is NA,
     but you can set it during initialization as shown below.
 */
-var k = Kindred(RIOT_API_KEY, regions.NORTH_AMERICA)
+var k = new Kindred({
+  key: RIOT_API_KEY,
+  defaultRegion: REGIONS.NORTH_AMERICA, // na by default
+  debug: true // false by default
+})
 
 /*
   The first parameter of most methods will be an object.
@@ -75,7 +79,7 @@ k.getSummoners({ names: names }, rprint)
 /*
   But I won't stop you from passing in a single string
   to the plural version of the parameter. Any method
-  that can accept multiple values for a parameter is flexibile.
+  that can accept multiple values for a parameter is flexible.
   Things that can only target one thing like getSummoner() on the
   other hand can only target one thing at a time
   though, and thus only has 'name' and 'id' parameters.
