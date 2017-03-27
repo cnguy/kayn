@@ -453,7 +453,17 @@
 
         var cb = arguments[1];
 
-        if (checkAll.string(names)) {
+        if (checkAll.int(ids)) {
+          return this._summonerRequest({
+            endUrl: '' + ids.join(','),
+            region: region
+          }, cb);
+        } else if (Number.isInteger(ids) || Number.isInteger(id)) {
+          return this._summonerRequest({
+            endUrl: '' + (ids || id),
+            region: region
+          }, cb);
+        } else if (checkAll.string(names)) {
           return this._summonerRequest({
             endUrl: 'by-name/' + names.map(function (name) {
               return _this3._sanitizeName(name);
@@ -463,16 +473,6 @@
         } else if (typeof names === 'string' || typeof name === 'string') {
           return this._summonerRequest({
             endUrl: 'by-name/' + (names || name),
-            region: region
-          }, cb);
-        } else if (checkAll.int(ids)) {
-          return this._summonerRequest({
-            endUrl: '' + ids.join(','),
-            region: region
-          }, cb);
-        } else if (Number.isInteger(ids) || Number.isInteger(id)) {
-          return this._summonerRequest({
-            endUrl: '' + (ids || id),
             region: region
           }, cb);
         } else {
@@ -755,15 +755,17 @@
 
         var cb = arguments[1];
 
-        if (!ids && !id && !names && !name) return this._logError(this.getRunes.name, 'required params ' + chalk.yellow('`ids` (array of ints)') + ', ' + chalk.yellow('`id` (int)') + ', ' + chalk.yellow('`names` (array of strings)') + ', or ' + chalk.yellow('`name` (string)') + ' not passed in');
-
-        var param = void 0;
-
-        if (checkAll.int(ids)) param = ids.join(',');
-        if (Number.isInteger(ids)) param = [ids];
-        if (id && !Number.isInteger(id)) param = [id];
-
-        if (checkAll.string(names)) {
+        if (checkAll.int(ids)) {
+          return this._runesMasteriesRequest({
+            endUrl: ids.join() + '/runes',
+            region: region
+          }, cb);
+        } else if (Number.isInteger(ids) || Number.isInteger(id)) {
+          return this._runesMasteriesRequest({
+            endUrl: (ids || id) + '/runes',
+            region: region
+          }, cb);
+        } else if (checkAll.string(names)) {
           return this.getSummoners({ names: names, region: region }, function (err, data) {
             var args = [];
 
@@ -797,21 +799,16 @@
               region: region
             }, cb);
           });
-        }
-
-        if (typeof name === 'string') {
-          return this.getSummoner({ name: name, region: region }, function (err, data) {
+        } else if (typeof names === 'string' || typeof name === 'string') {
+          return this.getSummoner({ name: names || name, region: region }, function (err, data) {
             return _this4._runesMasteriesRequest({
-              endUrl: data[_this4._sanitizeName(name)].id + '/runes',
+              endUrl: data[_this4._sanitizeName(names || name)].id + '/runes',
               region: region
             }, cb);
           });
+        } else {
+          return this._logError(this.getRunes.name, 'required params ' + chalk.yellow('`ids` (array of ints)') + ', ' + chalk.yellow('`id` (int)') + ', ' + chalk.yellow('`names` (array of strings)') + ', or ' + chalk.yellow('`name` (string)') + ' not passed in');
         }
-
-        return this._runesMasteriesRequest({
-          endUrl: param + '/runes',
-          region: region
-        }, cb);
       }
     }, {
       key: 'getMasteries',

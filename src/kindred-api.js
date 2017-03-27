@@ -218,17 +218,7 @@ class Kindred {
   }
 
   getSummoners({ region, ids, id, names, name } = {}, cb) {
-    if (checkAll.string(names)) {
-      return this._summonerRequest({
-        endUrl: `by-name/${names.map(name => this._sanitizeName(name)).join(',')}`,
-        region
-      }, cb)
-    } else if (typeof names === 'string' || typeof name === 'string') {
-      return this._summonerRequest({
-        endUrl: `by-name/${names || name}`,
-        region
-      }, cb)
-    } else if (checkAll.int(ids)) {
+    if (checkAll.int(ids)) {
       return this._summonerRequest({
         endUrl: `${ids.join(',')}`,
         region
@@ -236,6 +226,16 @@ class Kindred {
     } else if (Number.isInteger(ids) || Number.isInteger(id)) {
       return this._summonerRequest({
         endUrl: `${ids || id}`,
+        region
+      }, cb)
+    } else if (checkAll.string(names)) {
+      return this._summonerRequest({
+        endUrl: `by-name/${names.map(name => this._sanitizeName(name)).join(',')}`,
+        region
+      }, cb)
+    } else if (typeof names === 'string' || typeof name === 'string') {
+      return this._summonerRequest({
+        endUrl: `by-name/${names || name}`,
         region
       }, cb)
     } else {
@@ -384,18 +384,17 @@ class Kindred {
   }
 
   getRunes({ region, ids, id, names, name } = {}, cb) {
-    if (!ids && !id && !names && !name) return this._logError(
-      this.getRunes.name,
-      `required params ${chalk.yellow('`ids` (array of ints)')}, ${chalk.yellow('`id` (int)')}, ${chalk.yellow('`names` (array of strings)')}, or ${chalk.yellow('`name` (string)')} not passed in`
-    )
-
-    let param
-
-    if (checkAll.int(ids)) param = ids.join(',')
-    if (Number.isInteger(ids)) param = [ids]
-    if (id && !Number.isInteger(id)) param = [id]
-
-    if (checkAll.string(names)) {
+    if (checkAll.int(ids)) {
+      return this._runesMasteriesRequest({
+        endUrl: `${ids.join()}/runes`,
+        region
+      }, cb)
+    } else if (Number.isInteger(ids) || Number.isInteger(id)) {
+      return this._runesMasteriesRequest({
+        endUrl: `${ids || id}/runes`,
+        region
+      }, cb)
+    } else if (checkAll.string(names)) {
       return this.getSummoners({ names, region }, (err, data) => {
         let args = []
 
@@ -407,21 +406,19 @@ class Kindred {
           region
         }, cb)
       })
-    }
-
-    if (typeof name === 'string') {
-      return this.getSummoner({ name, region }, (err, data) => {
+    } else if (typeof names === 'string' || typeof name === 'string') {
+      return this.getSummoner({ name: names || name, region }, (err, data) => {
         return this._runesMasteriesRequest({
-          endUrl: `${data[this._sanitizeName(name)].id}/runes`,
+          endUrl: `${data[this._sanitizeName(names || name)].id}/runes`,
           region
         }, cb)
       })
+    } else {
+      return this._logError(
+        this.getRunes.name,
+        `required params ${chalk.yellow('`ids` (array of ints)')}, ${chalk.yellow('`id` (int)')}, ${chalk.yellow('`names` (array of strings)')}, or ${chalk.yellow('`name` (string)')} not passed in`
+      )
     }
-
-    return this._runesMasteriesRequest({
-      endUrl: `${param}/runes`,
-      region
-    }, cb)
   }
 
   getMasteries({ regions, ids, id } = {}, cb) {
