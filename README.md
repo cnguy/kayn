@@ -76,9 +76,9 @@ k.getSummoners({ names: names }, rprint)
   But I won't stop you from passing in a single string
   to the plural version of the parameter. Any method
   that can accept multiple values for a parameter is flexibile.
-  Things that can only target one thing likegetSummoner() on the
+  Things that can only target one thing like getSummoner() on the
   other hand can only target one thing at a time
-  though.
+  though, and thus only has 'name' and 'id' parameters.
 */
 k.getSummoners({ names: 'caaaaaaaaaria' }, rprint)
 k.getSummoners({ name: 'caaaaaaaaaria' }, rprint)
