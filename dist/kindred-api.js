@@ -813,25 +813,71 @@
     }, {
       key: 'getMasteries',
       value: function getMasteries() {
+        var _this5 = this;
+
         var _ref44 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            regions$$1 = _ref44.regions,
+            region = _ref44.region,
             ids = _ref44.ids,
-            id = _ref44.id;
+            id = _ref44.id,
+            names = _ref44.names,
+            name = _ref44.name;
 
         var cb = arguments[1];
 
-        if (!ids && !id) return this._logError(this.getMasteries.name, 'required params ' + chalk.yellow('`ids` (array of ints)') + ' or ' + chalk.yellow('`id` (int)') + ' not passed in');
+        if (checkAll.int(ids)) {
+          return this._runesMasteriesRequest({
+            endUrl: ids.join() + '/masteries',
+            region: region
+          }, cb);
+        } else if (Number.isInteger(ids) || Number.isInteger(id)) {
+          return this._runesMasteriesRequest({
+            endUrl: (ids || id) + '/masteries',
+            region: region
+          }, cb);
+        } else if (checkAll.string(names)) {
+          return this.getSummoners({ names: names, region: region }, function (err, data) {
+            var args = [];
 
-        var param = void 0;
+            var _iteratorNormalCompletion2 = true;
+            var _didIteratorError2 = false;
+            var _iteratorError2 = undefined;
 
-        if (checkAll.int(ids)) param = ids.join(',');
-        if (Number.isInteger(ids)) param = [ids];
-        if (id && !Number.isInteger(id)) param = [id];
+            try {
+              for (var _iterator2 = names[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                var _name2 = _step2.value;
 
-        return this._runesMasteriesRequest({
-          endUrl: param + '/masteries',
-          region: region
-        }, cb);
+                args.push(data[_this5._sanitizeName(_name2)].id);
+              }
+            } catch (err) {
+              _didIteratorError2 = true;
+              _iteratorError2 = err;
+            } finally {
+              try {
+                if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                  _iterator2.return();
+                }
+              } finally {
+                if (_didIteratorError2) {
+                  throw _iteratorError2;
+                }
+              }
+            }
+
+            return _this5._runesMasteriesRequest({
+              endUrl: args.join(',') + '/masteries',
+              region: region
+            }, cb);
+          });
+        } else if (typeof names === 'string' || typeof name === 'string') {
+          return this.getSummoner({ name: names || name, region: region }, function (err, data) {
+            return _this5._runesMasteriesRequest({
+              endUrl: data[_this5._sanitizeName(names || name)].id + '/masteries',
+              region: region
+            }, cb);
+          });
+        } else {
+          return this._logError(this.getMasteries.name, 'required params ' + chalk.yellow('`ids` (array of ints)') + ', ' + chalk.yellow('`id` (int)') + ', ' + chalk.yellow('`names` (array of strings)') + ', or ' + chalk.yellow('`name` (string)') + ' not passed in');
+        }
       }
     }]);
 

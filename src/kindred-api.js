@@ -421,22 +421,42 @@ class Kindred {
     }
   }
 
-  getMasteries({ regions, ids, id } = {}, cb) {
-    if (!ids && !id) return this._logError(
-      this.getMasteries.name,
-      `required params ${chalk.yellow('`ids` (array of ints)')} or ${chalk.yellow('`id` (int)')} not passed in`
-    )
+  getMasteries({ region, ids, id, names, name } = {}, cb) {
+    if (checkAll.int(ids)) {
+      return this._runesMasteriesRequest({
+        endUrl: `${ids.join()}/masteries`,
+        region
+      }, cb)
+    } else if (Number.isInteger(ids) || Number.isInteger(id)) {
+      return this._runesMasteriesRequest({
+        endUrl: `${ids || id}/masteries`,
+        region
+      }, cb)
+    } else if (checkAll.string(names)) {
+      return this.getSummoners({ names, region }, (err, data) => {
+        let args = []
 
-    let param
+        for (let name of names)
+          args.push(data[this._sanitizeName(name)].id)
 
-    if (checkAll.int(ids)) param = ids.join(',')
-    if (Number.isInteger(ids)) param = [ids]
-    if (id && !Number.isInteger(id)) param = [id]
-
-    return this._runesMasteriesRequest({
-      endUrl: `${param}/masteries`,
-      region
-    }, cb)
+        return this._runesMasteriesRequest({
+          endUrl: `${args.join(',')}/masteries`,
+          region
+        }, cb)
+      })
+    } else if (typeof names === 'string' || typeof name === 'string') {
+      return this.getSummoner({ name: names || name, region }, (err, data) => {
+        return this._runesMasteriesRequest({
+          endUrl: `${data[this._sanitizeName(names || name)].id}/masteries`,
+          region
+        }, cb)
+      })
+    } else {
+      return this._logError(
+        this.getMasteries.name,
+        `required params ${chalk.yellow('`ids` (array of ints)')}, ${chalk.yellow('`id` (int)')}, ${chalk.yellow('`names` (array of strings)')}, or ${chalk.yellow('`name` (string)')} not passed in`
+      )
+    }
   }
 }
 
