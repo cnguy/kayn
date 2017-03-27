@@ -308,8 +308,8 @@ to each endpoint!
 
 | Type | Endpoint | Description | Covered |
 | -------- | -------- | ----------- | ------- |
-| GET | /api/lol/{region}/v1.4/summoner/{summonerIds}/masteries | Get mastery pages mapped by summoner ID for a given list of summoner IDs. (REST) | no |
-| GET | /api/lol/{region}/v1.4/summoner/{summonerIds}/runes | Get rune pages mapped by summoner ID for a given list of summoner IDs. (REST) | no |
+| GET | /api/lol/{region}/v1.4/summoner/{summonerIds}/masteries | Get mastery pages mapped by summoner ID for a given list of summoner IDs. (REST) | yes |
+| GET | /api/lol/{region}/v1.4/summoner/{summonerIds}/runes | Get rune pages mapped by summoner ID for a given list of summoner IDs. (REST) | yes |
 
 ### STATS-V1.3
 [docs](https://developer.riotgames.com/api-methods/#stats-v1.3)

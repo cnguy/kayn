@@ -362,21 +362,23 @@
 
         var cb = arguments[1];
 
-        if ((!id || !Number.isInteger(id)) && !name) return this._logError(this.getRecentGames.name, 'required params ' + chalk.yellow('`id` (int)') + ' or ' + chalk.yellow('`name` (string)') + ' not passed in');
-
-        if (id && Number.isInteger(id)) return this._gameRequest({ endUrl: 'by-summoner/' + id + '/recent', region: region }, cb);
-
-        if (typeof name === 'string') {
+        if (id && Number.isInteger(id)) {
+          return this._gameRequest({ endUrl: 'by-summoner/' + id + '/recent', region: region }, cb);
+        } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
           return this.getSummoner({ name: name, region: region }, function (err, data) {
             return _this2._gameRequest({
               endUrl: 'by-summoner/' + data[_this2._sanitizeName(name)].id + '/recent', region: region
             }, cb);
           });
+        } else {
+          return this._logError(this.getRecentGames.name, 'required params ' + chalk.yellow('`id` (int)') + ' or ' + chalk.yellow('`name` (string)') + ' not passed in');
         }
       }
     }, {
       key: 'getLeagues',
       value: function getLeagues() {
+        var _this3 = this;
+
         var _ref16 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref16.region,
             ids = _ref16.ids,
@@ -386,29 +388,111 @@
 
         var cb = arguments[1];
 
+        console.log(name);
         if (checkAll.int(ids)) {
           return this._leagueRequest({ endUrl: 'by-summoner/' + ids.join(','), region: region }, cb);
-        } else if (Number.isInteger(ids)) {
-          return this._leagueRequest({ endUrl: 'by-summoner/' + ids, region: region }, cb);
+        } else if (Number.isInteger(ids) || Number.isInteger(id)) {
+          return this._leagueRequest({ endUrl: 'by-summoner/' + (ids || id), region: region }, cb);
+        } else if (checkAll.string(names)) {
+          return this.getSummoners({ names: names, region: region }, function (err, data) {
+            var args = [];
+
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+              for (var _iterator = names[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                var _name = _step.value;
+
+                args.push(data[_this3._sanitizeName(_name)].id);
+              }
+            } catch (err) {
+              _didIteratorError = true;
+              _iteratorError = err;
+            } finally {
+              try {
+                if (!_iteratorNormalCompletion && _iterator.return) {
+                  _iterator.return();
+                }
+              } finally {
+                if (_didIteratorError) {
+                  throw _iteratorError;
+                }
+              }
+            }
+
+            return _this3._leagueRequest({ endUrl: 'by-summoner/' + args.join(','), region: region }, cb);
+          });
+        } else if (_typeof(arguments[0]) === 'object' && (typeof names === 'string' || typeof name === 'string')) {
+          return this.getSummoner({ name: names || name, region: region }, function (err, data) {
+            return _this3._leagueRequest({
+              endUrl: 'by-summoner/' + data[_this3._sanitizeName(names || name)].id,
+              region: region
+            }, cb);
+          });
         } else {
-          this._logError(this.getLeagues.name, 'ids can be either an array of integers or a single integer');
+          return this._logError(this.getLeagues.name, 'required params ' + chalk.yellow('`ids` (array of ints)') + ', ' + chalk.yellow('`id` (int)') + ', ' + chalk.yellow('`names` (array of strings)') + ', or ' + chalk.yellow('`name` (string)') + ' not passed in');
         }
       }
     }, {
       key: 'getLeagueEntries',
       value: function getLeagueEntries() {
+        var _this4 = this;
+
         var _ref17 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref17.region,
-            ids = _ref17.ids;
+            ids = _ref17.ids,
+            id = _ref17.id,
+            names = _ref17.names,
+            name = _ref17.name;
 
         var cb = arguments[1];
 
         if (checkAll.int(ids)) {
           return this._leagueRequest({ endUrl: 'by-summoner/' + ids.join(',') + '/entry', region: region }, cb);
-        } else if (Number.isInteger(ids)) {
-          return this._leagueRequest({ endUrl: 'by-summoner/' + ids + '/entry', region: region }, cb);
+        } else if (Number.isInteger(ids) || Number.isInteger(id)) {
+          return this._leagueRequest({ endUrl: 'by-summoner/' + (ids || id) + '/entry', region: region }, cb);
+        } else if (checkAll.string(names)) {
+          return this.getSummoners({ names: names, region: region }, function (err, data) {
+            var args = [];
+
+            var _iteratorNormalCompletion2 = true;
+            var _didIteratorError2 = false;
+            var _iteratorError2 = undefined;
+
+            try {
+              for (var _iterator2 = names[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                var _name2 = _step2.value;
+
+                args.push(data[_this4._sanitizeName(_name2)].id);
+              }
+            } catch (err) {
+              _didIteratorError2 = true;
+              _iteratorError2 = err;
+            } finally {
+              try {
+                if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                  _iterator2.return();
+                }
+              } finally {
+                if (_didIteratorError2) {
+                  throw _iteratorError2;
+                }
+              }
+            }
+
+            return _this4._leagueRequest({ endUrl: 'by-summoner/' + args.join(',') + '/entry', region: region }, cb);
+          });
+        } else if (_typeof(arguments[0]) === 'object' && (typeof names === 'string' || typeof name === 'string')) {
+          return this.getSummoner({ name: names || name, region: region }, function (err, data) {
+            return _this4._leagueRequest({
+              endUrl: 'by-summoner/' + data[_this4._sanitizeName(names || name)].id + '/entry',
+              region: region
+            }, cb);
+          });
         } else {
-          this._logError(this.getLeagues.name, 'ids can be either an array of integers or a single integer');
+          this._logError(this.getLeagueEntries.name, 'required params ' + chalk.yellow('`ids` (array of ints)') + ', ' + chalk.yellow('`id` (int)') + ', ' + chalk.yellow('`names` (array of strings)') + ', or ' + chalk.yellow('`name` (string)') + ' not passed in');
         }
       }
     }, {
@@ -442,7 +526,7 @@
     }, {
       key: 'getSummoners',
       value: function getSummoners() {
-        var _this3 = this;
+        var _this5 = this;
 
         var _ref20 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref20.region,
@@ -466,11 +550,11 @@
         } else if (checkAll.string(names)) {
           return this._summonerRequest({
             endUrl: 'by-name/' + names.map(function (name) {
-              return _this3._sanitizeName(name);
+              return _this5._sanitizeName(name);
             }).join(','),
             region: region
           }, cb);
-        } else if (typeof names === 'string' || typeof name === 'string') {
+        } else if (_typeof(arguments[0]) === 'object' && (typeof names === 'string' || typeof name === 'string')) {
           return this._summonerRequest({
             endUrl: 'by-name/' + (names || name),
             region: region
@@ -484,14 +568,18 @@
       value: function getSummoner() {
         var _ref21 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref21.region,
-            name = _ref21.name,
-            id = _ref21.id;
+            id = _ref21.id,
+            name = _ref21.name;
 
         var cb = arguments[1];
 
-        if (typeof name === 'string') return this.getSummoners({ region: region, names: [name] }, cb);
-        if (Number.isInteger(id)) return this.getSummoners({ region: region, ids: [id] }, cb);
-        return this._logError(this.getSummoner.name, 'required parameters ' + chalk.yellow('`name` (string)') + ' or ' + chalk.yellow('`id` (int)') + ' not passed in');
+        if (Number.isInteger(id)) {
+          return this.getSummoners({ region: region, ids: [id] }, cb);
+        } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
+          return this.getSummoners({ region: region, names: [name] }, cb);
+        } else {
+          return this._logError(this.getSummoner.name, 'required params ' + chalk.yellow('`id` (int)') + ' or ' + chalk.yellow('`name` (string)') + ' not passed in');
+        }
       }
     }, {
       key: 'getSummonerNames',
@@ -531,25 +619,34 @@
       }
     }, {
       key: 'getShardStatus',
-      value: function getShardStatus(_ref24, cb) {
-        var region = _ref24.region;
+      value: function getShardStatus() {
+        var _ref24 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref24.region;
+
+        var cb = arguments[1];
 
         return this._statusRequest({ endUrl: 'shard', region: region }, cb = region ? cb : arguments[0]);
       }
     }, {
       key: 'getShardList',
-      value: function getShardList(_ref25, cb) {
-        var region = _ref25.region;
+      value: function getShardList() {
+        var _ref25 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref25.region;
+
+        var cb = arguments[1];
 
         return this._statusRequest({ endUrl: 'shards', region: region }, cb = region ? cb : arguments[0]);
       }
     }, {
       key: 'getMatch',
-      value: function getMatch(_ref26, cb) {
-        var region = _ref26.region,
+      value: function getMatch() {
+        var _ref26 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref26.region,
             id = _ref26.id,
             _ref26$options = _ref26.options,
             options = _ref26$options === undefined ? { includeTimeline: true } : _ref26$options;
+
+        var cb = arguments[1];
 
         if (!id || !Number.isInteger(id)) return this._logError(this.getMatch.name, 'required params ' + chalk.yellow('`id` (int)') + ' not passed in');
         return this._matchRequest({ endUrl: '' + id, region: region, options: options }, cb);
@@ -744,7 +841,7 @@
     }, {
       key: 'getRunes',
       value: function getRunes() {
-        var _this4 = this;
+        var _this6 = this;
 
         var _ref43 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref43.region,
@@ -769,40 +866,40 @@
           return this.getSummoners({ names: names, region: region }, function (err, data) {
             var args = [];
 
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
+            var _iteratorNormalCompletion3 = true;
+            var _didIteratorError3 = false;
+            var _iteratorError3 = undefined;
 
             try {
-              for (var _iterator = names[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                var _name = _step.value;
+              for (var _iterator3 = names[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                var _name3 = _step3.value;
 
-                args.push(data[_this4._sanitizeName(_name)].id);
+                args.push(data[_this6._sanitizeName(_name3)].id);
               }
             } catch (err) {
-              _didIteratorError = true;
-              _iteratorError = err;
+              _didIteratorError3 = true;
+              _iteratorError3 = err;
             } finally {
               try {
-                if (!_iteratorNormalCompletion && _iterator.return) {
-                  _iterator.return();
+                if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                  _iterator3.return();
                 }
               } finally {
-                if (_didIteratorError) {
-                  throw _iteratorError;
+                if (_didIteratorError3) {
+                  throw _iteratorError3;
                 }
               }
             }
 
-            return _this4._runesMasteriesRequest({
+            return _this6._runesMasteriesRequest({
               endUrl: args.join(',') + '/runes',
               region: region
             }, cb);
           });
-        } else if (typeof names === 'string' || typeof name === 'string') {
+        } else if (_typeof(arguments[0]) === 'object' && (typeof names === 'string' || typeof name === 'string')) {
           return this.getSummoner({ name: names || name, region: region }, function (err, data) {
-            return _this4._runesMasteriesRequest({
-              endUrl: data[_this4._sanitizeName(names || name)].id + '/runes',
+            return _this6._runesMasteriesRequest({
+              endUrl: data[_this6._sanitizeName(names || name)].id + '/runes',
               region: region
             }, cb);
           });
@@ -813,7 +910,7 @@
     }, {
       key: 'getMasteries',
       value: function getMasteries() {
-        var _this5 = this;
+        var _this7 = this;
 
         var _ref44 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref44.region,
@@ -838,40 +935,41 @@
           return this.getSummoners({ names: names, region: region }, function (err, data) {
             var args = [];
 
-            var _iteratorNormalCompletion2 = true;
-            var _didIteratorError2 = false;
-            var _iteratorError2 = undefined;
+            var _iteratorNormalCompletion4 = true;
+            var _didIteratorError4 = false;
+            var _iteratorError4 = undefined;
 
             try {
-              for (var _iterator2 = names[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                var _name2 = _step2.value;
+              for (var _iterator4 = names[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                var _name4 = _step4.value;
 
-                args.push(data[_this5._sanitizeName(_name2)].id);
+                args.push(data[_this7._sanitizeName(_name4)].id);
               }
             } catch (err) {
-              _didIteratorError2 = true;
-              _iteratorError2 = err;
+              _didIteratorError4 = true;
+              _iteratorError4 = err;
             } finally {
               try {
-                if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                  _iterator2.return();
+                if (!_iteratorNormalCompletion4 && _iterator4.return) {
+                  _iterator4.return();
                 }
               } finally {
-                if (_didIteratorError2) {
-                  throw _iteratorError2;
+                if (_didIteratorError4) {
+                  throw _iteratorError4;
                 }
               }
             }
 
-            return _this5._runesMasteriesRequest({
+            return _this7._runesMasteriesRequest({
               endUrl: args.join(',') + '/masteries',
               region: region
             }, cb);
           });
-        } else if (typeof names === 'string' || typeof name === 'string') {
+        } else if (_typeof(arguments[0]) === 'object' && (typeof names === 'string' || typeof name === 'string')) {
+          console.log(region, id, name);
           return this.getSummoner({ name: names || name, region: region }, function (err, data) {
-            return _this5._runesMasteriesRequest({
-              endUrl: data[_this5._sanitizeName(names || name)].id + '/masteries',
+            return _this7._runesMasteriesRequest({
+              endUrl: data[_this7._sanitizeName(names || name)].id + '/masteries',
               region: region
             }, cb);
           });

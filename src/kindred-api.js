@@ -162,45 +162,77 @@ class Kindred {
   }
 
   getRecentGames({ region, id, name } = {}, cb) {
-    if ((!id || !Number.isInteger(id)) && !name) return this._logError(
-      this.getRecentGames.name,
-      `required params ${chalk.yellow('`id` (int)')} or ${chalk.yellow('`name` (string)')} not passed in`
-    )
-
-    if (id && Number.isInteger(id))
+    if (id && Number.isInteger(id)) {
       return this._gameRequest({ endUrl: `by-summoner/${id}/recent`, region }, cb)
-
-    if (typeof name === 'string') {
+    } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
       return this.getSummoner({ name, region }, (err, data) => {
         return this._gameRequest({
           endUrl: `by-summoner/${data[this._sanitizeName(name)].id}/recent`, region
         }, cb)
       })
-    }
-  }
-
-  getLeagues({ region, ids, id, names, name } = {}, cb) {
-    if (checkAll.int(ids)) {
-      return this._leagueRequest({ endUrl: `by-summoner/${ids.join(',')}`, region }, cb)
-    } else if (Number.isInteger(ids)) {
-      return this._leagueRequest({ endUrl: `by-summoner/${ids}`, region }, cb)
     } else {
-      this._logError(
-        this.getLeagues.name,
-        'ids can be either an array of integers or a single integer'
+      return this._logError(
+        this.getRecentGames.name,
+        `required params ${chalk.yellow('`id` (int)')} or ${chalk.yellow('`name` (string)')} not passed in`
       )
     }
   }
 
-  getLeagueEntries({ region, ids } = {}, cb) {
+  getLeagues({ region, ids, id, names, name } = {}, cb) {
+    console.log(name)
+    if (checkAll.int(ids)) {
+      return this._leagueRequest({ endUrl: `by-summoner/${ids.join(',')}`, region }, cb)
+    } else if (Number.isInteger(ids) || Number.isInteger(id)) {
+      return this._leagueRequest({ endUrl: `by-summoner/${ids || id}`, region }, cb)
+    } else if (checkAll.string(names)) {
+      return this.getSummoners({ names, region }, (err, data) => {
+        let args = []
+
+        for (let name of names)
+          args.push(data[this._sanitizeName(name)].id)
+
+        return this._leagueRequest({ endUrl: `by-summoner/${args.join(',')}`, region }, cb)
+      })
+    } else if (typeof arguments[0] === 'object' && (typeof names === 'string' || typeof name === 'string')) {
+      return this.getSummoner({ name: names || name, region }, (err, data) => {
+        return this._leagueRequest({
+          endUrl: `by-summoner/${data[this._sanitizeName(names || name)].id}`,
+          region
+        }, cb)
+      })
+    } else {
+      return this._logError(
+        this.getLeagues.name,
+        `required params ${chalk.yellow('`ids` (array of ints)')}, ${chalk.yellow('`id` (int)')}, ${chalk.yellow('`names` (array of strings)')}, or ${chalk.yellow('`name` (string)')} not passed in`
+      )
+    }
+  }
+
+  getLeagueEntries({ region, ids, id, names, name } = {}, cb) {
     if (checkAll.int(ids)) {
       return this._leagueRequest({ endUrl: `by-summoner/${ids.join(',')}/entry`, region }, cb)
-    } else if (Number.isInteger(ids)) {
-      return this._leagueRequest({ endUrl: `by-summoner/${ids}/entry`, region }, cb)
+    } else if (Number.isInteger(ids) || Number.isInteger(id)) {
+      return this._leagueRequest({ endUrl: `by-summoner/${ids || id}/entry`, region }, cb)
+    } else if (checkAll.string(names)) {
+      return this.getSummoners({ names, region }, (err, data) => {
+        let args = []
+
+        for (let name of names)
+          args.push(data[this._sanitizeName(name)].id)
+
+        return this._leagueRequest({ endUrl: `by-summoner/${args.join(',')}/entry`, region }, cb)
+      })
+    } else if (typeof arguments[0] === 'object' && (typeof names === 'string' || typeof name === 'string')) {
+      return this.getSummoner({ name: names || name, region }, (err, data) => {
+        return this._leagueRequest({
+          endUrl: `by-summoner/${data[this._sanitizeName(names || name)].id}/entry`,
+          region
+        }, cb)
+      })
     } else {
       this._logError(
-        this.getLeagues.name,
-        'ids can be either an array of integers or a single integer'
+        this.getLeagueEntries.name,
+        `required params ${chalk.yellow('`ids` (array of ints)')}, ${chalk.yellow('`id` (int)')}, ${chalk.yellow('`names` (array of strings)')}, or ${chalk.yellow('`name` (string)')} not passed in`
       )
     }
   }
@@ -233,7 +265,7 @@ class Kindred {
         endUrl: `by-name/${names.map(name => this._sanitizeName(name)).join(',')}`,
         region
       }, cb)
-    } else if (typeof names === 'string' || typeof name === 'string') {
+    } else if (typeof arguments[0] === 'object' && (typeof names === 'string' || typeof name === 'string')) {
       return this._summonerRequest({
         endUrl: `by-name/${names || name}`,
         region
@@ -246,13 +278,17 @@ class Kindred {
     }
   }
 
-  getSummoner({ region, name, id } = {}, cb) {
-    if (typeof name === 'string') return this.getSummoners({ region, names: [name] }, cb)
-    if (Number.isInteger(id)) return this.getSummoners({ region, ids: [id] }, cb)
-    return this._logError(
-      this.getSummoner.name,
-      `required parameters ${chalk.yellow('`name` (string)')} or ${chalk.yellow('`id` (int)')} not passed in`
-    )
+  getSummoner({ region, id, name } = {}, cb) {
+    if (Number.isInteger(id)) {
+      return this.getSummoners({ region, ids: [id] }, cb)
+    } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
+      return this.getSummoners({ region, names: [name] }, cb)
+    } else {
+      return this._logError(
+        this.getSummoner.name,
+        `required params ${chalk.yellow('`id` (int)')} or ${chalk.yellow('`name` (string)')} not passed in`
+      )
+    }
   }
 
   getSummonerNames({ region, ids } = {}, cb) {
@@ -279,15 +315,15 @@ class Kindred {
     return this._statsRequest({ endUrl: `${id}/ranked`, region, options }, cb)
   }
 
-  getShardStatus({ region }, cb) {
+  getShardStatus({ region } = {}, cb) {
     return this._statusRequest({ endUrl: 'shard', region }, cb = region ? cb : arguments[0])
   }
 
-  getShardList({ region }, cb) {
+  getShardList({ region } = {}, cb) {
     return this._statusRequest({ endUrl: 'shards', region }, cb = region ? cb : arguments[0])
   }
 
-  getMatch({ region, id, options = { includeTimeline: true } }, cb) {
+  getMatch({ region, id, options = { includeTimeline: true } } = {}, cb) {
     if (!id || !Number.isInteger(id)) return this._logError(
       this.getMatch.name,
       `required params ${chalk.yellow('`id` (int)')} not passed in`
@@ -406,7 +442,7 @@ class Kindred {
           region
         }, cb)
       })
-    } else if (typeof names === 'string' || typeof name === 'string') {
+    } else if (typeof arguments[0] === 'object' && (typeof names === 'string' || typeof name === 'string')) {
       return this.getSummoner({ name: names || name, region }, (err, data) => {
         return this._runesMasteriesRequest({
           endUrl: `${data[this._sanitizeName(names || name)].id}/runes`,
@@ -444,7 +480,8 @@ class Kindred {
           region
         }, cb)
       })
-    } else if (typeof names === 'string' || typeof name === 'string') {
+    } else if (typeof arguments[0] === 'object' && (typeof names === 'string' || typeof name === 'string')) {
+      console.log(region, id, name)
       return this.getSummoner({ name: names || name, region }, (err, data) => {
         return this._runesMasteriesRequest({
           endUrl: `${data[this._sanitizeName(names || name)].id}/masteries`,
