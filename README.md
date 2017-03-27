@@ -61,7 +61,7 @@ k.getSummoner({ id: 32823699 }, rprint)
   Note, I don't name the id parameter per endpoint.
   The 'id', 'ids', 'name', and 'names' parameters
   stay consistent throughout the API.
-  (matchId, summonerId, runeId, etc).
+  (no matchId, summonerId, runeId, etc).
 */
 k.getMatch({ id: 2459973154 }, rprint)
 
@@ -74,9 +74,14 @@ k.getSummoners({ names: names }, rprint)
 
 /*
   But I won't stop you from passing in a single string
-  to the plural version of the parameter.
+  to the plural version of the parameter. Any method
+  that can accept multiple values for a parameter is flexibile.
+  Things that can only target one thing likegetSummoner() on the
+  other hand can only target one thing at a time
+  though.
 */
 k.getSummoners({ names: 'caaaaaaaaaria' }, rprint)
+k.getSummoners({ name: 'caaaaaaaaaria' }, rprint)
 
 /* Every method has an optional 'region' parameter. */
 var options = { name: 'sktt1peanut', region: REGIONS.KOREA }
@@ -140,6 +145,7 @@ k.getRunes({ names: ['Richelle', 'Grigne'] }, rprint)
 k.getRune({ name: ['Richelle'] }, rprint)
 k.getRecentGames({ name: 'Richelle' }, rprint)
 k.getLeagues({ names: ['Richelle', 'Grigne'] }, rprint)
+k.getCurrentGame({ name: 'Fràe', region: REGIONS.OCEANIA }, rprint)
 
 /*
     Default ranked mode is 'RANKED_SOLO_5x5' for all
