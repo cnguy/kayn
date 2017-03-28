@@ -5,9 +5,8 @@ Kindred is a not-so-thin Node.js wrapper on top of [Riot Games API for League of
 ## Table of Contents
 * [Philosophy](#philosophy)
 * [Installation](#installation)
-* [Quick Usage Examples](#quick-usage-examples)
 * [Endpoints Covered](#endpoints-covered)
-* [Full Documentation](#full-documentation)
+* [Usage Examples](#quick-usage-examples)
 
 ## Philosophy
 My goal is to make a wrapper that is convenient and sensible. This project is heavily inspired by [psuedonym117's Python wrapper](https://github.com/pseudonym117/Riot-Watcher). I want to make the API as consistent as possible and also make the rate-limiting as robust as possible. However, I also wish to provide users flexibility and a detailed errors system to make the wrapper as unobtrusive as possible. Look at the [Quick Usage Examples](#quick-usage-examples) to see what I mean.
@@ -19,6 +18,121 @@ For function methods, ```get``` implies a request.
 ```
 yarn add kindred-api
 ```
+
+## Endpoints Covered
+Make sure to check the [official Riot Documentation](https://developer.riotgames.com/api-methods/) to see what query parameters you can pass in
+to each endpoint!
+
+### CHAMPION-V1.2
+[docs](https://developer.riotgames.com/api-methods/#champion-v1.2)
+
+| Type | Endpoint | Description | Covered |
+| -------- | -------- | ----------- | ------- |
+| GET | /api/lol/{region}/v1.2/champion | Retrieve all champions. (REST) | no |
+| GET | /api/lol/{region}/v1.2/champion/{id} | Retrieve champion by ID. (REST) | no |
+
+### CHAMPIONMASTERY
+[docs](https://developer.riotgames.com/api-methods/#championmastery)
+
+### CURRENT-GAME-V1.0
+[docs](https://developer.riotgames.com/api-methods/#current-game-v1.0)
+
+| Type | Endpoint | Description | Covered |
+| -------- | -------- | ----------- | ------- |
+| GET | /observer-mode/rest/consumer/getSpectatorGameInfo/{platformId}/{summonerId} | Get current game information for the given summoner ID. (REST) | getCurrentGame() |
+
+### FEATURED-GAMES-V1.0
+[docs](https://developer.riotgames.com/api-methods/#featured-games-v1.0)
+
+| Type | Endpoint | Description | Covered |
+| -------- | -------- | ----------- | ------- |
+| GET | /observer-mode/rest/featured | Get list of featured games. (REST) | getFeaturedGames() |
+
+### GAME-V1.3
+[docs](https://developer.riotgames.com/api-methods/#game-v1.3)
+
+| Type | Endpoint | Description | Covered |
+| -------- | -------- | ----------- | ------- |
+| GET | /api/lol/{region}/v1.3/game/by-summoner/{summonerId}/recent | Get recent games by summoner ID. (REST) | getRecentGames() |
+
+### LEAGUE-V2.5
+[docs](https://developer.riotgames.com/api-methods/#league-v2.5)
+
+| Type | Endpoint | Description | Covered |
+| -------- | -------- | ----------- | ------- |
+| GET | /api/lol/{region}/v2.5/league/by-summoner/{summonerIds} | Get leagues mapped by summoner ID for a given list of summoner IDs. (REST) | getLeagues() |
+| GET | /api/lol/{region}/v2.5/league/by-summoner/{summonerIds}/entry | Get league entries mapped by summoner ID for a given list of summoner IDs. (REST) | getLeagueEntries() |
+| GET | /api/lol/{region}/v2.5/league/challenger | Get challenger tier leagues. (REST) | getChallengers() |
+| GET | /api/lol/{region}/v2.5/league/master | Get master tier leagues. (REST) | getMasteries() |
+
+### LOL-STATIC-DATA-V1.2
+[docs](https://developer.riotgames.com/api-methods/#lol-static-data-v1.2)
+
+| Type | Endpoint | Description | Covered |
+| -------- | -------- | ----------- | ------- |
+| GET | /api/lol/static-data/{region}/v1.2/champion | Retrieves champion list. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/champion/{id} | Retrieves a champion by its id. (REST) | yes |
+| GET | /api/lol/static-data/{region}/v1.2/item | Retrieves item list. (REST) | getItems() |
+| GET | /api/lol/static-data/{region}/v1.2/item/{id} | Retrieves item by its unique id. (REST) | getItem() |
+| GET | /api/lol/static-data/{region}/v1.2/language-strings | Retrieve language strings data. (REST) | getLanguageStrings() |
+| GET | /api/lol/static-data/{region}/v1.2/languages | Retrieve supported languages data. (REST) | getLanguages() |
+| GET | /api/lol/static-data/{region}/v1.2/map | Retrieve map data. (REST) | getMap() |
+| GET | /api/lol/static-data/{region}/v1.2/mastery | Retrieve mastery list. (REST) | getMasteryList() |
+| GET | /api/lol/static-data/{region}/v1.2/mastery/{id} | Retrieves mastery item by its unique id. (REST) | getMastery() |
+| GET | /api/lol/static-data/{region}/v1.2/realm | Retrieve realm data. (REST) | getRealmData() |
+| GET | /api/lol/static-data/{region}/v1.2/rune | Retrieves rune list. (REST) | getRuneList() |
+| GET | /api/lol/static-data/{region}/v1.2/rune/{id} | Retrieves rune by its unique id. (REST) | getRune() |
+| GET | /api/lol/static-data/{region}/v1.2/summoner-spell | Retrieves summoner spell list. (REST) | getSummonerSpellsList() |
+| GET | /api/lol/static-data/{region}/v1.2/summoner-spell/{id} | Retrieves summoner spell by its unique id. (REST) | getSummonerSpell() |
+| GET | /api/lol/static-data/{region}/v1.2/versions | Retrieve version data. (REST) | getVersionData() |
+
+### LOL-STATUS-V1.0
+[docs](https://developer.riotgames.com/api-methods/#lol-status-v1.0)
+
+| Type | Endpoint | Description | Covered |
+| -------- | -------- | ----------- | ------- |
+| GET | /lol/status/v1/shard | Get shard status. Returns the data available on the status.leagueoflegends.com website for the given region. (REST) | getShardStatus() |
+| GET | /lol/status/v1/shards | Get shard list. (REST) | getShardList() |
+
+### MATCH-V.2.2
+[docs](https://developer.riotgames.com/api-methods/#match-v2.2)
+
+| Type | Endpoint | Description | Covered |
+| -------- | -------- | ----------- | ------- |
+| GET | /api/lol/{region}/v2.2/match/{matchId} | Retrieve match by match ID. (REST) | getMatch() |
+
+### MATCHLIST-V2.2
+[docs](https://developer.riotgames.com/api-methods/#matchlist-v2.2)
+
+| Type | Endpoint | Description | Covered |
+| -------- | -------- | ----------- | ------- |
+| GET | /api/lol/{region}/v2.2/matchlist/by-summoner/{summonerId} | Retrieve match list by match ID. (REST) | getMatchList() |
+
+### RUNES-MASTERIES-V1.4
+[docs](https://developer.riotgames.com/api-methods/#runes-masteries-v1.4)
+
+| Type | Endpoint | Description | Covered |
+| -------- | -------- | ----------- | ------- |
+| GET | /api/lol/{region}/v1.4/summoner/{summonerIds}/masteries | Get mastery pages mapped by summoner ID for a given list of summoner IDs. (REST) | getMasteries() |
+| GET | /api/lol/{region}/v1.4/summoner/{summonerIds}/runes | Get rune pages mapped by summoner ID for a given list of summoner IDs. (REST) | getRunes() |
+
+### STATS-V1.3
+[docs](https://developer.riotgames.com/api-methods/#stats-v1.3)
+
+| Type | Endpoint | Description | Covered |
+| -------- | -------- | ----------- | ------- |
+| GET | /api/lol/{region}/v1.3/stats/by-summoner/{summonerId}/ranked | Get ranked stats by summoner ID. (REST) | getRankedStats() |
+| GET | /api/lol/{region}/v1.3/stats/by-summoner/{summonerId}/summary | Get player stats summaries by summoner ID. (REST) | getStatsSummary() |
+
+### SUMMONER-V1.4
+[docs](https://developer.riotgames.com/api-methods/#summoner-v1.4)
+
+| Type | Endpoint | Description | Covered |
+| -------- | -------- | ----------- | ------- |
+| GET | /api/lol/{region}/v1.4/summoner/by-account/{accountIds} | Get a list of summoners by account ids (RPC). | no |
+| GET | /api/lol/{region}/v1.4/summoner/by-name/{summonerNames} | Get a list of summoners by summoner names. (RPC) | getSummoner(), getSummoners() |
+| GET | /api/lol/{region}/v1.4/summoner/{summonerIds} | Get a list of summoners by summoner IDs. (RPC) | getSummoner(), getSummoners() |
+| GET | /api/lol/{region}/v1.4/summoner/{summonerIds}/name | Get summoner names mapped by summoner ID for a given list of summoner IDs. (REST) | getSummonerName(), getSummonerNames() |
 
 ## Quick Usage Examples
 
@@ -215,120 +329,3 @@ k.getMastery({ id: furyMasteryId }, rprint)
 var msRuneId = 10002
 k.getRune({ id: msRuneId }, rprint)
 ```
-
-## Endpoints Covered
-Make sure to check the [official Riot Documentation](https://developer.riotgames.com/api-methods/) to see what query parameters you can pass in
-to each endpoint!
-
-### CHAMPION-V1.2
-[docs](https://developer.riotgames.com/api-methods/#champion-v1.2)
-
-| Type | Endpoint | Description | Covered |
-| -------- | -------- | ----------- | ------- |
-| GET | /api/lol/{region}/v1.2/champion | Retrieve all champions. (REST) | no |
-| GET | /api/lol/{region}/v1.2/champion/{id} | Retrieve champion by ID. (REST) | no |
-
-### CHAMPIONMASTERY
-[docs](https://developer.riotgames.com/api-methods/#championmastery)
-
-### CURRENT-GAME-V1.0
-[docs](https://developer.riotgames.com/api-methods/#current-game-v1.0)
-
-| Type | Endpoint | Description | Covered |
-| -------- | -------- | ----------- | ------- |
-| GET | /observer-mode/rest/consumer/getSpectatorGameInfo/{platformId}/{summonerId} | Get current game information for the given summoner ID. (REST) | getCurrentGame() |
-
-### FEATURED-GAMES-V1.0
-[docs](https://developer.riotgames.com/api-methods/#featured-games-v1.0)
-
-| Type | Endpoint | Description | Covered |
-| -------- | -------- | ----------- | ------- |
-| GET | /observer-mode/rest/featured | Get list of featured games. (REST) | getFeaturedGames() |
-
-### GAME-V1.3
-[docs](https://developer.riotgames.com/api-methods/#game-v1.3)
-
-| Type | Endpoint | Description | Covered |
-| -------- | -------- | ----------- | ------- |
-| GET | /api/lol/{region}/v1.3/game/by-summoner/{summonerId}/recent | Get recent games by summoner ID. (REST) | getRecentGames() |
-
-### LEAGUE-V2.5
-[docs](https://developer.riotgames.com/api-methods/#league-v2.5)
-
-| Type | Endpoint | Description | Covered |
-| -------- | -------- | ----------- | ------- |
-| GET | /api/lol/{region}/v2.5/league/by-summoner/{summonerIds} | Get leagues mapped by summoner ID for a given list of summoner IDs. (REST) | getLeagues() |
-| GET | /api/lol/{region}/v2.5/league/by-summoner/{summonerIds}/entry | Get league entries mapped by summoner ID for a given list of summoner IDs. (REST) | getLeagueEntries() |
-| GET | /api/lol/{region}/v2.5/league/challenger | Get challenger tier leagues. (REST) | getChallengers() |
-| GET | /api/lol/{region}/v2.5/league/master | Get master tier leagues. (REST) | getMasteries() |
-
-### LOL-STATIC-DATA-V1.2
-[docs](https://developer.riotgames.com/api-methods/#lol-static-data-v1.2)
-
-| Type | Endpoint | Description | Covered |
-| -------- | -------- | ----------- | ------- |
-| GET | /api/lol/static-data/{region}/v1.2/champion | Retrieves champion list. (REST) | yes |
-| GET | /api/lol/static-data/{region}/v1.2/champion/{id} | Retrieves a champion by its id. (REST) | yes |
-| GET | /api/lol/static-data/{region}/v1.2/item | Retrieves item list. (REST) | getItems() |
-| GET | /api/lol/static-data/{region}/v1.2/item/{id} | Retrieves item by its unique id. (REST) | getItem() |
-| GET | /api/lol/static-data/{region}/v1.2/language-strings | Retrieve language strings data. (REST) | getLanguageStrings() |
-| GET | /api/lol/static-data/{region}/v1.2/languages | Retrieve supported languages data. (REST) | getLanguages() |
-| GET | /api/lol/static-data/{region}/v1.2/map | Retrieve map data. (REST) | getMap() |
-| GET | /api/lol/static-data/{region}/v1.2/mastery | Retrieve mastery list. (REST) | getMasteryList() |
-| GET | /api/lol/static-data/{region}/v1.2/mastery/{id} | Retrieves mastery item by its unique id. (REST) | getMastery() |
-| GET | /api/lol/static-data/{region}/v1.2/realm | Retrieve realm data. (REST) | getRealmData() |
-| GET | /api/lol/static-data/{region}/v1.2/rune | Retrieves rune list. (REST) | getRuneList() |
-| GET | /api/lol/static-data/{region}/v1.2/rune/{id} | Retrieves rune by its unique id. (REST) | getRune() |
-| GET | /api/lol/static-data/{region}/v1.2/summoner-spell | Retrieves summoner spell list. (REST) | getSummonerSpellsList() |
-| GET | /api/lol/static-data/{region}/v1.2/summoner-spell/{id} | Retrieves summoner spell by its unique id. (REST) | getSummonerSpell() |
-| GET | /api/lol/static-data/{region}/v1.2/versions | Retrieve version data. (REST) | getVersionData() |
-
-### LOL-STATUS-V1.0
-[docs](https://developer.riotgames.com/api-methods/#lol-status-v1.0)
-
-| Type | Endpoint | Description | Covered |
-| -------- | -------- | ----------- | ------- |
-| GET | /lol/status/v1/shard | Get shard status. Returns the data available on the status.leagueoflegends.com website for the given region. (REST) | getShardStatus() |
-| GET | /lol/status/v1/shards | Get shard list. (REST) | getShardList() |
-
-### MATCH-V.2.2
-[docs](https://developer.riotgames.com/api-methods/#match-v2.2)
-
-| Type | Endpoint | Description | Covered |
-| -------- | -------- | ----------- | ------- |
-| GET | /api/lol/{region}/v2.2/match/{matchId} | Retrieve match by match ID. (REST) | getMatch() |
-
-### MATCHLIST-V2.2
-[docs](https://developer.riotgames.com/api-methods/#matchlist-v2.2)
-
-| Type | Endpoint | Description | Covered |
-| -------- | -------- | ----------- | ------- |
-| GET | /api/lol/{region}/v2.2/matchlist/by-summoner/{summonerId} | Retrieve match list by match ID. (REST) | getMatchList() |
-
-### RUNES-MASTERIES-V1.4
-[docs](https://developer.riotgames.com/api-methods/#runes-masteries-v1.4)
-
-| Type | Endpoint | Description | Covered |
-| -------- | -------- | ----------- | ------- |
-| GET | /api/lol/{region}/v1.4/summoner/{summonerIds}/masteries | Get mastery pages mapped by summoner ID for a given list of summoner IDs. (REST) | getMasteries() |
-| GET | /api/lol/{region}/v1.4/summoner/{summonerIds}/runes | Get rune pages mapped by summoner ID for a given list of summoner IDs. (REST) | getRunes() |
-
-### STATS-V1.3
-[docs](https://developer.riotgames.com/api-methods/#stats-v1.3)
-
-| Type | Endpoint | Description | Covered |
-| -------- | -------- | ----------- | ------- |
-| GET | /api/lol/{region}/v1.3/stats/by-summoner/{summonerId}/ranked | Get ranked stats by summoner ID. (REST) | getRankedStats() |
-| GET | /api/lol/{region}/v1.3/stats/by-summoner/{summonerId}/summary | Get player stats summaries by summoner ID. (REST) | getStatsSummary() |
-
-### SUMMONER-V1.4
-[docs](https://developer.riotgames.com/api-methods/#summoner-v1.4)
-
-| Type | Endpoint | Description | Covered |
-| -------- | -------- | ----------- | ------- |
-| GET | /api/lol/{region}/v1.4/summoner/by-account/{accountIds} | Get a list of summoners by account ids (RPC). | no |
-| GET | /api/lol/{region}/v1.4/summoner/by-name/{summonerNames} | Get a list of summoners by summoner names. (RPC) | getSummoner(), getSummoners() |
-| GET | /api/lol/{region}/v1.4/summoner/{summonerIds} | Get a list of summoners by summoner IDs. (RPC) | getSummoner(), getSummoners() |
-| GET | /api/lol/{region}/v1.4/summoner/{summonerIds}/name | Get summoner names mapped by summoner ID for a given list of summoner IDs. (REST) | getSummonerName(), getSummonerNames() |
-
-## Full Documentation
