@@ -1,6 +1,8 @@
 const request = require('request')
 const chalk = require('chalk')
 
+import RateLimit from './rate-limit'
+
 import PLATFORM_IDS from './constants/platform-ids'
 import REGIONS from './constants/regions'
 import REGIONS_BACK from './constants/regions-back'
@@ -9,10 +11,25 @@ import VERSIONS from './constants/versions'
 import checkAll from './helpers/array-checkers'
 
 class Kindred {
-  constructor({ key, defaultRegion = REGIONS.NORTH_AMERICA, debug = false }) {
+  constructor({ key, defaultRegion = REGIONS.NORTH_AMERICA, debug = false, limits }) {
     this.key = key
     this.defaultRegion = defaultRegion
     this.debug = debug
+
+    if (limits) {
+      this.limits = [
+        new RateLimit(limits[0][0], limits[0][1]),
+        new RateLimit(limits[1][0], limits[1][1])
+      ]
+    }
+  }
+
+  canMakeRequest() {
+    if (!this.limits[0].requestAvailable() || !this.limits[1].requestAvailable()) {
+      return false
+    }
+
+    return true
   }
 
   _sanitizeName(name) {
@@ -20,7 +37,7 @@ class Kindred {
   }
 
   _validName(name) {
-    return /^([0-9\\p{L} _\\.])+$/.test(name)
+    return /^[0-9\\p{L} _\\.]+$/u.test(name)
   }
 
   _makeUrl(query, region, statusReq, status, observerMode) {
@@ -34,35 +51,83 @@ class Kindred {
     const proxy = staticReq ? 'global' : region
     const reqUrl = this._makeUrl(endUrl, proxy, staticReq, status, observerMode)
 
-    if (!cb)
+    if (!cb) {
       console.log(
         chalk.red(
           `error: No callback passed in for the method call regarding \`${chalk.yellow(reqUrl)}\``
         )
       )
+    }
 
-    request({ url: reqUrl, qs: options }, (error, response, body) => {
-      let statusMessage
-      const { statusCode } = response
+    if (this.limits) {
+      (function sendRequest() {
+        if (this.canMakeRequest()) {
+          this.limits[0].addRequest()
+          this.limits[1].addRequest()
+          request({ url: reqUrl, qs: options }, (error, response, body) => {
+            let statusMessage
+            const { statusCode } = response
 
-      if (statusCode >= 200 && statusCode < 300)
-        statusMessage = chalk.green(statusCode)
-      else if (statusCode >= 400 && statusCode < 500)
-        statusMessage = chalk.red(statusCode)
-      else if (statusCode >= 500)
-        statusMessage = chalk.bold.red(statusCode)
+            if (statusCode >= 200 && statusCode < 300)
+              statusMessage = chalk.green(statusCode)
+            else if (statusCode >= 400 && statusCode < 500)
+              statusMessage = chalk.red(statusCode)
+            else if (statusCode >= 500)
+              statusMessage = chalk.bold.red(statusCode)
 
-      if (this.debug) {
-        console.log(response && statusMessage, reqUrl)
-        console.log('x-app-rate-limit-count', response.headers['x-app-rate-limit-count'])
-        console.log('x-method-rate-limit-count', response.headers['x-method-rate-limit-count'])
-        console.log('x-rate-limit-count', response.headers['x-rate-limit-count'])
-        console.log('retry-after', response.headers['retry-after'])
-      }
+            if (this.debug) {
+              console.log(response && statusMessage, reqUrl)
+              console.log({
+                'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
+                'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
+                'x-rate-limit-count': response.headers['x-rate-limit-count'],
+                'retry-after': response.headers['retry-after']
+              })
+            }
 
-      if (statusCode >= 400) return cb(response && statusMessage, reqUrl)
-      else return cb(error, JSON.parse(body))
-    })
+            if (statusCode >= 500 && this.limits) {
+              if (this.debug) console.log('!!! resending request !!!')
+              setTimeout(sendRequest.bind(this), 1000)
+            }
+
+            if (statusCode >= 400) return cb(response && statusMessage)
+            else return cb(error, JSON.parse(body))
+          })
+        } else {
+          setTimeout(sendRequest.bind(this), 1000)
+        }
+      }).bind(this)(reqUrl, options)
+    } else {
+      request({ url: reqUrl, qs: options }, (error, response, body) => {
+        let statusMessage
+        const { statusCode } = response
+
+        if (statusCode >= 200 && statusCode < 300)
+          statusMessage = chalk.green(statusCode)
+        else if (statusCode >= 400 && statusCode < 500)
+          statusMessage = chalk.red(statusCode)
+        else if (statusCode >= 500)
+          statusMessage = chalk.bold.red(statusCode)
+
+        if (this.debug) {
+          console.log(response && statusMessage, reqUrl)
+          console.log({
+            'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
+            'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
+            'x-rate-limit-count': response.headers['x-rate-limit-count'],
+            'retry-after': response.headers['retry-after']
+          })
+        }
+
+        if (statusCode >= 500 && this.limits) {
+          if (this.debug) console.log('!!! resending request !!!')
+          setTimeout(sendRequest.bind(this), 1000)
+        }
+
+        if (statusCode >= 400) return cb(response && statusMessage)
+        else return cb(error, JSON.parse(body))
+      })
+    }
   }
 
   _observerRequest({ endUrl, region }, cb) {
@@ -180,9 +245,10 @@ class Kindred {
       return this._gameRequest({ endUrl: `by-summoner/${id}/recent`, region }, cb)
     } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
       return this.getSummoner({ name, region }, (err, data) => {
-        return this._gameRequest({
-          endUrl: `by-summoner/${data[this._sanitizeName(name)].id}/recent`, region
-        }, cb)
+        if (data)
+          return this._gameRequest({
+            endUrl: `by-summoner/${data[this._sanitizeName(name)].id}/recent`, region
+          }, cb)
       })
     } else {
       return this._logError(
@@ -199,19 +265,22 @@ class Kindred {
       return this._leagueRequest({ endUrl: `by-summoner/${ids || id}`, region }, cb)
     } else if (checkAll.string(names)) {
       return this.getSummoners({ names, region }, (err, data) => {
-        let args = []
+        if (data) {
+          let args = []
 
-        for (let name of names)
-          args.push(data[this._sanitizeName(name)].id)
+          for (let name of names)
+            args.push(data[this._sanitizeName(name)].id)
 
-        return this._leagueRequest({ endUrl: `by-summoner/${args.join(',')}`, region }, cb)
+          return this._leagueRequest({ endUrl: `by-summoner/${args.join(',')}`, region }, cb)
+        }
       })
     } else if (typeof arguments[0] === 'object' && (typeof names === 'string' || typeof name === 'string')) {
       return this.getSummoner({ name: names || name, region }, (err, data) => {
-        return this._leagueRequest({
-          endUrl: `by-summoner/${data[this._sanitizeName(names || name)].id}`,
-          region
-        }, cb)
+        if (data)
+          return this._leagueRequest({
+            endUrl: `by-summoner/${data[this._sanitizeName(names || name)].id}`,
+            region
+          }, cb)
       })
     } else {
       return this._logError(
@@ -339,11 +408,11 @@ class Kindred {
       return this._statsRequest({ endUrl: `${id}/ranked`, region, options }, cb)
     } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
       return this.getSummoner({ name, region }, (err, data) => {
-        console.log(data)
-        return this._statsRequest({
-          endUrl: `${data[this._sanitizeName(name)].id}/ranked`,
-          region, options
-        }, cb)
+        if (data)
+          return this._statsRequest({
+            endUrl: `${data[this._sanitizeName(name)].id}/ranked`,
+            region, options
+          }, cb)
       })
     } else {
       this._logError(
@@ -501,10 +570,11 @@ class Kindred {
       })
     } else if (typeof arguments[0] === 'object' && (typeof names === 'string' || typeof name === 'string')) {
       return this.getSummoner({ name: names || name, region }, (err, data) => {
-        return this._runesMasteriesRequest({
-          endUrl: `${data[this._sanitizeName(names || name)].id}/runes`,
-          region
-        }, cb)
+        if (data)
+          return this._runesMasteriesRequest({
+            endUrl: `${data[this._sanitizeName(names || name)].id}/runes`,
+            region
+          }, cb)
       })
     } else {
       return this._logError(

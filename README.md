@@ -32,13 +32,18 @@ var RIOT_API_KEY = process.env.RIOT_API_KEY
 var REGIONS = require('regions')
 
 /*
-    Default region for every method call is NA,
-    but you can set it during initialization as shown below.
+  Default region for every method call is NA,
+  but you can set it during initialization as shown below.
+  To not use the built-in rate limiter, do not pass in anyything
+  into limits.
 */
 var k = new Kindred({
   key: RIOT_API_KEY,
-  defaultRegion: REGIONS.NORTH_AMERICA, // na by default
-  debug: true // false by default
+  defaultRegion: REGIONS.NORTH_AMERICA,
+  debug: true,
+  limits: [ [10, 10], [500, 600] ] // default
+  // 10 requests per 10 seconds
+  // 500 requests per 10 minutes
 })
 
 /*
