@@ -34,14 +34,14 @@ var REGIONS = require('regions')
 /*
   Default region for every method call is NA,
   but you can set it during initialization as shown below.
-  To not use the built-in rate limiter, do not pass in anything
+  To NOT use the built-in rate limiter, do NOT pass in anything
   into limits.
 */
 var k = new Kindred({
   key: RIOT_API_KEY,
   defaultRegion: REGIONS.NORTH_AMERICA,
   debug: true,
-  limits: [ [10, 10], [500, 600] ] // default
+  limits: [ [10, 10], [500, 600] ] // user key
   // 10 requests per 10 seconds
   // 500 requests per 10 minutes
 })
@@ -157,15 +157,6 @@ k.getLeagues({ names: ['Richelle', 'Grigne'] }, rprint)
 k.getCurrentGame({ name: 'Fràe', region: REGIONS.OCEANIA }, rprint)
 
 /*
-    Default ranked mode is 'RANKED_SOLO_5x5' for all
-    methods naturally. This is all configurable though,
-    and this pattern will stay constant
-    throughout all my methods.
-*/
-k.setRegion(REGIONS.KOREA)
-k.getRankedStats(fakerId, rprint)
-k.setRegion(REGIONS.NORTH_AMERICA)
-/*
   Functions will have an options parameter that you can pass in query
   strings when applicable. Values of options should match the
   endpoint's 'Query Parameters'. Check the methods to see which methods
@@ -174,7 +165,7 @@ k.setRegion(REGIONS.NORTH_AMERICA)
   Some are required, and some are not. I often take care of the ones
   that are required by using the most sensible defaults.
 
-  For example, the required parameter is 'type'.
+  For example, the required parameter for many methods is 'type' (of queue).
   I made it so that the default is 'RANKED_SOLO_5x5' if 'type' is not passed
   in.
 
@@ -191,11 +182,11 @@ k.getMatch({ id: 2459973154 }, rprint) // includes timeline by default
 k.getMatch({ id: 2459973154, options: { includeTimeline: false } }, rprint)
 /*
   Note that the first parameter of most methods must always be an object.
-  But for specific methods that only have optional parameters or arguments
+  But for specific methods that only have optional parameters and/or arguments
   satisfied by defaults, we can skip that.
 */
 k.getChallengers(rprint) // default region, default solo queue mode, valid
-k.getRuneList(rprint) // not passing in any optional arguments, valid
+k.getRuneList(rprint) // only optional arguments & not passing in any optional arguments, valid
 
 /*
   However, for getMatchList, the endpoint uses an optional
@@ -204,16 +195,18 @@ k.getRuneList(rprint) // not passing in any optional arguments, valid
 */
 var name = 'caaaaaaaaaria'
 k.getSummoners({ region: 'na', names: name }, function (err, data) {
-  k.getMatchList({ region: 'na', id: data[name].id, options: {
-    /*
-      According to Riot API, query parameters that can accept multiple values
-      must be a comma separated list (or a single value), which is why I do the above 'join'.
+  if (data) {
+    k.getMatchList({ region: 'na', id: data[name].id, options: {
+      /*
+        According to Riot API, query parameters that can accept multiple values
+        must be a comma separated list (or a single value), which is why I do the above 'join'.
 
-      You can also simply do 'RANKED_SOLO_5x5, RANKED_FLEX_SR'.
-    */
-    rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'].join(),
-    championIds: '67' // '267,67' or ['267', '67'].join(',')
-  } }, rprint)
+        You can also simply do 'RANKED_SOLO_5x5, RANKED_FLEX_SR'.
+      */
+      rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'].join(),
+      championIds: '67' // '267,67' or ['267', '67'].join(',')
+    } }, rprint)
+  }
 })
 
 var furyMasteryId = 6111
