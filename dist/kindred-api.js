@@ -250,11 +250,17 @@
                     'x-rate-limit-count': response.headers['x-rate-limit-count'],
                     'retry-after': response.headers['retry-after']
                   });
+                  console.log();
                 }
 
                 if (statusCode >= 500 && _this.limits) {
                   if (_this.debug) console.log('!!! resending request !!!');
                   setTimeout(sendRequest.bind(_this), 1000);
+                }
+
+                if (statusCode === 429 && _this.limits) {
+                  if (_this.debug) console.log('!!! resending request !!!');
+                  setTimeout(sendRequest.bind(_this), response.headers['retry-after'] * 1000 + 50);
                 }
 
                 if (statusCode >= 400) return cb(response && statusMessage);else return cb(error, JSON.parse(body));

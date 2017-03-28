@@ -83,11 +83,17 @@ class Kindred {
                 'x-rate-limit-count': response.headers['x-rate-limit-count'],
                 'retry-after': response.headers['retry-after']
               })
+              console.log()
             }
 
             if (statusCode >= 500 && this.limits) {
               if (this.debug) console.log('!!! resending request !!!')
               setTimeout(sendRequest.bind(this), 1000)
+            }
+
+            if (statusCode === 429 && this.limits) {
+              if (this.debug) console.log('!!! resending request !!!')
+              setTimeout(sendRequest.bind(this), (response.headers['retry-after'] * 1000) + 50)
             }
 
             if (statusCode >= 400) return cb(response && statusMessage)
