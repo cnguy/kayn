@@ -49,10 +49,10 @@ Make sure to check the [official Riot Documentation](https://developer.riotgames
 
 | Type | Endpoint | Description | Covered |
 | -------- | -------- | ----------- | ------- |
-| GET | /championmastery/location/{location}/player/{playerId}/champion/{championId} | Get a champion mastery by player id and champion id. Response code 204 means there were no masteries found for given player id or player id and champion id combination. (RPC) | getChampMastery() |
-| GET | /championmastery/location/{location}/player/{playerId}/champions | Get all champion mastery entries sorted by number of champion points descending. (RPC) | getChampMasteries() |
-| GET | /championmastery/location/{location}/player/{playerId}/score | Get a player's total champion mastery score, which is sum of individual champion mastery levels. (RPC) | getTotalChampMasteryScore() |
-| GET | /championmastery/location/{location}/player/{playerId}/topchampions | Get specified number of top champion mastery entries sorted by number of champion points descending. (RPC) | getTopChamps() |
+| GET | /championmastery/location/<br/>{location}/player/{playerId}/<br/>champion/{championId} | Get a champion mastery by player id and champion id. Response code 204 means there were no masteries found for given player id or player id and champion id combination. (RPC) | getChampMastery() |
+| GET | /championmastery/location/<br/>{location}/player/{playerId}/<br />champions | Get all champion mastery entries sorted by number of champion points descending. (RPC) | getChampMasteries() |
+| GET | /championmastery/location/<br/>{location}/player/{playerId}/<br/>score | Get a player's total champion mastery score, which is sum of individual champion mastery levels. (RPC) | getTotalChampMasteryScore() |
+| GET | /championmastery/location/<br/>{location}/player/{playerId}/<br/>topchampions | Get specified number of top champion mastery entries sorted by number of champion points descending. (RPC) | getTopChamps() |
 
 ### Current Game
 [docs](https://developer.riotgames.com/api-methods/#current-game-v1.0)
