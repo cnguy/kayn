@@ -20,7 +20,7 @@ class Kindred {
   }
 
   _validName(name) {
-    return RegExp('^[0-9\\p{L} _\\.]+$').test(name)
+    return /^([0-9\\p{L} _\\.])+$/.test(name)
   }
 
   _makeUrl(query, region, statusReq, status, observerMode) {
@@ -60,7 +60,7 @@ class Kindred {
         console.log('retry-after', response.headers['retry-after'])
       }
 
-      if (error) return cb(error)
+      if (statusCode >= 400) return cb(response && statusMessage, reqUrl)
       else return cb(error, JSON.parse(body))
     })
   }
@@ -69,6 +69,13 @@ class Kindred {
     return this._baseRequest({
       endUrl: `observer-mode/rest/${endUrl}`,
       observerMode: true,
+      region
+    }, cb)
+  }
+
+  _championRequest({ endUrl, region }, cb) {
+    return this._baseRequest({
+      endUrl: `v${VERSIONS.CHAMPION}/${endUrl}`,
       region
     }, cb)
   }
@@ -186,7 +193,6 @@ class Kindred {
   }
 
   getLeagues({ region, ids, id, names, name } = {}, cb) {
-    console.log(name)
     if (checkAll.int(ids)) {
       return this._leagueRequest({ endUrl: `by-summoner/${ids.join(',')}`, region }, cb)
     } else if (Number.isInteger(ids) || Number.isInteger(id)) {
@@ -253,7 +259,7 @@ class Kindred {
   getMasters({ region, options = { type: 'RANKED_SOLO_5x5' } } = {}, cb) {
     return this._leagueRequest({
       endUrl: 'master', region, options
-    }, cb)
+    }, cb = region ? cb : arguments[0])
   }
 
   getSummoners({ region, ids, id, names, name } = {}, cb) {
@@ -298,28 +304,72 @@ class Kindred {
     }
   }
 
-  getSummonerNames({ region, ids } = {}, cb) {
-    if (Array.isArray(ids) && ids.length > 0) {
+  getSummonerNames({ region, ids, id } = {}, cb) {
+    if (checkAll.int(ids)) {
       return this._summonerRequest({
         endUrl: `${ids.join(',')}/name`,
         region
       }, cb)
-    } else if (Number.isInteger(ids)) {
+    } else if (Number.isInteger(ids) || Number.isInteger(id)) {
       return this._summonerRequest({
-        endUrl: `${ids}/name`,
+        endUrl: `${ids || id}/name`,
         region
       }, cb)
     } else {
-      this._logError(this.getSummonerNames.name, 'ids can be either an array or a single integer')
+      this._logError(
+        this.getSummonerNames.name,
+        `required params ${chalk.yellow('required params `ids` (array of ints)')} or ${chalk.yellow('`id` (int)')} not passed in`
+      )
     }
   }
 
-  getRankedStats({ region, id, options } = {}, cb) {
-    if (!id || !Number.isInteger(id)) return this._logError(
-      this.getRankedStats.name,
-      `required params ${chalk.yellow('`id` (int)')} not passed in`
-    )
-    return this._statsRequest({ endUrl: `${id}/ranked`, region, options }, cb)
+  getSummonerName({ region, id } = {}, cb) {
+    if (Number.isInteger(id)) {
+      return this.getSummonerNames({ region, id }, cb)
+    } else {
+      this._logError(
+        this.getSummonerName.name,
+        `required params ${chalk.yellow('`id` (int)')} not passed in`
+      )
+    }
+  }
+
+  getRankedStats({ region, id, name, options } = {}, cb) {
+    if (Number.isInteger(id)) {
+      return this._statsRequest({ endUrl: `${id}/ranked`, region, options }, cb)
+    } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
+      return this.getSummoner({ name, region }, (err, data) => {
+        console.log(data)
+        return this._statsRequest({
+          endUrl: `${data[this._sanitizeName(name)].id}/ranked`,
+          region, options
+        }, cb)
+      })
+    } else {
+      this._logError(
+        this.getRankedStats.name,
+        `required params ${chalk.yellow('`id` (int)')} or ${chalk.yellow('`name` (string)')} not passed in`
+      )
+    }
+  }
+
+  getStatsSummary({ region, id, name, options } = {}, cb) {
+    if (Number.isInteger(id)) {
+      return this._statsRequest({ endUrl: `${id}/summary`, region, options }, cb)
+    } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
+      return this.getSummoner({ name, region }, (err, data) => {
+        console.log(data)
+        return this._statsRequest({
+          endUrl: `${data[this._sanitizeName(name)].id}/summary`,
+          region, options
+        }, cb)
+      })
+    } else {
+      this._logError(
+        this.getRankedStats.name,
+        `required params ${chalk.yellow('`id` (int)')} or ${chalk.yellow('`name` (string)')} not passed in`
+      )
+    }
   }
 
   getShardStatus({ region } = {}, cb) {
@@ -371,7 +421,7 @@ class Kindred {
   }
 
   getLanguageStrings({ region, options } = {}, cb) {
-    return this._staticRequest({ endUrl: 'language-strings', region, options }, cb = region ? cb : arguments[0])
+    return this._staticRequest({ endUrl: 'language-strings', region, options }, cb = region || options ? cb : arguments[0])
   }
 
   getLanguages({ region } = {}, cb) {
@@ -394,7 +444,7 @@ class Kindred {
     return this._staticRequest({ endUrl: `mastery/${id}`, region, options }, cb)
   }
 
-  getRealm({ region } = {}, cb) {
+  getRealmData({ region } = {}, cb) {
     return this._staticRequest({ endUrl: 'realm', region }, cb = region ? cb : arguments[0])
   }
 
@@ -422,7 +472,7 @@ class Kindred {
     return this._staticRequest({ endUrl: 'summoner-spell/${id}', region, options }, cb)
   }
 
-  getVersions({ region, options } = {}, cb) {
+  getVersionData({ region, options } = {}, cb) {
     return this._staticRequest({ endUrl: 'versions', region, options }, cb = region || options ? cb : arguments[0])
   }
 
@@ -488,7 +538,6 @@ class Kindred {
         }, cb)
       })
     } else if (typeof arguments[0] === 'object' && (typeof names === 'string' || typeof name === 'string')) {
-      console.log(region, id, name)
       return this.getSummoner({ name: names || name, region }, (err, data) => {
         return this._runesMasteriesRequest({
           endUrl: `${data[this._sanitizeName(names || name)].id}/masteries`,
