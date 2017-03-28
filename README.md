@@ -20,10 +20,23 @@ yarn add kindred-api
 ```
 
 ## Endpoints Covered
-Make sure to check the [official Riot Documentation](https://developer.riotgames.com/api-methods/) to see what query parameters you can pass in
-to each endpoint!
+Make sure to check the [official Riot Documentation](https://developer.riotgames.com/api-methods/) to see what query parameters you can pass in to each endpoint!
 
-### CHAMPION-V1.2
+* [CHAMPION-V1.2](#champion)
+* [CHAMPIONMASTERY](#champion-mastery)
+* [CURRENT-GAME-V1.0](#current-game)
+* [FEATURED-GAMES-V1.0](#featured-games)
+* [GAME-V1.3](#game)
+* [LEAGUE-V2.5](#league)
+* [LOL-STATIC-DATA-V1.2](#lol-static-data)
+* [LOL-STATUS-V1.0](#lol-status)
+* [MATCH-V.2.2](#match)
+* [MATCHLIST-V2.2](#matchlist)
+* [RUNES-MASTERIES-V1.4](#runes-masteries)
+* [STATS-V1.3](#stats)
+* [SUMMONER-V1.4](#summoner)
+
+### Champion
 [docs](https://developer.riotgames.com/api-methods/#champion-v1.2)
 
 | Type | Endpoint | Description | Covered |
@@ -31,31 +44,38 @@ to each endpoint!
 | GET | /api/lol/{region}/v1.2/champion | Retrieve all champions. (REST) | no |
 | GET | /api/lol/{region}/v1.2/champion/{id} | Retrieve champion by ID. (REST) | no |
 
-### CHAMPIONMASTERY
+### Champion Mastery
 [docs](https://developer.riotgames.com/api-methods/#championmastery)
 
-### CURRENT-GAME-V1.0
+| Type | Endpoint | Description | Covered |
+| -------- | -------- | ----------- | ------- |
+| GET | /championmastery/location/{location}/player/{playerId}/champion/{championId} | Get a champion mastery by player id and champion id. Response code 204 means there were no masteries found for given player id or player id and champion id combination. (RPC) | getChampMastery() |
+| GET | /championmastery/location/{location}/player/{playerId}/champions | Get all champion mastery entries sorted by number of champion points descending. (RPC) | getChampMasteries() |
+| GET | /championmastery/location/{location}/player/{playerId}/score | Get a player's total champion mastery score, which is sum of individual champion mastery levels. (RPC) | getTotalChampMasteryScore() |
+| GET | /championmastery/location/{location}/player/{playerId}/topchampions | Get specified number of top champion mastery entries sorted by number of champion points descending. (RPC) | getTopChamps() |
+
+### Current Game
 [docs](https://developer.riotgames.com/api-methods/#current-game-v1.0)
 
 | Type | Endpoint | Description | Covered |
 | -------- | -------- | ----------- | ------- |
 | GET | /observer-mode/rest/consumer/getSpectatorGameInfo/{platformId}/{summonerId} | Get current game information for the given summoner ID. (REST) | getCurrentGame() |
 
-### FEATURED-GAMES-V1.0
+### Featured Games
 [docs](https://developer.riotgames.com/api-methods/#featured-games-v1.0)
 
 | Type | Endpoint | Description | Covered |
 | -------- | -------- | ----------- | ------- |
 | GET | /observer-mode/rest/featured | Get list of featured games. (REST) | getFeaturedGames() |
 
-### GAME-V1.3
+### Game
 [docs](https://developer.riotgames.com/api-methods/#game-v1.3)
 
 | Type | Endpoint | Description | Covered |
 | -------- | -------- | ----------- | ------- |
 | GET | /api/lol/{region}/v1.3/game/by-summoner/{summonerId}/recent | Get recent games by summoner ID. (REST) | getRecentGames() |
 
-### LEAGUE-V2.5
+### League
 [docs](https://developer.riotgames.com/api-methods/#league-v2.5)
 
 | Type | Endpoint | Description | Covered |
@@ -65,7 +85,7 @@ to each endpoint!
 | GET | /api/lol/{region}/v2.5/league/challenger | Get challenger tier leagues. (REST) | getChallengers() |
 | GET | /api/lol/{region}/v2.5/league/master | Get master tier leagues. (REST) | getMasteries() |
 
-### LOL-STATIC-DATA-V1.2
+### LoL Static Data
 [docs](https://developer.riotgames.com/api-methods/#lol-static-data-v1.2)
 
 | Type | Endpoint | Description | Covered |
@@ -86,7 +106,7 @@ to each endpoint!
 | GET | /api/lol/static-data/{region}/v1.2/summoner-spell/{id} | Retrieves summoner spell by its unique id. (REST) | getSummonerSpell() |
 | GET | /api/lol/static-data/{region}/v1.2/versions | Retrieve version data. (REST) | getVersionData() |
 
-### LOL-STATUS-V1.0
+### LoL Status
 [docs](https://developer.riotgames.com/api-methods/#lol-status-v1.0)
 
 | Type | Endpoint | Description | Covered |
@@ -94,21 +114,21 @@ to each endpoint!
 | GET | /lol/status/v1/shard | Get shard status. Returns the data available on the status.leagueoflegends.com website for the given region. (REST) | getShardStatus() |
 | GET | /lol/status/v1/shards | Get shard list. (REST) | getShardList() |
 
-### MATCH-V.2.2
+### Match
 [docs](https://developer.riotgames.com/api-methods/#match-v2.2)
 
 | Type | Endpoint | Description | Covered |
 | -------- | -------- | ----------- | ------- |
 | GET | /api/lol/{region}/v2.2/match/{matchId} | Retrieve match by match ID. (REST) | getMatch() |
 
-### MATCHLIST-V2.2
+### Matchlist
 [docs](https://developer.riotgames.com/api-methods/#matchlist-v2.2)
 
 | Type | Endpoint | Description | Covered |
 | -------- | -------- | ----------- | ------- |
 | GET | /api/lol/{region}/v2.2/matchlist/by-summoner/{summonerId} | Retrieve match list by match ID. (REST) | getMatchList() |
 
-### RUNES-MASTERIES-V1.4
+### Runes Masteries
 [docs](https://developer.riotgames.com/api-methods/#runes-masteries-v1.4)
 
 | Type | Endpoint | Description | Covered |
@@ -116,7 +136,7 @@ to each endpoint!
 | GET | /api/lol/{region}/v1.4/summoner/{summonerIds}/masteries | Get mastery pages mapped by summoner ID for a given list of summoner IDs. (REST) | getMasteries() |
 | GET | /api/lol/{region}/v1.4/summoner/{summonerIds}/runes | Get rune pages mapped by summoner ID for a given list of summoner IDs. (REST) | getRunes() |
 
-### STATS-V1.3
+### Stats
 [docs](https://developer.riotgames.com/api-methods/#stats-v1.3)
 
 | Type | Endpoint | Description | Covered |
@@ -124,7 +144,7 @@ to each endpoint!
 | GET | /api/lol/{region}/v1.3/stats/by-summoner/{summonerId}/ranked | Get ranked stats by summoner ID. (REST) | getRankedStats() |
 | GET | /api/lol/{region}/v1.3/stats/by-summoner/{summonerId}/summary | Get player stats summaries by summoner ID. (REST) | getStatsSummary() |
 
-### SUMMONER-V1.4
+### Summoner
 [docs](https://developer.riotgames.com/api-methods/#summoner-v1.4)
 
 | Type | Endpoint | Description | Covered |
@@ -159,6 +179,21 @@ var k = new Kindred({
   // 10 requests per 10 seconds
   // 500 requests per 10 minutes
 })
+
+/*
+  NOTE: Making any form of parameter error will inform you
+  what parameters you can pass in!
+*/
+k.getTopChamps(rprint)
+// getTopChamps request FAILED; required params `id` (int) or `playerID` (int) not passed in
+
+k.getChampMastery(rprint)
+// getChampMastery request FAILED; required params `playerID` (int) and `champID` (int) not passed in
+
+/*
+  Notice the OR and the AND!!
+  Note: getChampMastery is the only method that requires two forms of ids.
+*/
 
 /*
   The first parameter of most methods will be an object.
