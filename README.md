@@ -78,16 +78,16 @@ Make sure to check the [official Riot Documentation](https://developer.riotgames
 ### League
 [docs](https://developer.riotgames.com/api-methods/#league-v2.5)
 
-1. /api/lol/{region}/v2.5/league/by-summoner/{summonerIds}
+1. **/api/lol/{region}/v2.5/league/by-summoner/{summonerIds}**
     * Get leagues mapped by summoner ID for a given list of summoner IDs. (REST)
-    * getLeagues({ region (str), ids ([int]/int), id (int), names ([str]/str), name (str) }, cb) 
-2. /api/lol/{region}/v2.5/league/by-summoner/{summonerIds}/entry
+    * getLeagues({ region, ids ([int]/int), id (int), names ([str]/str), name (str) }, cb) 
+2. **/api/lol/{region}/v2.5/league/by-summoner/{summonerIds}/entry**
     * Get league entries mapped by summoner ID for a given list of summoner IDs. (REST)
-    * getLeagueEntries({ region(str), ids ([int]/int), id(int), names ([str]/str), name (str) }, cb)
-3. /api/lol/{region}/v2.5/league/challenger
+    * getLeagueEntries({ region, ids ([int]/int), id(int), names ([str]/str), name (str) }, cb)
+3. **/api/lol/{region}/v2.5/league/challenger**
     * Get challenger tier leagues. (REST)
     * getChallengers({ region, options = { type: 'RANKED_SOLO_5x5' } } = {}, cb)
-4. /api/lol/{region}/v2.5/league/master
+4. **/api/lol/{region}/v2.5/league/master**
     * Get master tier leagues. (REST)
     * getMasters({ region, options = { type: 'RANKED_SOLO_5x5' } } = {}, cb)
 
