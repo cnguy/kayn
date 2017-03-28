@@ -15,7 +15,7 @@ My goal is to make a wrapper that is convenient and sensible. This project is he
 For function methods, ```get``` implies a request.
 
 ## Installation
-
+(not published yet)
 ```
 yarn add kindred-api
 ```
@@ -34,7 +34,7 @@ var REGIONS = require('regions')
 /*
   Default region for every method call is NA,
   but you can set it during initialization as shown below.
-  To not use the built-in rate limiter, do not pass in anyything
+  To not use the built-in rate limiter, do not pass in anything
   into limits.
 */
 var k = new Kindred({
