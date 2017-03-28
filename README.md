@@ -1,6 +1,6 @@
 # Kindred
 
-Kindred is a not-so-thin Node.js wrapper on top of [Riot Games API for League of Legends](http://www.developer.riotgames.com)
+Kindred is a thin Node.js wrapper on top of [Riot Games API for League of Legends](http://www.developer.riotgames.com)
 
 ## Table of Contents
 * [Philosophy](#philosophy)
@@ -59,7 +59,7 @@ Make sure to check the [official Riot Documentation](https://developer.riotgames
 
 | Type | Endpoint | Description | Covered |
 | -------- | -------- | ----------- | ------- |
-| GET | /observer-mode/rest/consumer/getSpectatorGameInfo/{platformId}/{summonerId} | Get current game information for the given summoner ID. (REST) | getCurrentGame() |
+| GET | /observer-mode/rest/<br/>consumer/getSpectatorGameInfo/{platformId}/{summonerId} | Get current game information for the given summoner ID. (REST) | getCurrentGame() |
 
 ### Featured Games
 [docs](https://developer.riotgames.com/api-methods/#featured-games-v1.0)
@@ -78,12 +78,18 @@ Make sure to check the [official Riot Documentation](https://developer.riotgames
 ### League
 [docs](https://developer.riotgames.com/api-methods/#league-v2.5)
 
-| Type | Endpoint | Description | Covered |
-| -------- | -------- | ----------- | ------- |
-| GET | /api/lol/{region}/v2.5/league/by-summoner/{summonerIds} | Get leagues mapped by summoner ID for a given list of summoner IDs. (REST) | getLeagues() |
-| GET | /api/lol/{region}/v2.5/league/by-summoner/{summonerIds}/entry | Get league entries mapped by summoner ID for a given list of summoner IDs. (REST) | getLeagueEntries() |
-| GET | /api/lol/{region}/v2.5/league/challenger | Get challenger tier leagues. (REST) | getChallengers() |
-| GET | /api/lol/{region}/v2.5/league/master | Get master tier leagues. (REST) | getMasteries() |
+1. /api/lol/{region}/v2.5/league/by-summoner/{summonerIds}
+    * Get leagues mapped by summoner ID for a given list of summoner IDs. (REST)
+    * getLeagues({ region (str), ids ([int]/int), id (int), names ([str]/str), name (str) }, cb) 
+2. /api/lol/{region}/v2.5/league/by-summoner/{summonerIds}/entry
+    * Get league entries mapped by summoner ID for a given list of summoner IDs. (REST)
+    * getLeagueEntries({ region(str), ids ([int]/int), id(int), names ([str]/str), name (str) }, cb)
+3. /api/lol/{region}/v2.5/league/challenger
+    * Get challenger tier leagues. (REST)
+    * getChallengers({ region, options = { type: 'RANKED_SOLO_5x5' } } = {}, cb)
+4. /api/lol/{region}/v2.5/league/master
+    * Get master tier leagues. (REST)
+    * getMasters({ region, options = { type: 'RANKED_SOLO_5x5' } } = {}, cb)
 
 ### LoL Static Data
 [docs](https://developer.riotgames.com/api-methods/#lol-static-data-v1.2)
