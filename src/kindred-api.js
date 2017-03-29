@@ -51,8 +51,8 @@ class Kindred {
     return re.test(name)
   }
 
-  _makeUrl(query, region, statusReq, status, observerMode, championMastery) {
-    const mid = statusReq ? '' : `${region}/`
+  _makeUrl(query, region, staticReq, status, observerMode, championMastery) {
+    const mid = staticReq ? '' : `${region}/`
     const prefix = !status && !observerMode && !championMastery ? `api/lol/${mid}` : observerMode || championMastery ? '' : 'lol/status/'
 
     return `https://${region}.api.riotgames.com/${prefix}${encodeURI(query)}?api_key=${this.key}`
@@ -74,8 +74,10 @@ class Kindred {
     if (this.limits) {
       (function sendRequest() {
         if (this.canMakeRequest()) {
-          this.limits[0].addRequest()
-          this.limits[1].addRequest()
+          if (!staticReq) {
+            this.limits[0].addRequest()
+            this.limits[1].addRequest()
+          }
           request({ url: reqUrl, qs: options }, (error, response, body) => {
             let statusMessage
             const { statusCode } = response
@@ -193,7 +195,7 @@ class Kindred {
     }, cb)
   }
 
-  _statusRequest({ endUrl, region }, cb) {
+  _staticRequest({ endUrl, region }, cb) {
     return this._baseRequest({ endUrl: `v${VERSIONS.STATUS}/${endUrl}`, region, status: true }, cb)
   }
 
@@ -595,11 +597,11 @@ class Kindred {
 
   /* LOL-STATUS-V1.0 */
   getShardStatus({ region } = {}, cb) {
-    return this._statusRequest({ endUrl: 'shard', region }, cb = region ? cb : arguments[0])
+    return this._staticRequest({ endUrl: 'shard', region }, cb = region ? cb : arguments[0])
   }
 
   getShardList({ region } = {}, cb) {
-    return this._statusRequest({ endUrl: 'shards', region }, cb = region ? cb : arguments[0])
+    return this._staticRequest({ endUrl: 'shards', region }, cb = region ? cb : arguments[0])
   }
 
   /* MATCH-V2.2 */

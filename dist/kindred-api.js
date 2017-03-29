@@ -204,8 +204,8 @@
       }
     }, {
       key: '_makeUrl',
-      value: function _makeUrl(query, region, statusReq, status, observerMode, championMastery) {
-        var mid = statusReq ? '' : region + '/';
+      value: function _makeUrl(query, region, staticReq, status, observerMode, championMastery) {
+        var mid = staticReq ? '' : region + '/';
         var prefix = !status && !observerMode && !championMastery ? 'api/lol/' + mid : observerMode || championMastery ? '' : 'lol/status/';
 
         return 'https://' + region + '.api.riotgames.com/' + prefix + encodeURI(query) + '?api_key=' + this.key;
@@ -242,8 +242,10 @@
             var _this = this;
 
             if (this.canMakeRequest()) {
-              this.limits[0].addRequest();
-              this.limits[1].addRequest();
+              if (!staticReq) {
+                this.limits[0].addRequest();
+                this.limits[1].addRequest();
+              }
               request({ url: reqUrl, qs: options }, function (error, response, body) {
                 var statusMessage = void 0;
                 var statusCode = response.statusCode;
@@ -385,8 +387,8 @@
         }, cb);
       }
     }, {
-      key: '_statusRequest',
-      value: function _statusRequest(_ref10, cb) {
+      key: '_staticRequest',
+      value: function _staticRequest(_ref10, cb) {
         var endUrl = _ref10.endUrl,
             region = _ref10.region;
 
@@ -1068,7 +1070,7 @@
 
         var cb = arguments[1];
 
-        return this._statusRequest({ endUrl: 'shard', region: region }, cb = region ? cb : arguments[0]);
+        return this._staticRequest({ endUrl: 'shard', region: region }, cb = region ? cb : arguments[0]);
       }
     }, {
       key: 'getShardList',
@@ -1078,7 +1080,7 @@
 
         var cb = arguments[1];
 
-        return this._statusRequest({ endUrl: 'shards', region: region }, cb = region ? cb : arguments[0]);
+        return this._staticRequest({ endUrl: 'shards', region: region }, cb = region ? cb : arguments[0]);
       }
     }, {
       key: 'getMatch',
