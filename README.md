@@ -19,9 +19,9 @@ March 28, 2017
 **I'm pretty proud of the end result. The rate limiting isn't the best, and the method names are kinda iffy, but it works really well for my other project and when I need a quick script**.
 
 ## Installation
-(not published yet)
 ```
 yarn add kindred-api
+// or npm install kindred-api
 ```
 
 ## Endpoints Covered
