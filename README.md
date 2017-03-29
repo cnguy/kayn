@@ -14,7 +14,7 @@ My goal is to make a wrapper that is convenient and sensible. This project is he
 
 This is my first try at making an API wrapper. I am open to any advice and help!
 
-March 28, 2017
+***March 28, 2017***
 
 **I'm pretty proud of the end result. The rate limiting isn't the best, and the method names are kinda iffy, but it works really well for my other project and when I need a quick script**.
 
@@ -423,13 +423,15 @@ k.getRune({ id: msRuneId }, rprint)
 
 **Feel free to make a PR regarding anything (even the smallest typo or inconsistency).**
 
-There are a few inconsistencies within this program that I don't know how to address since this is my first API wrapper and I'm still quite a big newbie.
+There are a few inconsistencies and weird things within this libary that I don't know how to address since this is my first API wrapper and I'm still quite a big newbie.
+
+For example, the two methods getChamp() and getChampion() are actually different.
 
 getChamp() targets the champ endpoint
 
 getChampion() targets the static endpoint
 
-I didn't want to attach getChampion() with 'static' in any way or form since I thought it looked kind of annoying.
+I didn't want to attach getChampion() with 'static' in any way or form since I thought it looked kind of annoying because then I would want to attach static to the other static methods as well (maybe that's better?).
 
 **Right now, the code is also quite messy and there is a lot of repeated code.** Function definitions are quite long because I include many aliases as well. I haven't thought of an elegant way to make a magic function that manages to work for every single endpoint request yet.
 
