@@ -221,13 +221,13 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
 ## Usage
 
 ```javascript
-var Kindred = require('kindred-api')
+var KindredAPI = require('kindred-api')
 
 // var RIOT_API_KEY = require('whatever')
 // or if you're using something like dotenv..
 require('dotenv').config()
 var RIOT_API_KEY = process.env.RIOT_API_KEY
-var REGIONS = require('regions')
+var REGIONS = KindredAPI.REGIONS
 
 /*
   Default region for every method call is NA,
@@ -236,7 +236,7 @@ var REGIONS = require('regions')
   To NOT use the built-in rate limiter, do NOT pass in anything
   into limits.
 */
-var k = new Kindred({
+var k = new KindredAPI.Kindred({
   key: RIOT_API_KEY,
   defaultRegion: REGIONS.NORTH_AMERICA,
   debug: true, // shows status code, urls, and relevant headers

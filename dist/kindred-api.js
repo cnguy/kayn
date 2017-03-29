@@ -1510,5 +1510,10 @@
     return Kindred$1;
   }();
 
-  module.exports = Kindred$1;
+  var Kindred$2 = {
+    Kindred: Kindred$1,
+    REGIONS: regions
+  };
+
+  module.exports = Kindred$2;
 });

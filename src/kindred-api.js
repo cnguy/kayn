@@ -851,4 +851,7 @@ class Kindred {
   }
 }
 
-export default Kindred
+export default {
+  Kindred,
+  REGIONS
+}
