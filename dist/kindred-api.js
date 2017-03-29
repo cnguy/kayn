@@ -156,9 +156,18 @@
     }
   };
 
+  var codes = {
+    400: 'Bad Request',
+    403: 'Forbidden',
+    404: 'Not Found',
+    415: 'Unsupported Media Type',
+    429: 'Rate Limit Exceeded',
+    500: 'Internal Service Error',
+    503: 'Service Unavailable'
+  };
+
   var getResponseMessage = function getResponseMessage(code) {
     var message = codes[code];
-
     if (!message) return;
     return message;
   };
@@ -258,10 +267,10 @@
                 var statusCode = response.statusCode;
 
 
-                if (statusCode >= 200 && statusCode < 300) statusMessage = chalk.green(statusCode);else if (statusCode >= 400 && statusCode < 500) statusMessage = chalk.red(statusCode);else if (statusCode >= 500) statusMessage = chalk.bold.red(statusCode);
+                if (statusCode >= 200 && statusCode < 300) statusMessage = chalk.green(statusCode);else if (statusCode >= 400 && statusCode < 500) statusMessage = chalk.red(statusCode + ' ' + getResponseMessage(statusCode));else if (statusCode >= 500) statusMessage = chalk.bold.red(statusCode + ' ' + getResponseMessage(statusCode));
 
                 if (_this.debug) {
-                  console.log(response && statusMessage, reqUrl);
+                  console.log(statusMessage, reqUrl);
                   console.log({
                     'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
                     'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
@@ -281,7 +290,7 @@
                   setTimeout(sendRequest.bind(_this), response.headers['retry-after'] * 1000 + 50);
                 }
 
-                if (statusCode >= 400) return cb(statusMessage);else return cb(error, JSON.parse(body));
+                if (statusCode >= 400) return cb(statusMessage + ' : ' + chalk.yellow(reqUrl));else return cb(error, JSON.parse(body));
               });
             } else {
               setTimeout(sendRequest.bind(this), 1000);
@@ -293,7 +302,7 @@
             var statusCode = response.statusCode;
 
 
-            if (statusCode >= 200 && statusCode < 300) statusMessage = chalk.green(statusCode);else if (statusCode >= 400 && statusCode < 500) statusMessage = chalk.red(statusCode);else if (statusCode >= 500) statusMessage = chalk.bold.red(statusCode);
+            if (statusCode >= 200 && statusCode < 300) statusMessage = chalk.green(statusCode);else if (statusCode >= 400 && statusCode < 500) statusMessage = chalk.red(statusCode + ' ' + getResponseMessage(statusCode));else if (statusCode >= 500) statusMessage = chalk.bold.red(statusCode + ' ' + getResponseMessage(statusCode));
 
             if (_this2.debug) {
               console.log(response && statusMessage, reqUrl);
@@ -305,7 +314,7 @@
               });
             }
 
-            if (statusCode >= 400) return cb(response && statusMessage + ': ' + getResponseMessage(statusCode));else return cb(error, JSON.parse(body));
+            if (statusCode >= 400) return cb(statusMessage + ' : ' + chalk.yellow(reqUrl));else return cb(error, JSON.parse(body));
           });
         }
       }

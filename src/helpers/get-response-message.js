@@ -1,8 +1,7 @@
 import responseCodes from '../constants/response-codes'
 
 const getResponseMessage = (code) => {
-  const message = codes[code]
-
+  const message = responseCodes[code]
   if (!message) return
   return message
 }

@@ -86,12 +86,12 @@ class Kindred {
             if (statusCode >= 200 && statusCode < 300)
               statusMessage = chalk.green(statusCode)
             else if (statusCode >= 400 && statusCode < 500)
-              statusMessage = chalk.red(statusCode)
+              statusMessage = chalk.red(`${statusCode} ${getResponseMessage(statusCode)}`)
             else if (statusCode >= 500)
-              statusMessage = chalk.bold.red(statusCode)
+              statusMessage = chalk.bold.red(`${statusCode} ${getResponseMessage(statusCode)}`)
 
             if (this.debug) {
-              console.log(response && statusMessage, reqUrl)
+              console.log(statusMessage, reqUrl)
               console.log({
                 'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
                 'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
@@ -111,7 +111,7 @@ class Kindred {
               setTimeout(sendRequest.bind(this), (response.headers['retry-after'] * 1000) + 50)
             }
 
-            if (statusCode >= 400) return cb(statusMessage)
+            if (statusCode >= 400) return cb(statusMessage + ' : ' + chalk.yellow(reqUrl))
             else return cb(error, JSON.parse(body))
           })
         } else {
@@ -124,11 +124,11 @@ class Kindred {
         const { statusCode } = response
 
         if (statusCode >= 200 && statusCode < 300)
-          statusMessage = chalk.green(statusCode)
-        else if (statusCode >= 400 && statusCode < 500)
-          statusMessage = chalk.red(statusCode)
-        else if (statusCode >= 500)
-          statusMessage = chalk.bold.red(statusCode)
+              statusMessage = chalk.green(statusCode)
+            else if (statusCode >= 400 && statusCode < 500)
+              statusMessage = chalk.red(`${statusCode} ${getResponseMessage(statusCode)}`)
+            else if (statusCode >= 500)
+              statusMessage = chalk.bold.red(`${statusCode} ${getResponseMessage(statusCode)}`)
 
         if (this.debug) {
           console.log(response && statusMessage, reqUrl)
@@ -140,7 +140,7 @@ class Kindred {
           })
         }
 
-        if (statusCode >= 400) return cb(response && statusMessage + ': ' + getResponseMessage(statusCode))
+        if (statusCode >= 400) return cb(statusMessage + ' : ' + chalk.yellow(reqUrl))
         else return cb(error, JSON.parse(body))
       })
     }
