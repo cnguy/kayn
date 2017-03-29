@@ -156,6 +156,13 @@
     }
   };
 
+  var getResponseMessage = function getResponseMessage(code) {
+    var message = codes[code];
+
+    if (!message) return;
+    return message;
+  };
+
   var re = XRegExp('^[0-9\\p{L} _\\.]+$');
 
   var Kindred$1 = function () {
@@ -274,7 +281,7 @@
                   setTimeout(sendRequest.bind(_this), response.headers['retry-after'] * 1000 + 50);
                 }
 
-                if (statusCode >= 400) return cb(response && statusMessage);else return cb(error, JSON.parse(body));
+                if (statusCode >= 400) return cb(statusMessage);else return cb(error, JSON.parse(body));
               });
             } else {
               setTimeout(sendRequest.bind(this), 1000);
@@ -298,7 +305,7 @@
               });
             }
 
-            if (statusCode >= 400) return cb(response && statusMessage);else return cb(error, JSON.parse(body));
+            if (statusCode >= 400) return cb(response && statusMessage + ': ' + getResponseMessage(statusCode));else return cb(error, JSON.parse(body));
           });
         }
       }

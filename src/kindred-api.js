@@ -10,6 +10,7 @@ import REGIONS_BACK from './constants/regions-back'
 import VERSIONS from './constants/versions'
 
 import checkAll from './helpers/array-checkers'
+import getResponseMessage from './helpers/get-response-message'
 
 const re = XRegExp('^[0-9\\p{L} _\\.]+$')
 
@@ -110,7 +111,7 @@ class Kindred {
               setTimeout(sendRequest.bind(this), (response.headers['retry-after'] * 1000) + 50)
             }
 
-            if (statusCode >= 400) return cb(response && statusMessage)
+            if (statusCode >= 400) return cb(statusMessage)
             else return cb(error, JSON.parse(body))
           })
         } else {
@@ -139,7 +140,7 @@ class Kindred {
           })
         }
 
-        if (statusCode >= 400) return cb(response && statusMessage)
+        if (statusCode >= 400) return cb(response && statusMessage + ': ' + getResponseMessage(statusCode))
         else return cb(error, JSON.parse(body))
       })
     }
