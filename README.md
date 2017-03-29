@@ -1,6 +1,6 @@
 # Kindred
 
-Kindred is a thin Node.js wrapper on top of [Riot Games API for League of Legends](http://www.developer.riotgames.com)
+Kindred is a thin Node.js wrapper (with an optional rate limiter) on top of [Riot Games API for League of Legends](http://www.developer.riotgames.com)
 
 ## Table of Contents
 * [Philosophy](#philosophy)
@@ -10,13 +10,13 @@ Kindred is a thin Node.js wrapper on top of [Riot Games API for League of Legend
 * [Contributing and Issues](#contributing-and-issues)
 
 ## Philosophy
-My goal is to make a wrapper that is convenient and sensible. This project is heavily inspired by [psuedonym117's Python wrapper](https://github.com/pseudonym117/Riot-Watcher). I want to make the API as consistent as possible and also make a decent rate limiter. However, I also wish to provide users flexibility and a detailed errors system to make the wrapper as unobtrusive as possible. Look at the [Quick Usage Examples](#quick-usage-examples) to see what I mean.
+My goal is to make a wrapper that is simple, sensibile, and consistent. This project is heavily inspired by [psuedonym117's Python wrapper](https://github.com/pseudonym117/Riot-Watcher). Look at the [Quick Usage Examples](#quick-usage-examples) to see what I mean.
 
 This is my first try at making an API wrapper. I am open to any advice and help!
 
 ***March 28, 2017***
 
-**I'm pretty proud of the end result. The rate limiting isn't the best, and the method names are kinda iffy, but it works really well for my other project and when I need a quick script**.
+**I'm pretty proud of the end result. The rate limiting isn't the best, and the method names are kinda iffy (minor inconsistencies), but it works really well for my other project and for when I need a quick script. I'll try to improve this library over the next few weeks.**
 
 ## Installation
 ```
