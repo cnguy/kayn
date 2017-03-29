@@ -1,4 +1,4 @@
-# Kindred [WORK IN PROGRESS]
+# Kindred
 
 Kindred is a thin Node.js wrapper on top of [Riot Games API for League of Legends](http://www.developer.riotgames.com)
 
