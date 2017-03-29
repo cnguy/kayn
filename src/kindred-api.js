@@ -53,7 +53,7 @@ class Kindred {
 
   _makeUrl(query, region, staticReq, status, observerMode, championMastery) {
     const mid = staticReq ? '' : `${region}/`
-    const prefix = !status && !observerMode && !championMastery ? `api/lol/${mid}` : observerMode || championMastery ? '' : 'lol/status/'
+    const prefix = !status && !observerMode && !championMastery ? `api/lol/${mid}` : ''
 
     return `https://${region}.api.riotgames.com/${prefix}${encodeURI(query)}?api_key=${this.key}`
   }
@@ -183,6 +183,14 @@ class Kindred {
     }, cb)
   }
 
+  _statusRequest({ endUrl, region, options }, cb) {
+    return this._baseRequest({
+      endUrl: `lol/status/v${VERSIONS.STATUS}/${endUrl}`,
+      status: true,
+      options
+    }, cb)
+  }
+
   _gameRequest({ endUrl, region }, cb) {
     return this._baseRequest({
       endUrl: `v${VERSIONS.GAME}/game/${endUrl}`, region
@@ -193,10 +201,6 @@ class Kindred {
     return this._baseRequest({
       endUrl: `v${VERSIONS.LEAGUE}/league/${endUrl}`, region, options
     }, cb)
-  }
-
-  _staticRequest({ endUrl, region }, cb) {
-    return this._baseRequest({ endUrl: `v${VERSIONS.STATUS}/${endUrl}`, region, status: true }, cb)
   }
 
   _matchRequest({ endUrl, region, options }, cb) {
@@ -500,7 +504,7 @@ class Kindred {
 
   getChampion({ region, id, championID, options } = {}, cb) {
     if (Number.isInteger(id || championID)) {
-      this._staticRequest({ endUrl: `champion/${id || championID}`, region, options }, cb)
+      return this._staticRequest({ endUrl: `champion/${id || championID}`, region, options }, cb)
     } else {
       return this._logError(
         this.getChampion.name,
@@ -597,11 +601,11 @@ class Kindred {
 
   /* LOL-STATUS-V1.0 */
   getShardStatus({ region } = {}, cb) {
-    return this._staticRequest({ endUrl: 'shard', region }, cb = region ? cb : arguments[0])
+    return this._statusRequest({ endUrl: 'shard', region }, cb = region ? cb : arguments[0])
   }
 
   getShardList({ region } = {}, cb) {
-    return this._staticRequest({ endUrl: 'shards', region }, cb = region ? cb : arguments[0])
+    return this._statusRequest({ endUrl: 'shards', region }, cb = region ? cb : arguments[0])
   }
 
   /* MATCH-V2.2 */

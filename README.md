@@ -368,6 +368,7 @@ k.getRunes({ names: ['Richelle', 'Grigne'] }, rprint)
 k.getRunes({ name: 'Richelle' }, rprint)
 k.getRecentGames({ name: 'Richelle' }, rprint)
 k.getLeagues({ names: ['Richelle', 'Grigne'] }, rprint)
+/* Note: I handle that platform id stuffs. */
 k.getCurrentGame({ name: 'Fràe', region: REGIONS.OCEANIA }, rprint)
 
 /*

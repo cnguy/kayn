@@ -206,7 +206,7 @@
       key: '_makeUrl',
       value: function _makeUrl(query, region, staticReq, status, observerMode, championMastery) {
         var mid = staticReq ? '' : region + '/';
-        var prefix = !status && !observerMode && !championMastery ? 'api/lol/' + mid : observerMode || championMastery ? '' : 'lol/status/';
+        var prefix = !status && !observerMode && !championMastery ? 'api/lol/' + mid : '';
 
         return 'https://' + region + '.api.riotgames.com/' + prefix + encodeURI(query) + '?api_key=' + this.key;
       }
@@ -366,10 +366,23 @@
         }, cb);
       }
     }, {
-      key: '_gameRequest',
-      value: function _gameRequest(_ref8, cb) {
+      key: '_statusRequest',
+      value: function _statusRequest(_ref8, cb) {
         var endUrl = _ref8.endUrl,
-            region = _ref8.region;
+            region = _ref8.region,
+            options = _ref8.options;
+
+        return this._baseRequest({
+          endUrl: 'lol/status/v' + versions.STATUS + '/' + endUrl,
+          status: true,
+          options: options
+        }, cb);
+      }
+    }, {
+      key: '_gameRequest',
+      value: function _gameRequest(_ref9, cb) {
+        var endUrl = _ref9.endUrl,
+            region = _ref9.region;
 
         return this._baseRequest({
           endUrl: 'v' + versions.GAME + '/game/' + endUrl, region: region
@@ -377,22 +390,14 @@
       }
     }, {
       key: '_leagueRequest',
-      value: function _leagueRequest(_ref9, cb) {
-        var endUrl = _ref9.endUrl,
-            region = _ref9.region,
-            options = _ref9.options;
+      value: function _leagueRequest(_ref10, cb) {
+        var endUrl = _ref10.endUrl,
+            region = _ref10.region,
+            options = _ref10.options;
 
         return this._baseRequest({
           endUrl: 'v' + versions.LEAGUE + '/league/' + endUrl, region: region, options: options
         }, cb);
-      }
-    }, {
-      key: '_staticRequest',
-      value: function _staticRequest(_ref10, cb) {
-        var endUrl = _ref10.endUrl,
-            region = _ref10.region;
-
-        return this._baseRequest({ endUrl: 'v' + versions.STATUS + '/' + endUrl, region: region, status: true }, cb);
       }
     }, {
       key: '_matchRequest',
@@ -885,7 +890,7 @@
         var cb = arguments[1];
 
         if (Number.isInteger(id || championID)) {
-          this._staticRequest({ endUrl: 'champion/' + (id || championID), region: region, options: options }, cb);
+          return this._staticRequest({ endUrl: 'champion/' + (id || championID), region: region, options: options }, cb);
         } else {
           return this._logError(this.getChampion.name, 'required params ' + chalk.yellow('`id/championID` (int)') + ' not passed in');
         }
@@ -1070,7 +1075,7 @@
 
         var cb = arguments[1];
 
-        return this._staticRequest({ endUrl: 'shard', region: region }, cb = region ? cb : arguments[0]);
+        return this._statusRequest({ endUrl: 'shard', region: region }, cb = region ? cb : arguments[0]);
       }
     }, {
       key: 'getShardList',
@@ -1080,7 +1085,7 @@
 
         var cb = arguments[1];
 
-        return this._staticRequest({ endUrl: 'shards', region: region }, cb = region ? cb : arguments[0]);
+        return this._statusRequest({ endUrl: 'shards', region: region }, cb = region ? cb : arguments[0]);
       }
     }, {
       key: 'getMatch',
