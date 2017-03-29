@@ -1,6 +1,6 @@
 # Kindred
 
-Kindred is a thin Node.js wrapper (with an optional rate limiter) on top of [Riot Games API for League of Legends](http://www.developer.riotgames.com)
+Kindred is a thin Node.js wrapper (with an optional rate limiter) on top of [Riot Games API for League of Legends](http://www.developer.riotgames.com).
 
 ## Table of Contents
 * [Philosophy](#philosophy)

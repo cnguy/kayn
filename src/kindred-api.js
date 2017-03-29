@@ -21,15 +21,19 @@ class Kindred {
     this.debug = debug
 
     if (limits) {
-      this.limits = [
-        new RateLimit(limits[0][0], limits[0][1]),
-        new RateLimit(limits[1][0], limits[1][1])
-      ]
+      this.limits = {}
+
+      for (const region of Object.keys(REGIONS)) {
+        this.limits[REGIONS[region]] = [
+          new RateLimit(limits[0][0], limits[0][1]),
+          new RateLimit(limits[1][0], limits[1][1])
+        ]
+      }
     }
   }
 
-  canMakeRequest() {
-    if (!this.limits[0].requestAvailable() || !this.limits[1].requestAvailable()) {
+  canMakeRequest(region) {
+    if (!this.limits[region][0].requestAvailable() || !this.limits[region][1].requestAvailable()) {
       return false
     }
 
@@ -74,11 +78,12 @@ class Kindred {
 
     if (this.limits) {
       (function sendRequest() {
-        if (this.canMakeRequest()) {
+        if (this.canMakeRequest(region)) {
           if (!staticReq) {
-            this.limits[0].addRequest()
-            this.limits[1].addRequest()
+            this.limits[region][0].addRequest()
+            this.limits[region][1].addRequest()
           }
+
           request({ url: reqUrl, qs: options }, (error, response, body) => {
             let statusMessage
             const { statusCode } = response

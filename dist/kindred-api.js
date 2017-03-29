@@ -190,14 +190,39 @@
       this.debug = debug;
 
       if (limits) {
-        this.limits = [new RateLimit(limits[0][0], limits[0][1]), new RateLimit(limits[1][0], limits[1][1])];
+        this.limits = {};
+
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = Object.keys(regions)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var region = _step.value;
+
+            this.limits[regions[region]] = [new RateLimit(limits[0][0], limits[0][1]), new RateLimit(limits[1][0], limits[1][1])];
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+              _iterator.return();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
       }
     }
 
     _createClass(Kindred$1, [{
       key: 'canMakeRequest',
-      value: function canMakeRequest() {
-        if (!this.limits[0].requestAvailable() || !this.limits[1].requestAvailable()) {
+      value: function canMakeRequest(region) {
+        if (!this.limits[region][0].requestAvailable() || !this.limits[region][1].requestAvailable()) {
           return false;
         }
 
@@ -257,11 +282,12 @@
           (function sendRequest() {
             var _this = this;
 
-            if (this.canMakeRequest()) {
+            if (this.canMakeRequest(region)) {
               if (!staticReq) {
-                this.limits[0].addRequest();
-                this.limits[1].addRequest();
+                this.limits[region][0].addRequest();
+                this.limits[region][1].addRequest();
               }
+
               request({ url: reqUrl, qs: options }, function (error, response, body) {
                 var statusMessage = void 0;
                 var statusCode = response.statusCode;
@@ -742,27 +768,27 @@
 
             var args = [];
 
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
+            var _iteratorNormalCompletion2 = true;
+            var _didIteratorError2 = false;
+            var _iteratorError2 = undefined;
 
             try {
-              for (var _iterator = names[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                var _name = _step.value;
+              for (var _iterator2 = names[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                var _name = _step2.value;
 
                 args.push(data[_this8._sanitizeName(_name)].id);
               }
             } catch (err) {
-              _didIteratorError = true;
-              _iteratorError = err;
+              _didIteratorError2 = true;
+              _iteratorError2 = err;
             } finally {
               try {
-                if (!_iteratorNormalCompletion && _iterator.return) {
-                  _iterator.return();
+                if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                  _iterator2.return();
                 }
               } finally {
-                if (_didIteratorError) {
-                  throw _iteratorError;
+                if (_didIteratorError2) {
+                  throw _iteratorError2;
                 }
               }
             }
@@ -816,27 +842,27 @@
 
             var args = [];
 
-            var _iteratorNormalCompletion2 = true;
-            var _didIteratorError2 = false;
-            var _iteratorError2 = undefined;
+            var _iteratorNormalCompletion3 = true;
+            var _didIteratorError3 = false;
+            var _iteratorError3 = undefined;
 
             try {
-              for (var _iterator2 = names[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                var _name2 = _step2.value;
+              for (var _iterator3 = names[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                var _name2 = _step3.value;
 
                 args.push(data[_this9._sanitizeName(_name2)].id);
               }
             } catch (err) {
-              _didIteratorError2 = true;
-              _iteratorError2 = err;
+              _didIteratorError3 = true;
+              _iteratorError3 = err;
             } finally {
               try {
-                if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                  _iterator2.return();
+                if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                  _iterator3.return();
                 }
               } finally {
-                if (_didIteratorError2) {
-                  throw _iteratorError2;
+                if (_didIteratorError3) {
+                  throw _iteratorError3;
                 }
               }
             }
@@ -1188,27 +1214,27 @@
 
             var args = [];
 
-            var _iteratorNormalCompletion3 = true;
-            var _didIteratorError3 = false;
-            var _iteratorError3 = undefined;
+            var _iteratorNormalCompletion4 = true;
+            var _didIteratorError4 = false;
+            var _iteratorError4 = undefined;
 
             try {
-              for (var _iterator3 = names[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                var _name3 = _step3.value;
+              for (var _iterator4 = names[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                var _name3 = _step4.value;
 
                 args.push(data[_this11._sanitizeName(_name3)].id);
               }
             } catch (err) {
-              _didIteratorError3 = true;
-              _iteratorError3 = err;
+              _didIteratorError4 = true;
+              _iteratorError4 = err;
             } finally {
               try {
-                if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                  _iterator3.return();
+                if (!_iteratorNormalCompletion4 && _iterator4.return) {
+                  _iterator4.return();
                 }
               } finally {
-                if (_didIteratorError3) {
-                  throw _iteratorError3;
+                if (_didIteratorError4) {
+                  throw _iteratorError4;
                 }
               }
             }
@@ -1264,27 +1290,27 @@
 
             var args = [];
 
-            var _iteratorNormalCompletion4 = true;
-            var _didIteratorError4 = false;
-            var _iteratorError4 = undefined;
+            var _iteratorNormalCompletion5 = true;
+            var _didIteratorError5 = false;
+            var _iteratorError5 = undefined;
 
             try {
-              for (var _iterator4 = names[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-                var _name4 = _step4.value;
+              for (var _iterator5 = names[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+                var _name4 = _step5.value;
 
                 args.push(data[_this12._sanitizeName(_name4)].id);
               }
             } catch (err) {
-              _didIteratorError4 = true;
-              _iteratorError4 = err;
+              _didIteratorError5 = true;
+              _iteratorError5 = err;
             } finally {
               try {
-                if (!_iteratorNormalCompletion4 && _iterator4.return) {
-                  _iterator4.return();
+                if (!_iteratorNormalCompletion5 && _iterator5.return) {
+                  _iterator5.return();
                 }
               } finally {
-                if (_didIteratorError4) {
-                  throw _iteratorError4;
+                if (_didIteratorError5) {
+                  throw _iteratorError5;
                 }
               }
             }
