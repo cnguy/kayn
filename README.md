@@ -7,11 +7,12 @@ Kindred is a thin Node.js wrapper on top of [Riot Games API for League of Legend
 * [Installation](#installation)
 * [Endpoints Covered](#endpoints-covered)
 * [Usage Examples](#quick-usage-examples)
+* [Contributing and Issues](#contributing-and-issues)
 
 ## Philosophy
 My goal is to make a wrapper that is convenient and sensible. This project is heavily inspired by [psuedonym117's Python wrapper](https://github.com/pseudonym117/Riot-Watcher). I want to make the API as consistent as possible and also make the rate-limiting as robust as possible. However, I also wish to provide users flexibility and a detailed errors system to make the wrapper as unobtrusive as possible. Look at the [Quick Usage Examples](#quick-usage-examples) to see what I mean.
 
-For function methods, ```get``` implies a request.
+This is my first try at making an API wrapper. I am open to any advice and help!
 
 ## Installation
 (not published yet)
@@ -46,7 +47,7 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
     * getChamps({ region, id (int), options (object) }, cb)
 2. **/api/lol/{region}/v1.2/champion/{id}**
     * Retrieve champion by ID. (REST)
-    * getChamp({ region, id (int), championID (int) }, cb)
+    * getChamp({ region, id/championID (int) }, cb)
 
 ### Champion Mastery
 [docs](https://developer.riotgames.com/api-methods/#championmastery)
@@ -56,20 +57,20 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
     * getChampMastery({ region = this.defaultRegion, playerID (int), championID (int), options (object) }, cb)
 2. **/championmastery/location/{location}/player/{playerId}/champions**
     * Get all champion mastery entries sorted by number of champion points descending. (RPC)
-    * getChampMasteries({ region = this.defaultRegion, id (int), playerID (int), name (string), options (object) }, cb)
+    * getChampMasteries({ region = this.defaultRegion, id/summonerID/playerID (int), name (string), options (object) }, cb)
 3. **/championmastery/location/{location}/player/{playerId}/score**
     * Get a player's total champion mastery score, which is sum of individual champion mastery levels. (RPC)
-    * getTotalChampMasteryScore({ region = this.defaultRegion, id (int), playerID (int), name (string), options (object) }, cb)
+    * getTotalChampMasteryScore({ region = this.defaultRegion, id/summonerID/playerID (int), name (string), options (object) }, cb)
 4. **/championmastery/location/{location}/player/{playerId}/topchampions**
     * Get specified number of top champion mastery entries sorted by number of champion points descending. (RPC) 
-    * getTopChamps({ region = this.defaultRegion, id (int), playerID (int), name (string), options (object) }, cb)
+    * getTopChamps({ region = this.defaultRegion, id/summonerID/playerID (int), name (string), options (object) }, cb)
 
 ### Current Game
 [docs](https://developer.riotgames.com/api-methods/#current-game-v1.0)
 
 1. **/observer-mode/rest/consumer/getSpectatorGameInfo/{platformId}/{summonerId}**
     * Get current game information for the given summoner ID. (REST)
-    * getCurrentGame({ region = this.defaultRegion, id (int), name (str) }, cb)
+    * getCurrentGame({ region = this.defaultRegion, id/summonerID/playerID (int), name (str) }, cb)
 
 ### Featured Games
 [docs](https://developer.riotgames.com/api-methods/#featured-games-v1.0)
@@ -90,10 +91,10 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
 
 1. **/api/lol/{region}/v2.5/league/by-summoner/{summonerIds}**
     * Get leagues mapped by summoner ID for a given list of summoner IDs. (REST)
-    * getLeagues({ region, ids ([int]/int), id (int), names ([str]/str), name (str) }, cb) 
+    * getLeagues({ region, ids/summonerIDs/playerIDs ([int]/int), id/summonerID/player/ID (int), names ([str]/str), name (str) }, cb) 
 2. **/api/lol/{region}/v2.5/league/by-summoner/{summonerIds}/entry**
     * Get league entries mapped by summoner ID for a given list of summoner IDs. (REST)
-    * getLeagueEntries({ region, ids ([int]/int), id (int), names ([str]/str), name (str) }, cb)
+    * getLeagueEntries({ region, ids/summonerIDs/playerIDs ([int]/int), id/summonerID/playerID (int), names ([str]/str), name (str) }, cb)
 3. **/api/lol/{region}/v2.5/league/challenger**
     * Get challenger tier leagues. (REST)
     * getChallengers({ region, options = { type: 'RANKED_SOLO_5x5' } }, cb)
@@ -109,13 +110,13 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
     * getChampionList({ region, options (object) }, cb)
 2. **/api/lol/static-data/{region}/v1.2/champion/{id}**
     * Retrieves a champion by its id. (REST)
-    * getChampion({ region, id (int), options (object) }, cb)
+    * getChampion({ region, id/championID (int), options (object) }, cb)
 3. **/api/lol/static-data/{region}/v1.2/item**
     * Retrieves item list. (REST)
     * getItems({ region, options (object) }, cb)
 4. **/api/lol/static-data/{region}/v1.2/item/{id}**
     * Get master tier leagues. (REST)
-    * getItem({ region, id (int), options (object) }, cb)
+    * getItem({ region, id/itemID (int), options (object) }, cb)
 5. **/api/lol/static-data/{region}/v1.2/language-strings**
     * Retrieve language strings data. (REST)
     * getLanguageStrings({ region, options (object) }, cb)
@@ -130,7 +131,7 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
     * getMasteryList({ region, options (object) }, cb)
 9. **/api/lol/static-data/{region}/v1.2/mastery/{id}**
     * Retrieves mastery item by its unique id. (REST)
-    * getMastery({ region, id (int), options (object) }, cb)
+    * getMastery({ region, id/masteryID (int), options (object) }, cb)
 10. **/api/lol/static-data/{region}/v1.2/realm**
     * Retrieve realm data. (REST)
     * getRealmData({ region }, cb)
@@ -139,13 +140,13 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
     * getRuneList({ region, options (object) }, cb)
 12. **/api/lol/static-data/{region}/v1.2/rune/{id}**
     * Retrieves rune by its unique id. (REST)
-    * getRune({ region, id (int), options (object) }, cb)
+    * getRune({ region, id/runeID (int), options (object) }, cb)
 13. **/api/lol/static-data/{region}/v1.2/summoner-spell**
     * Retrieves summoner spell list. (REST)
-    * getSummonerSpellsList({ region, options (object) }, cb)
+    * getSummonerSpells({ region, options (object) }, cb)
 14. **/api/lol/static-data/{region}/v1.2/summoner-spell/{id}**
     * Retrieves summoner spell by its unique id. (REST)
-    * getSummonerSpell({ region, id (int), options (object) }, cb)
+    * getSummonerSpell({ region, id/spellID/summonerSpellID (int), options (object) }, cb)
 15. **/api/lol/static-data/{region}/v1.2/versions**
     * Retrieve version data. (REST)
     * getVersionData({ region, options (object) }, cb)
@@ -165,34 +166,34 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
 
 1. **/api/lol/{region}/v2.2/match/{matchId}**
     * Retrieve match by match ID. (REST)
-    * getMatch({ region, id (int), matchID (int), options = { includeTimeline: true } }, cb) 
+    * getMatch({ region, id/matchID (int), options = { includeTimeline: true } }, cb) 
 
 ### Matchlist
 [docs](https://developer.riotgames.com/api-methods/#matchlist-v2.2)
 
 1. **/api/lol/{region}/v2.2/matchlist/by-summoner/{summonerId}**
     * Retrieve match list by match ID. (REST)
-    * getMatchList({ region, id (int), playerID (int), summonerID (int), options = { type: 'RANKED_SOLO_5x5' } }, cb)
+    * getMatchList({ region, id/summonerID/playerID (int), name (str), options = { rankedQueues: 'RANKED_SOLO_5x5' } }, cb)
 
 ### Runes Masteries
 [docs](https://developer.riotgames.com/api-methods/#runes-masteries-v1.4)
 
 1. **/api/lol/{region}/v1.4/summoner/{summonerIds}/masteries**
     * Get mastery pages mapped by summoner ID for a given list of summoner IDs. (REST)
-    * getMasteries({ region, ids (int), id (int), names (str), name (str)}, cb)
+    * getMasteries({ region, ids/summonerIDs/playerIDs ([int]/int), id (int), names ([str]/str), name (str)}, cb)
 2. **/api/lol/{region}/v1.4/summoner/{summonerIds}/runes**
     * Retrieve match list by match ID. (REST)
-    * getRunes({ region, ids, id, names, name }, cb)
+    * getRunes({ region, ids/summonerIDs/playerIDs ([int]/int), id (int), names ([str]/str), name (str) }, cb)
 
 ### Stats
 [docs](https://developer.riotgames.com/api-methods/#stats-v1.3)
 
 1. **/api/lol/{region}/v1.3/stats/by-summoner/{summonerId}/ranked**
     * Get ranked stats by summoner ID. (REST)
-    * getRankedStats({ region, id (int), name (str), options (object) }, cb)
+    * getRankedStats({ region, id/summonerID/playerID (int), name (str), options (object) }, cb)
 2. **/api/lol/{region}/v1.3/stats/by-summoner/{summonerId}/summary**
     * Get player stats summaries by summoner ID. (REST)
-    * getStatsSummary({ region, id (int), name (str), options (object) }, cb)
+    * getStatsSummary({ region, id/summonerID/playerID (int), name (str), options (object) }, cb)
 
 ### Summoner
 [docs](https://developer.riotgames.com/api-methods/#summoner-v1.4)
@@ -202,16 +203,16 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
     * N/A
 2. **/api/lol/{region}/v1.4/summoner/by-name/{summonerNames}**
     * Get a list of summoners by summoner names. (RPC)
-    * getSummoners({ region, ids ([int]/int), id (int), names ([str], str), name (str) }, cb)
+    * getSummoners({ region, ids/summonerIDs/playerIDs ([int]/int), id (int), names ([str]/ str), name (str) }, cb)
     * getSummoner({ region, id (int), name (str) }, cb)
 3. **/api/lol/{region}/v1.4/summoner/{summonerIds}**
     * Get challenger tier leagues. (REST)
-    * getSummoners({ region, ids ([int]/int), id (int), names ([str], str), name (str) }, cb)
+    * getSummoners({ region, ids/summonerIDs/playerIDs ([int]/int), id (int), names ([str]/ str), name (str) }, cb)
     * getSummoner({ region, id (int), name (str) }, cb)
 4. **/api/lol/{region}/v1.4/summoner/{summonerIds}/name**
     * Get master tier leagues. (REST)
-    * getSummonerNames({ region, ids ([int]/int), id (int) }, cb)
-    * getSummonerName({ region, id (int) }, cb)
+    * getSummonerNames({ region, ids/summonerIDs/playerIDs ([int]/int), id/summonerID/playerID (int) }, cb)
+    * getSummonerName({ region, id/summonerID/playerID (int) }, cb)
 
 ## Quick Usage Examples
 
@@ -227,76 +228,80 @@ var REGIONS = require('regions')
 /*
   Default region for every method call is NA,
   but you can set it during initialization as shown below.
+  You can also change it with 'setRegion(region)' as well.
   To NOT use the built-in rate limiter, do NOT pass in anything
   into limits.
 */
 var k = new Kindred({
   key: RIOT_API_KEY,
   defaultRegion: REGIONS.NORTH_AMERICA,
-  debug: true,
+  debug: true, // shows status code, urls, and relevant headers
   limits: [ [10, 10], [500, 600] ] // user key
   // 10 requests per 10 seconds
   // 500 requests per 10 minutes
 })
 
+function rprint(err, data) { console.log(data) }
+
 /*
   NOTE: Making any form of parameter error will inform you
   what parameters you can pass in!
 */
+k.getSummoner(rprint)
+// getSummoners request FAILED; required params `ids` (array of ints), `id` (int), `names` (array of strings), or `name` (string) not passed in
+
+k.getSummoner(rprint)
+// getSummoner request FAILED; required params `id` (int) or `name` (string) not passed in
+
 k.getTopChamps(rprint)
 // getTopChamps request FAILED; required params `id` (int) or `playerID` (int) not passed in
 
 k.getChampMastery(rprint)
-// getChampMastery request FAILED; required params `playerID` (int) and `championID` (int) not passed in
+// getChampMastery request FAILED; required params `playerID` (int) AND `championID` (int) not passed in
 
 /*
   Notice the OR and the AND!!
-  Note: getChampMastery is the only method that requires two forms of ids.
+  Note: getChampMastery is the only method that can't take in an 'id' parameter,
+  because it requires both a 'playerID' and a 'championID'!
 */
 
 /*
-  The first parameter of most methods will be an object.
-
-  Note that getSummoners() can target a specific summoner.
-  You can also use getSummoner(), though.
+  The first parameter of all endpoint methods will ALWAYS be an object.
+  However, when the parameters are satisfied by default parameters and/or
+  only have optional parameters, you can simply pass your callback in.
 */
-function rprint(err, data) { console.log(data) }
-k.getSummoners({ name: 'caaaaaaaaaria' }, rprint)
-k.getSummoner({ name: 'caaaaaaaaaria' }, rprint)
+k.getChallengers(rprint) // default region, default solo queue mode, valid
+k.getRuneList(rprint) // only optional arguments & not passing in any optional arguments, valid
 
 /*
-  getSummoners & getSummoner target many endpoints. In the case
-  of the summoner endpoints, it made a lot more sense for the two
+  getSummoners & getSummoner target both the by-name and by-id endpoints.
+  In the case of the summoner endpoints, it made a lot more sense for the two
   functions to target both the by-name and by-id summoner endpoints.
 
   The example above targets the by-name endpoint, while
   the example below targets the by-id endpoint.
 */
-k.getSummoner({ id: 32823699 }, rprint)
+k.getSummoner({ id: 354959 }, rprint)
 
 /*
-  Note, I don't name the id parameter per endpoint.
   The 'id', 'ids', 'name', and 'names' parameters
-  stay consistent throughout the API.
-  (no matchId, summonerId, runeId, etc).
-*/
-k.getMatch({ id: 2459973154 }, rprint)
+  stay consistent throughout the API but for the one
+  exception above. However, I do have aliases for them.
+  
+  For example, for summoners, you have summonerID, summonerIDs,
+  playerID, and playerIDs.
 
-/*
-  When 'names' and/or 'ids' parameters are available, you
-  can pass in an array.
+  Plural parameters can take in both arrays and singular values.
+  Single parameters, however, can only take singular values.
 */
+k.getSummoner({ summonerID: 354959 }, rprint)
+k.getSummoners({ summonerIDs: [354959, 21542029] }, rprint)
+k.getMatch({ id: 2459973154 }, rprint)
+k.getMatch({ matchID: 2459973154 }, rprint)
+
 var names = ['beautifulkorean', 'c9gun', 'caaaaaaaaarIa']
 k.getSummoners({ names: names }, rprint)
 
-/*
-  But I won't stop you from passing in a single string
-  to the plural version of the parameter. Any method
-  that can accept multiple values for a parameter is flexible.
-  Things that can only target one thing like getSummoner() on the
-  other hand can only target one thing at a time
-  though, and thus only has 'name' and 'id' parameters.
-*/
 k.getSummoners({ names: 'caaaaaaaaaria' }, rprint)
 k.getSummoners({ name: 'caaaaaaaaaria' }, rprint)
 
@@ -326,20 +331,20 @@ k.getSummoner(fakerIgn, function (err, data) {
 }) // faker's data
 
 /*
-  What if an endpoint only accepts ids?
-
-  ex: the player runes endpoint only accepts a comma-separated
-      list of integers
+  Note that the player runes endpoint only accepts
+  a comma-separated list of integers.
 */
 
 k.setRegion(REGIONS.NORTH_AMERICA)
-// all valid
+
 k.getRunes({ ids: [354959, 21542029] }, rprint)
 k.getRunes({ id: 354959 }, rprint)
 k.getRunes({ ids: 354959 }, rprint)
 
 /*
-  But what if you're given a list of names instead of ids?
+  But what if you want to quickly get the rune pages given
+  that you have a list of names?
+
   You'd chain it like in many other clients:
   Get the ids from the names, get the runes from the ids.
 */
@@ -353,13 +358,10 @@ k.getSummoners({ names: names2 }, function (err, data) {
   k.getRunes({ ids: args }, rprint)
 })
 
-/*
-  I find that inconvenient, and so I just chain it for you in my code.
-  It will naturally send additional requests though.
-  So now you can just do this:
-*/
+/* I find that inconvenient, and so I just chain it for you in my code. */
+// all methods that target endpoints that only accept ids
 k.getRunes({ names: ['Richelle', 'Grigne'] }, rprint)
-k.getRune({ name: ['Richelle'] }, rprint)
+k.getRunes({ name: 'Richelle' }, rprint)
 k.getRecentGames({ name: 'Richelle' }, rprint)
 k.getLeagues({ names: ['Richelle', 'Grigne'] }, rprint)
 k.getCurrentGame({ name: 'Fràe', region: REGIONS.OCEANIA }, rprint)
@@ -376,25 +378,13 @@ k.getCurrentGame({ name: 'Fràe', region: REGIONS.OCEANIA }, rprint)
   For example, the required parameter for many methods is 'type' (of queue).
   I made it so that the default is 'RANKED_SOLO_5x5' if 'type' is not passed
   in.
-
-  The client will give off warnings if there are required parameters that you did
-  not pass in though (that I can't take care of).
 */
 k.getChallengers({ region: 'na' }, rprint) // get challengers from ranked solo queue ladder
 k.getChallengers({ region: 'na', options: {
   type: 'RANKED_FLEX_SR'
 }}, rprint) // get challengers from ranked flex ladder
-k.getSummoner()
-// getSummoner request FAILED; required parameters `name` (string) or `id` (int) not passed in
 k.getMatch({ id: 2459973154 }, rprint) // includes timeline by default
 k.getMatch({ id: 2459973154, options: { includeTimeline: false } }, rprint)
-/*
-  Note that the first parameter of most methods must always be an object.
-  But for specific methods that only have optional parameters and/or arguments
-  satisfied by defaults, we can skip that.
-*/
-k.getChallengers(rprint) // default region, default solo queue mode, valid
-k.getRuneList(rprint) // only optional arguments & not passing in any optional arguments, valid
 
 /*
   However, for getMatchList, the endpoint uses an optional
@@ -423,3 +413,21 @@ k.getMastery({ id: furyMasteryId }, rprint)
 var msRuneId = 10002
 k.getRune({ id: msRuneId }, rprint)
 ```
+
+## Contributing and Issues
+
+**Feel free to make a PR regarding anything (even the smallest typo or inconsistency).**
+
+There are a few inconsistencies within this program that I don't know how to address since this is my first API wrapper and I'm still quite a big newbie.
+
+getChamp() targets the champ endpoint
+
+getChampion() targets the static endpoint
+
+I didn't want to attach getChampion() with 'static' in any way or form since I thought it looked kind of annoying.
+
+**Right now, the code is also quite messy and there is a lot of repeated code.** Function definitions are quite long because I include many aliases as well. I haven't thought of an elegant way to make a magic function that manages to work for every single endpoint request yet.
+
+In addition, I haven't aliased certain function parameters in some functions.
+
+Any help and/or advice is appreciated!

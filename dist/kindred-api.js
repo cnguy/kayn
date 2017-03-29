@@ -476,7 +476,7 @@
             region: region
           });
         } else {
-          return this._logError(this.getChamp.name, 'required params ' + chalk.yellow('`id` (int)') + ' or ' + chalk.yellow('`championID` (int)') + ' not passed in');
+          return this._logError(this.getChamp.name, 'required params ' + chalk.yellow('`id/championID` (int)') + ' not passed in');
         }
       }
     }, {
@@ -498,7 +498,7 @@
             endUrl: location + '/player/' + playerID + '/champion/' + championID, region: region, options: options
           }, cb);
         } else {
-          return this._logError(this.getChampMastery.name, 'required params ' + chalk.yellow('`playerID` (int)') + ' and ' + chalk.yellow('`championID` (int)') + ' not passed in');
+          return this._logError(this.getChampMastery.name, 'required params ' + chalk.yellow('`playerID` (int) AND `championID` (int)') + ' not passed in');
         }
       }
     }, {
@@ -510,17 +510,18 @@
             _ref19$region = _ref19.region,
             region = _ref19$region === undefined ? this.defaultRegion : _ref19$region,
             id = _ref19.id,
+            summonerID = _ref19.summonerID,
             playerID = _ref19.playerID,
             name = _ref19.name,
             options = _ref19.options;
 
         var cb = arguments[1];
 
-        if (Number.isInteger(id) || Number.isInteger(playerID)) {
+        if (Number.isInteger(id || summonerID || playerID)) {
           var location = platformIds[regions$1[region]];
 
           return this._championMasteryRequest({
-            endUrl: location + '/player/' + (id || playerID) + '/champions', region: region, options: options
+            endUrl: location + '/player/' + (id || summonerID || playerID) + '/champions', region: region, options: options
           }, cb);
         } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
           var _location = platformIds[regions$1[region]];
@@ -533,52 +534,30 @@
             }, cb);
           });
         } else {
-          return this._logError(this.getChampMasteries.name, 'required params ' + chalk.yellow('`id` (int)') + ' or ' + chalk.yellow('`playerID` (int)') + ' not passed in');
+          return this._logError(this.getChampMasteries.name, 'required params ' + chalk.yellow('`id/summonerID/playerID` (int)') + ' or ' + chalk.yellow('`name` (str)') + ' not passed in');
         }
       }
     }, {
       key: 'getTotalChampMasteryScore',
       value: function getTotalChampMasteryScore() {
+        var _this4 = this;
+
         var _ref20 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             _ref20$region = _ref20.region,
             region = _ref20$region === undefined ? this.defaultRegion : _ref20$region,
             id = _ref20.id,
+            summonerID = _ref20.summonerID,
             playerID = _ref20.playerID,
             name = _ref20.name,
             options = _ref20.options;
 
         var cb = arguments[1];
 
-        if (Number.isInteger(id) || Number.isInteger(playerID)) {
+        if (Number.isInteger(id || summonerID || playerID)) {
           var location = platformIds[regions$1[region]];
 
           return this._championMasteryRequest({
-            endUrl: location + '/player/' + (id || playerID) + '/score', region: region, options: options
-          }, cb);
-        } else {
-          return this._logError(this.getTotalChampMasteryScore.name, 'required params ' + chalk.yellow('`id` (int)') + ' or ' + chalk.yellow('`playerID` (int)') + ' not passed in');
-        }
-      }
-    }, {
-      key: 'getTopChamps',
-      value: function getTopChamps() {
-        var _this4 = this;
-
-        var _ref21 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            _ref21$region = _ref21.region,
-            region = _ref21$region === undefined ? this.defaultRegion : _ref21$region,
-            id = _ref21.id,
-            playerID = _ref21.playerID,
-            name = _ref21.name,
-            options = _ref21.options;
-
-        var cb = arguments[1];
-
-        if (Number.isInteger(id) || Number.isInteger(playerID)) {
-          var location = platformIds[regions$1[region]];
-
-          return this._championMasteryRequest({
-            endUrl: location + '/player/' + (id || playerID) + '/topchampions', region: region, options: options
+            endUrl: location + '/player/' + (id || summonerID || playerID) + '/score', region: region, options: options
           }, cb);
         } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
           var _location2 = platformIds[regions$1[region]];
@@ -586,40 +565,81 @@
           return this.getSummoner({ name: name, region: region }, function (err, data) {
             if (err) return cb(err);
             return _this4._championMasteryRequest({
-              endUrl: _location2 + '/player/' + data[_this4._sanitizeName(name)].id + '/topchampions',
+              endUrl: _location2 + '/player/' + data[_this4._sanitizeName(name)].id + '/score',
               region: region
             }, cb);
           });
         } else {
-          return this._logError(this.getTopChamps.name, 'required params ' + chalk.yellow('`id` (int)') + ' or ' + chalk.yellow('`playerID` (int)') + ' not passed in');
+          return this._logError(this.getTotalChampMasteryScore.name, 'required params ' + chalk.yellow('`id/summonerID/playerID` (int)') + ' or ' + chalk.yellow('`name` (str)') + ' not passed in');
+        }
+      }
+    }, {
+      key: 'getTopChamps',
+      value: function getTopChamps() {
+        var _this5 = this;
+
+        var _ref21 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            _ref21$region = _ref21.region,
+            region = _ref21$region === undefined ? this.defaultRegion : _ref21$region,
+            id = _ref21.id,
+            summonerID = _ref21.summonerID,
+            playerID = _ref21.playerID,
+            name = _ref21.name,
+            options = _ref21.options;
+
+        var cb = arguments[1];
+
+        if (Number.isInteger(id || summonerID || playerID)) {
+          var location = platformIds[regions$1[region]];
+
+          return this._championMasteryRequest({
+            endUrl: location + '/player/' + (id || summonerID || playerID) + '/topchampions', region: region, options: options
+          }, cb);
+        } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
+          var _location3 = platformIds[regions$1[region]];
+
+          return this.getSummoner({ name: name, region: region }, function (err, data) {
+            if (err) return cb(err);
+            return _this5._championMasteryRequest({
+              endUrl: _location3 + '/player/' + data[_this5._sanitizeName(name)].id + '/topchampions',
+              region: region
+            }, cb);
+          });
+        } else {
+          return this._logError(this.getTopChamps.name, 'required params ' + chalk.yellow('`id/summonerID/playerID` (int)') + ' or ' + chalk.yellow('`name` (str)') + ' not passed in');
         }
       }
     }, {
       key: 'getCurrentGame',
       value: function getCurrentGame() {
-        var _this5 = this;
+        var _this6 = this;
 
         var _ref22 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             _ref22$region = _ref22.region,
             region = _ref22$region === undefined ? this.defaultRegion : _ref22$region,
             id = _ref22.id,
+            summonerID = _ref22.summonerID,
+            playerID = _ref22.playerID,
             name = _ref22.name;
 
         var cb = arguments[1];
 
         var platformId = platformIds[regions$1[region]];
 
-        if (Number.isInteger(id)) {
-          return this._currentGameRequest({ endUrl: '' + id, platformId: platformId, region: region }, cb);
+        if (Number.isInteger(id || summonerID || playerID)) {
+          return this._currentGameRequest({
+            endUrl: '' + (id || summonerID || playerID),
+            platformId: platformId, region: region
+          }, cb);
         } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
           return this.getSummoner({ name: name, region: region }, function (err, data) {
             if (err) return cb(err);
-            return _this5._currentGameRequest({
-              endUrl: '' + data[_this5._sanitizeName(name)].id, platformId: platformId, region: region
+            return _this6._currentGameRequest({
+              endUrl: '' + data[_this6._sanitizeName(name)].id, platformId: platformId, region: region
             }, cb);
           });
         } else {
-          return this._logError(this.getCurrentGame.name, 'required params ' + chalk.yellow('`id` (int)') + ' or ' + chalk.yellow('`name` (string)') + ' not passed in');
+          return this._logError(this.getCurrentGame.name, 'required params ' + chalk.yellow('`id/summonerID/playerID` (int)') + ' or ' + chalk.yellow('`name` (string)') + ' not passed in');
         }
       }
     }, {
@@ -638,46 +658,61 @@
     }, {
       key: 'getRecentGames',
       value: function getRecentGames() {
-        var _this6 = this;
+        var _this7 = this;
 
         var _ref24 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref24.region,
             id = _ref24.id,
+            summonerID = _ref24.summonerID,
+            playerID = _ref24.playerID,
             name = _ref24.name;
 
         var cb = arguments[1];
 
-        if (id && Number.isInteger(id)) {
-          return this._gameRequest({ endUrl: 'by-summoner/' + id + '/recent', region: region }, cb);
+        if (Number.isInteger(id || summonerID || playerID)) {
+          return this._gameRequest({
+            endUrl: 'by-summoner/' + (id || summonerID || playerID) + '/recent',
+            region: region
+          }, cb);
         } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
           return this.getSummoner({ name: name, region: region }, function (err, data) {
             if (err) return cb(err);
-            return _this6._gameRequest({
-              endUrl: 'by-summoner/' + data[_this6._sanitizeName(name)].id + '/recent', region: region
+            return _this7._gameRequest({
+              endUrl: 'by-summoner/' + data[_this7._sanitizeName(name)].id + '/recent', region: region
             }, cb);
           });
         } else {
-          return this._logError(this.getRecentGames.name, 'required params ' + chalk.yellow('`id` (int)') + ' or ' + chalk.yellow('`name` (string)') + ' not passed in');
+          return this._logError(this.getRecentGames.name, 'required params ' + chalk.yellow('`id/summonerID/playerID` (int)') + ' or ' + chalk.yellow('`name` (string)') + ' not passed in');
         }
       }
     }, {
       key: 'getLeagues',
       value: function getLeagues() {
-        var _this7 = this;
+        var _this8 = this;
 
         var _ref25 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref25.region,
             ids = _ref25.ids,
             id = _ref25.id,
+            summonerIDs = _ref25.summonerIDs,
+            summonerID = _ref25.summonerID,
+            playerIDs = _ref25.playerIDs,
+            playerID = _ref25.playerID,
             names = _ref25.names,
             name = _ref25.name;
 
         var cb = arguments[1];
 
-        if (checkAll.int(ids)) {
-          return this._leagueRequest({ endUrl: 'by-summoner/' + ids.join(','), region: region }, cb);
-        } else if (Number.isInteger(ids) || Number.isInteger(id)) {
-          return this._leagueRequest({ endUrl: 'by-summoner/' + (ids || id), region: region }, cb);
+        if (checkAll.int(ids || summonerIDs || playerIDs)) {
+          return this._leagueRequest({
+            endUrl: 'by-summoner/' + (ids || summonerIDs || playerIDs).join(','),
+            region: region
+          }, cb);
+        } else if (Number.isInteger(ids || id || summonerIDs || summonerID || playerIDs || playerID)) {
+          return this._leagueRequest({
+            endUrl: 'by-summoner/' + (ids || id || summonerIDs || summonerID || playerIDs || playerID),
+            region: region
+          }, cb);
         } else if (checkAll.string(names)) {
           return this.getSummoners({ names: names, region: region }, function (err, data) {
             if (err) return cb(err);
@@ -692,7 +727,7 @@
               for (var _iterator = names[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                 var _name = _step.value;
 
-                args.push(data[_this7._sanitizeName(_name)].id);
+                args.push(data[_this8._sanitizeName(_name)].id);
               }
             } catch (err) {
               _didIteratorError = true;
@@ -709,39 +744,49 @@
               }
             }
 
-            return _this7._leagueRequest({ endUrl: 'by-summoner/' + args.join(','), region: region }, cb);
+            return _this8._leagueRequest({ endUrl: 'by-summoner/' + args.join(','), region: region }, cb);
           });
         } else if (_typeof(arguments[0]) === 'object' && (typeof names === 'string' || typeof name === 'string')) {
           return this.getSummoner({ name: names || name, region: region }, function (err, data) {
             if (err) return cb(err);
 
-            return _this7._leagueRequest({
-              endUrl: 'by-summoner/' + data[_this7._sanitizeName(names || name)].id,
+            return _this8._leagueRequest({
+              endUrl: 'by-summoner/' + data[_this8._sanitizeName(names || name)].id,
               region: region
             }, cb);
           });
         } else {
-          return this._logError(this.getLeagues.name, 'required params ' + chalk.yellow('`ids` (array of ints)') + ', ' + chalk.yellow('`id` (int)') + ', ' + chalk.yellow('`names` (array of strings)') + ', or ' + chalk.yellow('`name` (string)') + ' not passed in');
+          return this._logError(this.getLeagues.name, 'required params ' + chalk.yellow('`ids/summonerIDs/playerIDs` ([int]/int)') + ', ' + chalk.yellow('`id/summonerID/playerID` (int)') + ', ' + chalk.yellow('`names` ([str]/str)') + ', or ' + chalk.yellow('`name` (str)') + ' not passed in');
         }
       }
     }, {
       key: 'getLeagueEntries',
       value: function getLeagueEntries() {
-        var _this8 = this;
+        var _this9 = this;
 
         var _ref26 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref26.region,
             ids = _ref26.ids,
             id = _ref26.id,
+            summonerIDs = _ref26.summonerIDs,
+            summonerID = _ref26.summonerID,
+            playerIDs = _ref26.playerIDs,
+            playerID = _ref26.playerID,
             names = _ref26.names,
             name = _ref26.name;
 
         var cb = arguments[1];
 
-        if (checkAll.int(ids)) {
-          return this._leagueRequest({ endUrl: 'by-summoner/' + ids.join(',') + '/entry', region: region }, cb);
-        } else if (Number.isInteger(ids) || Number.isInteger(id)) {
-          return this._leagueRequest({ endUrl: 'by-summoner/' + (ids || id) + '/entry', region: region }, cb);
+        if (checkAll.int(ids || summonerIDs || playerIDs)) {
+          return this._leagueRequest({
+            endUrl: 'by-summoner/' + (ids || summonerIDs || playerIDs).join(',') + '/entry',
+            region: region
+          }, cb);
+        } else if (Number.isInteger(ids || id || summonerIDs || summonerID || playerIDs || playerID)) {
+          return this._leagueRequest({
+            endUrl: 'by-summoner/' + (ids || id || summonerIDs || summonerID || playerIDs || playerID) + '/entry',
+            region: region
+          }, cb);
         } else if (checkAll.string(names)) {
           return this.getSummoners({ names: names, region: region }, function (err, data) {
             if (err) return cb(err);
@@ -756,7 +801,7 @@
               for (var _iterator2 = names[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
                 var _name2 = _step2.value;
 
-                args.push(data[_this8._sanitizeName(_name2)].id);
+                args.push(data[_this9._sanitizeName(_name2)].id);
               }
             } catch (err) {
               _didIteratorError2 = true;
@@ -773,18 +818,18 @@
               }
             }
 
-            return _this8._leagueRequest({ endUrl: 'by-summoner/' + args.join(',') + '/entry', region: region }, cb);
+            return _this9._leagueRequest({ endUrl: 'by-summoner/' + args.join(',') + '/entry', region: region }, cb);
           });
         } else if (_typeof(arguments[0]) === 'object' && (typeof names === 'string' || typeof name === 'string')) {
           return this.getSummoner({ name: names || name, region: region }, function (err, data) {
             if (err) return cb(err);
-            return _this8._leagueRequest({
-              endUrl: 'by-summoner/' + data[_this8._sanitizeName(names || name)].id + '/entry',
+            return _this9._leagueRequest({
+              endUrl: 'by-summoner/' + data[_this9._sanitizeName(names || name)].id + '/entry',
               region: region
             }, cb);
           });
         } else {
-          this._logError(this.getLeagueEntries.name, 'required params ' + chalk.yellow('`ids` (array of ints)') + ', ' + chalk.yellow('`id` (int)') + ', ' + chalk.yellow('`names` (array of strings)') + ', or ' + chalk.yellow('`name` (string)') + ' not passed in');
+          this._logError(this.getLeagueEntries.name, 'required params ' + chalk.yellow('`ids/summonerIDs/playerIDs` ([int]/int)') + ', ' + chalk.yellow('`id/summonerID/playerID` (int)') + ', ' + chalk.yellow('`names` ([str]/str)') + ', or ' + chalk.yellow('`name` (str)') + ' not passed in');
         }
       }
     }, {
@@ -816,219 +861,11 @@
         }, cb = region ? cb : arguments[0]);
       }
     }, {
-      key: 'getSummoners',
-      value: function getSummoners() {
-        var _this9 = this;
-
-        var _ref29 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref29.region,
-            ids = _ref29.ids,
-            id = _ref29.id,
-            names = _ref29.names,
-            name = _ref29.name;
-
-        var cb = arguments[1];
-
-        if (checkAll.int(ids)) {
-          return this._summonerRequest({
-            endUrl: '' + ids.join(','),
-            region: region
-          }, cb);
-        } else if (Number.isInteger(ids) || Number.isInteger(id)) {
-          return this._summonerRequest({
-            endUrl: '' + (ids || id),
-            region: region
-          }, cb);
-        } else if (checkAll.string(names)) {
-          return this._summonerRequest({
-            endUrl: 'by-name/' + names.map(function (name) {
-              return _this9._sanitizeName(name);
-            }).join(','),
-            region: region
-          }, cb);
-        } else if (_typeof(arguments[0]) === 'object' && (typeof names === 'string' || typeof name === 'string')) {
-          return this._summonerRequest({
-            endUrl: 'by-name/' + (this._sanitizeName(names) || this._sanitizeName(name)),
-            region: region
-          }, cb);
-        } else {
-          this._logError(this.getSummoners.name, 'required params ' + chalk.yellow('`ids` (array of ints)') + ', ' + chalk.yellow('`id` (int)') + ', ' + chalk.yellow('`names` (array of strings)') + ', or ' + chalk.yellow('`name` (string)') + ' not passed in');
-        }
-      }
-    }, {
-      key: 'getSummoner',
-      value: function getSummoner() {
-        var _ref30 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref30.region,
-            id = _ref30.id,
-            name = _ref30.name;
-
-        var cb = arguments[1];
-
-        if (Number.isInteger(id)) {
-          return this.getSummoners({ region: region, ids: [id] }, cb);
-        } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
-          return this.getSummoners({ region: region, names: [name] }, cb);
-        } else {
-          return this._logError(this.getSummoner.name, 'required params ' + chalk.yellow('`id` (int)') + ' or ' + chalk.yellow('`name` (string)') + ' not passed in');
-        }
-      }
-    }, {
-      key: 'getSummonerNames',
-      value: function getSummonerNames() {
-        var _ref31 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref31.region,
-            ids = _ref31.ids,
-            id = _ref31.id;
-
-        var cb = arguments[1];
-
-        if (checkAll.int(ids)) {
-          return this._summonerRequest({
-            endUrl: ids.join(',') + '/name',
-            region: region
-          }, cb);
-        } else if (Number.isInteger(ids) || Number.isInteger(id)) {
-          return this._summonerRequest({
-            endUrl: (ids || id) + '/name',
-            region: region
-          }, cb);
-        } else {
-          this._logError(this.getSummonerNames.name, 'required params ' + chalk.yellow('required params `ids` (array of ints)') + ' or ' + chalk.yellow('`id` (int)') + ' not passed in');
-        }
-      }
-    }, {
-      key: 'getSummonerName',
-      value: function getSummonerName() {
-        var _ref32 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref32.region,
-            id = _ref32.id;
-
-        var cb = arguments[1];
-
-        if (Number.isInteger(id)) {
-          return this.getSummonerNames({ region: region, id: id }, cb);
-        } else {
-          this._logError(this.getSummonerName.name, 'required params ' + chalk.yellow('`id` (int)') + ' not passed in');
-        }
-      }
-    }, {
-      key: 'getRankedStats',
-      value: function getRankedStats() {
-        var _this10 = this;
-
-        var _ref33 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref33.region,
-            id = _ref33.id,
-            name = _ref33.name,
-            options = _ref33.options;
-
-        var cb = arguments[1];
-
-        if (Number.isInteger(id)) {
-          return this._statsRequest({ endUrl: id + '/ranked', region: region, options: options }, cb);
-        } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
-          return this.getSummoner({ name: name, region: region }, function (err, data) {
-            if (err) return cb(err);
-            return _this10._statsRequest({
-              endUrl: data[_this10._sanitizeName(name)].id + '/ranked',
-              region: region, options: options
-            }, cb);
-          });
-        } else {
-          this._logError(this.getRankedStats.name, 'required params ' + chalk.yellow('`id` (int)') + ' or ' + chalk.yellow('`name` (string)') + ' not passed in');
-        }
-      }
-    }, {
-      key: 'getStatsSummary',
-      value: function getStatsSummary() {
-        var _this11 = this;
-
-        var _ref34 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref34.region,
-            id = _ref34.id,
-            name = _ref34.name,
-            options = _ref34.options;
-
-        var cb = arguments[1];
-
-        if (Number.isInteger(id)) {
-          return this._statsRequest({ endUrl: id + '/summary', region: region, options: options }, cb);
-        } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
-          return this.getSummoner({ name: name, region: region }, function (err, data) {
-            if (err) return cb(err);
-            return _this11._statsRequest({
-              endUrl: data[_this11._sanitizeName(name)].id + '/summary',
-              region: region, options: options
-            }, cb);
-          });
-        } else {
-          this._logError(this.getRankedStats.name, 'required params ' + chalk.yellow('`id` (int)') + ' or ' + chalk.yellow('`name` (string)') + ' not passed in');
-        }
-      }
-    }, {
-      key: 'getShardStatus',
-      value: function getShardStatus() {
-        var _ref35 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref35.region;
-
-        var cb = arguments[1];
-
-        return this._statusRequest({ endUrl: 'shard', region: region }, cb = region ? cb : arguments[0]);
-      }
-    }, {
-      key: 'getShardList',
-      value: function getShardList() {
-        var _ref36 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref36.region;
-
-        var cb = arguments[1];
-
-        return this._statusRequest({ endUrl: 'shards', region: region }, cb = region ? cb : arguments[0]);
-      }
-    }, {
-      key: 'getMatch',
-      value: function getMatch() {
-        var _ref37 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref37.region,
-            id = _ref37.id,
-            matchID = _ref37.matchID,
-            _ref37$options = _ref37.options,
-            options = _ref37$options === undefined ? { includeTimeline: true } : _ref37$options;
-
-        var cb = arguments[1];
-
-        if (Number.isInteger(id) || Number.isInteger(matchID)) {
-          return this._matchRequest({ endUrl: '' + (id || matchID), region: region, options: options }, cb);
-        } else {
-          return this._logError(this.getMatch.name, 'required params ' + chalk.yellow('`id` (int)') + ' or ' + chalk.yellow('`matchID` (int)') + ' not passed in');
-        }
-      }
-    }, {
-      key: 'getMatchList',
-      value: function getMatchList() {
-        var _ref38 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref38.region,
-            id = _ref38.id,
-            playerID = _ref38.playerID,
-            summonerID = _ref38.summonerID,
-            _ref38$options = _ref38.options,
-            options = _ref38$options === undefined ? { type: 'RANKED_SOLO_5x5' } : _ref38$options;
-
-        var cb = arguments[1];
-
-        if (Number.isInteger(id) || Number.isInteger(playerID) || Number.isInteger(summonerID)) {
-          return this._matchListRequest({ endUrl: '' + (id || playerID || summonerID), region: region, options: options }, cb);
-        } else {
-          return this._logError(this.getMatchList.name, 'required params ' + chalk.yellow('`id` (int)') + ', ' + chalk.yellow('`playerID` (int)') + ', or ' + chalk.yellow('`summonerID` (int)') + ' not passed in');
-        }
-      }
-    }, {
       key: 'getChampionList',
       value: function getChampionList() {
-        var _ref39 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref39.region,
-            options = _ref39.options;
+        var _ref29 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref29.region,
+            options = _ref29.options;
 
         var cb = arguments[1];
 
@@ -1037,22 +874,26 @@
     }, {
       key: 'getChampion',
       value: function getChampion() {
-        var _ref40 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref40.region,
-            id = _ref40.id,
-            options = _ref40.options;
+        var _ref30 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref30.region,
+            id = _ref30.id,
+            championID = _ref30.championID,
+            options = _ref30.options;
 
         var cb = arguments[1];
 
-        if (!id || !Number.isInteger(id)) return this._logError(this.getChampion.name, 'required params ' + chalk.yellow('`id` (int)') + ' not passed in');
-        return this._staticRequest({ endUrl: 'champion/' + id, region: region, options: options }, cb);
+        if (Number.isInteger(id || championID)) {
+          this._staticRequest({ endUrl: 'champion/' + (id || championID), region: region, options: options }, cb);
+        } else {
+          return this._logError(this.getChampion.name, 'required params ' + chalk.yellow('`id/championID` (int)') + ' not passed in');
+        }
       }
     }, {
       key: 'getItems',
       value: function getItems() {
-        var _ref41 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref41.region,
-            options = _ref41.options;
+        var _ref31 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref31.region,
+            options = _ref31.options;
 
         var cb = arguments[1];
 
@@ -1061,22 +902,26 @@
     }, {
       key: 'getItem',
       value: function getItem() {
-        var _ref42 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref42.region,
-            id = _ref42.id,
-            options = _ref42.options;
+        var _ref32 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref32.region,
+            id = _ref32.id,
+            itemID = _ref32.itemID,
+            options = _ref32.options;
 
         var cb = arguments[1];
 
-        if (!id || !Number.isInteger(id)) return this._logError(this.getItem.name, 'required params ' + chalk.yellow('`id` (int)') + ' not passed in');
-        return this._staticRequest({ endUrl: 'item/' + id, region: region, options: options }, cb);
+        if (Number.isInteger(id || itemID)) {
+          return this._staticRequest({ endUrl: 'item/' + (id || itemID), region: region, options: options }, cb);
+        } else {
+          return this._logError(this.getItem.name, 'required params ' + chalk.yellow('`id/itemID` (int)') + ' not passed in');
+        }
       }
     }, {
       key: 'getLanguageStrings',
       value: function getLanguageStrings() {
-        var _ref43 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref43.region,
-            options = _ref43.options;
+        var _ref33 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref33.region,
+            options = _ref33.options;
 
         var cb = arguments[1];
 
@@ -1085,8 +930,8 @@
     }, {
       key: 'getLanguages',
       value: function getLanguages() {
-        var _ref44 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref44.region;
+        var _ref34 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref34.region;
 
         var cb = arguments[1];
 
@@ -1095,9 +940,9 @@
     }, {
       key: 'getMap',
       value: function getMap() {
-        var _ref45 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref45.region,
-            options = _ref45.options;
+        var _ref35 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref35.region,
+            options = _ref35.options;
 
         var cb = arguments[1];
 
@@ -1106,9 +951,9 @@
     }, {
       key: 'getMasteryList',
       value: function getMasteryList() {
-        var _ref46 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref46.region,
-            options = _ref46.options;
+        var _ref36 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref36.region,
+            options = _ref36.options;
 
         var cb = arguments[1];
 
@@ -1117,21 +962,28 @@
     }, {
       key: 'getMastery',
       value: function getMastery() {
-        var _ref47 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref47.region,
-            id = _ref47.id,
-            options = _ref47.options;
+        var _ref37 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref37.region,
+            id = _ref37.id,
+            masteryID = _ref37.masteryID,
+            options = _ref37.options;
 
         var cb = arguments[1];
 
-        if (!id || !Number.isInteger(id)) return this._logError(this.getMastery.name, 'required params ' + chalk.yellow('`id` (int)') + ' not passed in');
-        return this._staticRequest({ endUrl: 'mastery/' + id, region: region, options: options }, cb);
+        if (Number.isInteger(id || masteryID)) {
+          return this._staticRequest({
+            endUrl: 'mastery/' + (id || masteryID),
+            region: region, options: options
+          }, cb);
+        } else {
+          return this._logError(this.getMastery.name, 'required params ' + chalk.yellow('`id/masteryID` (int)') + ' not passed in');
+        }
       }
     }, {
       key: 'getRealmData',
       value: function getRealmData() {
-        var _ref48 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref48.region;
+        var _ref38 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref38.region;
 
         var cb = arguments[1];
 
@@ -1140,9 +992,9 @@
     }, {
       key: 'getRuneList',
       value: function getRuneList() {
-        var _ref49 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref49.region,
-            options = _ref49.options;
+        var _ref39 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref39.region,
+            options = _ref39.options;
 
         var cb = arguments[1];
 
@@ -1151,22 +1003,26 @@
     }, {
       key: 'getRune',
       value: function getRune() {
-        var _ref50 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref50.region,
-            id = _ref50.id,
-            options = _ref50.options;
+        var _ref40 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref40.region,
+            id = _ref40.id,
+            runeID = _ref40.runeID,
+            options = _ref40.options;
 
         var cb = arguments[1];
 
-        if (!id || !Number.isInteger(id)) return this._logError(this.getRune.name, 'required params ' + chalk.yellow('`id` (int)') + ' not passed in');
-        return this._staticRequest({ endUrl: 'rune/' + id, region: region, options: options }, cb);
+        if (Number.isInteger(id || runeID)) {
+          return this._staticRequest({ endUrl: 'rune/' + (id || runeID), region: region, options: options }, cb);
+        } else {
+          return this._logError(this.getRune.name, 'required params ' + chalk.yellow('`id/runeID` (int)') + ' not passed in');
+        }
       }
     }, {
-      key: 'getSummonerSpellsList',
-      value: function getSummonerSpellsList() {
-        var _ref51 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref51.region,
-            options = _ref51.options;
+      key: 'getSummonerSpells',
+      value: function getSummonerSpells() {
+        var _ref41 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref41.region,
+            options = _ref41.options;
 
         var cb = arguments[1];
 
@@ -1175,49 +1031,132 @@
     }, {
       key: 'getSummonerSpell',
       value: function getSummonerSpell() {
-        var _ref52 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref52.region,
-            id = _ref52.id,
-            options = _ref52.options;
+        var _ref42 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref42.region,
+            id = _ref42.id,
+            spellID = _ref42.spellID,
+            summonerSpellID = _ref42.summonerSpellID,
+            options = _ref42.options;
 
         var cb = arguments[1];
 
-        if (!id || !Number.isInteger(id)) return this._logError(this.getSummonerSpell.name, 'required params ' + chalk.yellow('`id` (int)') + ' not passed in');
-        return this._staticRequest({ endUrl: 'summoner-spell/${id}', region: region, options: options }, cb);
+        if (Number.isInteger(id || spellID || summonerSpellID)) {
+          return this._staticRequest({
+            endUrl: 'summoner-spell/' + (id || spellID || summonerSpellID),
+            region: region, options: options
+          }, cb);
+        } else {
+          return this._logError(this.getSummonerSpell.name, 'required params ' + chalk.yellow('`id/spellID/summonerSpellID` (int)') + ' not passed in');
+        }
       }
     }, {
       key: 'getVersionData',
       value: function getVersionData() {
-        var _ref53 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref53.region,
-            options = _ref53.options;
+        var _ref43 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref43.region,
+            options = _ref43.options;
 
         var cb = arguments[1];
 
         return this._staticRequest({ endUrl: 'versions', region: region, options: options }, cb = region || options ? cb : arguments[0]);
       }
     }, {
-      key: 'getRunes',
-      value: function getRunes() {
-        var _this12 = this;
-
-        var _ref54 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref54.region,
-            ids = _ref54.ids,
-            id = _ref54.id,
-            names = _ref54.names,
-            name = _ref54.name;
+      key: 'getShardStatus',
+      value: function getShardStatus() {
+        var _ref44 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref44.region;
 
         var cb = arguments[1];
 
-        if (checkAll.int(ids)) {
+        return this._statusRequest({ endUrl: 'shard', region: region }, cb = region ? cb : arguments[0]);
+      }
+    }, {
+      key: 'getShardList',
+      value: function getShardList() {
+        var _ref45 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref45.region;
+
+        var cb = arguments[1];
+
+        return this._statusRequest({ endUrl: 'shards', region: region }, cb = region ? cb : arguments[0]);
+      }
+    }, {
+      key: 'getMatch',
+      value: function getMatch() {
+        var _ref46 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref46.region,
+            id = _ref46.id,
+            matchID = _ref46.matchID,
+            _ref46$options = _ref46.options,
+            options = _ref46$options === undefined ? { includeTimeline: true } : _ref46$options;
+
+        var cb = arguments[1];
+
+        if (Number.isInteger(id || matchID)) {
+          return this._matchRequest({ endUrl: '' + (id || matchID), region: region, options: options }, cb);
+        } else {
+          return this._logError(this.getMatch.name, 'required params ' + chalk.yellow('`id/matchID` (int)') + ' not passed in');
+        }
+      }
+    }, {
+      key: 'getMatchList',
+      value: function getMatchList() {
+        var _this10 = this;
+
+        var _ref47 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref47.region,
+            id = _ref47.id,
+            summonerID = _ref47.summonerID,
+            playerID = _ref47.playerID,
+            name = _ref47.name,
+            _ref47$options = _ref47.options,
+            options = _ref47$options === undefined ? { rankedQueues: 'RANKED_SOLO_5x5' } : _ref47$options;
+
+        var cb = arguments[1];
+
+        if (Number.isInteger(id || summonerID || playerID)) {
+          return this._matchListRequest({
+            endUrl: '' + (id || summonerID || playerID),
+            region: region, options: options
+          }, cb);
+        } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
+          return this.getSummoner({ name: name, region: region }, function (err, data) {
+            if (err) return cb(err);
+            return _this10._matchListRequest({
+              endUrl: '' + data[_this10._sanitizeName(name)].id,
+              region: region, options: options
+            }, cb);
+          });
+        } else {
+          return this._logError(this.getMatchList.name, 'required params ' + chalk.yellow('`id/summonerID/playerID` (int)') + ' or ' + chalk.yellow('`name` (str)') + ' not passed in');
+        }
+      }
+    }, {
+      key: 'getRunes',
+      value: function getRunes() {
+        var _this11 = this;
+
+        var _ref48 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref48.region,
+            ids = _ref48.ids,
+            id = _ref48.id,
+            summonerIDs = _ref48.summonerIDs,
+            summonerID = _ref48.summonerID,
+            playerIDs = _ref48.playerIDs,
+            playerID = _ref48.playerID,
+            names = _ref48.names,
+            name = _ref48.name;
+
+        var cb = arguments[1];
+
+        if (checkAll.int(ids || summonerIDs || playerIDs)) {
           return this._runesMasteriesRequest({
-            endUrl: ids.join() + '/runes',
+            endUrl: (ids || summonerIDs || playerIDs).join() + '/runes',
             region: region
           }, cb);
-        } else if (Number.isInteger(ids) || Number.isInteger(id)) {
+        } else if (Number.isInteger(ids || id || summonerIDs || summonerID || playerIDs || playerID)) {
           return this._runesMasteriesRequest({
-            endUrl: (ids || id) + '/runes',
+            endUrl: (ids || id || summonerIDs || summonerID || playerIDs || playerID) + '/runes',
             region: region
           }, cb);
         } else if (checkAll.string(names)) {
@@ -1234,7 +1173,7 @@
               for (var _iterator3 = names[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
                 var _name3 = _step3.value;
 
-                args.push(data[_this12._sanitizeName(_name3)].id);
+                args.push(data[_this11._sanitizeName(_name3)].id);
               }
             } catch (err) {
               _didIteratorError3 = true;
@@ -1251,7 +1190,7 @@
               }
             }
 
-            return _this12._runesMasteriesRequest({
+            return _this11._runesMasteriesRequest({
               endUrl: args.join(',') + '/runes',
               region: region
             }, cb);
@@ -1259,37 +1198,41 @@
         } else if (_typeof(arguments[0]) === 'object' && (typeof names === 'string' || typeof name === 'string')) {
           return this.getSummoner({ name: names || name, region: region }, function (err, data) {
             if (err) return cb(err);
-            return _this12._runesMasteriesRequest({
-              endUrl: data[_this12._sanitizeName(names || name)].id + '/runes',
+            return _this11._runesMasteriesRequest({
+              endUrl: data[_this11._sanitizeName(names || name)].id + '/runes',
               region: region
             }, cb);
           });
         } else {
-          return this._logError(this.getRunes.name, 'required params ' + chalk.yellow('`ids` (array of ints)') + ', ' + chalk.yellow('`id` (int)') + ', ' + chalk.yellow('`names` (array of strings)') + ', or ' + chalk.yellow('`name` (string)') + ' not passed in');
+          return this._logError(this.getRunes.name, 'required params ' + chalk.yellow('`ids/summonerIDs/playerIDs` ([int]/int)') + ', ' + chalk.yellow('`id/summonerID/playerID` (int)') + ', ' + chalk.yellow('`names` ([str]/str)') + ', or ' + chalk.yellow('`name` (str)') + ' not passed in');
         }
       }
     }, {
       key: 'getMasteries',
       value: function getMasteries() {
-        var _this13 = this;
+        var _this12 = this;
 
-        var _ref55 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref55.region,
-            ids = _ref55.ids,
-            id = _ref55.id,
-            names = _ref55.names,
-            name = _ref55.name;
+        var _ref49 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref49.region,
+            ids = _ref49.ids,
+            id = _ref49.id,
+            summonerIDs = _ref49.summonerIDs,
+            summonerID = _ref49.summonerID,
+            playerIDs = _ref49.playerIDs,
+            playerID = _ref49.playerID,
+            names = _ref49.names,
+            name = _ref49.name;
 
         var cb = arguments[1];
 
-        if (checkAll.int(ids)) {
+        if (checkAll.int(ids || summonerIDs || playerIDs)) {
           return this._runesMasteriesRequest({
-            endUrl: ids.join() + '/masteries',
+            endUrl: (ids || summonerIDs || playerIDs).join() + '/masteries',
             region: region
           }, cb);
-        } else if (Number.isInteger(ids) || Number.isInteger(id)) {
+        } else if (Number.isInteger(ids || id || summonerIDs || summonerID || playerIDs || playerID)) {
           return this._runesMasteriesRequest({
-            endUrl: (ids || id) + '/masteries',
+            endUrl: (ids || id || summonerIDs || summonerID || playerIDs || playerID) + '/masteries',
             region: region
           }, cb);
         } else if (checkAll.string(names)) {
@@ -1306,7 +1249,7 @@
               for (var _iterator4 = names[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
                 var _name4 = _step4.value;
 
-                args.push(data[_this13._sanitizeName(_name4)].id);
+                args.push(data[_this12._sanitizeName(_name4)].id);
               }
             } catch (err) {
               _didIteratorError4 = true;
@@ -1323,7 +1266,7 @@
               }
             }
 
-            return _this13._runesMasteriesRequest({
+            return _this12._runesMasteriesRequest({
               endUrl: args.join(',') + '/masteries',
               region: region
             }, cb);
@@ -1331,13 +1274,186 @@
         } else if (_typeof(arguments[0]) === 'object' && (typeof names === 'string' || typeof name === 'string')) {
           return this.getSummoner({ name: names || name, region: region }, function (err, data) {
             if (err) return cb(err);
-            return _this13._runesMasteriesRequest({
-              endUrl: data[_this13._sanitizeName(names || name)].id + '/masteries',
+            return _this12._runesMasteriesRequest({
+              endUrl: data[_this12._sanitizeName(names || name)].id + '/masteries',
               region: region
             }, cb);
           });
         } else {
-          return this._logError(this.getMasteries.name, 'required params ' + chalk.yellow('`ids` (array of ints)') + ', ' + chalk.yellow('`id` (int)') + ', ' + chalk.yellow('`names` (array of strings)') + ', or ' + chalk.yellow('`name` (string)') + ' not passed in');
+          return this._logError(this.getMasteries.name, 'required params ' + chalk.yellow('`ids/summonerIDs/playerIDs` ([int]/int)') + ', ' + chalk.yellow('`id/summonerID/playerID` (int)') + ', ' + chalk.yellow('`names` ([str]/str)') + ', or ' + chalk.yellow('`name` (str)') + ' not passed in');
+        }
+      }
+    }, {
+      key: 'getRankedStats',
+      value: function getRankedStats() {
+        var _this13 = this;
+
+        var _ref50 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref50.region,
+            id = _ref50.id,
+            summonerID = _ref50.summonerID,
+            playerID = _ref50.playerID,
+            name = _ref50.name,
+            options = _ref50.options;
+
+        var cb = arguments[1];
+
+        if (Number.isInteger(id || summonerID || playerID)) {
+          return this._statsRequest({
+            endUrl: (id || summonerID || playerID) + '/ranked',
+            region: region, options: options
+          }, cb);
+        } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
+          return this.getSummoner({ name: name, region: region }, function (err, data) {
+            if (err) return cb(err);
+            return _this13._statsRequest({
+              endUrl: data[_this13._sanitizeName(name)].id + '/ranked',
+              region: region, options: options
+            }, cb);
+          });
+        } else {
+          this._logError(this.getRankedStats.name, 'required params ' + chalk.yellow('`id/summonerID/playerID` (int)') + ' or ' + chalk.yellow('`name` (string)') + ' not passed in');
+        }
+      }
+    }, {
+      key: 'getStatsSummary',
+      value: function getStatsSummary() {
+        var _this14 = this;
+
+        var _ref51 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref51.region,
+            id = _ref51.id,
+            summonerID = _ref51.summonerID,
+            playerID = _ref51.playerID,
+            name = _ref51.name,
+            options = _ref51.options;
+
+        var cb = arguments[1];
+
+        if (Number.isInteger(id || summonerID || playerID)) {
+          return this._statsRequest({
+            endUrl: (id || summonerID || playerID) + '/summary',
+            region: region, options: options
+          }, cb);
+        } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
+          return this.getSummoner({ name: name, region: region }, function (err, data) {
+            if (err) return cb(err);
+            return _this14._statsRequest({
+              endUrl: data[_this14._sanitizeName(name)].id + '/summary',
+              region: region, options: options
+            }, cb);
+          });
+        } else {
+          this._logError(this.getRankedStats.name, 'required params ' + chalk.yellow('`id/summonerID/playerID` (int)') + ' or ' + chalk.yellow('`name` (string)') + ' not passed in');
+        }
+      }
+    }, {
+      key: 'getSummoners',
+      value: function getSummoners() {
+        var _this15 = this;
+
+        var _ref52 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref52.region,
+            ids = _ref52.ids,
+            id = _ref52.id,
+            summonerIDs = _ref52.summonerIDs,
+            summonerID = _ref52.summonerID,
+            playerIDs = _ref52.playerIDs,
+            playerID = _ref52.playerID,
+            names = _ref52.names,
+            name = _ref52.name;
+
+        var cb = arguments[1];
+
+        if (checkAll.int(ids || summonerIDs || playerIDs)) {
+          return this._summonerRequest({
+            endUrl: '' + (ids || summonerIDs || playerIDs).join(','),
+            region: region
+          }, cb);
+        } else if (Number.isInteger(ids || id || summonerIDs || summonerID || playerIDs || playerID)) {
+          return this._summonerRequest({
+            endUrl: '' + (ids || id || summonerIDs || summonerID || playerIDs || playerID),
+            region: region
+          }, cb);
+        } else if (checkAll.string(names)) {
+          return this._summonerRequest({
+            endUrl: 'by-name/' + names.map(function (name) {
+              return _this15._sanitizeName(name);
+            }).join(','),
+            region: region
+          }, cb);
+        } else if (_typeof(arguments[0]) === 'object' && (typeof names === 'string' || typeof name === 'string')) {
+          return this._summonerRequest({
+            endUrl: 'by-name/' + this._sanitizeName(names || name),
+            region: region
+          }, cb);
+        } else {
+          this._logError(this.getSummoners.name, 'required params ' + chalk.yellow('`ids/summonerIDs/playerIDs` ([int]/int)') + ', ' + chalk.yellow('`id/summonerID/playerID` (int)') + ', ' + chalk.yellow('`names` ([str]/str)') + ', or ' + chalk.yellow('`name` (str)') + ' not passed in');
+        }
+      }
+    }, {
+      key: 'getSummoner',
+      value: function getSummoner() {
+        var _ref53 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref53.region,
+            id = _ref53.id,
+            summonerID = _ref53.summonerID,
+            playerID = _ref53.playerID,
+            name = _ref53.name;
+
+        var cb = arguments[1];
+
+        if (Number.isInteger(id || summonerID || playerID)) {
+          return this.getSummoners({ region: region, ids: [id || summonerID || playerID] }, cb);
+        } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
+          return this.getSummoners({ region: region, names: [name] }, cb);
+        } else {
+          return this._logError(this.getSummoner.name, 'required params ' + chalk.yellow('`id/summonerID/playerID` (int)') + ' or ' + chalk.yellow('`name` (string)') + ' not passed in');
+        }
+      }
+    }, {
+      key: 'getSummonerNames',
+      value: function getSummonerNames() {
+        var _ref54 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref54.region,
+            ids = _ref54.ids,
+            id = _ref54.id,
+            summonerIDs = _ref54.summonerIDs,
+            summonerID = _ref54.summonerID,
+            playerIDs = _ref54.playerIDs,
+            playerID = _ref54.playerID;
+
+        var cb = arguments[1];
+
+        if (checkAll.int(ids || summonerIDs || playerIDs)) {
+          return this._summonerRequest({
+            endUrl: (ids || summonerIDs || playerIDs).join(',') + '/name',
+            region: region
+          }, cb);
+        } else if (Number.isInteger(ids || id || summonerIDs || summonerID || playerIDs || playerID)) {
+          return this._summonerRequest({
+            endUrl: (ids || id || summonerIDs || summonerID || playerIDs || playerID) + '/name',
+            region: region
+          }, cb);
+        } else {
+          this._logError(this.getSummonerNames.name, 'required params ' + chalk.yellow('required params `ids/summonerIDs/playerIDs` ([int]/int)') + ' or ' + chalk.yellow('`id/summonerID/playerID` (int)') + ' not passed in');
+        }
+      }
+    }, {
+      key: 'getSummonerName',
+      value: function getSummonerName() {
+        var _ref55 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref55.region,
+            id = _ref55.id,
+            summonerID = _ref55.summonerID,
+            playerID = _ref55.playerID;
+
+        var cb = arguments[1];
+
+        if (Number.isInteger(id)) {
+          return this.getSummonerNames({ region: region, id: id || summonerID || playerID }, cb);
+        } else {
+          this._logError(this.getSummonerName.name, 'required params ' + chalk.yellow('`id/summonerID/playerID` (int)') + ' not passed in');
         }
       }
     }]);
