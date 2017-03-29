@@ -6,13 +6,17 @@ Kindred is a thin Node.js wrapper on top of [Riot Games API for League of Legend
 * [Philosophy](#philosophy)
 * [Installation](#installation)
 * [Endpoints Covered](#endpoints-covered)
-* [Usage Examples](#quick-usage-examples)
+* [Usage](#usage)
 * [Contributing and Issues](#contributing-and-issues)
 
 ## Philosophy
-My goal is to make a wrapper that is convenient and sensible. This project is heavily inspired by [psuedonym117's Python wrapper](https://github.com/pseudonym117/Riot-Watcher). I want to make the API as consistent as possible and also make the rate-limiting as robust as possible. However, I also wish to provide users flexibility and a detailed errors system to make the wrapper as unobtrusive as possible. Look at the [Quick Usage Examples](#quick-usage-examples) to see what I mean.
+My goal is to make a wrapper that is convenient and sensible. This project is heavily inspired by [psuedonym117's Python wrapper](https://github.com/pseudonym117/Riot-Watcher). I want to make the API as consistent as possible and also make a decent rate limiter. However, I also wish to provide users flexibility and a detailed errors system to make the wrapper as unobtrusive as possible. Look at the [Quick Usage Examples](#quick-usage-examples) to see what I mean.
 
 This is my first try at making an API wrapper. I am open to any advice and help!
+
+March 28, 2017
+
+**I'm pretty proud of the end result. The rate limiting isn't the best, and the method names are kinda iffy, but it works really well for my other project and when I need a quick script**.
 
 ## Installation
 (not published yet)
@@ -214,7 +218,7 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
     * getSummonerNames({ region, ids/summonerIDs/playerIDs ([int]/int), id/summonerID/playerID (int) }, cb)
     * getSummonerName({ region, id/summonerID/playerID (int) }, cb)
 
-## Quick Usage Examples
+## Usage
 
 ```javascript
 var Kindred = require('kindred-api')
@@ -427,7 +431,5 @@ getChampion() targets the static endpoint
 I didn't want to attach getChampion() with 'static' in any way or form since I thought it looked kind of annoying.
 
 **Right now, the code is also quite messy and there is a lot of repeated code.** Function definitions are quite long because I include many aliases as well. I haven't thought of an elegant way to make a magic function that manages to work for every single endpoint request yet.
-
-In addition, I haven't aliased certain function parameters in some functions.
 
 Any help and/or advice is appreciated!
