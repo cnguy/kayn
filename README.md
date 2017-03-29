@@ -184,10 +184,10 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
 
 1. **/api/lol/{region}/v1.4/summoner/{summonerIds}/masteries**
     * Get mastery pages mapped by summoner ID for a given list of summoner IDs. (REST)
-    * getMasteries({ region, ids/summonerIDs/playerIDs ([int]/int), id (int), names ([str]/str), name (str)}, cb)
+    * getMasteries({ region, ids/summonerIDs/playerIDs ([int]/int), id/summonerID/playerID (int), names ([str]/str), name (str)}, cb)
 2. **/api/lol/{region}/v1.4/summoner/{summonerIds}/runes**
     * Retrieve match list by match ID. (REST)
-    * getRunes({ region, ids/summonerIDs/playerIDs ([int]/int), id (int), names ([str]/str), name (str) }, cb)
+    * getRunes({ region, ids/summonerIDs/playerIDs ([int]/int), id/summonerID/playerID (int), names ([str]/str), name (str) }, cb)
 
 ### Stats
 [docs](https://developer.riotgames.com/api-methods/#stats-v1.3)
