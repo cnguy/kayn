@@ -129,11 +129,11 @@ class Kindred {
         const { statusCode } = response
 
         if (statusCode >= 200 && statusCode < 300)
-              statusMessage = chalk.green(statusCode)
-            else if (statusCode >= 400 && statusCode < 500)
-              statusMessage = chalk.red(`${statusCode} ${getResponseMessage(statusCode)}`)
-            else if (statusCode >= 500)
-              statusMessage = chalk.bold.red(`${statusCode} ${getResponseMessage(statusCode)}`)
+          statusMessage = chalk.green(statusCode)
+        else if (statusCode >= 400 && statusCode < 500)
+          statusMessage = chalk.red(`${statusCode} ${getResponseMessage(statusCode)}`)
+        else if (statusCode >= 500)
+          statusMessage = chalk.bold.red(`${statusCode} ${getResponseMessage(statusCode)}`)
 
         if (this.debug) {
           console.log(response && statusMessage, reqUrl)
