@@ -247,7 +247,7 @@ k.getTopChamps(rprint)
 // getTopChamps request FAILED; required params `id` (int) or `playerID` (int) not passed in
 
 k.getChampMastery(rprint)
-// getChampMastery request FAILED; required params `playerID` (int) and `champID` (int) not passed in
+// getChampMastery request FAILED; required params `playerID` (int) and `championID` (int) not passed in
 
 /*
   Notice the OR and the AND!!
