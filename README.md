@@ -14,6 +14,8 @@ Kindred is a thin Node.js wrapper (with an optional rate limiter) on top of [Rio
 * All endpoints covered but one (get summoner by accountIDs).
 * Basic rate-limiting that is enforced per region.
     * Retries on 429 and >= 500 (should it just be 500?).
+        * Promise-based requests retry up to three times.
+        * Callback-based requests are infinite at the moment.
 * Tells you what parameters you can pass in when you make a parameter-related error.
 
 Hopefully there aren't *too* many bugs! ***I'm a noob after all, so use this library at your own risk.*** I'm currently working on adding caching and fully support promises (it might be a bit buggy atm).
