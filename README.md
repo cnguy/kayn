@@ -16,6 +16,8 @@ Kindred is a thin Node.js wrapper (with an optional rate limiter) on top of [Rio
     * Retries on 429 and >= 500 (should it just be 500?).
 * Tells you what parameters you can pass in when you make a parameter-related error.
 
+Hopefully there aren't *too* many bugs! I'm a noob after all.
+
 ## Philosophy
 My goal is to make a wrapper that is simple, sensible, and consistent. This project is heavily inspired by [psuedonym117's Python wrapper](https://github.com/pseudonym117/Riot-Watcher). Look at the [Usage Section](#usage) to see what I mean.
 
