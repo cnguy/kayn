@@ -77,11 +77,12 @@ class Kindred {
     }
 
     if (this.limits) {
-      (function sendRequest() {
-        if (this.canMakeRequest(region)) {
+      var self = this;
+      (function sendRequest(callback) {
+        if (self.canMakeRequest(region)) {
           if (!staticReq) {
-            this.limits[region][0].addRequest()
-            this.limits[region][1].addRequest()
+            self.limits[region][0].addRequest()
+            self.limits[region][1].addRequest()
           }
 
           request({ url: reqUrl, qs: options }, (error, response, body) => {
@@ -95,7 +96,7 @@ class Kindred {
             else if (statusCode >= 500)
               statusMessage = chalk.bold.red(`${statusCode} ${getResponseMessage(statusCode)}`)
 
-            if (this.debug) {
+            if (self.debug) {
               console.log(statusMessage, reqUrl)
               console.log({
                 'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
@@ -106,23 +107,25 @@ class Kindred {
               console.log()
             }
 
-            if (statusCode >= 500 && this.limits) {
-              if (this.debug) console.log('!!! resending request !!!')
-              setTimeout(sendRequest.bind(this), 1000)
+            if (statusCode >= 500 && self.limits) {
+              if (self.debug) console.log('!!! resending request !!!')
+              setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
             }
 
-            if (statusCode === 429 && this.limits) {
-              if (this.debug) console.log('!!! resending request !!!')
-              setTimeout(sendRequest.bind(this), (response.headers['retry-after'] * 1000) + 50)
+            if (statusCode === 429 && self.limits) {
+              if (self.debug) console.log('!!! resending request !!!')
+              setTimeout(() => {
+                sendRequest.bind(self)(callback)
+              }, (response.headers['retry-after'] * 1000) + 50)
             }
 
-            if (statusCode >= 400) return cb(statusMessage + ' : ' + chalk.yellow(reqUrl))
-            else return cb(error, JSON.parse(body))
+            if (statusCode >= 400) return callback(statusMessage + ' : ' + chalk.yellow(reqUrl))
+            else return callback(error, JSON.parse(body))
           })
         } else {
-          setTimeout(sendRequest.bind(this), 1000)
+          setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
         }
-      }).bind(this)(reqUrl, options)
+      })(cb)
     } else {
       request({ url: reqUrl, qs: options }, (error, response, body) => {
         let statusMessage

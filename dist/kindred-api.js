@@ -254,7 +254,7 @@
     }, {
       key: '_baseRequest',
       value: function _baseRequest(_ref2, cb) {
-        var _this2 = this;
+        var _this = this;
 
         var endUrl = _ref2.endUrl,
             _ref2$region = _ref2.region,
@@ -279,13 +279,12 @@
         }
 
         if (this.limits) {
-          (function sendRequest() {
-            var _this = this;
-
-            if (this.canMakeRequest(region)) {
+          var self = this;
+          (function sendRequest(callback) {
+            if (self.canMakeRequest(region)) {
               if (!staticReq) {
-                this.limits[region][0].addRequest();
-                this.limits[region][1].addRequest();
+                self.limits[region][0].addRequest();
+                self.limits[region][1].addRequest();
               }
 
               request({ url: reqUrl, qs: options }, function (error, response, body) {
@@ -295,7 +294,7 @@
 
                 if (statusCode >= 200 && statusCode < 300) statusMessage = chalk.green(statusCode);else if (statusCode >= 400 && statusCode < 500) statusMessage = chalk.red(statusCode + ' ' + getResponseMessage(statusCode));else if (statusCode >= 500) statusMessage = chalk.bold.red(statusCode + ' ' + getResponseMessage(statusCode));
 
-                if (_this.debug) {
+                if (self.debug) {
                   console.log(statusMessage, reqUrl);
                   console.log({
                     'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
@@ -306,22 +305,28 @@
                   console.log();
                 }
 
-                if (statusCode >= 500 && _this.limits) {
-                  if (_this.debug) console.log('!!! resending request !!!');
-                  setTimeout(sendRequest.bind(_this), 1000);
+                if (statusCode >= 500 && self.limits) {
+                  if (self.debug) console.log('!!! resending request !!!');
+                  setTimeout(function () {
+                    sendRequest.bind(self)(callback);
+                  }, 1000);
                 }
 
-                if (statusCode === 429 && _this.limits) {
-                  if (_this.debug) console.log('!!! resending request !!!');
-                  setTimeout(sendRequest.bind(_this), response.headers['retry-after'] * 1000 + 50);
+                if (statusCode === 429 && self.limits) {
+                  if (self.debug) console.log('!!! resending request !!!');
+                  setTimeout(function () {
+                    sendRequest.bind(self)(callback);
+                  }, response.headers['retry-after'] * 1000 + 50);
                 }
 
-                if (statusCode >= 400) return cb(statusMessage + ' : ' + chalk.yellow(reqUrl));else return cb(error, JSON.parse(body));
+                if (statusCode >= 400) return callback(statusMessage + ' : ' + chalk.yellow(reqUrl));else return callback(error, JSON.parse(body));
               });
             } else {
-              setTimeout(sendRequest.bind(this), 1000);
+              setTimeout(function () {
+                sendRequest.bind(self)(callback);
+              }, 1000);
             }
-          }).bind(this)(reqUrl, options);
+          })(cb);
         } else {
           request({ url: reqUrl, qs: options }, function (error, response, body) {
             var statusMessage = void 0;
@@ -330,7 +335,7 @@
 
             if (statusCode >= 200 && statusCode < 300) statusMessage = chalk.green(statusCode);else if (statusCode >= 400 && statusCode < 500) statusMessage = chalk.red(statusCode + ' ' + getResponseMessage(statusCode));else if (statusCode >= 500) statusMessage = chalk.bold.red(statusCode + ' ' + getResponseMessage(statusCode));
 
-            if (_this2.debug) {
+            if (_this.debug) {
               console.log(response && statusMessage, reqUrl);
               console.log({
                 'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
@@ -553,7 +558,7 @@
     }, {
       key: 'getChampMasteries',
       value: function getChampMasteries() {
-        var _this3 = this;
+        var _this2 = this;
 
         var _ref19 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             _ref19$region = _ref19.region,
@@ -577,8 +582,8 @@
 
           return this.getSummoner({ name: name, region: region }, function (err, data) {
             if (err) return cb(err);
-            return _this3._championMasteryRequest({
-              endUrl: _location + '/player/' + data[_this3._sanitizeName(name)].id + '/champions',
+            return _this2._championMasteryRequest({
+              endUrl: _location + '/player/' + data[_this2._sanitizeName(name)].id + '/champions',
               region: region
             }, cb);
           });
@@ -589,7 +594,7 @@
     }, {
       key: 'getTotalChampMasteryScore',
       value: function getTotalChampMasteryScore() {
-        var _this4 = this;
+        var _this3 = this;
 
         var _ref20 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             _ref20$region = _ref20.region,
@@ -613,8 +618,8 @@
 
           return this.getSummoner({ name: name, region: region }, function (err, data) {
             if (err) return cb(err);
-            return _this4._championMasteryRequest({
-              endUrl: _location2 + '/player/' + data[_this4._sanitizeName(name)].id + '/score',
+            return _this3._championMasteryRequest({
+              endUrl: _location2 + '/player/' + data[_this3._sanitizeName(name)].id + '/score',
               region: region
             }, cb);
           });
@@ -625,7 +630,7 @@
     }, {
       key: 'getTopChamps',
       value: function getTopChamps() {
-        var _this5 = this;
+        var _this4 = this;
 
         var _ref21 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             _ref21$region = _ref21.region,
@@ -649,8 +654,8 @@
 
           return this.getSummoner({ name: name, region: region }, function (err, data) {
             if (err) return cb(err);
-            return _this5._championMasteryRequest({
-              endUrl: _location3 + '/player/' + data[_this5._sanitizeName(name)].id + '/topchampions',
+            return _this4._championMasteryRequest({
+              endUrl: _location3 + '/player/' + data[_this4._sanitizeName(name)].id + '/topchampions',
               region: region
             }, cb);
           });
@@ -661,7 +666,7 @@
     }, {
       key: 'getCurrentGame',
       value: function getCurrentGame() {
-        var _this6 = this;
+        var _this5 = this;
 
         var _ref22 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             _ref22$region = _ref22.region,
@@ -683,8 +688,8 @@
         } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
           return this.getSummoner({ name: name, region: region }, function (err, data) {
             if (err) return cb(err);
-            return _this6._currentGameRequest({
-              endUrl: '' + data[_this6._sanitizeName(name)].id, platformId: platformId, region: region
+            return _this5._currentGameRequest({
+              endUrl: '' + data[_this5._sanitizeName(name)].id, platformId: platformId, region: region
             }, cb);
           });
         } else {
@@ -707,7 +712,7 @@
     }, {
       key: 'getRecentGames',
       value: function getRecentGames() {
-        var _this7 = this;
+        var _this6 = this;
 
         var _ref24 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref24.region,
@@ -726,8 +731,8 @@
         } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
           return this.getSummoner({ name: name, region: region }, function (err, data) {
             if (err) return cb(err);
-            return _this7._gameRequest({
-              endUrl: 'by-summoner/' + data[_this7._sanitizeName(name)].id + '/recent', region: region
+            return _this6._gameRequest({
+              endUrl: 'by-summoner/' + data[_this6._sanitizeName(name)].id + '/recent', region: region
             }, cb);
           });
         } else {
@@ -737,7 +742,7 @@
     }, {
       key: 'getLeagues',
       value: function getLeagues() {
-        var _this8 = this;
+        var _this7 = this;
 
         var _ref25 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref25.region,
@@ -776,7 +781,7 @@
               for (var _iterator2 = names[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
                 var _name = _step2.value;
 
-                args.push(data[_this8._sanitizeName(_name)].id);
+                args.push(data[_this7._sanitizeName(_name)].id);
               }
             } catch (err) {
               _didIteratorError2 = true;
@@ -793,14 +798,14 @@
               }
             }
 
-            return _this8._leagueRequest({ endUrl: 'by-summoner/' + args.join(','), region: region }, cb);
+            return _this7._leagueRequest({ endUrl: 'by-summoner/' + args.join(','), region: region }, cb);
           });
         } else if (_typeof(arguments[0]) === 'object' && (typeof names === 'string' || typeof name === 'string')) {
           return this.getSummoner({ name: names || name, region: region }, function (err, data) {
             if (err) return cb(err);
 
-            return _this8._leagueRequest({
-              endUrl: 'by-summoner/' + data[_this8._sanitizeName(names || name)].id,
+            return _this7._leagueRequest({
+              endUrl: 'by-summoner/' + data[_this7._sanitizeName(names || name)].id,
               region: region
             }, cb);
           });
@@ -811,7 +816,7 @@
     }, {
       key: 'getLeagueEntries',
       value: function getLeagueEntries() {
-        var _this9 = this;
+        var _this8 = this;
 
         var _ref26 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref26.region,
@@ -850,7 +855,7 @@
               for (var _iterator3 = names[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
                 var _name2 = _step3.value;
 
-                args.push(data[_this9._sanitizeName(_name2)].id);
+                args.push(data[_this8._sanitizeName(_name2)].id);
               }
             } catch (err) {
               _didIteratorError3 = true;
@@ -867,13 +872,13 @@
               }
             }
 
-            return _this9._leagueRequest({ endUrl: 'by-summoner/' + args.join(',') + '/entry', region: region }, cb);
+            return _this8._leagueRequest({ endUrl: 'by-summoner/' + args.join(',') + '/entry', region: region }, cb);
           });
         } else if (_typeof(arguments[0]) === 'object' && (typeof names === 'string' || typeof name === 'string')) {
           return this.getSummoner({ name: names || name, region: region }, function (err, data) {
             if (err) return cb(err);
-            return _this9._leagueRequest({
-              endUrl: 'by-summoner/' + data[_this9._sanitizeName(names || name)].id + '/entry',
+            return _this8._leagueRequest({
+              endUrl: 'by-summoner/' + data[_this8._sanitizeName(names || name)].id + '/entry',
               region: region
             }, cb);
           });
@@ -1150,7 +1155,7 @@
     }, {
       key: 'getMatchList',
       value: function getMatchList() {
-        var _this10 = this;
+        var _this9 = this;
 
         var _ref47 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref47.region,
@@ -1171,8 +1176,8 @@
         } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
           return this.getSummoner({ name: name, region: region }, function (err, data) {
             if (err) return cb(err);
-            return _this10._matchListRequest({
-              endUrl: '' + data[_this10._sanitizeName(name)].id,
+            return _this9._matchListRequest({
+              endUrl: '' + data[_this9._sanitizeName(name)].id,
               region: region, options: options
             }, cb);
           });
@@ -1183,7 +1188,7 @@
     }, {
       key: 'getRunes',
       value: function getRunes() {
-        var _this11 = this;
+        var _this10 = this;
 
         var _ref48 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref48.region,
@@ -1222,7 +1227,7 @@
               for (var _iterator4 = names[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
                 var _name3 = _step4.value;
 
-                args.push(data[_this11._sanitizeName(_name3)].id);
+                args.push(data[_this10._sanitizeName(_name3)].id);
               }
             } catch (err) {
               _didIteratorError4 = true;
@@ -1239,7 +1244,7 @@
               }
             }
 
-            return _this11._runesMasteriesRequest({
+            return _this10._runesMasteriesRequest({
               endUrl: args.join(',') + '/runes',
               region: region
             }, cb);
@@ -1247,8 +1252,8 @@
         } else if (_typeof(arguments[0]) === 'object' && (typeof names === 'string' || typeof name === 'string')) {
           return this.getSummoner({ name: names || name, region: region }, function (err, data) {
             if (err) return cb(err);
-            return _this11._runesMasteriesRequest({
-              endUrl: data[_this11._sanitizeName(names || name)].id + '/runes',
+            return _this10._runesMasteriesRequest({
+              endUrl: data[_this10._sanitizeName(names || name)].id + '/runes',
               region: region
             }, cb);
           });
@@ -1259,7 +1264,7 @@
     }, {
       key: 'getMasteries',
       value: function getMasteries() {
-        var _this12 = this;
+        var _this11 = this;
 
         var _ref49 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref49.region,
@@ -1298,7 +1303,7 @@
               for (var _iterator5 = names[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
                 var _name4 = _step5.value;
 
-                args.push(data[_this12._sanitizeName(_name4)].id);
+                args.push(data[_this11._sanitizeName(_name4)].id);
               }
             } catch (err) {
               _didIteratorError5 = true;
@@ -1315,7 +1320,7 @@
               }
             }
 
-            return _this12._runesMasteriesRequest({
+            return _this11._runesMasteriesRequest({
               endUrl: args.join(',') + '/masteries',
               region: region
             }, cb);
@@ -1323,8 +1328,8 @@
         } else if (_typeof(arguments[0]) === 'object' && (typeof names === 'string' || typeof name === 'string')) {
           return this.getSummoner({ name: names || name, region: region }, function (err, data) {
             if (err) return cb(err);
-            return _this12._runesMasteriesRequest({
-              endUrl: data[_this12._sanitizeName(names || name)].id + '/masteries',
+            return _this11._runesMasteriesRequest({
+              endUrl: data[_this11._sanitizeName(names || name)].id + '/masteries',
               region: region
             }, cb);
           });
@@ -1335,7 +1340,7 @@
     }, {
       key: 'getRankedStats',
       value: function getRankedStats() {
-        var _this13 = this;
+        var _this12 = this;
 
         var _ref50 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref50.region,
@@ -1355,8 +1360,8 @@
         } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
           return this.getSummoner({ name: name, region: region }, function (err, data) {
             if (err) return cb(err);
-            return _this13._statsRequest({
-              endUrl: data[_this13._sanitizeName(name)].id + '/ranked',
+            return _this12._statsRequest({
+              endUrl: data[_this12._sanitizeName(name)].id + '/ranked',
               region: region, options: options
             }, cb);
           });
@@ -1367,7 +1372,7 @@
     }, {
       key: 'getStatsSummary',
       value: function getStatsSummary() {
-        var _this14 = this;
+        var _this13 = this;
 
         var _ref51 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref51.region,
@@ -1387,8 +1392,8 @@
         } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
           return this.getSummoner({ name: name, region: region }, function (err, data) {
             if (err) return cb(err);
-            return _this14._statsRequest({
-              endUrl: data[_this14._sanitizeName(name)].id + '/summary',
+            return _this13._statsRequest({
+              endUrl: data[_this13._sanitizeName(name)].id + '/summary',
               region: region, options: options
             }, cb);
           });
@@ -1399,7 +1404,7 @@
     }, {
       key: 'getSummoners',
       value: function getSummoners() {
-        var _this15 = this;
+        var _this14 = this;
 
         var _ref52 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref52.region,
@@ -1427,7 +1432,7 @@
         } else if (checkAll.string(names)) {
           return this._summonerRequest({
             endUrl: 'by-name/' + names.map(function (name) {
-              return _this15._sanitizeName(name);
+              return _this14._sanitizeName(name);
             }).join(','),
             region: region
           }, cb);
