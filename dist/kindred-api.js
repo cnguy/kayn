@@ -369,8 +369,6 @@
 
                       if (statusCode >= 400) return callback(statusMessage + ' : ' + chalk.yellow(reqUrl));else return callback(error, JSON.parse(body));
                     } else {
-                      console.log('callback not defined');
-
                       if (error) {
                         return reject('err:', error);
                       } else {
