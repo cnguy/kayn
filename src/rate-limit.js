@@ -16,7 +16,7 @@ class RateLimit {
   }
 
   addRequest() {
-    this.madeRequests.push((new Date()).getTime() + (this.seconds*1000 + ((this.seconds*1000) / 75)))
+    this.madeRequests.push((new Date()).getTime() + (this.seconds*1000))
   }
 
   requestAvailable() {

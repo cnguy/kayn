@@ -92,102 +92,115 @@ class Kindred {
   }
 
   _baseRequest({ endUrl, region = this.defaultRegion, status = false, observerMode = false, staticReq = false, championMastery = false, options = {} }, cb) {
-    const proxy = staticReq ? 'global' : region
-    const reqUrl = this._makeUrl(endUrl, proxy, staticReq, status, observerMode, championMastery)
+    return new Promise((resolve, reject) => {
+      const proxy = staticReq ? 'global' : region
+      const reqUrl = this._makeUrl(endUrl, proxy, staticReq, status, observerMode, championMastery)
 
-    if (!cb) {
-      console.log(
-        chalk.red(
-          `error: No callback passed in for the method call regarding \`${chalk.yellow(reqUrl)}\``
-        )
-      )
-      return
-    }
-
-    if (this.limits) {
-      var self = this;
-      (function sendRequest(callback) {
-        if (self.canMakeRequest(region)) {
-          if (!staticReq) {
-            self.limits[region][0].addRequest()
-            self.limits[region][1].addRequest()
-          }
-
-          request({ url: reqUrl, qs: options }, (error, response, body) => {
-            if (response && body) {
-              let statusMessage
-              const { statusCode } = response
-
-              if (statusCode >= 200 && statusCode < 300)
-                statusMessage = chalk.green(statusCode)
-              else if (statusCode >= 400 && statusCode < 500)
-                statusMessage = chalk.red(`${statusCode} ${getResponseMessage(statusCode)}`)
-              else if (statusCode >= 500)
-                statusMessage = chalk.bold.red(`${statusCode} ${getResponseMessage(statusCode)}`)
-
-              if (self.debug) {
-                console.log(statusMessage, reqUrl)
-                console.log({
-                  'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
-                  'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
-                  'x-rate-limit-count': response.headers['x-rate-limit-count'],
-                  'retry-after': response.headers['retry-after']
-                })
-                console.log()
-              }
-
-              if (statusCode >= 500) {
-                if (self.debug) console.log('!!! resending request !!!')
-                setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
-              }
-
-              if (statusCode === 429) {
-                if (self.debug) console.log('!!! resending request !!!')
-                setTimeout(() => {
-                  sendRequest.bind(self)(callback)
-                }, (response.headers['retry-after'] * 1000) + 50)
-              }
-
-              if (statusCode >= 400) return callback(statusMessage + ' : ' + chalk.yellow(reqUrl))
-              else return callback(error, JSON.parse(body))
-            } else {
-              console.log(error, reqUrl)
+      if (this.limits) {
+        var self = this;
+        
+        (function sendRequest(callback) {
+          if (self.canMakeRequest(region)) {
+            if (!staticReq) {
+              self.limits[region][0].addRequest()
+              self.limits[region][1].addRequest()
             }
-          })
-        } else {
-          setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
-        }
-      })(cb)
-    } else {
-      request({ url: reqUrl, qs: options }, (error, response, body) => {
-        if (response) {
-          let statusMessage
-          const { statusCode } = response
 
-          if (statusCode >= 200 && statusCode < 300)
-            statusMessage = chalk.green(statusCode)
-          else if (statusCode >= 400 && statusCode < 500)
-            statusMessage = chalk.red(`${statusCode} ${getResponseMessage(statusCode)}`)
-          else if (statusCode >= 500)
-            statusMessage = chalk.bold.red(`${statusCode} ${getResponseMessage(statusCode)}`)
+            // return new Promise((resolve, reject) => {
+              request({ url: reqUrl, qs: options }, (error, response, body) => {
+                if (response && body) {
+                  let statusMessage
+                  const { statusCode } = response
 
-          if (this.debug) {
-            console.log(response && statusMessage, reqUrl)
-            console.log({
-              'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
-              'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
-              'x-rate-limit-count': response.headers['x-rate-limit-count'],
-              'retry-after': response.headers['retry-after']
-            })
+                  if (statusCode >= 200 && statusCode < 300)
+                    statusMessage = chalk.green(statusCode)
+                  else if (statusCode >= 400 && statusCode < 500)
+                    statusMessage = chalk.red(`${statusCode} ${getResponseMessage(statusCode)}`)
+                  else if (statusCode >= 500)
+                    statusMessage = chalk.bold.red(`${statusCode} ${getResponseMessage(statusCode)}`)
+
+                  if (self.debug) {
+                    console.log(statusMessage, reqUrl)
+                    console.log({
+                      'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
+                      'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
+                      'x-rate-limit-count': response.headers['x-rate-limit-count'],
+                      'retry-after': response.headers['retry-after']
+                    })
+                    console.log()
+                  }
+                  
+                  if (callback) {
+                    if (statusCode >= 500) {
+                      if (self.debug) console.log('!!! resending request !!!')
+                      setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
+                    }
+
+                    if (statusCode === 429) {
+                      if (self.debug) console.log('!!! resending request !!!')
+                      setTimeout(() => {
+                        sendRequest.bind(self)(callback)
+                      }, (response.headers['retry-after'] * 1000) + 50)
+                    }
+
+                    if (statusCode >= 400) return callback(statusMessage + ' : ' + chalk.yellow(reqUrl))
+                    else return callback(error, JSON.parse(body))
+                  } else {
+                    console.log('callback not defined')
+                    
+                    if (error) {
+                      return reject('err:', error)
+                    } else {
+                      return resolve(JSON.parse(body))
+                    }
+                  }
+                } else {
+                  console.log(error, reqUrl)
+                }
+              })
+          } else {
+            setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
           }
+        })(cb)
+      } else {
+        request({ url: reqUrl, qs: options }, (error, response, body) => {
+          if (response) {
+            let statusMessage
+            const { statusCode } = response
 
-          if (statusCode >= 400) return cb(statusMessage + ' : ' + chalk.yellow(reqUrl))
-          else return cb(error, JSON.parse(body))
-        } else {
-          console.log(error, reqUrl)
-        }
-      })
-    }
+            if (statusCode >= 200 && statusCode < 300)
+              statusMessage = chalk.green(statusCode)
+            else if (statusCode >= 400 && statusCode < 500)
+              statusMessage = chalk.red(`${statusCode} ${getResponseMessage(statusCode)}`)
+            else if (statusCode >= 500)
+              statusMessage = chalk.bold.red(`${statusCode} ${getResponseMessage(statusCode)}`)
+
+            if (this.debug) {
+              console.log(response && statusMessage, reqUrl)
+              console.log({
+                'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
+                'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
+                'x-rate-limit-count': response.headers['x-rate-limit-count'],
+                'retry-after': response.headers['retry-after']
+              })
+            }
+
+            if (cb) {
+              if (statusCode >= 400) return cb(statusMessage + ' : ' + chalk.yellow(reqUrl))
+              else return cb(error, JSON.parse(body))
+            } else {
+              if (error) {
+                return reject('err:', error)
+              } else {
+                return resolve(JSON.parse(body))
+              }
+            }
+          } else {
+            console.log(error, reqUrl)
+          }
+        })
+      }
+    })
   }
 
   _observerRequest({ endUrl, region }, cb) {

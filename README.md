@@ -16,7 +16,7 @@ Kindred is a thin Node.js wrapper (with an optional rate limiter) on top of [Rio
     * Retries on 429 and >= 500 (should it just be 500?).
 * Tells you what parameters you can pass in when you make a parameter-related error.
 
-Hopefully there aren't *too* many bugs! I'm a noob after all.
+Hopefully there aren't *too* many bugs! ***I'm a noob after all, so use this library at your own risk.*** I'm currently working on adding caching and fully support promises (it might be a bit buggy atm).
 
 ## Philosophy
 My goal is to make a wrapper that is simple, sensible, and consistent. This project is heavily inspired by [psuedonym117's Python wrapper](https://github.com/pseudonym117/Riot-Watcher). Look at the [Usage Section](#usage) to see what I mean.
@@ -309,7 +309,13 @@ k.getSummoner({ id: 354959 }, rprint)
   Single parameters, however, can only take singular values.
 */
 k.getSummoner({ summonerID: 354959 }, rprint)
+
+k.getSummoner({ summonerID: 354959 })
+ .then(json => console.log(json))
+ .catch(err => console.log(err))
+
 k.getSummoners({ summonerIDs: [354959, 21542029] }, rprint)
+
 k.getMatch({ id: 2459973154 }, rprint)
 k.getMatch({ matchID: 2459973154 }, rprint)
 
@@ -355,6 +361,10 @@ k.getRunes({ ids: [354959, 21542029] }, rprint)
 k.getRunes({ id: 354959 }, rprint)
 k.getRunes({ ids: 354959 }, rprint)
 
+k.getRunes({ id: 354959 })
+ .then(json => console.log(json))
+ .catch(err => console.error(err))
+
 /*
   But what if you want to quickly get the rune pages given
   that you have a list of names?
@@ -380,6 +390,8 @@ k.getRecentGames({ name: 'Richelle' }, rprint)
 k.getLeagues({ names: ['Richelle', 'Grigne'] }, rprint)
 /* Note: I handle that platform id stuffs. */
 k.getCurrentGame({ name: 'Fràe', region: REGIONS.OCEANIA }, rprint)
+
+/* Currently promises are bugged for these type of chained requests. */
 
 /*
   Functions will have an options parameter that you can pass in query
