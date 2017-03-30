@@ -146,7 +146,7 @@ class Kindred {
                       if (statusCode >= 400) return callback(statusMessage + ' : ' + chalk.yellow(reqUrl))
                       else return callback(error, JSON.parse(body))
                     } else {
-                      if (statusCode === 429) {
+                      if (statusCode === 500) {
                         if (self.debug) console.log('!!! resending promise request !!!')
                         setTimeout(() => { return reject('retry' )}, 1000)
                       } else if (statusCode === 429) {
