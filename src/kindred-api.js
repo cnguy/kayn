@@ -17,11 +17,39 @@ const re = XRegExp('^[0-9\\p{L} _\\.]+$')
 class Kindred {
   constructor({ key, defaultRegion = REGIONS.NORTH_AMERICA, debug = false, limits }) {
     this.key = key
-    this.defaultRegion = defaultRegion
+
+    let foundRegion
+
+    for (const region of Object.keys(REGIONS)) {
+      if (REGIONS[region] === defaultRegion) {
+        foundRegion = true
+      }
+    }
+
+    this.defaultRegion = foundRegion ? defaultRegion : undefined
+
+    if (!this.defaultRegion) {
+      console.log(`${chalk.red(`Initialization of Kindred failed: ${chalk.yellow(defaultRegion)} is an invalid region.`)}`)
+      console.log(`${(chalk.red(`Try importing ${chalk.yellow("require('./dist/kindred-api').REGIONS")} and using one of those values instead.`))}`)
+      process.exit(1)
+    }
+
     this.debug = debug
 
     if (limits) {
+      const invalid = (Array.isArray(limits) && limits.length !== 2 || !checkAll.int(limits[0]) || limits[0].length !== 2 || !checkAll.int(limits[1]) || limits[1].length !== 2) && limits !== 'dev' && limits !== 'prod'
+
+      if (invalid) {
+        console.log(`${chalk.red(`Initialization of Kindred failed: Invalid ${chalk.yellow('limits')}. Valid examples: ${chalk.yellow('[[10, 10], [500, 600]]')}`)}.`)
+        console.log(`${(chalk.red('You can also pass in one of these two strings:'))} dev/prod `)
+        console.log(`${(chalk.red('and Kindred will set the limits appropriately.'))}`)
+        process.exit(1)
+      }
+
       this.limits = {}
+
+      if (limits === 'dev') limits = [[10, 10], [500, 600]]
+      if (limits === 'prod') limits = [[3000, 10], [180000, 600]]
 
       for (const region of Object.keys(REGIONS)) {
         this.limits[REGIONS[region]] = [

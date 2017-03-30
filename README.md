@@ -250,8 +250,9 @@ var k = new KindredAPI.Kindred({
   defaultRegion: REGIONS.NORTH_AMERICA,
   debug: true, // shows status code, urls, and relevant headers
   limits: [ [10, 10], [500, 600] ] // user key
-  // 10 requests per 10 seconds
-  // 500 requests per 10 minutes
+  // 10 requests per 10 seconds, 500 requests per 10 minutes
+
+  // You can just pass in 'dev' or 'prod' instead though.
 })
 
 function rprint(err, data) { console.log(data) }
