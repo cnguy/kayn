@@ -107,12 +107,12 @@ class Kindred {
               console.log()
             }
 
-            if (statusCode >= 500 && self.limits) {
+            if (statusCode >= 500) {
               if (self.debug) console.log('!!! resending request !!!')
               setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
             }
 
-            if (statusCode === 429 && self.limits) {
+            if (statusCode === 429) {
               if (self.debug) console.log('!!! resending request !!!')
               setTimeout(() => {
                 sendRequest.bind(self)(callback)
