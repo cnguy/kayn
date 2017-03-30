@@ -391,7 +391,15 @@ k.getLeagues({ names: ['Richelle', 'Grigne'] }, rprint)
 /* Note: I handle that platform id stuffs. */
 k.getCurrentGame({ name: 'Fràe', region: REGIONS.OCEANIA }, rprint)
 
-/* Currently promises are bugged for these type of chained requests. */
+/*
+    Currently promises are bugged for these type of chained requests
+    since I don't fully understand them yet. You'll have to chain for promises
+    still.
+*/
+var ctzName = 'contractz'
+k.getSummoner({ name: ctzName })
+ .then(json => k.getMasteries({ id: json[ctzName].id }))
+ .then(json => console.log(json))
 
 /*
   Functions will have an options parameter that you can pass in query
