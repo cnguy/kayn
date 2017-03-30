@@ -1,6 +1,7 @@
 const request = require('request')
 const chalk = require('chalk')
 const XRegExp = require('xregexp')
+const queryString = require('query-string')
 
 import RateLimit from './rate-limit'
 
@@ -88,18 +89,27 @@ class Kindred {
     const mid = staticReq ? '' : `${region}/`
     const prefix = !status && !observerMode && !championMastery ? `api/lol/${mid}` : ''
 
-    return `https://${region}.api.riotgames.com/${prefix}${encodeURI(query)}?api_key=${this.key}`
+    let url = `https://${region}.api.riotgames.com/${prefix}${encodeURI(query)}`
+
+    if (url.lastIndexOf('?') === -1) url += '?'
+    else url += '&'
+    url += `api_key=${this.key}`
+    return url
   }
 
   _baseRequest({ endUrl, region = this.defaultRegion, status = false, observerMode = false, staticReq = false, championMastery = false, options = {} }, cb) {
     const doAsync = () => {
       return new Promise((resolve, reject) => {
         const proxy = staticReq ? 'global' : region
-        const reqUrl = this._makeUrl(endUrl, proxy, staticReq, status, observerMode, championMastery)
+        
+        const stringified = queryString.stringify(options)
+        
+        const postfix = stringified ? '?' + stringified : ''
+        const reqUrl = this._makeUrl(endUrl + postfix, proxy, staticReq, status, observerMode, championMastery)
 
         if (this.limits) {
           var self = this;
-          
+
           (function sendRequest(callback) {
             if (self.canMakeRequest(region)) {
               if (!staticReq) {
@@ -107,7 +117,7 @@ class Kindred {
                 self.limits[region][1].addRequest()
               }
 
-                request({ url: reqUrl, qs: options }, (error, response, body) => {
+                request({ url: reqUrl }, (error, response, body) => {
                   if (response && body) {
                     let statusMessage
                     const { statusCode } = response
@@ -167,7 +177,7 @@ class Kindred {
             }
           })(cb)
         } else {
-          request({ url: reqUrl, qs: options }, (error, response, body) => {
+          request({ url: reqUrl }, (error, response, body) => {
             if (response) {
               let statusMessage
               const { statusCode } = response
@@ -474,16 +484,16 @@ class Kindred {
   }
 
   /* LEAGUE-V2.5 */
-  getLeagues({ region, ids, id, summonerIDs, summonerID, playerIDs, playerID, names, name } = {}, cb) {
+  getLeagues({ region, ids, id, summonerIDs, summonerID, playerIDs, playerID, names, name, options } = {}, cb) {
     if (checkAll.int(ids || summonerIDs || playerIDs)) {
       return this._leagueRequest({
         endUrl: `by-summoner/${(ids || summonerIDs || playerIDs).join(',')}`,
-        region
+        region, options
       }, cb)
     } else if (Number.isInteger(ids || id || summonerIDs || summonerID || playerIDs || playerID)) {
       return this._leagueRequest({
         endUrl: `by-summoner/${ids || id || summonerIDs || summonerID || playerIDs || playerID}`,
-        region
+        region, options
       }, cb)
     } else if (checkAll.string(names)) {
       return this.getSummoners({ names, region }, (err, data) => {
@@ -494,7 +504,7 @@ class Kindred {
         for (let name of names)
           args.push(data[this._sanitizeName(name)].id)
 
-        return this._leagueRequest({ endUrl: `by-summoner/${args.join(',')}`, region }, cb)
+        return this._leagueRequest({ endUrl: `by-summoner/${args.join(',')}`, region, options }, cb)
       })
     } else if (typeof arguments[0] === 'object' && (typeof names === 'string' || typeof name === 'string')) {
       return this.getSummoner({ name: names || name, region }, (err, data) => {
@@ -502,7 +512,7 @@ class Kindred {
 
         return this._leagueRequest({
           endUrl: `by-summoner/${data[this._sanitizeName(names || name)].id}`,
-          region
+          region, options
         }, cb)
       })
     } else {

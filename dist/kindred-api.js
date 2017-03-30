@@ -1,16 +1,16 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define('kindred-api', ['module', 'double-ended-queue', 'request', 'chalk', 'xregexp'], factory);
+    define('kindred-api', ['module', 'double-ended-queue', 'request', 'chalk', 'xregexp', 'query-string'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(module, require('double-ended-queue'), require('request'), require('chalk'), require('xregexp'));
+    factory(module, require('double-ended-queue'), require('request'), require('chalk'), require('xregexp'), require('query-string'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod, global.doubleEndedQueue, global.request, global.chalk, global.xregexp);
+    factory(mod, global.doubleEndedQueue, global.request, global.chalk, global.xregexp, global.queryString);
     global.kindredApi = mod.exports;
   }
-})(this, function (module, Deque, request, chalk, XRegExp) {
+})(this, function (module, Deque, request, chalk, XRegExp, queryString) {
   'use strict';
 
   var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
@@ -298,7 +298,11 @@
         var mid = staticReq ? '' : region + '/';
         var prefix = !status && !observerMode && !championMastery ? 'api/lol/' + mid : '';
 
-        return 'https://' + region + '.api.riotgames.com/' + prefix + encodeURI(query) + '?api_key=' + this.key;
+        var url = 'https://' + region + '.api.riotgames.com/' + prefix + encodeURI(query);
+
+        if (url.lastIndexOf('?') === -1) url += '?';else url += '&';
+        url += 'api_key=' + this.key;
+        return url;
       }
     }, {
       key: '_baseRequest',
@@ -322,7 +326,11 @@
         var doAsync = function doAsync() {
           return new Promise(function (resolve, reject) {
             var proxy = staticReq ? 'global' : region;
-            var reqUrl = _this._makeUrl(endUrl, proxy, staticReq, status, observerMode, championMastery);
+
+            var stringified = queryString.stringify(options);
+
+            var postfix = stringified ? '?' + stringified : '';
+            var reqUrl = _this._makeUrl(endUrl + postfix, proxy, staticReq, status, observerMode, championMastery);
 
             if (_this.limits) {
               var self = _this;
@@ -334,7 +342,7 @@
                     self.limits[region][1].addRequest();
                   }
 
-                  request({ url: reqUrl, qs: options }, function (error, response, body) {
+                  request({ url: reqUrl }, function (error, response, body) {
                     if (response && body) {
                       var statusMessage = void 0;
                       var statusCode = response.statusCode;
@@ -397,7 +405,7 @@
                 }
               })(cb);
             } else {
-              request({ url: reqUrl, qs: options }, function (error, response, body) {
+              request({ url: reqUrl }, function (error, response, body) {
                 if (response) {
                   var statusMessage = void 0;
                   var statusCode = response.statusCode;
@@ -840,19 +848,20 @@
             playerIDs = _ref25.playerIDs,
             playerID = _ref25.playerID,
             names = _ref25.names,
-            name = _ref25.name;
+            name = _ref25.name,
+            options = _ref25.options;
 
         var cb = arguments[1];
 
         if (checkAll.int(ids || summonerIDs || playerIDs)) {
           return this._leagueRequest({
             endUrl: 'by-summoner/' + (ids || summonerIDs || playerIDs).join(','),
-            region: region
+            region: region, options: options
           }, cb);
         } else if (Number.isInteger(ids || id || summonerIDs || summonerID || playerIDs || playerID)) {
           return this._leagueRequest({
             endUrl: 'by-summoner/' + (ids || id || summonerIDs || summonerID || playerIDs || playerID),
-            region: region
+            region: region, options: options
           }, cb);
         } else if (checkAll.string(names)) {
           return this.getSummoners({ names: names, region: region }, function (err, data) {
@@ -885,7 +894,7 @@
               }
             }
 
-            return _this7._leagueRequest({ endUrl: 'by-summoner/' + args.join(','), region: region }, cb);
+            return _this7._leagueRequest({ endUrl: 'by-summoner/' + args.join(','), region: region, options: options }, cb);
           });
         } else if (_typeof(arguments[0]) === 'object' && (typeof names === 'string' || typeof name === 'string')) {
           return this.getSummoner({ name: names || name, region: region }, function (err, data) {
@@ -893,7 +902,7 @@
 
             return _this7._leagueRequest({
               endUrl: 'by-summoner/' + data[_this7._sanitizeName(names || name)].id,
-              region: region
+              region: region, options: options
             }, cb);
           });
         } else {
