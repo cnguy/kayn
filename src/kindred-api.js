@@ -554,13 +554,13 @@ class Kindred {
   getChallengers({ region, options = { type: 'RANKED_SOLO_5x5' } } = {}, cb) {
     return this._leagueRequest({
       endUrl: 'challenger', region, options
-    }, cb = region ? cb : arguments[0])
+    }, cb = region || options ? cb : arguments[0])
   }
 
   getMasters({ region, options = { type: 'RANKED_SOLO_5x5' } } = {}, cb) {
     return this._leagueRequest({
       endUrl: 'master', region, options
-    }, cb = region ? cb : arguments[0])
+    }, cb = region || options ? cb : arguments[0])
   }
 
   /* LOL-STATIC-DATA-V1.2 */

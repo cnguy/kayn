@@ -370,7 +370,7 @@
 
                         if (statusCode >= 400) return callback(statusMessage + ' : ' + chalk.yellow(reqUrl));else return callback(error, JSON.parse(body));
                       } else {
-                        if (statusCode === 429) {
+                        if (statusCode === 500) {
                           if (self.debug) console.log('!!! resending promise request !!!');
                           setTimeout(function () {
                             return reject('retry');
@@ -985,7 +985,7 @@
 
         return this._leagueRequest({
           endUrl: 'challenger', region: region, options: options
-        }, cb = region ? cb : arguments[0]);
+        }, cb = region || options ? cb : arguments[0]);
       }
     }, {
       key: 'getMasters',
@@ -999,7 +999,7 @@
 
         return this._leagueRequest({
           endUrl: 'master', region: region, options: options
-        }, cb = region ? cb : arguments[0]);
+        }, cb = region || options ? cb : arguments[0]);
       }
     }, {
       key: 'getChampionList',
