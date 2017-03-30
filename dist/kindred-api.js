@@ -523,7 +523,7 @@
           return this._championRequest({
             endUrl: 'champion/' + (id || championID),
             region: region
-          });
+          }, cb);
         } else {
           return this._logError(this.getChamp.name, 'required params ' + chalk.yellow('`id/championID` (int)') + ' not passed in');
         }

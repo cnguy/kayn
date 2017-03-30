@@ -259,7 +259,7 @@ class Kindred {
       return this._championRequest({
         endUrl: `champion/${id || championID}`,
         region
-      })
+      }, cb)
     } else {
       return this._logError(
         this.getChamp.name,
