@@ -122,6 +122,8 @@ class Kindred {
 
               if (statusCode >= 400) return callback(statusMessage + ' : ' + chalk.yellow(reqUrl))
               else return callback(error, JSON.parse(body))
+            } else {
+              console.log(error, reqUrl)
             }
           })
         } else {
