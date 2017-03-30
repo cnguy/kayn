@@ -3,11 +3,18 @@
 Kindred is a thin Node.js wrapper (with an optional rate limiter) on top of [Riot Games API for League of Legends](http://www.developer.riotgames.com).
 
 ## Table of Contents
+* [Core Features](#core-features)
 * [Philosophy](#philosophy)
 * [Installation](#installation)
 * [Endpoints Covered](#endpoints-covered)
 * [Usage](#usage)
 * [Contributing and Issues](#contributing-and-issues)
+
+## Core Features
+* All endpoints covered but one (get summoner by accountIDs).
+* Basic rate-limiting that is enforced per region.
+    * Retries on 429 and >= 500 (should it just be 500?).
+* Tells you what parameters you can pass in when you make a parameter-related error.
 
 ## Philosophy
 My goal is to make a wrapper that is simple, sensible, and consistent. This project is heavily inspired by [psuedonym117's Python wrapper](https://github.com/pseudonym117/Riot-Watcher). Look at the [Usage Section](#usage) to see what I mean.

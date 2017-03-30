@@ -86,41 +86,43 @@ class Kindred {
           }
 
           request({ url: reqUrl, qs: options }, (error, response, body) => {
-            let statusMessage
-            const { statusCode } = response
+            if (response && body) {
+              let statusMessage
+              const { statusCode } = response
 
-            if (statusCode >= 200 && statusCode < 300)
-              statusMessage = chalk.green(statusCode)
-            else if (statusCode >= 400 && statusCode < 500)
-              statusMessage = chalk.red(`${statusCode} ${getResponseMessage(statusCode)}`)
-            else if (statusCode >= 500)
-              statusMessage = chalk.bold.red(`${statusCode} ${getResponseMessage(statusCode)}`)
+              if (statusCode >= 200 && statusCode < 300)
+                statusMessage = chalk.green(statusCode)
+              else if (statusCode >= 400 && statusCode < 500)
+                statusMessage = chalk.red(`${statusCode} ${getResponseMessage(statusCode)}`)
+              else if (statusCode >= 500)
+                statusMessage = chalk.bold.red(`${statusCode} ${getResponseMessage(statusCode)}`)
 
-            if (self.debug) {
-              console.log(statusMessage, reqUrl)
-              console.log({
-                'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
-                'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
-                'x-rate-limit-count': response.headers['x-rate-limit-count'],
-                'retry-after': response.headers['retry-after']
-              })
-              console.log()
+              if (self.debug) {
+                console.log(statusMessage, reqUrl)
+                console.log({
+                  'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
+                  'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
+                  'x-rate-limit-count': response.headers['x-rate-limit-count'],
+                  'retry-after': response.headers['retry-after']
+                })
+                console.log()
+              }
+
+              if (statusCode >= 500) {
+                if (self.debug) console.log('!!! resending request !!!')
+                setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
+              }
+
+              if (statusCode === 429) {
+                if (self.debug) console.log('!!! resending request !!!')
+                setTimeout(() => {
+                  sendRequest.bind(self)(callback)
+                }, (response.headers['retry-after'] * 1000) + 50)
+              }
+
+              if (statusCode >= 400) return callback(statusMessage + ' : ' + chalk.yellow(reqUrl))
+              else return callback(error, JSON.parse(body))
             }
-
-            if (statusCode >= 500) {
-              if (self.debug) console.log('!!! resending request !!!')
-              setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
-            }
-
-            if (statusCode === 429) {
-              if (self.debug) console.log('!!! resending request !!!')
-              setTimeout(() => {
-                sendRequest.bind(self)(callback)
-              }, (response.headers['retry-after'] * 1000) + 50)
-            }
-
-            if (statusCode >= 400) return callback(statusMessage + ' : ' + chalk.yellow(reqUrl))
-            else return callback(error, JSON.parse(body))
           })
         } else {
           setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
@@ -128,28 +130,32 @@ class Kindred {
       })(cb)
     } else {
       request({ url: reqUrl, qs: options }, (error, response, body) => {
-        let statusMessage
-        const { statusCode } = response
+        if (response) {
+          let statusMessage
+          const { statusCode } = response
 
-        if (statusCode >= 200 && statusCode < 300)
-          statusMessage = chalk.green(statusCode)
-        else if (statusCode >= 400 && statusCode < 500)
-          statusMessage = chalk.red(`${statusCode} ${getResponseMessage(statusCode)}`)
-        else if (statusCode >= 500)
-          statusMessage = chalk.bold.red(`${statusCode} ${getResponseMessage(statusCode)}`)
+          if (statusCode >= 200 && statusCode < 300)
+            statusMessage = chalk.green(statusCode)
+          else if (statusCode >= 400 && statusCode < 500)
+            statusMessage = chalk.red(`${statusCode} ${getResponseMessage(statusCode)}`)
+          else if (statusCode >= 500)
+            statusMessage = chalk.bold.red(`${statusCode} ${getResponseMessage(statusCode)}`)
 
-        if (this.debug) {
-          console.log(response && statusMessage, reqUrl)
-          console.log({
-            'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
-            'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
-            'x-rate-limit-count': response.headers['x-rate-limit-count'],
-            'retry-after': response.headers['retry-after']
-          })
+          if (this.debug) {
+            console.log(response && statusMessage, reqUrl)
+            console.log({
+              'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
+              'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
+              'x-rate-limit-count': response.headers['x-rate-limit-count'],
+              'retry-after': response.headers['retry-after']
+            })
+          }
+
+          if (statusCode >= 400) return cb(statusMessage + ' : ' + chalk.yellow(reqUrl))
+          else return cb(error, JSON.parse(body))
+        } else {
+          console.log(error, reqUrl)
         }
-
-        if (statusCode >= 400) return cb(statusMessage + ' : ' + chalk.yellow(reqUrl))
-        else return cb(error, JSON.parse(body))
       })
     }
   }
