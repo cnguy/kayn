@@ -77,7 +77,9 @@ class Kindred {
       getAll: this.getChampMasteries.bind(this),
 
       getTotalChampionMasteryScore: this.getTotalChampMasteryScore.bind(this),
-      getTopChampions: this.getTopChamps.bind(this)
+      getTopChampions: this.getTopChamps.bind(this),
+      top: this.getTopChamps.bind(this),
+      best: this.getTopChamps.bind(this)
     }
 
     this.CurrentGame = {

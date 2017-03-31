@@ -18,7 +18,7 @@ Kindred is a thin Node.js wrapper (with an optional rate limiter) on top of [Rio
         * Callback-based requests are infinite at the moment.
 * Tells you what parameters you can pass in when you make a parameter-related error.
 
-Hopefully there aren't *too* many bugs! ***I'm a noob after all, so use this library at your own risk.*** I'm currently working on adding namespaced functions. In addition, I'm heavily focusing on refactoring the code now. The docs are not fully updated yet.
+Hopefully there aren't *too* many bugs! ***I'm a noob after all, so use this library at your own risk.*** I'm currently focusing on refactoring the code now. The docs are not fully updated yet.
 
 ## Philosophy
 My goal is to make a wrapper that is simple, sensible, and consistent. This project is heavily inspired by [psuedonym117's Python wrapper](https://github.com/pseudonym117/Riot-Watcher). Look at the [Usage Section](#usage) to see what I mean.
@@ -60,9 +60,14 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
 1. **/api/lol/{region}/v1.2/champion**
     * Retrieve all champions. (REST)
     * getChamps({ region, id (int), options (object) }, cb)
+    * Namespaced Functions: *Champion.getChampions, CurrentGame.getAll*
+    * Example 1: ```k.Champion.getAll({ region: REGIONS.KOREA }, rprint)```
 2. **/api/lol/{region}/v1.2/champion/{id}**
     * Retrieve champion by ID. (REST)
     * getChamp({ region, id/championID (int) }, cb)
+    * Namespaced Functions: *Champion.getChampion, Champion.get*
+    * Example 1: ```k.Champion.get({ champID: 67 }, rprint)```
+    * Example 2: ```k.Champion.get({ champID: 67 }, rprint).then(data => console.log(data))```
 
 ### Champion Mastery
 [docs](https://developer.riotgames.com/api-methods/#championmastery)
@@ -70,9 +75,15 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
 1. **/championmastery/location/{location}/player/{playerId}/champion/{championId}**
     * Get a champion mastery by player id and champion id. Response code 204 means there were no masteries found for given player id or player id and champion id combination. (RPC)
     * getChampMastery({ region = this.defaultRegion, playerID (int), championID (int), options (object) }, cb)
+    * Namespaced Functions: *ChampionMastery.getChampionMastery, ChampionMastery.get*
+    * Example 1: ```k.ChampionMastery.get({ playerID: 20026563, championID: 203 }, rprint)```
+    * Example 2: ```k.ChampionMastery.get({ playerID: 20026563, championID: 203 }).then(data => console.log(data))```
 2. **/championmastery/location/{location}/player/{playerId}/champions**
     * Get all champion mastery entries sorted by number of champion points descending. (RPC)
     * getChampMasteries({ region = this.defaultRegion, id/summonerID/playerID (int), name (string), options (object) }, cb)
+    * Namespaced Functions: *ChampionMastery.getChampionMasteries, ChampionMastery.getAll, ChampionMastery.top, ChampionMastery.best*
+    * Example 1: ```k.ChampionMastery.best({ id: 20026563 }, rprint)```
+    * Example 2: ```k.ChampionMastery.getAll({ id: 20026563 }).then(data => console.log(data))```
 3. **/championmastery/location/{location}/player/{playerId}/score**
     * Get a player's total champion mastery score, which is sum of individual champion mastery levels. (RPC)
     * getTotalChampMasteryScore({ region = this.defaultRegion, id/summonerID/playerID (int), name (string), options (object) }, cb)
@@ -86,6 +97,8 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
 1. **/observer-mode/rest/consumer/getSpectatorGameInfo/{platformId}/{summonerId}**
     * Get current game information for the given summoner ID. (REST)
     * getCurrentGame({ region = this.defaultRegion, id/summonerID/playerID (int), name (str) }, cb)
+    * Namespaced Functions: *CurrentGame.getCurrentGame, CurrentGame.get*
+    * Example 1: ```k.CurrentGame.get({ name: 'Contractz' }, rprint)```
 
 ### Featured Games
 [docs](https://developer.riotgames.com/api-methods/#featured-games-v1.0)
