@@ -290,6 +290,20 @@ k.getChallengers(rprint) // default region, default solo queue mode, valid
 k.getRuneList(rprint) // only optional arguments & not passing in any optional arguments, valid
 
 /*
+    I have recently added namespacing to the methods.
+    You can check out all the namespaces and the aliases in the code
+    since I didn't mention them in the endpoints-covered
+    section yet.
+
+    All the namespaces are named after the official names Riot have given them.
+*/
+k.League.getChallengers(rprint)
+k.League.challengers(rprint)
+k.League.challengers()
+        .then(data => console.log(data))
+        .catch(err => console.error(err))
+
+/*
   getSummoners & getSummoner target both the by-name and by-id endpoints.
   In the case of the summoner endpoints, it made a lot more sense for the two
   functions to target both the by-name and by-id summoner endpoints.
@@ -298,6 +312,11 @@ k.getRuneList(rprint) // only optional arguments & not passing in any optional a
   the example below targets the by-id endpoint.
 */
 k.getSummoner({ id: 354959 }, rprint)
+k.Summoner.getSummoner({ id: 354959 }, rprint)
+k.Summoner.get({ id: 354959 }, rprint)
+k.Summoner.get({ id: 354959 })
+          .then(data => console.log(data))
+          .catch(err => console.error(err))
 
 /*
   The 'id', 'ids', 'name', and 'names' parameters
@@ -320,9 +339,16 @@ k.getSummoners({ summonerIDs: [354959, 21542029] }, rprint)
 
 k.getMatch({ id: 2459973154 }, rprint)
 k.getMatch({ matchID: 2459973154 }, rprint)
+k.Match.get({ id: 2459973154 }, rprint)
+k.Match.get({ id: 2459973154 })
+       .then(data => console.log(data))
+       .catch(err => console.error(err))
 
 var names = ['beautifulkorean', 'c9gun', 'caaaaaaaaarIa']
-k.getSummoners({ names: names }, rprint)
+k.Summoner.getAll({ names }, rprint) // getSummoners
+
+var ids = [22059766, 20026563, 44989337]
+k.Summoner.names({ ids }, rprint)
 
 k.getSummoners({ names: 'caaaaaaaaaria' }, rprint)
 k.getSummoners({ name: 'caaaaaaaaaria' }, rprint)
@@ -394,7 +420,7 @@ k.getLeagues({ names: ['Richelle', 'Grigne'] }, rprint)
 k.getCurrentGame({ name: 'Fràe', region: REGIONS.OCEANIA }, rprint)
 
 /*
-    Currently promises are bugged for these type of chained requests
+    WARNING: Currently promises are bugged for these type of chained requests
     since I don't fully understand them yet. You'll have to chain for promises
     still.
 */
@@ -420,8 +446,8 @@ k.getChallengers({ region: 'na' }, rprint) // get challengers from ranked solo q
 k.getChallengers({ region: 'na', options: {
   type: 'RANKED_FLEX_SR'
 }}, rprint) // get challengers from ranked flex ladder
-k.getMatch({ id: 2459973154 }, rprint) // includes timeline by default
-k.getMatch({ id: 2459973154, options: { includeTimeline: false } }, rprint)
+k.Match.get({ id: 2459973154 }, rprint) // includes timeline by default
+k.Match.get({ id: 2459973154, options: { includeTimeline: false } }, rprint)
 
 /*
   However, for getMatchList, the endpoint uses an optional
@@ -446,9 +472,10 @@ k.getSummoners({ region: 'na', names: name }, function (err, data) {
 
 var furyMasteryId = 6111
 k.getMastery({ id: furyMasteryId }, rprint)
+k.Static.getMastery({ id: furyMasteryId }, rprint)
 
 var msRuneId = 10002
-k.getRune({ id: msRuneId }, rprint)
+k.Static.getRune({ id: msRuneId }, rprint)
 ```
 
 ## Contributing and Issues
@@ -457,13 +484,16 @@ k.getRune({ id: msRuneId }, rprint)
 
 There are a few inconsistencies and weird things within this libary that I don't know how to address since this is my first API wrapper and I'm still quite a big newbie.
 
-For example, the two methods getChamp() and getChampion() are actually different.
+~~For example, the two methods getChamp() and getChampion() are actually different.~~
 
-getChamp() targets the champ endpoint
+~~getChamp() targets the champ endpoint~~
 
-getChampion() targets the static endpoint
+~~getChampion() targets the static endpoint~~
 
-I didn't want to attach getChampion() with 'static' in any way or form since I thought it looked kind of annoying because then I would want to attach static to the other static methods as well (maybe that's better?).
+~~I didn't want to attach getChampion() with 'static' in any way or form since I thought it looked kind of annoying because then I would want to attach static to the other static methods as well (maybe that's better?).~~
+
+March 31: I decided to combat the above by just namespacing the functions
+(k.Static.getChampion vs k.Champion.getChampion/get).
 
 **Right now, the code is also quite messy and there is a lot of repeated code.** Function definitions are quite long because I include many aliases as well. I haven't thought of an elegant way to make a magic function that manages to work for every single endpoint request yet.
 
