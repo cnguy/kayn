@@ -66,8 +66,8 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
     * Retrieve champion by ID. (REST)
     * getChamp({ region, id/championID (int) }, cb)
     * Namespaced Functions: *Champion.getChampion, Champion.get*
-    * Example 1: ```k.Champion.get({ champID: 67 }, rprint)```
-    * Example 2: ```k.Champion.get({ champID: 67 }).then(data => console.log(data))```
+    * Example 1: ```k.Champion.get({ championID: 67 }, rprint)```
+    * Example 2: ```k.Champion.get({ championID: 67 }).then(data => console.log(data))```
 
 ### Champion Mastery
 [docs](https://developer.riotgames.com/api-methods/#championmastery)
