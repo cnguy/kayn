@@ -61,11 +61,26 @@ class Kindred {
       }
     }
 
-    this.champion = {
+    this.Champion = {
       getChampions: this.getChamps.bind(this),
       getChampion: this.getChamp.bind(this)
     }
-    
+
+    this.Static = {
+      getChampions: this.getChampionList.bind(this),
+      getChampion: this.getChampion.bind(this),
+      getItems: this.getItems.bind(this),
+      getItem: this.getItem.bind(this),
+      getLanguageStrings: this.getLanguageStrings.bind(this),
+      getMasteries: this.getMasteryList.bind(this),
+      getMastery: this.getMastery.bind(this),
+      getRealmData: this.getRealmData.bind(this),
+      getRunes: this.getRuneList.bind(this),
+      getRune: this.getRune.bind(this),
+      getSummonerSpells: this.getSummonerSpells.bind(this),
+      getSummonerSpell: this.getSummonerSpell.bind(this),
+      getVersionData: this.getVersionData.bind(this)
+    }
   }
 
   canMakeRequest(region) {
