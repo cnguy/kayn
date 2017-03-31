@@ -18,7 +18,7 @@ Kindred is a thin Node.js wrapper (with an optional rate limiter) on top of [Rio
         * Callback-based requests are infinite at the moment.
 * Tells you what parameters you can pass in when you make a parameter-related error.
 
-Hopefully there aren't *too* many bugs! ***I'm a noob after all, so use this library at your own risk.*** I'm currently working on adding namespaced functions. In addition, I'm heavily focusing on refactoring the code now.
+Hopefully there aren't *too* many bugs! ***I'm a noob after all, so use this library at your own risk.*** I'm currently working on adding namespaced functions. In addition, I'm heavily focusing on refactoring the code now. The docs are not fully updated yet.
 
 ## Philosophy
 My goal is to make a wrapper that is simple, sensible, and consistent. This project is heavily inspired by [psuedonym117's Python wrapper](https://github.com/pseudonym117/Riot-Watcher). Look at the [Usage Section](#usage) to see what I mean.

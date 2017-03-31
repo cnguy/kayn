@@ -311,7 +311,13 @@
         get: this.getLeagues.bind(this),
 
         getLeagueEntries: this.getLeagueEntries.bind(this),
-        getEntries: this.getLeagueEntries.bind(this)
+        getEntries: this.getLeagueEntries.bind(this),
+
+        getChallengers: this.getChallengers.bind(this),
+        challengers: this.getChallengers.bind(this),
+
+        getMasters: this.getMasters.bind(this),
+        masters: this.getMasters.bind(this)
       };
 
       this.Static = {
@@ -328,6 +334,58 @@
         getSummonerSpells: this.getSummonerSpells.bind(this),
         getSummonerSpell: this.getSummonerSpell.bind(this),
         getVersionData: this.getVersionData.bind(this)
+      };
+
+      this.Status = {
+        getShardStatus: this.getShardStatus.bind(this),
+        getStatus: this.getShardStatus.bind(this),
+        get: this.getShardStatus.bind(this),
+
+        getShardList: this.getShardList.bind(this),
+        getShards: this.getShardList.bind(this),
+        getAll: this.getShardList.bind(this)
+      };
+
+      this.Match = {
+        getMatch: this.getMatch.bind(this),
+        get: this.getMatch.bind(this)
+      };
+
+      this.MatchList = {
+        getMatchList: this.getMatchList.bind(this),
+        get: this.getMatchList.bind(this)
+      };
+
+      this.RunesMasteries = {
+        getRunes: this.getRunes.bind(this),
+        runes: this.getRunes.bind(this),
+
+        getMasteries: this.getMasteries.bind(this),
+        masteries: this.getMasteries.bind(this)
+      };
+
+      this.Stats = {
+        getRankedStats: this.getRankedStats.bind(this),
+        ranked: this.getRankedStats.bind(this),
+
+        getStatsSummary: this.getStatsSummary.bind(this),
+        summary: this.getStatsSummary.bind(this)
+      };
+
+      this.Summoner = {
+        getSummoners: this.getSummoners.bind(this),
+        getAll: this.getSummoners.bind(this),
+
+        getSummoner: this.getSummoner.bind(this),
+        get: this.getSummoner.bind(this),
+
+        getSummonerNames: this.getSummonerNames.bind(this),
+        getNames: this.getSummonerNames.bind(this),
+        names: this.getSummonerNames.bind(this),
+
+        getSummonerName: this.getSummonerName.bind(this),
+        getName: this.getSummonerName.bind(this),
+        name: this.getSummonerName.bind(this)
       };
     }
 
