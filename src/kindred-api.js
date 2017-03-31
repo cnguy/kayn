@@ -5,6 +5,7 @@ const queryString = require('query-string')
 
 import RateLimit from './rate-limit'
 
+import LIMITS from './constants/limits'
 import PLATFORM_IDS from './constants/platform-ids'
 import REGIONS from './constants/regions'
 import REGIONS_BACK from './constants/regions-back'
@@ -49,8 +50,8 @@ class Kindred {
 
       this.limits = {}
 
-      if (limits === 'dev') limits = [[10, 10], [500, 600]]
-      if (limits === 'prod') limits = [[3000, 10], [180000, 600]]
+      if (limits === 'dev') limits = LIMITS.DEV
+      if (limits === 'prod') limits = LIMITS.PROD
 
       for (const region of Object.keys(REGIONS)) {
         this.limits[REGIONS[region]] = [
@@ -59,6 +60,12 @@ class Kindred {
         ]
       }
     }
+
+    this.champion = {
+      getChampions: this.getChamps.bind(this),
+      getChampion: this.getChamp.bind(this)
+    }
+    
   }
 
   canMakeRequest(region) {
@@ -238,7 +245,7 @@ class Kindred {
 
   _championMasteryRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
-      endUrl: `championmastery/location/${endUrl}`, options,
+      endUrl: `championmastery/location/${endUrl}`, region, options,
       championMastery: true
     }, cb)
   }
@@ -318,13 +325,13 @@ class Kindred {
   }
 
   /* CHAMPION-V1.2 */
-  getChamps({ region, options }, cb) {
+  getChamps({ region, options } = {}, cb) {
     return this._championRequest({
       endUrl: `champion`, region, options
     }, cb = region || options ? cb : arguments[0])
   }
 
-  getChamp({ region, id, championID }, cb) {
+  getChamp({ region, id, championID } = {}, cb) {
     if (Number.isInteger(id) || Number.isInteger(championID)) {
       return this._championRequest({
         endUrl: `champion/${id || championID}`,
@@ -923,5 +930,6 @@ class Kindred {
 
 export default {
   Kindred,
-  REGIONS
+  REGIONS,
+  LIMITS
 }

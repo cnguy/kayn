@@ -77,6 +77,11 @@
     return RateLimit;
   }();
 
+  var limits = {
+    'DEV': [[10, 10], [500, 600]],
+    'PROD': [[3000, 10], [180000, 600]]
+  };
+
   var platformIds = {
     BRAZIL: 'BR1',
     EUROPE: 'EUN1',
@@ -181,7 +186,7 @@
           defaultRegion = _ref$defaultRegion === undefined ? regions.NORTH_AMERICA : _ref$defaultRegion,
           _ref$debug = _ref.debug,
           debug = _ref$debug === undefined ? false : _ref$debug,
-          limits = _ref.limits;
+          limits$$1 = _ref.limits;
 
       _classCallCheck(this, Kindred$1);
 
@@ -226,8 +231,8 @@
 
       this.debug = debug;
 
-      if (limits) {
-        var invalid = (Array.isArray(limits) && limits.length !== 2 || !checkAll.int(limits[0]) || limits[0].length !== 2 || !checkAll.int(limits[1]) || limits[1].length !== 2) && limits !== 'dev' && limits !== 'prod';
+      if (limits$$1) {
+        var invalid = (Array.isArray(limits$$1) && limits$$1.length !== 2 || !checkAll.int(limits$$1[0]) || limits$$1[0].length !== 2 || !checkAll.int(limits$$1[1]) || limits$$1[1].length !== 2) && limits$$1 !== 'dev' && limits$$1 !== 'prod';
 
         if (invalid) {
           console.log(chalk.red('Initialization of Kindred failed: Invalid ' + chalk.yellow('limits') + '. Valid examples: ' + chalk.yellow('[[10, 10], [500, 600]]')) + '.');
@@ -238,8 +243,8 @@
 
         this.limits = {};
 
-        if (limits === 'dev') limits = [[10, 10], [500, 600]];
-        if (limits === 'prod') limits = [[3000, 10], [180000, 600]];
+        if (limits$$1 === 'dev') limits$$1 = limits.DEV;
+        if (limits$$1 === 'prod') limits$$1 = limits.PROD;
 
         var _iteratorNormalCompletion2 = true;
         var _didIteratorError2 = false;
@@ -249,7 +254,7 @@
           for (var _iterator2 = Object.keys(regions)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
             var region = _step2.value;
 
-            this.limits[regions[region]] = [new RateLimit(limits[0][0], limits[0][1]), new RateLimit(limits[1][0], limits[1][1])];
+            this.limits[regions[region]] = [new RateLimit(limits$$1[0][0], limits$$1[0][1]), new RateLimit(limits$$1[1][0], limits$$1[1][1])];
           }
         } catch (err) {
           _didIteratorError2 = true;
@@ -266,6 +271,11 @@
           }
         }
       }
+
+      this.champion = {
+        getChampions: this.getChamps.bind(this),
+        getChampion: this.getChamp.bind(this)
+      };
     }
 
     _createClass(Kindred$1, [{
@@ -476,7 +486,7 @@
             options = _ref5.options;
 
         return this._baseRequest({
-          endUrl: 'championmastery/location/' + endUrl, options: options,
+          endUrl: 'championmastery/location/' + endUrl, region: region, options: options,
           championMastery: true
         }, cb);
       }
@@ -604,9 +614,12 @@
       }
     }, {
       key: 'getChamps',
-      value: function getChamps(_ref16, cb) {
-        var region = _ref16.region,
+      value: function getChamps() {
+        var _ref16 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref16.region,
             options = _ref16.options;
+
+        var cb = arguments[1];
 
         return this._championRequest({
           endUrl: 'champion', region: region, options: options
@@ -614,10 +627,13 @@
       }
     }, {
       key: 'getChamp',
-      value: function getChamp(_ref17, cb) {
-        var region = _ref17.region,
+      value: function getChamp() {
+        var _ref17 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref17.region,
             id = _ref17.id,
             championID = _ref17.championID;
+
+        var cb = arguments[1];
 
         if (Number.isInteger(id) || Number.isInteger(championID)) {
           return this._championRequest({
@@ -1613,7 +1629,8 @@
 
   var Kindred$2 = {
     Kindred: Kindred$1,
-    REGIONS: regions
+    REGIONS: regions,
+    LIMITS: limits
   };
 
   module.exports = Kindred$2;
