@@ -60,7 +60,7 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
 1. **/api/lol/{region}/v1.2/champion**
     * Retrieve all champions. (REST)
     * getChamps({ region, id (int), options (object) }, cb)
-    * Namespaced Functions: *Champion.getChampions, CurrentGame.getAll*
+    * Namespaced Functions: *Champion.getChampions, Champion.getAll*
     * Example 1: ```k.Champion.getAll({ region: REGIONS.KOREA }, rprint)```
 2. **/api/lol/{region}/v1.2/champion/{id}**
     * Retrieve champion by ID. (REST)
