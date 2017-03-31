@@ -63,7 +63,44 @@ class Kindred {
 
     this.Champion = {
       getChampions: this.getChamps.bind(this),
-      getChampion: this.getChamp.bind(this)
+      getAll: this.getChamps.bind(this),
+
+      getChampion: this.getChamp.bind(this),
+      get: this.getChamp.bind(this)
+    }
+
+    this.ChampionMastery = {
+      getChampionMastery: this.getChampMastery.bind(this),
+      get: this.getChampMastery.bind(this),
+
+      getChampionMasteries: this.getChampMasteries.bind(this),
+      getAll: this.getChampMasteries.bind(this),
+
+      getTotalChampionMasteryScore: this.getTotalChampMasteryScore.bind(this),
+      getTopChampions: this.getTopChamps.bind(this)
+    }
+
+    this.CurrentGame = {
+      getCurrentGame: this.getCurrentGame.bind(this),
+      get: this.getCurrentGame.bind(this)
+    }
+
+    this.FeaturedGames = {
+      getFeaturedGames: this.getFeaturedGames.bind(this),
+      get: this.getFeaturedGames.bind(this)
+    }
+
+    this.Game = {
+      getRecentGames: this.getRecentGames.bind(this),
+      get: this.getRecentGames.bind(this)
+    }
+
+    this.League = {
+      getLeagues: this.getLeagues.bind(this),
+      get: this.getLeagues.bind(this),
+
+      getLeagueEntries: this.getLeagueEntries.bind(this),
+      getEntries: this.getLeagueEntries.bind(this)
     }
 
     this.Static = {
