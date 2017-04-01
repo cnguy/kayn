@@ -11,14 +11,15 @@ Kindred is a thin Node.js wrapper (with an optional rate limiter) on top of [Rio
 * [Contributing and Issues](#contributing-and-issues)
 
 ## Core Features
-* All endpoints covered but one (get summoner by accountIDs).
+* All standard endpoints covered but one (get summoner by accountIDs).
+* Supports both callbacks and promises.
 * Basic rate-limiting that is enforced per region.
     * Retries on 429 and >= 500 (should it just be 500?).
         * Promise-based requests retry up to three times.
         * Callback-based requests are infinite at the moment.
 * Tells you what parameters you can pass in when you make a parameter-related error.
 
-Hopefully there aren't *too* many bugs! I'm currently focusing on refactoring the code now.
+Hopefully there aren't *too* many bugs! I'm currently focusing on refactoring the code now. I'm planning to add caching in the near future.
 
 ## Philosophy
 My goal is to make a wrapper that is simple, sensible, and consistent. This project is heavily inspired by [psuedonym117's Python wrapper](https://github.com/pseudonym117/Riot-Watcher). Look at the [Usage Section](#usage) to see what I mean.
@@ -592,7 +593,7 @@ There are a few inconsistencies and weird things within this libary that I don't
 ~~I didn't want to attach getChampion() with 'static' in any way or form since I thought it looked kind of annoying because then I would want to attach static to the other static methods as well (maybe that's better?).~~
 
 March 31: I decided to combat the above by just namespacing the functions
-(k.Static.getChampion vs k.Champion.getChampion/get).
+(k.Static.getChampion vs k.Champion.getChampion/get). The original functions are still usable though.
 
 **Right now, the code is also quite messy and there is a lot of repeated code.** Function definitions are quite long because I include many aliases as well. I haven't thought of an elegant way to make a magic function that manages to work for every single endpoint request yet.
 
