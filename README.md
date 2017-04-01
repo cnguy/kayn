@@ -258,7 +258,7 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
 2. **/api/lol/{region}/v1.4/summoner/{summonerIds}/runes**
     * Retrieve match list by match ID. (REST)
     * getRunes({ region, ids/summonerIDs/playerIDs ([int]/int), id/summonerID/playerID (int), names ([str]/str), name (str) }, cb)
-    * Namespaced Functions: *RunesMasteries.getMasteries, RunesMasteries.masteriesi*
+    * Namespaced Functions: *RunesMasteries.getMasteries, RunesMasteries.masteries*
     * Example 1: ```k.RunesMasteries.masteries({ id: 20026563 }, rprint)```
 
 ### Stats
@@ -473,14 +473,14 @@ k.getRunes({ id: 354959 })
   You'd chain it like in many other clients:
   Get the ids from the names, get the runes from the ids.
 */
-var names2 = ['Richelle', 'Grigne']
-k.getSummoners({ names: names2 }, function (err, data) {
-  var args = []
+names = ['Richelle', 'Grigne']
+k.getSummoners({ names }, function (err, data) {
+  var ids = []
 
-  for (var name of names2)
-    args.push(data[name.replace(/\s/g, '').toLowerCase()].id)
+  for (var name of names)
+    ids.push(data[name.replace(/\s/g, '').toLowerCase()].id)
   
-  k.getRunes({ ids: args }, rprint)
+  k.getRunes({ ids }, rprint)
 })
 
 /* I find that inconvenient, and so I just chain it for you in my code. */
@@ -533,15 +533,32 @@ k.getSummoners({ region: 'na', names: name }, function (err, data) {
     k.getMatchList({ region: 'na', id: data[name].id, options: {
       /*
         According to Riot API, query parameters that can accept multiple values
-        must be a comma separated list (or a single value), which is why I do the above 'join'.
+        must be a comma separated list (or a single value), which is why I do the below 'join'.
 
-        You can also simply do 'RANKED_SOLO_5x5, RANKED_FLEX_SR'.
+        You can also simply do 'RANKED_SOLO_5x5,RANKED_FLEX_SR'.
       */
-      rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'].join(),
+      rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'].join(','),
       championIds: '67' // '267,67' or ['267', '67'].join(',')
     } }, rprint)
   }
 })
+
+/* The above example with promises. */
+var name = 'caaaaaaaaaria'
+var opts = {
+  region: 'na',
+  options: {
+    rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'].join(','),
+    championIDs: '67'
+  }
+}
+
+k.getSummoner({ name, region: opts.region })
+  .then(data => k.getMatchList(
+    Object.assign({ id: data[name].id }, opts)
+  ))
+  .then(data => console.log(data))
+  .catch(err => console.err(error))
 
 var furyMasteryId = 6111
 k.getMastery({ id: furyMasteryId }, rprint)
