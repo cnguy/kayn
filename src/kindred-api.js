@@ -64,6 +64,7 @@ class Kindred {
     this.Champion = {
       getChampions: this.getChamps.bind(this),
       getAll: this.getChamps.bind(this),
+      all: this.getChamps.bind(this),
 
       getChampion: this.getChamp.bind(this),
       get: this.getChamp.bind(this)
@@ -75,8 +76,13 @@ class Kindred {
 
       getChampionMasteries: this.getChampMasteries.bind(this),
       getAll: this.getChampMasteries.bind(this),
+      all: this.getChampMasteries.bind(this),
 
       getTotalChampionMasteryScore: this.getTotalChampMasteryScore.bind(this),
+      getTotalScore: this.getTotalChampMasteryScore.bind(this),
+      totalScore: this.getTotalChampMasteryScore.bind(this),
+      total: this.getTotalChampMasteryScore.bind(this),
+
       getTopChampions: this.getTopChamps.bind(this),
       top: this.getTopChamps.bind(this),
       best: this.getTopChamps.bind(this)
@@ -94,6 +100,7 @@ class Kindred {
 
     this.Game = {
       getRecentGames: this.getRecentGames.bind(this),
+      getRecent: this.getRecentGames.bind(this),
       get: this.getRecentGames.bind(this)
     }
 
@@ -103,6 +110,7 @@ class Kindred {
 
       getLeagueEntries: this.getLeagueEntries.bind(this),
       getEntries: this.getLeagueEntries.bind(this),
+      entries: this.getLeagueEntries.bind(this),
 
       getChallengers: this.getChallengers.bind(this),
       challengers: this.getChallengers.bind(this),
@@ -113,18 +121,55 @@ class Kindred {
 
     this.Static = {
       getChampions: this.getChampionList.bind(this),
+      champions: this.getChampionList.bind(this),
+
       getChampion: this.getChampion.bind(this),
+      champion: this.getChampion.bind(this),
+
       getItems: this.getItems.bind(this),
+      items: this.getItems.bind(this),
+
       getItem: this.getItem.bind(this),
+      item: this.getItem.bind(this),
+
       getLanguageStrings: this.getLanguageStrings.bind(this),
+      languageStrings: this.getLanguageStrings.bind(this),
+
+      getLanguages: this.getLanguages.bind(this),
+      languages: this.getLanguages.bind(this),
+
+      getMap: this.getMap.bind(this),
+      map: this.getMap.bind(this),
+
       getMasteries: this.getMasteryList.bind(this),
+      masteries: this.getMasteryList.bind(this),
+
       getMastery: this.getMastery.bind(this),
+      mastery: this.getMastery.bind(this),
+
       getRealmData: this.getRealmData.bind(this),
+      realmData: this.getRealmData.bind(this),
+      realm: this.getRealmData.bind(this),
+      realms: this.getRealmData.bind(this),
+
       getRunes: this.getRuneList.bind(this),
+      runes: this.getRuneList.bind(this),
+
       getRune: this.getRune.bind(this),
+      rune: this.getRune.bind(this),
+
       getSummonerSpells: this.getSummonerSpells.bind(this),
+      summonerSpells: this.getSummonerSpells.bind(this),
+      spells: this.getSummonerSpells.bind(this),
+
       getSummonerSpell: this.getSummonerSpell.bind(this),
-      getVersionData: this.getVersionData.bind(this)
+      summonerSpell: this.getSummonerSpell.bind(this),
+      spell: this.getSummonerSpell.bind(this),
+
+      getVersionData: this.getVersionData.bind(this),
+      versionData: this.getVersionData.bind(this),
+      version: this.getVersionData.bind(this),
+      versions: this.getVersionData.bind(this)
     }
 
     this.Status = {
@@ -134,7 +179,8 @@ class Kindred {
 
       getShardList: this.getShardList.bind(this),
       getShards: this.getShardList.bind(this),
-      getAll: this.getShardList.bind(this)
+      getAll: this.getShardList.bind(this),
+      all: this.getShardList.bind(this)
     }
 
     this.Match = {
@@ -166,6 +212,7 @@ class Kindred {
     this.Summoner = {
       getSummoners: this.getSummoners.bind(this),
       getAll: this.getSummoners.bind(this),
+      all: this.getSummoners.bind(this),
 
       getSummoner: this.getSummoner.bind(this),
       get: this.getSummoner.bind(this),
