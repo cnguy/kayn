@@ -205,11 +205,11 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
 13. **/api/lol/static-data/{region}/v1.2/summoner-spell**
     * Retrieves summoner spell list. (REST)
     * getSummonerSpells({ region, options (object) }, cb)
-    * Namespaced Functions: *Static.getSummonerSpells, Static.summonerSpells, Summoner.spells*
+    * Namespaced Functions: *Static.getSummonerSpells, Static.summonerSpells, Static.spells*
 14. **/api/lol/static-data/{region}/v1.2/summoner-spell/{id}**
     * Retrieves summoner spell by its unique id. (REST)
     * getSummonerSpell({ region, id/spellID/summonerSpellID (int), options (object) }, cb)
-    * Namespaced Functions: *Static.getSummonerSpell, Static.summonerSpell, Summoner.spell*
+    * Namespaced Functions: *Static.getSummonerSpell, Static.summonerSpell, Static.spell*
 15. **/api/lol/static-data/{region}/v1.2/versions**
     * Retrieve version data. (REST)
     * getVersionData({ region, options (object) }, cb)
