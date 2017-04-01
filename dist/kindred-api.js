@@ -414,6 +414,14 @@
         masteries: this.getMasteries.bind(this)
       };
 
+      this.Runes = {
+        get: this.getRunes.bind(this)
+      };
+
+      this.Masteries = {
+        get: this.getMasteries.bind(this)
+      };
+
       this.Stats = {
         getRankedStats: this.getRankedStats.bind(this),
         ranked: this.getRankedStats.bind(this),
@@ -777,7 +785,7 @@
 
         return this._championRequest({
           endUrl: 'champion', region: region, options: options
-        }, cb = region || options ? cb : arguments[0]);
+        }, cb = arguments.length === 2 ? cb : arguments[0]);
       }
     }, {
       key: 'getChamp',
@@ -1200,7 +1208,7 @@
 
         return this._leagueRequest({
           endUrl: 'challenger', region: region, options: options
-        }, cb = region || options ? cb : arguments[0]);
+        }, cb = arguments.length === 2 ? cb : arguments[0]);
       }
     }, {
       key: 'getMasters',
@@ -1214,7 +1222,7 @@
 
         return this._leagueRequest({
           endUrl: 'master', region: region, options: options
-        }, cb = region || options ? cb : arguments[0]);
+        }, cb = arguments.length === 2 ? cb : arguments[0]);
       }
     }, {
       key: 'getChampionList',
@@ -1225,7 +1233,7 @@
 
         var cb = arguments[1];
 
-        return this._staticRequest({ endUrl: 'champion', region: region, options: options }, cb = region || options ? cb : arguments[0]);
+        return this._staticRequest({ endUrl: 'champion', region: region, options: options }, cb = arguments.length === 2 ? cb : arguments[0]);
       }
     }, {
       key: 'getChampion',
@@ -1253,7 +1261,7 @@
 
         var cb = arguments[1];
 
-        return this._staticRequest({ endUrl: 'item', region: region, options: options }, cb = region || options ? cb : arguments[0]);
+        return this._staticRequest({ endUrl: 'item', region: region, options: options }, cb = arguments.length === 2 ? cb : arguments[0]);
       }
     }, {
       key: 'getItem',
@@ -1281,7 +1289,7 @@
 
         var cb = arguments[1];
 
-        return this._staticRequest({ endUrl: 'language-strings', region: region, options: options }, cb = region || options ? cb : arguments[0]);
+        return this._staticRequest({ endUrl: 'language-strings', region: region, options: options }, cb = arguments.length === 2 ? cb : arguments[0]);
       }
     }, {
       key: 'getLanguages',
@@ -1302,7 +1310,7 @@
 
         var cb = arguments[1];
 
-        return this._staticRequest({ endUrl: 'map', region: region, options: options }, cb = region || options ? cb : arguments[0]);
+        return this._staticRequest({ endUrl: 'map', region: region, options: options }, cb = arguments.length === 2 ? cb : arguments[0]);
       }
     }, {
       key: 'getMasteryList',
@@ -1313,7 +1321,7 @@
 
         var cb = arguments[1];
 
-        return this._staticRequest({ endUrl: 'mastery', region: region, options: options }, cb = region || options ? cb : arguments[0]);
+        return this._staticRequest({ endUrl: 'mastery', region: region, options: options }, cb = arguments.length === 2 ? cb : arguments[0]);
       }
     }, {
       key: 'getMastery',
@@ -1354,7 +1362,7 @@
 
         var cb = arguments[1];
 
-        return this._staticRequest({ endUrl: 'rune', region: region, options: options }, cb = region || options ? cb : arguments[0]);
+        return this._staticRequest({ endUrl: 'rune', region: region, options: options }, cb = arguments.length === 2 ? cb : arguments[0]);
       }
     }, {
       key: 'getRune',
@@ -1382,7 +1390,7 @@
 
         var cb = arguments[1];
 
-        return this._staticRequest({ endUrl: 'summoner-spell', region: region, options: options }, cb = region || options ? cb : arguments[0]);
+        return this._staticRequest({ endUrl: 'summoner-spell', region: region, options: options }, cb = arguments.length === 2 ? cb : arguments[0]);
       }
     }, {
       key: 'getSummonerSpell',
@@ -1414,7 +1422,7 @@
 
         var cb = arguments[1];
 
-        return this._staticRequest({ endUrl: 'versions', region: region, options: options }, cb = region || options ? cb : arguments[0]);
+        return this._staticRequest({ endUrl: 'versions', region: region, options: options }, cb = arguments.length === 2 ? cb : arguments[0]);
       }
     }, {
       key: 'getShardStatus',

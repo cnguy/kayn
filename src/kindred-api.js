@@ -193,6 +193,14 @@ class Kindred {
       masteries: this.getMasteries.bind(this)
     }
 
+    this.Runes = {
+      get: this.getRunes.bind(this)
+    }
+
+    this.Masteries = {
+      get: this.getMasteries.bind(this)
+    }
+
     this.Stats = {
       getRankedStats: this.getRankedStats.bind(this),
       ranked: this.getRankedStats.bind(this),
@@ -475,7 +483,7 @@ class Kindred {
   getChamps({ region, options } = {}, cb) {
     return this._championRequest({
       endUrl: 'champion', region, options
-    }, cb = region || options ? cb : arguments[0])
+    }, cb = arguments.length === 2 ? cb : arguments[0])
   }
 
   getChamp({
@@ -777,7 +785,7 @@ class Kindred {
   } = {}, cb) {
     return this._leagueRequest({
       endUrl: 'challenger', region, options
-    }, cb = region || options ? cb : arguments[0])
+    }, cb = arguments.length === 2 ? cb : arguments[0])
   }
 
   getMasters({
@@ -786,12 +794,12 @@ class Kindred {
   } = {}, cb) {
     return this._leagueRequest({
       endUrl: 'master', region, options
-    }, cb = region || options ? cb : arguments[0])
+    }, cb = arguments.length === 2 ? cb : arguments[0])
   }
 
   /* LOL-STATIC-DATA-V1.2 */
   getChampionList({ region, options } = {}, cb) {
-    return this._staticRequest({ endUrl: 'champion', region, options }, cb = region || options ? cb : arguments[0])
+    return this._staticRequest({ endUrl: 'champion', region, options }, cb = arguments.length === 2 ? cb : arguments[0])
   }
 
   getChampion({
@@ -810,7 +818,7 @@ class Kindred {
   }
 
   getItems({ region, options } = {}, cb) {
-    return this._staticRequest({ endUrl: 'item', region, options }, cb = region || options ? cb : arguments[0])
+    return this._staticRequest({ endUrl: 'item', region, options }, cb = arguments.length === 2 ? cb : arguments[0])
   }
 
   getItem({
@@ -829,7 +837,7 @@ class Kindred {
   }
 
   getLanguageStrings({ region, options } = {}, cb) {
-    return this._staticRequest({ endUrl: 'language-strings', region, options }, cb = region || options ? cb : arguments[0])
+    return this._staticRequest({ endUrl: 'language-strings', region, options }, cb = arguments.length === 2 ? cb : arguments[0])
   }
 
   getLanguages({ region } = {}, cb) {
@@ -837,11 +845,11 @@ class Kindred {
   }
 
   getMap({ region, options } = {}, cb) {
-    return this._staticRequest({ endUrl: 'map', region, options }, cb = region || options ? cb : arguments[0])
+    return this._staticRequest({ endUrl: 'map', region, options }, cb = arguments.length === 2 ? cb : arguments[0])
   }
 
   getMasteryList({ region, options } = {}, cb) {
-    return this._staticRequest({ endUrl: 'mastery', region, options }, cb = region || options ? cb : arguments[0])
+    return this._staticRequest({ endUrl: 'mastery', region, options }, cb = arguments.length === 2 ? cb : arguments[0])
   }
 
   getMastery({
@@ -867,7 +875,7 @@ class Kindred {
   }
 
   getRuneList({ region, options } = {}, cb) {
-    return this._staticRequest({ endUrl: 'rune', region, options }, cb = region || options ? cb : arguments[0])
+    return this._staticRequest({ endUrl: 'rune', region, options }, cb = arguments.length === 2 ? cb : arguments[0])
   }
 
   getRune({
@@ -886,7 +894,7 @@ class Kindred {
   }
 
   getSummonerSpells({ region, options } = {}, cb) {
-    return this._staticRequest({ endUrl: 'summoner-spell', region, options }, cb = region || options ? cb : arguments[0])
+    return this._staticRequest({ endUrl: 'summoner-spell', region, options }, cb = arguments.length === 2 ? cb : arguments[0])
   }
 
   getSummonerSpell({
@@ -908,7 +916,7 @@ class Kindred {
   }
 
   getVersionData({ region, options } = {}, cb) {
-    return this._staticRequest({ endUrl: 'versions', region, options }, cb = region || options ? cb : arguments[0])
+    return this._staticRequest({ endUrl: 'versions', region, options }, cb = arguments.length === 2 ? cb : arguments[0])
   }
 
   /* LOL-STATUS-V1.0 */

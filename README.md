@@ -18,7 +18,7 @@ Kindred is a thin Node.js wrapper (with an optional rate limiter) on top of [Rio
         * Callback-based requests are infinite at the moment.
 * Tells you what parameters you can pass in when you make a parameter-related error.
 
-Hopefully there aren't *too* many bugs! ***I'm a noob after all, so use this library at your own risk.*** I'm currently focusing on refactoring the code now. The docs are not fully updated yet.
+Hopefully there aren't *too* many bugs! I'm currently focusing on refactoring the code now.
 
 ## Philosophy
 My goal is to make a wrapper that is simple, sensible, and consistent. This project is heavily inspired by [psuedonym117's Python wrapper](https://github.com/pseudonym117/Riot-Watcher). Look at the [Usage Section](#usage) to see what I mean.
@@ -253,12 +253,12 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
 1. **/api/lol/{region}/v1.4/summoner/{summonerIds}/masteries**
     * Get mastery pages mapped by summoner ID for a given list of summoner IDs. (REST)
     * getMasteries({ region, ids/summonerIDs/playerIDs ([int]/int), id/summonerID/playerID (int), names ([str]/str), name (str)}, cb)
-    * Namespaced Functions: *RunesMasteries.getRunes, RunesMasteries.runes*
+    * Namespaced Functions: *RunesMasteries.getRunes, RunesMasteries.runes, Runes.get*
     * Example 1: ```k.RunesMasteries.runes({ id: 20026563 }, rprint)```
 2. **/api/lol/{region}/v1.4/summoner/{summonerIds}/runes**
     * Retrieve match list by match ID. (REST)
     * getRunes({ region, ids/summonerIDs/playerIDs ([int]/int), id/summonerID/playerID (int), names ([str]/str), name (str) }, cb)
-    * Namespaced Functions: *RunesMasteries.getMasteries, RunesMasteries.masteries*
+    * Namespaced Functions: *RunesMasteries.getMasteries, RunesMasteries.masteries, Masteries.get*
     * Example 1: ```k.RunesMasteries.masteries({ id: 20026563 }, rprint)```
 
 ### Stats
@@ -338,6 +338,8 @@ function rprint(err, data) { console.log(data) }
 */
 k.getSummoner(rprint)
 // getSummoners request FAILED; required params `ids` (array of ints), `id` (int), `names` (array of strings), or `name` (string) not passed in
+k.Summoner.get(rprint)
+// same as above
 
 k.getSummoner(rprint)
 // getSummoner request FAILED; required params `id` (int) or `name` (string) not passed in
@@ -347,6 +349,8 @@ k.getTopChamps(rprint)
 
 k.getChampMastery(rprint)
 // getChampMastery request FAILED; required params `playerID` (int) AND `championID` (int) not passed in
+k.ChampionMastery.get(rprint)
+// same as above
 
 /*
   Notice the OR and the AND!!
@@ -360,7 +364,10 @@ k.getChampMastery(rprint)
   only have optional parameters, you can simply pass your callback in.
 */
 k.getChallengers(rprint) // default region, default solo queue mode, valid
+k.League.challengers(rprint) // same as above
+
 k.getRuneList(rprint) // only optional arguments & not passing in any optional arguments, valid
+k.Static.runes(rprint)
 
 /*
     I have recently added namespacing to the methods.
@@ -465,6 +472,9 @@ k.getRunes({ ids: 354959 }, rprint)
 k.getRunes({ id: 354959 })
  .then(json => console.log(json))
  .catch(err => console.error(err))
+k.Runes.get({ id: 354959 })
+       .then(json => console.log(json))
+       .catch(err => console.log(err))
 
 /*
   But what if you want to quickly get the rune pages given
@@ -489,19 +499,18 @@ k.getRunes({ names: ['Richelle', 'Grigne'] }, rprint)
 k.getRunes({ name: 'Richelle' }, rprint)
 k.getRecentGames({ name: 'Richelle' }, rprint)
 k.getLeagues({ names: ['Richelle', 'Grigne'] }, rprint)
-/* Note: I handle that platform id stuffs. */
+
 k.getCurrentGame({ name: 'Fràe', region: REGIONS.OCEANIA }, rprint)
+k.getLeagues({ names: ['Richelle', 'Grigne'] })
+ .then(data => console.log(data))
 
-/*
-    WARNING: Currently promises are bugged for these type of chained requests
-    since I don't fully understand them yet. You'll have to chain for promises
-    still.
-*/
-var ctzName = 'contractz'
-k.getSummoner({ name: ctzName })
- .then(json => k.getMasteries({ id: json[ctzName].id }))
- .then(json => console.log(json))
-
+var name = 'Grigne'
+k.RunesMasteries.runes({ name })
+                .then(data => console.log(data))
+k.Runes.get({ name })
+       .then(data => console.log(data))
+k.Masteries.get({ name })
+       .then(data => console.log(data))
 /*
   Functions will have an options parameter that you can pass in query
   strings when applicable. Values of options should match the
