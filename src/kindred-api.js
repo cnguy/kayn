@@ -263,13 +263,18 @@ class Kindred {
     return url
   }
 
-  _baseRequest({ endUrl, region = this.defaultRegion, status = false, observerMode = false, staticReq = false, championMastery = false, options = {} }, cb) {
+  _baseRequest({
+    endUrl,
+    region = this.defaultRegion,
+    status = false, observerMode = false, staticReq = false, championMastery = false,
+    options = {}
+  }, cb) {
     const doAsync = () => {
       return new Promise((resolve, reject) => {
         const proxy = staticReq ? 'global' : region
-        
+
         const stringified = queryString.stringify(options)
-        
+
         const postfix = stringified ? '?' + stringified : ''
         const reqUrl = this._makeUrl(endUrl + postfix, proxy, staticReq, status, observerMode, championMastery)
 
@@ -283,61 +288,61 @@ class Kindred {
                 self.limits[region][1].addRequest()
               }
 
-                request({ url: reqUrl }, (error, response, body) => {
-                  if (response && body) {
-                    let statusMessage
-                    const { statusCode } = response
+              request({ url: reqUrl }, (error, response, body) => {
+                if (response && body) {
+                  let statusMessage
+                  const { statusCode } = response
 
-                    if (statusCode >= 200 && statusCode < 300)
-                      statusMessage = chalk.green(statusCode)
-                    else if (statusCode >= 400 && statusCode < 500)
-                      statusMessage = chalk.red(`${statusCode} ${getResponseMessage(statusCode)}`)
-                    else if (statusCode >= 500)
-                      statusMessage = chalk.bold.red(`${statusCode} ${getResponseMessage(statusCode)}`)
+                  if (statusCode >= 200 && statusCode < 300)
+                    statusMessage = chalk.green(statusCode)
+                  else if (statusCode >= 400 && statusCode < 500)
+                    statusMessage = chalk.red(`${statusCode} ${getResponseMessage(statusCode)}`)
+                  else if (statusCode >= 500)
+                    statusMessage = chalk.bold.red(`${statusCode} ${getResponseMessage(statusCode)}`)
 
-                    if (self.debug) {
-                      console.log(statusMessage, reqUrl)
-                      console.log({
-                        'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
-                        'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
-                        'x-rate-limit-count': response.headers['x-rate-limit-count'],
-                        'retry-after': response.headers['retry-after']
-                      })
-                      console.log()
-                    }
-                    
-                    if (callback) {
-                      if (statusCode >= 500) {
-                        if (self.debug) console.log('!!! resending request !!!')
-                        setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
-                      }
-
-                      if (statusCode === 429) {
-                        if (self.debug) console.log('!!! resending request !!!')
-                        setTimeout(() => {
-                          sendRequest.bind(self)(callback)
-                        }, (response.headers['retry-after'] * 1000) + 50)
-                      }
-
-                      if (statusCode >= 400) return callback(statusMessage + ' : ' + chalk.yellow(reqUrl))
-                      else return callback(error, JSON.parse(body))
-                    } else {
-                      if (statusCode === 500) {
-                        if (self.debug) console.log('!!! resending promise request !!!')
-                        setTimeout(() => { return reject('retry' )}, 1000)
-                      } else if (statusCode === 429) {
-                        if (self.debug) console.log('!!! resending promise request !!!')
-                        setTimeout(() => { return reject('retry') }, (response.headers['retry-after'] * 1000) + 50)
-                      } else if (error || statusCode >= 400) {
-                        return reject('err:', error, statusCode)
-                      } else {
-                        return resolve(JSON.parse(body))
-                      }
-                    }
-                  } else {
-                    console.log(error, reqUrl)
+                  if (self.debug) {
+                    console.log(statusMessage, reqUrl)
+                    console.log({
+                      'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
+                      'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
+                      'x-rate-limit-count': response.headers['x-rate-limit-count'],
+                      'retry-after': response.headers['retry-after']
+                    })
+                    console.log()
                   }
-                })
+
+                  if (callback) {
+                    if (statusCode >= 500) {
+                      if (self.debug) console.log('!!! resending request !!!')
+                      setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
+                    }
+
+                    if (statusCode === 429) {
+                      if (self.debug) console.log('!!! resending request !!!')
+                      setTimeout(() => {
+                        sendRequest.bind(self)(callback)
+                      }, (response.headers['retry-after'] * 1000) + 50)
+                    }
+
+                    if (statusCode >= 400) return callback(statusMessage + ' : ' + chalk.yellow(reqUrl))
+                    else return callback(error, JSON.parse(body))
+                  } else {
+                    if (statusCode === 500) {
+                      if (self.debug) console.log('!!! resending promise request !!!')
+                      setTimeout(() => { return reject('retry') }, 1000)
+                    } else if (statusCode === 429) {
+                      if (self.debug) console.log('!!! resending promise request !!!')
+                      setTimeout(() => { return reject('retry') }, (response.headers['retry-after'] * 1000) + 50)
+                    } else if (error || statusCode >= 400) {
+                      return reject('err:', error, statusCode)
+                    } else {
+                      return resolve(JSON.parse(body))
+                    }
+                  }
+                } else {
+                  console.log(error, reqUrl)
+                }
+              })
             } else {
               setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
             }
@@ -486,11 +491,14 @@ class Kindred {
   /* CHAMPION-V1.2 */
   getChamps({ region, options } = {}, cb) {
     return this._championRequest({
-      endUrl: `champion`, region, options
+      endUrl: 'champion', region, options
     }, cb = region || options ? cb : arguments[0])
   }
 
-  getChamp({ region, id, championID } = {}, cb) {
+  getChamp({
+    region,
+    id, championID
+  } = {}, cb) {
     if (Number.isInteger(id) || Number.isInteger(championID)) {
       return this._championRequest({
         endUrl: `champion/${id || championID}`,
@@ -505,7 +513,11 @@ class Kindred {
   }
 
   /* CHAMPIONMASTERY */
-  getChampMastery({ region = this.defaultRegion, playerID, championID, options } = {}, cb) {
+  getChampMastery({
+    region = this.defaultRegion,
+    playerID, championID,
+    options
+  } = {}, cb) {
     if (Number.isInteger(playerID) && Number.isInteger(championID)) {
       const location = PLATFORM_IDS[REGIONS_BACK[region]]
 
@@ -545,7 +557,12 @@ class Kindred {
     }
   }
 
-  getTotalChampMasteryScore({ region = this.defaultRegion, id, summonerID, playerID, name, options } = {}, cb) {
+  getTotalChampMasteryScore({
+    region = this.defaultRegion,
+    id, summonerID, playerID,
+    name,
+    options
+  } = {}, cb) {
     if (Number.isInteger(id || summonerID || playerID)) {
       const location = PLATFORM_IDS[REGIONS_BACK[region]]
 
@@ -570,7 +587,12 @@ class Kindred {
     }
   }
 
-  getTopChamps({ region = this.defaultRegion, id, summonerID, playerID, name, options } = {}, cb) {
+  getTopChamps({
+    region = this.defaultRegion,
+    id, summonerID, playerID,
+    name,
+    options
+  } = {}, cb) {
     if (Number.isInteger(id || summonerID || playerID)) {
       const location = PLATFORM_IDS[REGIONS_BACK[region]]
 
@@ -596,7 +618,11 @@ class Kindred {
   }
 
   /* CURRENT-GAME-V1.0 */
-  getCurrentGame({ region = this.defaultRegion, id, summonerID, playerID, name } = {}, cb) {
+  getCurrentGame({
+    region = this.defaultRegion,
+    id, summonerID, playerID,
+    name
+  } = {}, cb) {
     const platformId = PLATFORM_IDS[REGIONS_BACK[region]]
 
     if (Number.isInteger(id || summonerID || playerID)) {
@@ -628,7 +654,11 @@ class Kindred {
   }
 
   /* GAME-V1.3 */
-  getRecentGames({ region, id, summonerID, playerID, name } = {}, cb) {
+  getRecentGames({
+    region,
+    id, summonerID, playerID,
+    name
+  } = {}, cb) {
     if (Number.isInteger(id || summonerID || playerID)) {
       return this._gameRequest({
         endUrl: `by-summoner/${id || summonerID || playerID}/recent`,
@@ -650,7 +680,14 @@ class Kindred {
   }
 
   /* LEAGUE-V2.5 */
-  getLeagues({ region, ids, id, summonerIDs, summonerID, playerIDs, playerID, names, name, options } = {}, cb) {
+  getLeagues({
+    region,
+    ids, summonerIDs, playerIDs,
+    id, summonerID, playerID,
+    names,
+    name,
+    options
+  } = {}, cb) {
     if (checkAll.int(ids || summonerIDs || playerIDs)) {
       return this._leagueRequest({
         endUrl: `by-summoner/${(ids || summonerIDs || playerIDs).join(',')}`,
@@ -689,7 +726,13 @@ class Kindred {
     }
   }
 
-  getLeagueEntries({ region, ids, id, summonerIDs, summonerID, playerIDs, playerID, names, name } = {}, cb) {
+  getLeagueEntries({
+    region,
+    ids, summonerIDs, playerIDs,
+    id, summonerID, playerID,
+    names,
+    name
+  } = {}, cb) {
     if (checkAll.int(ids || summonerIDs || playerIDs)) {
       return this._leagueRequest({
         endUrl: `by-summoner/${(ids || summonerIDs || playerIDs).join(',')}/entry`,
@@ -727,13 +770,19 @@ class Kindred {
     }
   }
 
-  getChallengers({ region, options = { type: 'RANKED_SOLO_5x5' } } = {}, cb) {
+  getChallengers({
+    region,
+    options = { type: 'RANKED_SOLO_5x5' }
+  } = {}, cb) {
     return this._leagueRequest({
       endUrl: 'challenger', region, options
     }, cb = region || options ? cb : arguments[0])
   }
 
-  getMasters({ region, options = { type: 'RANKED_SOLO_5x5' } } = {}, cb) {
+  getMasters({
+    region,
+    options = { type: 'RANKED_SOLO_5x5' }
+  } = {}, cb) {
     return this._leagueRequest({
       endUrl: 'master', region, options
     }, cb = region || options ? cb : arguments[0])
@@ -744,7 +793,11 @@ class Kindred {
     return this._staticRequest({ endUrl: 'champion', region, options }, cb = region || options ? cb : arguments[0])
   }
 
-  getChampion({ region, id, championID, options } = {}, cb) {
+  getChampion({
+    region,
+    id, championID,
+    options
+  } = {}, cb) {
     if (Number.isInteger(id || championID)) {
       return this._staticRequest({ endUrl: `champion/${id || championID}`, region, options }, cb)
     } else {
@@ -759,7 +812,11 @@ class Kindred {
     return this._staticRequest({ endUrl: 'item', region, options }, cb = region || options ? cb : arguments[0])
   }
 
-  getItem({ region, id, itemID, options } = {}, cb) {
+  getItem({
+    region,
+    id, itemID,
+    options
+  } = {}, cb) {
     if (Number.isInteger(id || itemID)) {
       return this._staticRequest({ endUrl: `item/${id || itemID}`, region, options }, cb)
     } else {
@@ -808,7 +865,11 @@ class Kindred {
     return this._staticRequest({ endUrl: 'rune', region, options }, cb = region || options ? cb : arguments[0])
   }
 
-  getRune({ region, id, runeID, options } = {}, cb) {
+  getRune({
+    region,
+    id, runeID,
+    options
+  } = {}, cb) {
     if (Number.isInteger(id || runeID)) {
       return this._staticRequest({ endUrl: `rune/${id || runeID}`, region, options }, cb)
     } else {
@@ -823,7 +884,11 @@ class Kindred {
     return this._staticRequest({ endUrl: 'summoner-spell', region, options }, cb = region || options ? cb : arguments[0])
   }
 
-  getSummonerSpell({ region, id, spellID, summonerSpellID, options } = {}, cb) {
+  getSummonerSpell({
+    region,
+    id, spellID, summonerSpellID,
+    options
+  } = {}, cb) {
     if (Number.isInteger(id || spellID || summonerSpellID)) {
       return this._staticRequest({
         endUrl: `summoner-spell/${id || spellID || summonerSpellID}`,
@@ -851,7 +916,11 @@ class Kindred {
   }
 
   /* MATCH-V2.2 */
-  getMatch({ region, id, matchID, options = { includeTimeline: true } } = {}, cb) {
+  getMatch({
+    region,
+    id, matchID,
+    options = { includeTimeline: true }
+  } = {}, cb) {
     if (Number.isInteger(id || matchID)) {
       return this._matchRequest({ endUrl: `${id || matchID}`, region, options }, cb)
     } else {
@@ -863,7 +932,12 @@ class Kindred {
   }
 
   /* MATCHLIST-V2.2 */
-  getMatchList({ region, id, summonerID, playerID, name, options = { rankedQueues: 'RANKED_SOLO_5x5' } } = {}, cb) {
+  getMatchList({
+    region,
+    id, summonerID, playerID,
+    name,
+    options = { rankedQueues: 'RANKED_SOLO_5x5' }
+  } = {}, cb) {
     if (Number.isInteger(id || summonerID || playerID)) {
       return this._matchListRequest({
         endUrl: `${id || summonerID || playerID}`,
@@ -886,7 +960,13 @@ class Kindred {
   }
 
   /* RUNES-MASTERIES-V1.4 */
-  getRunes({ region, ids, id, summonerIDs, summonerID, playerIDs, playerID, names, name } = {}, cb) {
+  getRunes({
+    region,
+    ids, summonerIDs, playerIDs,
+    id, summonerID, playerID,
+    names,
+    name
+  } = {}, cb) {
     if (checkAll.int(ids || summonerIDs || playerIDs)) {
       return this._runesMasteriesRequest({
         endUrl: `${(ids || summonerIDs || playerIDs).join()}/runes`,
@@ -927,7 +1007,13 @@ class Kindred {
     }
   }
 
-  getMasteries({ region, ids, id, summonerIDs, summonerID, playerIDs, playerID, names, name } = {}, cb) {
+  getMasteries({
+    region,
+    ids, summonerIDs, playerIDs,
+    id, summonerID, playerID,
+    names,
+    name
+  } = {}, cb) {
     if (checkAll.int(ids || summonerIDs || playerIDs)) {
       return this._runesMasteriesRequest({
         endUrl: `${(ids || summonerIDs || playerIDs).join()}/masteries`,
@@ -969,7 +1055,12 @@ class Kindred {
   }
 
   /* STATS-V1.3 */
-  getRankedStats({ region, id, summonerID, playerID, name, options } = {}, cb) {
+  getRankedStats({
+    region,
+    id, summonerID, playerID,
+    name,
+    options
+  } = {}, cb) {
     if (Number.isInteger(id || summonerID || playerID)) {
       return this._statsRequest({
         endUrl: `${id || summonerID || playerID}/ranked`,
@@ -991,7 +1082,12 @@ class Kindred {
     }
   }
 
-  getStatsSummary({ region, id, summonerID, playerID, name, options } = {}, cb) {
+  getStatsSummary({
+    region,
+    id, summonerID, playerID,
+    name,
+    options
+  } = {}, cb) {
     if (Number.isInteger(id || summonerID || playerID)) {
       return this._statsRequest({
         endUrl: `${id || summonerID || playerID}/summary`,
@@ -1014,7 +1110,13 @@ class Kindred {
   }
 
   /* SUMMONER-V1.4 */
-  getSummoners({ region, ids, id, summonerIDs, summonerID, playerIDs, playerID, names, name } = {}, cb) {
+  getSummoners({
+    region,
+    ids, summonerIDs, playerIDs,
+    id, summonerID, playerID,
+    names,
+    name
+  } = {}, cb) {
     if (checkAll.int(ids || summonerIDs || playerIDs)) {
       return this._summonerRequest({
         endUrl: `${(ids || summonerIDs || playerIDs).join(',')}`,
@@ -1043,7 +1145,11 @@ class Kindred {
     }
   }
 
-  getSummoner({ region, id, summonerID, playerID, name } = {}, cb) {
+  getSummoner({
+    region,
+    id, summonerID, playerID,
+    name
+  } = {}, cb) {
     if (Number.isInteger(id || summonerID || playerID)) {
       return this.getSummoners({ region, ids: [id || summonerID || playerID] }, cb)
     } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
@@ -1056,7 +1162,11 @@ class Kindred {
     }
   }
 
-  getSummonerNames({ region, ids, id, summonerIDs, summonerID, playerIDs, playerID } = {}, cb) {
+  getSummonerNames({
+    region,
+    ids, summonerIDs, playerIDs,
+    id, summonerID, playerID
+  } = {}, cb) {
     if (checkAll.int(ids || summonerIDs || playerIDs)) {
       return this._summonerRequest({
         endUrl: `${(ids || summonerIDs || playerIDs).join(',')}/name`,
@@ -1075,7 +1185,9 @@ class Kindred {
     }
   }
 
-  getSummonerName({ region, id, summonerID, playerID } = {}, cb) {
+  getSummonerName({
+    region, id, summonerID, playerID
+  } = {}, cb) {
     if (Number.isInteger(id)) {
       return this.getSummonerNames({ region, id: id || summonerID || playerID }, cb)
     } else {
