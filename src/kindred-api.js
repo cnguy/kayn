@@ -11,24 +11,18 @@ import REGIONS from './constants/regions'
 import REGIONS_BACK from './constants/regions-back'
 import VERSIONS from './constants/versions'
 
-import checkAll from './helpers/array-checkers'
-import getResponseMessage from './helpers/get-response-message'
+import re from './constants/valid-summoner-name-regex'
 
-const re = XRegExp('^[0-9\\p{L} _\\.]+$')
+import checkAll from './helpers/array-checkers'
+import checkValidRegion from './helpers/check-valid-region'
+import getResponseMessage from './helpers/get-response-message'
+import invalidLimits from './helpers/limits-checker'
 
 class Kindred {
   constructor({ key, defaultRegion = REGIONS.NORTH_AMERICA, debug = false, limits }) {
     this.key = key
 
-    let foundRegion
-
-    for (const region of Object.keys(REGIONS)) {
-      if (REGIONS[region] === defaultRegion) {
-        foundRegion = true
-      }
-    }
-
-    this.defaultRegion = foundRegion ? defaultRegion : undefined
+    this.defaultRegion = checkValidRegion(defaultRegion) ? defaultRegion : undefined
 
     if (!this.defaultRegion) {
       console.log(`${chalk.red(`Initialization of Kindred failed: ${chalk.yellow(defaultRegion)} is an invalid region.`)}`)
@@ -39,9 +33,7 @@ class Kindred {
     this.debug = debug
 
     if (limits) {
-      const invalid = (Array.isArray(limits) && limits.length !== 2 || !checkAll.int(limits[0]) || limits[0].length !== 2 || !checkAll.int(limits[1]) || limits[1].length !== 2) && limits !== 'dev' && limits !== 'prod'
-
-      if (invalid) {
+      if (invalidLimits(limits)) {
         console.log(`${chalk.red(`Initialization of Kindred failed: Invalid ${chalk.yellow('limits')}. Valid examples: ${chalk.yellow('[[10, 10], [500, 600]]')}`)}.`)
         console.log(`${(chalk.red('You can also pass in one of these two strings:'))} dev/prod `)
         console.log(`${(chalk.red('and Kindred will set the limits appropriately.'))}`)
@@ -228,11 +220,7 @@ class Kindred {
   }
 
   canMakeRequest(region) {
-    if (!this.limits[region][0].requestAvailable() || !this.limits[region][1].requestAvailable()) {
-      return false
-    }
-
-    return true
+    return !(!this.limits[region][0].requestAvailable() || !this.limits[region][1].requestAvailable())
   }
 
   _sanitizeName(name) {
@@ -254,13 +242,8 @@ class Kindred {
   _makeUrl(query, region, staticReq, status, observerMode, championMastery) {
     const mid = staticReq ? '' : `${region}/`
     const prefix = !status && !observerMode && !championMastery ? `api/lol/${mid}` : ''
-
     let url = `https://${region}.api.riotgames.com/${prefix}${encodeURI(query)}`
-
-    if (url.lastIndexOf('?') === -1) url += '?'
-    else url += '&'
-    url += `api_key=${this.key}`
-    return url
+    return url + (url.lastIndexOf('?') === -1 ? '?' : '&') + `api_key=${this.key}`
   }
 
   _baseRequest({
@@ -542,12 +525,14 @@ class Kindred {
     } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
       const location = PLATFORM_IDS[REGIONS_BACK[region]]
 
-      return this.getSummoner({ name, region }, (err, data) => {
-        if (err) return cb(err)
-        return this._championMasteryRequest({
-          endUrl: `${location}/player/${data[this._sanitizeName(name)].id}/champions`,
-          region
-        }, cb)
+      return new Promise((resolve, reject) => {
+        return this.getSummoner({ name, region }, (err, data) => {
+          if (err) { cb ? cb(err) : reject(err); return }
+          return resolve(this._championMasteryRequest({
+            endUrl: `${location}/player/${data[this._sanitizeName(name)].id}/champions`,
+            region
+          }, cb))
+        })
       })
     } else {
       return this._logError(
@@ -572,12 +557,14 @@ class Kindred {
     } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
       const location = PLATFORM_IDS[REGIONS_BACK[region]]
 
-      return this.getSummoner({ name, region }, (err, data) => {
-        if (err) return cb(err)
-        return this._championMasteryRequest({
-          endUrl: `${location}/player/${data[this._sanitizeName(name)].id}/score`,
-          region
-        }, cb)
+      return new Promise((resolve, reject) => {
+        return this.getSummoner({ name, region }, (err, data) => {
+          if (err) { cb ? cb(err) : reject(err); return }
+          return resolve(this._championMasteryRequest({
+            endUrl: `${location}/player/${data[this._sanitizeName(name)].id}/score`,
+            region
+          }, cb))
+        })
       })
     } else {
       return this._logError(
@@ -602,12 +589,14 @@ class Kindred {
     } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
       const location = PLATFORM_IDS[REGIONS_BACK[region]]
 
-      return this.getSummoner({ name, region }, (err, data) => {
-        if (err) return cb(err)
-        return this._championMasteryRequest({
-          endUrl: `${location}/player/${data[this._sanitizeName(name)].id}/topchampions`,
-          region
-        }, cb)
+      return new Promise((resolve, reject) => {
+        return this.getSummoner({ name, region }, (err, data) => {
+          if (err) { cb ? cb(err) : reject(err); return }
+          return resolve(this._championMasteryRequest({
+            endUrl: `${location}/player/${data[this._sanitizeName(name)].id}/topchampions`,
+            region
+          }, cb))
+        })
       })
     } else {
       return this._logError(
@@ -631,11 +620,13 @@ class Kindred {
         platformId, region
       }, cb)
     } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
-      return this.getSummoner({ name, region }, (err, data) => {
-        if (err) return cb(err)
-        return this._currentGameRequest({
-          endUrl: `${data[this._sanitizeName(name)].id}`, platformId, region
-        }, cb)
+      return new Promise((resolve, reject) => {
+        return this.getSummoner({ name, region }, (err, data) => {
+          if (err) { cb ? cb(err) : reject(err); return }
+          return resolve(this._currentGameRequest({
+            endUrl: `${data[this._sanitizeName(name)].id}`, platformId, region
+          }, cb))
+        })
       })
     } else {
       return this._logError(
@@ -665,11 +656,13 @@ class Kindred {
         region
       }, cb)
     } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
-      return this.getSummoner({ name, region }, (err, data) => {
-        if (err) return cb(err)
-        return this._gameRequest({
-          endUrl: `by-summoner/${data[this._sanitizeName(name)].id}/recent`, region
-        }, cb)
+      return new Promise((resolve, reject) => {
+        return this.getSummoner({ name, region }, (err, data) => {
+          if (err) { cb ? cb(err) : reject(err); return }
+          return resolve(this._gameRequest({
+            endUrl: `by-summoner/${data[this._sanitizeName(name)].id}/recent`, region
+          }, cb))
+        })
       })
     } else {
       return this._logError(
@@ -699,24 +692,28 @@ class Kindred {
         region, options
       }, cb)
     } else if (checkAll.string(names)) {
-      return this.getSummoners({ names, region }, (err, data) => {
-        if (err) return cb(err)
+      return new Promise((resolve, reject) => {
+        return this.getSummoners({ names, region }, (err, data) => {
+          if (err) { cb ? cb(err) : reject(err); return }
 
-        let args = []
+          let args = []
 
-        for (let name of names)
-          args.push(data[this._sanitizeName(name)].id)
+          for (let name of names)
+            args.push(data[this._sanitizeName(name)].id)
 
-        return this._leagueRequest({ endUrl: `by-summoner/${args.join(',')}`, region, options }, cb)
+          return resolve(this._leagueRequest({ endUrl: `by-summoner/${args.join(',')}`, region, options }, cb))
+        })
       })
     } else if (typeof arguments[0] === 'object' && (typeof names === 'string' || typeof name === 'string')) {
-      return this.getSummoner({ name: names || name, region }, (err, data) => {
-        if (err) return cb(err)
+      return new Promise((resolve, reject) => {
+        return this.getSummoner({ name: names || name, region }, (err, data) => {
+          if (err) { cb ? cb(err) : reject(err); return }
 
-        return this._leagueRequest({
-          endUrl: `by-summoner/${data[this._sanitizeName(names || name)].id}`,
-          region, options
-        }, cb)
+          return resolve(this._leagueRequest({
+            endUrl: `by-summoner/${data[this._sanitizeName(names || name)].id}`,
+            region, options
+          }, cb))
+        })
       })
     } else {
       return this._logError(
@@ -744,23 +741,27 @@ class Kindred {
         region
       }, cb)
     } else if (checkAll.string(names)) {
-      return this.getSummoners({ names, region }, (err, data) => {
-        if (err) return cb(err)
+      return new Promise((resolve, reject) => {
+        return this.getSummoners({ names, region }, (err, data) => {
+          if (err) { cb ? cb(err) : reject(err); return }
 
-        let args = []
+          let args = []
 
-        for (let name of names)
-          args.push(data[this._sanitizeName(name)].id)
+          for (let name of names)
+            args.push(data[this._sanitizeName(name)].id)
 
-        return this._leagueRequest({ endUrl: `by-summoner/${args.join(',')}/entry`, region }, cb)
+          return resolve(this._leagueRequest({ endUrl: `by-summoner/${args.join(',')}/entry`, region }, cb))
+        })
       })
     } else if (typeof arguments[0] === 'object' && (typeof names === 'string' || typeof name === 'string')) {
-      return this.getSummoner({ name: names || name, region }, (err, data) => {
-        if (err) return cb(err)
-        return this._leagueRequest({
-          endUrl: `by-summoner/${data[this._sanitizeName(names || name)].id}/entry`,
-          region
-        }, cb)
+      return new Promise((resolve, reject) => {
+        return this.getSummoner({ name: names || name, region }, (err, data) => {
+          if (err) { cb ? cb(err) : reject(err); return }
+          return resolve(this._leagueRequest({
+            endUrl: `by-summoner/${data[this._sanitizeName(names || name)].id}/entry`,
+            region
+          }, cb))
+        })
       })
     } else {
       this._logError(
@@ -843,7 +844,11 @@ class Kindred {
     return this._staticRequest({ endUrl: 'mastery', region, options }, cb = region || options ? cb : arguments[0])
   }
 
-  getMastery({ region, id, masteryID, options } = {}, cb) {
+  getMastery({
+    region,
+    id, masteryID,
+    options
+  } = {}, cb) {
     if (Number.isInteger(id || masteryID)) {
       return this._staticRequest({
         endUrl: `mastery/${id || masteryID}`,
@@ -944,12 +949,14 @@ class Kindred {
         region, options
       }, cb)
     } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
-      return this.getSummoner({ name, region }, (err, data) => {
-        if (err) return cb(err)
-        return this._matchListRequest({
-          endUrl: `${data[this._sanitizeName(name)].id}`,
-          region, options
-        }, cb)
+      return new Promise((resolve, reject) => {
+        return this.getSummoner({ name, region }, (err, data) => {
+          if (err) { cb ? cb(err) : reject(err); return }
+          return resolve(this._matchListRequest({
+            endUrl: `${data[this._sanitizeName(name)].id}`,
+            region, options
+          }, cb))
+        })
       })
     } else {
       return this._logError(
@@ -978,26 +985,30 @@ class Kindred {
         region
       }, cb)
     } else if (checkAll.string(names)) {
-      return this.getSummoners({ names, region }, (err, data) => {
-        if (err) return cb(err)
+      return new Promise((resolve, reject) => {
+        return this.getSummoners({ names, region }, (err, data) => {
+          if (err) { cb ? cb(err) : reject(err); return }
 
-        let args = []
+          let args = []
 
-        for (let name of names)
-          args.push(data[this._sanitizeName(name)].id)
+          for (let name of names)
+            args.push(data[this._sanitizeName(name)].id)
 
-        return this._runesMasteriesRequest({
-          endUrl: `${args.join(',')}/runes`,
-          region
-        }, cb)
+          return resolve(this._runesMasteriesRequest({
+            endUrl: `${args.join(',')}/runes`,
+            region
+          }, cb))
+        })
       })
     } else if (typeof arguments[0] === 'object' && (typeof names === 'string' || typeof name === 'string')) {
-      return this.getSummoner({ name: names || name, region }, (err, data) => {
-        if (err) return cb(err)
-        return this._runesMasteriesRequest({
-          endUrl: `${data[this._sanitizeName(names || name)].id}/runes`,
-          region
-        }, cb)
+      return new Promise((resolve, reject) => {
+        return this.getSummoner({ name: names || name, region }, (err, data) => {
+          if (err) { cb ? cb(err) : reject(err); return }
+          return resolve(this._runesMasteriesRequest({
+            endUrl: `${data[this._sanitizeName(names || name)].id}/runes`,
+            region
+          }, cb))
+        })
       })
     } else {
       return this._logError(
@@ -1025,26 +1036,30 @@ class Kindred {
         region
       }, cb)
     } else if (checkAll.string(names)) {
-      return this.getSummoners({ names, region }, (err, data) => {
-        if (err) return cb(err)
+      return new Promise((resolve, reject) => {
+        return this.getSummoners({ names, region }, (err, data) => {
+          if (err) { cb ? cb(err) : reject(err); return }
 
-        let args = []
+          let args = []
 
-        for (let name of names)
-          args.push(data[this._sanitizeName(name)].id)
+          for (let name of names)
+            args.push(data[this._sanitizeName(name)].id)
 
-        return this._runesMasteriesRequest({
-          endUrl: `${args.join(',')}/masteries`,
-          region
-        }, cb)
+          return resolve(this._runesMasteriesRequest({
+            endUrl: `${args.join(',')}/masteries`,
+            region
+          }, cb))
+        })
       })
     } else if (typeof arguments[0] === 'object' && (typeof names === 'string' || typeof name === 'string')) {
-      return this.getSummoner({ name: names || name, region }, (err, data) => {
-        if (err) return cb(err)
-        return this._runesMasteriesRequest({
-          endUrl: `${data[this._sanitizeName(names || name)].id}/masteries`,
-          region
-        }, cb)
+      return new Promise((resolve, reject) => {
+        return this.getSummoner({ name: names || name, region }, (err, data) => {
+          if (err) { cb ? cb(err) : reject(err); return }
+          return resolve(this._runesMasteriesRequest({
+            endUrl: `${data[this._sanitizeName(names || name)].id}/masteries`,
+            region
+          }, cb))
+        })
       })
     } else {
       return this._logError(
@@ -1067,12 +1082,14 @@ class Kindred {
         region, options
       }, cb)
     } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
-      return this.getSummoner({ name, region }, (err, data) => {
-        if (err) return cb(err)
-        return this._statsRequest({
-          endUrl: `${data[this._sanitizeName(name)].id}/ranked`,
-          region, options
-        }, cb)
+      return new Promise((resolve, reject) => {
+        return this.getSummoner({ name, region }, (err, data) => {
+          if (err) { cb ? cb(err) : reject(err); return }
+          return resolve(this._statsRequest({
+            endUrl: `${data[this._sanitizeName(name)].id}/ranked`,
+            region, options
+          }, cb))
+        })
       })
     } else {
       this._logError(
@@ -1094,12 +1111,14 @@ class Kindred {
         region, options
       }, cb)
     } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
-      return this.getSummoner({ name, region }, (err, data) => {
-        if (err) return cb(err)
-        return this._statsRequest({
-          endUrl: `${data[this._sanitizeName(name)].id}/summary`,
-          region, options
-        }, cb)
+      return new Promise((resolve, reject) => {
+        return this.getSummoner({ name, region }, (err, data) => {
+          if (err) { cb ? cb(err) : reject(err); return }
+          return resolve(this._statsRequest({
+            endUrl: `${data[this._sanitizeName(name)].id}/summary`,
+            region, options
+          }, cb))
+        })
       })
     } else {
       this._logError(

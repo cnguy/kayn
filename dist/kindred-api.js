@@ -1,16 +1,16 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define('kindred-api', ['module', 'double-ended-queue', 'request', 'chalk', 'xregexp', 'query-string'], factory);
+    define('kindred-api', ['module', 'double-ended-queue', 'xregexp', 'request', 'chalk', 'xregexp', 'query-string'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(module, require('double-ended-queue'), require('request'), require('chalk'), require('xregexp'), require('query-string'));
+    factory(module, require('double-ended-queue'), require('xregexp'), require('request'), require('chalk'), require('xregexp'), require('query-string'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod, global.doubleEndedQueue, global.request, global.chalk, global.xregexp, global.queryString);
+    factory(mod, global.doubleEndedQueue, global.xregexp, global.request, global.chalk, global.xregexp, global.queryString);
     global.kindredApi = mod.exports;
   }
-})(this, function (module, Deque, request, chalk, XRegExp, queryString) {
+})(this, function (module, Deque, XRegExp$1, request, chalk, XRegExp, queryString) {
   'use strict';
 
   var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
@@ -139,6 +139,8 @@
     'SUMMONER': 1.4
   };
 
+  var re = XRegExp$1('^[0-9\\p{L} _\\.]+$');
+
   var checkAllHelpers = {
     int: function int(arr) {
       return arr.every(function (i) {
@@ -161,6 +163,35 @@
     }
   };
 
+  var check = function check(region) {
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+      for (var _iterator = Object.keys(regions)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var r = _step.value;
+
+        if (regions[r] === region) return true;
+      }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion && _iterator.return) {
+          _iterator.return();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
+      }
+    }
+
+    return false;
+  };
+
   var codes = {
     400: 'Bad Request',
     403: 'Forbidden',
@@ -177,7 +208,9 @@
     return message;
   };
 
-  var re = XRegExp('^[0-9\\p{L} _\\.]+$');
+  var check$1 = function check$1(l) {
+    return (Array.isArray(l) && l.length !== 2 || !checkAll.int(l[0]) || l[0].length !== 2 || !checkAll.int(l[1]) || l[1].length !== 2) && l !== 'dev' && l !== 'prod';
+  };
 
   var Kindred$1 = function () {
     function Kindred$1(_ref) {
@@ -192,36 +225,7 @@
 
       this.key = key;
 
-      var foundRegion = void 0;
-
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = Object.keys(regions)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var _region = _step.value;
-
-          if (regions[_region] === defaultRegion) {
-            foundRegion = true;
-          }
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
-
-      this.defaultRegion = foundRegion ? defaultRegion : undefined;
+      this.defaultRegion = check(defaultRegion) ? defaultRegion : undefined;
 
       if (!this.defaultRegion) {
         console.log('' + chalk.red('Initialization of Kindred failed: ' + chalk.yellow(defaultRegion) + ' is an invalid region.'));
@@ -232,9 +236,7 @@
       this.debug = debug;
 
       if (limits$$1) {
-        var invalid = (Array.isArray(limits$$1) && limits$$1.length !== 2 || !checkAll.int(limits$$1[0]) || limits$$1[0].length !== 2 || !checkAll.int(limits$$1[1]) || limits$$1[1].length !== 2) && limits$$1 !== 'dev' && limits$$1 !== 'prod';
-
-        if (invalid) {
+        if (check$1(limits$$1)) {
           console.log(chalk.red('Initialization of Kindred failed: Invalid ' + chalk.yellow('limits') + '. Valid examples: ' + chalk.yellow('[[10, 10], [500, 600]]')) + '.');
           console.log(chalk.red('You can also pass in one of these two strings:') + ' dev/prod ');
           console.log('' + chalk.red('and Kindred will set the limits appropriately.'));
@@ -441,11 +443,7 @@
     _createClass(Kindred$1, [{
       key: 'canMakeRequest',
       value: function canMakeRequest(region) {
-        if (!this.limits[region][0].requestAvailable() || !this.limits[region][1].requestAvailable()) {
-          return false;
-        }
-
-        return true;
+        return !(!this.limits[region][0].requestAvailable() || !this.limits[region][1].requestAvailable());
       }
     }, {
       key: '_sanitizeName',
@@ -467,12 +465,8 @@
       value: function _makeUrl(query, region, staticReq, status, observerMode, championMastery) {
         var mid = staticReq ? '' : region + '/';
         var prefix = !status && !observerMode && !championMastery ? 'api/lol/' + mid : '';
-
         var url = 'https://' + region + '.api.riotgames.com/' + prefix + encodeURI(query);
-
-        if (url.lastIndexOf('?') === -1) url += '?';else url += '&';
-        url += 'api_key=' + this.key;
-        return url;
+        return url + (url.lastIndexOf('?') === -1 ? '?' : '&') + ('api_key=' + this.key);
       }
     }, {
       key: '_baseRequest',
@@ -851,12 +845,16 @@
         } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
           var _location = platformIds[regions$1[region]];
 
-          return this.getSummoner({ name: name, region: region }, function (err, data) {
-            if (err) return cb(err);
-            return _this2._championMasteryRequest({
-              endUrl: _location + '/player/' + data[_this2._sanitizeName(name)].id + '/champions',
-              region: region
-            }, cb);
+          return new Promise(function (resolve, reject) {
+            return _this2.getSummoner({ name: name, region: region }, function (err, data) {
+              if (err) {
+                cb ? cb(err) : reject(err);return;
+              }
+              return resolve(_this2._championMasteryRequest({
+                endUrl: _location + '/player/' + data[_this2._sanitizeName(name)].id + '/champions',
+                region: region
+              }, cb));
+            });
           });
         } else {
           return this._logError(this.getChampMasteries.name, 'required params ' + chalk.yellow('`id/summonerID/playerID` (int)') + ' or ' + chalk.yellow('`name` (str)') + ' not passed in');
@@ -887,12 +885,16 @@
         } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
           var _location2 = platformIds[regions$1[region]];
 
-          return this.getSummoner({ name: name, region: region }, function (err, data) {
-            if (err) return cb(err);
-            return _this3._championMasteryRequest({
-              endUrl: _location2 + '/player/' + data[_this3._sanitizeName(name)].id + '/score',
-              region: region
-            }, cb);
+          return new Promise(function (resolve, reject) {
+            return _this3.getSummoner({ name: name, region: region }, function (err, data) {
+              if (err) {
+                cb ? cb(err) : reject(err);return;
+              }
+              return resolve(_this3._championMasteryRequest({
+                endUrl: _location2 + '/player/' + data[_this3._sanitizeName(name)].id + '/score',
+                region: region
+              }, cb));
+            });
           });
         } else {
           return this._logError(this.getTotalChampMasteryScore.name, 'required params ' + chalk.yellow('`id/summonerID/playerID` (int)') + ' or ' + chalk.yellow('`name` (str)') + ' not passed in');
@@ -923,12 +925,16 @@
         } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
           var _location3 = platformIds[regions$1[region]];
 
-          return this.getSummoner({ name: name, region: region }, function (err, data) {
-            if (err) return cb(err);
-            return _this4._championMasteryRequest({
-              endUrl: _location3 + '/player/' + data[_this4._sanitizeName(name)].id + '/topchampions',
-              region: region
-            }, cb);
+          return new Promise(function (resolve, reject) {
+            return _this4.getSummoner({ name: name, region: region }, function (err, data) {
+              if (err) {
+                cb ? cb(err) : reject(err);return;
+              }
+              return resolve(_this4._championMasteryRequest({
+                endUrl: _location3 + '/player/' + data[_this4._sanitizeName(name)].id + '/topchampions',
+                region: region
+              }, cb));
+            });
           });
         } else {
           return this._logError(this.getTopChamps.name, 'required params ' + chalk.yellow('`id/summonerID/playerID` (int)') + ' or ' + chalk.yellow('`name` (str)') + ' not passed in');
@@ -957,11 +963,15 @@
             platformId: platformId, region: region
           }, cb);
         } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
-          return this.getSummoner({ name: name, region: region }, function (err, data) {
-            if (err) return cb(err);
-            return _this5._currentGameRequest({
-              endUrl: '' + data[_this5._sanitizeName(name)].id, platformId: platformId, region: region
-            }, cb);
+          return new Promise(function (resolve, reject) {
+            return _this5.getSummoner({ name: name, region: region }, function (err, data) {
+              if (err) {
+                cb ? cb(err) : reject(err);return;
+              }
+              return resolve(_this5._currentGameRequest({
+                endUrl: '' + data[_this5._sanitizeName(name)].id, platformId: platformId, region: region
+              }, cb));
+            });
           });
         } else {
           return this._logError(this.getCurrentGame.name, 'required params ' + chalk.yellow('`id/summonerID/playerID` (int)') + ' or ' + chalk.yellow('`name` (string)') + ' not passed in');
@@ -1000,11 +1010,15 @@
             region: region
           }, cb);
         } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
-          return this.getSummoner({ name: name, region: region }, function (err, data) {
-            if (err) return cb(err);
-            return _this6._gameRequest({
-              endUrl: 'by-summoner/' + data[_this6._sanitizeName(name)].id + '/recent', region: region
-            }, cb);
+          return new Promise(function (resolve, reject) {
+            return _this6.getSummoner({ name: name, region: region }, function (err, data) {
+              if (err) {
+                cb ? cb(err) : reject(err);return;
+              }
+              return resolve(_this6._gameRequest({
+                endUrl: 'by-summoner/' + data[_this6._sanitizeName(name)].id + '/recent', region: region
+              }, cb));
+            });
           });
         } else {
           return this._logError(this.getRecentGames.name, 'required params ' + chalk.yellow('`id/summonerID/playerID` (int)') + ' or ' + chalk.yellow('`name` (string)') + ' not passed in');
@@ -1040,46 +1054,54 @@
             region: region, options: options
           }, cb);
         } else if (checkAll.string(names)) {
-          return this.getSummoners({ names: names, region: region }, function (err, data) {
-            if (err) return cb(err);
-
-            var args = [];
-
-            var _iteratorNormalCompletion3 = true;
-            var _didIteratorError3 = false;
-            var _iteratorError3 = undefined;
-
-            try {
-              for (var _iterator3 = names[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                var _name = _step3.value;
-
-                args.push(data[_this7._sanitizeName(_name)].id);
+          return new Promise(function (resolve, reject) {
+            return _this7.getSummoners({ names: names, region: region }, function (err, data) {
+              if (err) {
+                cb ? cb(err) : reject(err);return;
               }
-            } catch (err) {
-              _didIteratorError3 = true;
-              _iteratorError3 = err;
-            } finally {
+
+              var args = [];
+
+              var _iteratorNormalCompletion3 = true;
+              var _didIteratorError3 = false;
+              var _iteratorError3 = undefined;
+
               try {
-                if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                  _iterator3.return();
+                for (var _iterator3 = names[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                  var _name = _step3.value;
+
+                  args.push(data[_this7._sanitizeName(_name)].id);
                 }
+              } catch (err) {
+                _didIteratorError3 = true;
+                _iteratorError3 = err;
               } finally {
-                if (_didIteratorError3) {
-                  throw _iteratorError3;
+                try {
+                  if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                    _iterator3.return();
+                  }
+                } finally {
+                  if (_didIteratorError3) {
+                    throw _iteratorError3;
+                  }
                 }
               }
-            }
 
-            return _this7._leagueRequest({ endUrl: 'by-summoner/' + args.join(','), region: region, options: options }, cb);
+              return resolve(_this7._leagueRequest({ endUrl: 'by-summoner/' + args.join(','), region: region, options: options }, cb));
+            });
           });
         } else if (_typeof(arguments[0]) === 'object' && (typeof names === 'string' || typeof name === 'string')) {
-          return this.getSummoner({ name: names || name, region: region }, function (err, data) {
-            if (err) return cb(err);
+          return new Promise(function (resolve, reject) {
+            return _this7.getSummoner({ name: names || name, region: region }, function (err, data) {
+              if (err) {
+                cb ? cb(err) : reject(err);return;
+              }
 
-            return _this7._leagueRequest({
-              endUrl: 'by-summoner/' + data[_this7._sanitizeName(names || name)].id,
-              region: region, options: options
-            }, cb);
+              return resolve(_this7._leagueRequest({
+                endUrl: 'by-summoner/' + data[_this7._sanitizeName(names || name)].id,
+                region: region, options: options
+              }, cb));
+            });
           });
         } else {
           return this._logError(this.getLeagues.name, 'required params ' + chalk.yellow('`ids/summonerIDs/playerIDs` ([int]/int)') + ', ' + chalk.yellow('`id/summonerID/playerID` (int)') + ', ' + chalk.yellow('`names` ([str]/str)') + ', or ' + chalk.yellow('`name` (str)') + ' not passed in');
@@ -1114,45 +1136,53 @@
             region: region
           }, cb);
         } else if (checkAll.string(names)) {
-          return this.getSummoners({ names: names, region: region }, function (err, data) {
-            if (err) return cb(err);
-
-            var args = [];
-
-            var _iteratorNormalCompletion4 = true;
-            var _didIteratorError4 = false;
-            var _iteratorError4 = undefined;
-
-            try {
-              for (var _iterator4 = names[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-                var _name2 = _step4.value;
-
-                args.push(data[_this8._sanitizeName(_name2)].id);
+          return new Promise(function (resolve, reject) {
+            return _this8.getSummoners({ names: names, region: region }, function (err, data) {
+              if (err) {
+                cb ? cb(err) : reject(err);return;
               }
-            } catch (err) {
-              _didIteratorError4 = true;
-              _iteratorError4 = err;
-            } finally {
+
+              var args = [];
+
+              var _iteratorNormalCompletion4 = true;
+              var _didIteratorError4 = false;
+              var _iteratorError4 = undefined;
+
               try {
-                if (!_iteratorNormalCompletion4 && _iterator4.return) {
-                  _iterator4.return();
+                for (var _iterator4 = names[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                  var _name2 = _step4.value;
+
+                  args.push(data[_this8._sanitizeName(_name2)].id);
                 }
+              } catch (err) {
+                _didIteratorError4 = true;
+                _iteratorError4 = err;
               } finally {
-                if (_didIteratorError4) {
-                  throw _iteratorError4;
+                try {
+                  if (!_iteratorNormalCompletion4 && _iterator4.return) {
+                    _iterator4.return();
+                  }
+                } finally {
+                  if (_didIteratorError4) {
+                    throw _iteratorError4;
+                  }
                 }
               }
-            }
 
-            return _this8._leagueRequest({ endUrl: 'by-summoner/' + args.join(',') + '/entry', region: region }, cb);
+              return resolve(_this8._leagueRequest({ endUrl: 'by-summoner/' + args.join(',') + '/entry', region: region }, cb));
+            });
           });
         } else if (_typeof(arguments[0]) === 'object' && (typeof names === 'string' || typeof name === 'string')) {
-          return this.getSummoner({ name: names || name, region: region }, function (err, data) {
-            if (err) return cb(err);
-            return _this8._leagueRequest({
-              endUrl: 'by-summoner/' + data[_this8._sanitizeName(names || name)].id + '/entry',
-              region: region
-            }, cb);
+          return new Promise(function (resolve, reject) {
+            return _this8.getSummoner({ name: names || name, region: region }, function (err, data) {
+              if (err) {
+                cb ? cb(err) : reject(err);return;
+              }
+              return resolve(_this8._leagueRequest({
+                endUrl: 'by-summoner/' + data[_this8._sanitizeName(names || name)].id + '/entry',
+                region: region
+              }, cb));
+            });
           });
         } else {
           this._logError(this.getLeagueEntries.name, 'required params ' + chalk.yellow('`ids/summonerIDs/playerIDs` ([int]/int)') + ', ' + chalk.yellow('`id/summonerID/playerID` (int)') + ', ' + chalk.yellow('`names` ([str]/str)') + ', or ' + chalk.yellow('`name` (str)') + ' not passed in');
@@ -1446,12 +1476,16 @@
             region: region, options: options
           }, cb);
         } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
-          return this.getSummoner({ name: name, region: region }, function (err, data) {
-            if (err) return cb(err);
-            return _this9._matchListRequest({
-              endUrl: '' + data[_this9._sanitizeName(name)].id,
-              region: region, options: options
-            }, cb);
+          return new Promise(function (resolve, reject) {
+            return _this9.getSummoner({ name: name, region: region }, function (err, data) {
+              if (err) {
+                cb ? cb(err) : reject(err);return;
+              }
+              return resolve(_this9._matchListRequest({
+                endUrl: '' + data[_this9._sanitizeName(name)].id,
+                region: region, options: options
+              }, cb));
+            });
           });
         } else {
           return this._logError(this.getMatchList.name, 'required params ' + chalk.yellow('`id/summonerID/playerID` (int)') + ' or ' + chalk.yellow('`name` (str)') + ' not passed in');
@@ -1486,48 +1520,56 @@
             region: region
           }, cb);
         } else if (checkAll.string(names)) {
-          return this.getSummoners({ names: names, region: region }, function (err, data) {
-            if (err) return cb(err);
-
-            var args = [];
-
-            var _iteratorNormalCompletion5 = true;
-            var _didIteratorError5 = false;
-            var _iteratorError5 = undefined;
-
-            try {
-              for (var _iterator5 = names[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-                var _name3 = _step5.value;
-
-                args.push(data[_this10._sanitizeName(_name3)].id);
+          return new Promise(function (resolve, reject) {
+            return _this10.getSummoners({ names: names, region: region }, function (err, data) {
+              if (err) {
+                cb ? cb(err) : reject(err);return;
               }
-            } catch (err) {
-              _didIteratorError5 = true;
-              _iteratorError5 = err;
-            } finally {
+
+              var args = [];
+
+              var _iteratorNormalCompletion5 = true;
+              var _didIteratorError5 = false;
+              var _iteratorError5 = undefined;
+
               try {
-                if (!_iteratorNormalCompletion5 && _iterator5.return) {
-                  _iterator5.return();
+                for (var _iterator5 = names[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+                  var _name3 = _step5.value;
+
+                  args.push(data[_this10._sanitizeName(_name3)].id);
                 }
+              } catch (err) {
+                _didIteratorError5 = true;
+                _iteratorError5 = err;
               } finally {
-                if (_didIteratorError5) {
-                  throw _iteratorError5;
+                try {
+                  if (!_iteratorNormalCompletion5 && _iterator5.return) {
+                    _iterator5.return();
+                  }
+                } finally {
+                  if (_didIteratorError5) {
+                    throw _iteratorError5;
+                  }
                 }
               }
-            }
 
-            return _this10._runesMasteriesRequest({
-              endUrl: args.join(',') + '/runes',
-              region: region
-            }, cb);
+              return resolve(_this10._runesMasteriesRequest({
+                endUrl: args.join(',') + '/runes',
+                region: region
+              }, cb));
+            });
           });
         } else if (_typeof(arguments[0]) === 'object' && (typeof names === 'string' || typeof name === 'string')) {
-          return this.getSummoner({ name: names || name, region: region }, function (err, data) {
-            if (err) return cb(err);
-            return _this10._runesMasteriesRequest({
-              endUrl: data[_this10._sanitizeName(names || name)].id + '/runes',
-              region: region
-            }, cb);
+          return new Promise(function (resolve, reject) {
+            return _this10.getSummoner({ name: names || name, region: region }, function (err, data) {
+              if (err) {
+                cb ? cb(err) : reject(err);return;
+              }
+              return resolve(_this10._runesMasteriesRequest({
+                endUrl: data[_this10._sanitizeName(names || name)].id + '/runes',
+                region: region
+              }, cb));
+            });
           });
         } else {
           return this._logError(this.getRunes.name, 'required params ' + chalk.yellow('`ids/summonerIDs/playerIDs` ([int]/int)') + ', ' + chalk.yellow('`id/summonerID/playerID` (int)') + ', ' + chalk.yellow('`names` ([str]/str)') + ', or ' + chalk.yellow('`name` (str)') + ' not passed in');
@@ -1562,48 +1604,56 @@
             region: region
           }, cb);
         } else if (checkAll.string(names)) {
-          return this.getSummoners({ names: names, region: region }, function (err, data) {
-            if (err) return cb(err);
-
-            var args = [];
-
-            var _iteratorNormalCompletion6 = true;
-            var _didIteratorError6 = false;
-            var _iteratorError6 = undefined;
-
-            try {
-              for (var _iterator6 = names[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-                var _name4 = _step6.value;
-
-                args.push(data[_this11._sanitizeName(_name4)].id);
+          return new Promise(function (resolve, reject) {
+            return _this11.getSummoners({ names: names, region: region }, function (err, data) {
+              if (err) {
+                cb ? cb(err) : reject(err);return;
               }
-            } catch (err) {
-              _didIteratorError6 = true;
-              _iteratorError6 = err;
-            } finally {
+
+              var args = [];
+
+              var _iteratorNormalCompletion6 = true;
+              var _didIteratorError6 = false;
+              var _iteratorError6 = undefined;
+
               try {
-                if (!_iteratorNormalCompletion6 && _iterator6.return) {
-                  _iterator6.return();
+                for (var _iterator6 = names[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+                  var _name4 = _step6.value;
+
+                  args.push(data[_this11._sanitizeName(_name4)].id);
                 }
+              } catch (err) {
+                _didIteratorError6 = true;
+                _iteratorError6 = err;
               } finally {
-                if (_didIteratorError6) {
-                  throw _iteratorError6;
+                try {
+                  if (!_iteratorNormalCompletion6 && _iterator6.return) {
+                    _iterator6.return();
+                  }
+                } finally {
+                  if (_didIteratorError6) {
+                    throw _iteratorError6;
+                  }
                 }
               }
-            }
 
-            return _this11._runesMasteriesRequest({
-              endUrl: args.join(',') + '/masteries',
-              region: region
-            }, cb);
+              return resolve(_this11._runesMasteriesRequest({
+                endUrl: args.join(',') + '/masteries',
+                region: region
+              }, cb));
+            });
           });
         } else if (_typeof(arguments[0]) === 'object' && (typeof names === 'string' || typeof name === 'string')) {
-          return this.getSummoner({ name: names || name, region: region }, function (err, data) {
-            if (err) return cb(err);
-            return _this11._runesMasteriesRequest({
-              endUrl: data[_this11._sanitizeName(names || name)].id + '/masteries',
-              region: region
-            }, cb);
+          return new Promise(function (resolve, reject) {
+            return _this11.getSummoner({ name: names || name, region: region }, function (err, data) {
+              if (err) {
+                cb ? cb(err) : reject(err);return;
+              }
+              return resolve(_this11._runesMasteriesRequest({
+                endUrl: data[_this11._sanitizeName(names || name)].id + '/masteries',
+                region: region
+              }, cb));
+            });
           });
         } else {
           return this._logError(this.getMasteries.name, 'required params ' + chalk.yellow('`ids/summonerIDs/playerIDs` ([int]/int)') + ', ' + chalk.yellow('`id/summonerID/playerID` (int)') + ', ' + chalk.yellow('`names` ([str]/str)') + ', or ' + chalk.yellow('`name` (str)') + ' not passed in');
@@ -1630,12 +1680,16 @@
             region: region, options: options
           }, cb);
         } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
-          return this.getSummoner({ name: name, region: region }, function (err, data) {
-            if (err) return cb(err);
-            return _this12._statsRequest({
-              endUrl: data[_this12._sanitizeName(name)].id + '/ranked',
-              region: region, options: options
-            }, cb);
+          return new Promise(function (resolve, reject) {
+            return _this12.getSummoner({ name: name, region: region }, function (err, data) {
+              if (err) {
+                cb ? cb(err) : reject(err);return;
+              }
+              return resolve(_this12._statsRequest({
+                endUrl: data[_this12._sanitizeName(name)].id + '/ranked',
+                region: region, options: options
+              }, cb));
+            });
           });
         } else {
           this._logError(this.getRankedStats.name, 'required params ' + chalk.yellow('`id/summonerID/playerID` (int)') + ' or ' + chalk.yellow('`name` (string)') + ' not passed in');
@@ -1662,12 +1716,16 @@
             region: region, options: options
           }, cb);
         } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
-          return this.getSummoner({ name: name, region: region }, function (err, data) {
-            if (err) return cb(err);
-            return _this13._statsRequest({
-              endUrl: data[_this13._sanitizeName(name)].id + '/summary',
-              region: region, options: options
-            }, cb);
+          return new Promise(function (resolve, reject) {
+            return _this13.getSummoner({ name: name, region: region }, function (err, data) {
+              if (err) {
+                cb ? cb(err) : reject(err);return;
+              }
+              return resolve(_this13._statsRequest({
+                endUrl: data[_this13._sanitizeName(name)].id + '/summary',
+                region: region, options: options
+              }, cb));
+            });
           });
         } else {
           this._logError(this.getRankedStats.name, 'required params ' + chalk.yellow('`id/summonerID/playerID` (int)') + ' or ' + chalk.yellow('`name` (string)') + ' not passed in');
