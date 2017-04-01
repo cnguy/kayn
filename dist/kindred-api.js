@@ -533,7 +533,7 @@
                         console.log();
                       }
 
-                      if (callback) {
+                      if (typeof callback === 'function') {
                         if (statusCode >= 500) {
                           if (self.debug) console.log('!!! resending request !!!');
                           setTimeout(function () {
@@ -595,7 +595,7 @@
                     });
                   }
 
-                  if (cb) {
+                  if (typeof cb === 'function') {
                     if (statusCode >= 400) return cb(statusMessage + ' : ' + chalk.yellow(reqUrl));else return cb(error, JSON.parse(body));
                   } else {
                     if (error) {
@@ -1104,7 +1104,6 @@
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-
               return resolve(_this7._leagueRequest({
                 endUrl: 'by-summoner/' + data[_this7._sanitizeName(names || name)].id,
                 region: region, options: options

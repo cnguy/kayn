@@ -302,7 +302,7 @@ class Kindred {
                     console.log()
                   }
 
-                  if (callback) {
+                  if (typeof callback === 'function') {
                     if (statusCode >= 500) {
                       if (self.debug) console.log('!!! resending request !!!')
                       setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
@@ -361,7 +361,7 @@ class Kindred {
                 })
               }
 
-              if (cb) {
+              if (typeof cb === 'function') {
                 if (statusCode >= 400) return cb(statusMessage + ' : ' + chalk.yellow(reqUrl))
                 else return cb(error, JSON.parse(body))
               } else {
@@ -716,7 +716,6 @@ class Kindred {
       return new Promise((resolve, reject) => {
         return this.getSummoner({ name: names || name, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
-
           return resolve(this._leagueRequest({
             endUrl: `by-summoner/${data[this._sanitizeName(names || name)].id}`,
             region, options
