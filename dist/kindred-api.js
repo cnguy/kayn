@@ -1403,7 +1403,7 @@
         var _ref28 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref28.region,
             _ref28$options = _ref28.options,
-            options = _ref28$options === undefined ? { type: 'TEAM_BUILDER_RANKED_SOLO' } : _ref28$options;
+            options = _ref28$options === undefined ? { type: 'RANKED_SOLO_5x5' } : _ref28$options;
 
         var cb = arguments[1];
 
@@ -1417,7 +1417,7 @@
         var _ref29 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref29.region,
             _ref29$options = _ref29.options,
-            options = _ref29$options === undefined ? { type: 'TEAM_BUILDER_RANKED_SOLO' } : _ref29$options;
+            options = _ref29$options === undefined ? { type: 'RANKED_SOLO_5x5' } : _ref29$options;
 
         var cb = arguments[1];
 

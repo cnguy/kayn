@@ -884,7 +884,7 @@ class Kindred {
 
   getChallengers({
     region,
-    options = { type: 'TEAM_BUILDER_RANKED_SOLO' }
+    options = { type: 'RANKED_SOLO_5x5' }
   } = {}, cb) {
     return this._leagueRequest({
       endUrl: 'challenger', region, options
@@ -893,7 +893,7 @@ class Kindred {
 
   getMasters({
     region,
-    options = { type: 'TEAM_BUILDER_RANKED_SOLO' }
+    options = { type: 'RANKED_SOLO_5x5' }
   } = {}, cb) {
     return this._leagueRequest({
       endUrl: 'master', region, options
