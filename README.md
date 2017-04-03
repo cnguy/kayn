@@ -8,6 +8,7 @@ Kindred is a thin Node.js wrapper (with an optional rate limiter) on top of [Rio
 * [Installation](#installation)
 * [Endpoints Covered](#endpoints-covered)
 * [Usage](#usage)
+* [Caching](#caching)
 * [Contributing and Issues](#contributing-and-issues)
 
 ## Core Features
@@ -18,8 +19,9 @@ Kindred is a thin Node.js wrapper (with an optional rate limiter) on top of [Rio
         * Promise-based requests retry up to three times.
         * Callback-based requests are infinite at the moment.
 * Tells you what parameters you can pass in when you make a parameter-related error.
+* Built-in, flexible caching (in memory and redis).
 
-Hopefully there aren't *too* many bugs! I'm currently focusing on refactoring the code now. I'm planning to add caching in the near future.
+Hopefully there aren't *too* many bugs! I'm currently focusing on refactoring the code now.
 
 ## Philosophy
 My goal is to make a wrapper that is simple, sensible, and consistent. This project is heavily inspired by [psuedonym117's Python wrapper](https://github.com/pseudonym117/Riot-Watcher). Look at the [Usage Section](#usage) to see what I mean.
@@ -313,6 +315,8 @@ var KindredAPI = require('kindred-api')
 require('dotenv').config()
 var RIOT_API_KEY = process.env.RIOT_API_KEY
 var REGIONS = KindredAPI.REGIONS
+var LIMITS = KindredAPI.LIMITS
+var CACHE_TYPES = KindredAPI.CACHE_TYPES
 
 /*
   Default region for every method call is NA,
@@ -325,11 +329,15 @@ var k = new KindredAPI.Kindred({
   key: RIOT_API_KEY,
   defaultRegion: REGIONS.NORTH_AMERICA,
   debug: true, // shows status code, urls, and relevant headers
-  limits: [ [10, 10], [500, 600] ] // user key
+  limits: [ [10, 10], [500, 600] ], // user key
   // 10 requests per 10 seconds, 500 requests per 10 minutes
-
-  // You can just pass in 'dev' or 'prod' instead though.
+  // You can just pass in LIMITS.DEV, LIMITS.PROD, 'dev', or 'prod' instead though.
+  cacheOptions: CACHE_TYPES[0] // in memory
 })
+
+console.log(CACHE_TYPES)
+
+// ['in-memory-cache', 'redis']
 
 function rprint(err, data) { console.log(data) }
 
@@ -576,6 +584,64 @@ k.Static.getMastery({ id: furyMasteryId }, rprint)
 
 var msRuneId = 10002
 k.Static.getRune({ id: msRuneId }, rprint)
+```
+
+## Caching
+
+*April 2*
+I have added caching support. Right now, the library supports in-memory caching as well as
+caching with redis. These are the default timers that made sense to me.
+
+``` javascript
+const endpointCacheTimers = {
+  // defaults
+  CHAMPION: cacheTimers.MONTH,
+  CHAMPION_MASTERY: cacheTimers.SIX_HOURS,
+  CURRENT_GAME: cacheTimers.NONE,
+  FEATURED_GAMES: cacheTimers.NONE,
+  GAME: cacheTimers.HOUR,
+  LEAGUE: cacheTimers.SIX_HOURS,
+  STATIC: cacheTimers.MONTH,
+  STATUS: cacheTimers.NONE,
+  MATCH: cacheTimers.MONTH,
+  MATCH_LIST: cacheTimers.ONE_HOUR,
+  RUNES_MASTERIES: cacheTimers.HOUR,
+  STATS: cacheTimers.HOUR,
+  SUMMONER: cacheTimers.DAY
+}
+```
+
+If you pass in cacheOptions, but not how long you want each type of request
+to be cached (cacheTTL object), then by default you'll use the above timers.
+
+To pass in your own custom timers, initialize Kindred like this:
+
+``` javascript
+import TIME_CONSTANTS from KindredAPI.TIME_CONSTANTS // for convenience, has a bunch of set timers in seconds
+
+var k = new KindredAPI.Kindred({
+  key: RIOT_API_KEY,
+  defaultRegion: REGIONS.NORTH_AMERICA,
+  debug: true, // you can see if you're retrieving from cache with lack of requests showing
+  limits: [ [10, 10], [500, 600] ],
+  cacheOptions: CACHE_TYPES[0] // in-memory
+  cacheTTL :{
+    // All values in SECONDS.
+    CHAMPION: whatever,
+    CHAMPION_MASTERY: whatever,
+    CURRENT_GAME: whatever,
+    FEATURED_GAMES: whatever,
+    GAME: whatever,
+    LEAGUE: whatever,
+    STATIC: TIME_CONSTANTS.MONTH,
+    STATUS: whatever,
+    MATCH: whatever,
+    MATCH_LIST: whatever,
+    RUNES_MASTERIES: whatever,
+    STATS: whatever,
+    SUMMONER: TIME_CONSTANTS.DAY
+  }
+})
 ```
 
 ## Contributing and Issues

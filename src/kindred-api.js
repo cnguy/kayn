@@ -3,13 +3,19 @@ const chalk = require('chalk')
 const XRegExp = require('xregexp')
 const queryString = require('query-string')
 
+import IMC from './cache/in-memory-cache'
+import RC from './cache/redis-cache'
+
 import RateLimit from './rate-limit'
 
+import TIME_CONSTANTS from './cache/constants/cache-timers'
+import CACHE_TIMERS from './cache/constants/endpoint-cache-timers'
 import LIMITS from './constants/limits'
 import PLATFORM_IDS from './constants/platform-ids'
 import REGIONS from './constants/regions'
 import REGIONS_BACK from './constants/regions-back'
 import VERSIONS from './constants/versions'
+import CACHE_TYPES from './constants/caches'
 
 import re from './constants/valid-summoner-name-regex'
 
@@ -19,7 +25,11 @@ import getResponseMessage from './helpers/get-response-message'
 import invalidLimits from './helpers/limits-checker'
 
 class Kindred {
-  constructor({ key, defaultRegion = REGIONS.NORTH_AMERICA, debug = false, limits }) {
+  constructor({
+    key, defaultRegion = REGIONS.NORTH_AMERICA, debug = false,
+    limits,
+    cacheOptions, cacheTTL
+  }) {
     this.key = key
 
     this.defaultRegion = checkValidRegion(defaultRegion) ? defaultRegion : undefined
@@ -31,6 +41,38 @@ class Kindred {
     }
 
     this.debug = debug
+
+    if (!cacheOptions) {
+      this.cache = {
+        get: (args, cb) => cb(null, null),
+        set: (args, value) => { }
+      }
+    } else {
+      if (cacheOptions === CACHE_TYPES[0])
+        this.cache = new IMC()
+      else if (cacheOptions ===  CACHE_TYPES[1])
+        this.cache = new RC()
+      else
+        this.cache = cacheOptions
+      console.log(cacheTTL)
+      this.CACHE_TIMERS = cacheTTL ? cacheTTL : CACHE_TIMERS
+    }
+
+    if (!this.CACHE_TIMERS) this.CACHE_TIMERS = {
+      CHAMPION: 0,
+      CHAMPION_MASTERY: 0,
+      CURRENT_GAME: 0,
+      FEATURED_GAMES: 0,
+      GAME: 0,
+      LEAGUE: 0,
+      STATIC: 0,
+      STATUS: 0,
+      MATCH: 0,
+      MATCH_LIST: 0,
+      RUNES_MASTERIES: 0,
+      STATS: 0,
+      SUMMONER: 0
+    }
 
     if (limits) {
       if (invalidLimits(limits)) {
@@ -250,37 +292,108 @@ class Kindred {
   _makeUrl(query, region, staticReq, status, observerMode, championMastery) {
     const mid = staticReq ? '' : `${region}/`
     const prefix = !status && !observerMode && !championMastery ? `api/lol/${mid}` : ''
-    let url = `https://${region}.api.riotgames.com/${prefix}${encodeURI(query)}`
-    return url + (url.lastIndexOf('?') === -1 ? '?' : '&') + `api_key=${this.key}`
+    return `https://${region}.api.riotgames.com/${prefix}${encodeURI(query)}`
   }
 
   _baseRequest({
     endUrl,
     region = this.defaultRegion,
     status = false, observerMode = false, staticReq = false, championMastery = false,
-    options = {}
+    options = {},
+    cacheParams = {}
   }, cb) {
-    const doAsync = () => {
+    const tryRequest = () => {
       return new Promise((resolve, reject) => {
         const proxy = staticReq ? 'global' : region
-
         const stringified = queryString.stringify(options)
-
         const postfix = stringified ? '?' + stringified : ''
         const reqUrl = this._makeUrl(endUrl + postfix, proxy, staticReq, status, observerMode, championMastery)
+        const fullUrl = reqUrl + (reqUrl.lastIndexOf('?') === -1 ? '?' : '&') + `api_key=${this.key}`
 
-        if (this.limits) {
-          var self = this;
+        this.cache.get({ key: reqUrl }, (err, data) => {
+          if (data) {
+            var json = JSON.parse(data)
+            if (cb) return cb(err, json)
+            else return resolve(json)
+          } else {
+            if (this.limits) {
+              var self = this;
 
-          (function sendRequest(callback) {
-            if (self.canMakeRequest(region)) {
-              if (!staticReq) {
-                self.limits[region][0].addRequest()
-                self.limits[region][1].addRequest()
-              }
+              (function sendRequest(callback) {
+                if (self.canMakeRequest(region)) {
+                  if (!staticReq) {
+                    self.limits[region][0].addRequest()
+                    self.limits[region][1].addRequest()
+                  }
 
-              request({ url: reqUrl }, (error, response, body) => {
-                if (response && body) {
+                  request({ url: fullUrl }, (error, response, body) => {
+                    if (response && body) {
+                      let statusMessage
+                      const { statusCode } = response
+
+                      if (statusCode >= 200 && statusCode < 300)
+                        statusMessage = chalk.green(statusCode)
+                      else if (statusCode >= 400 && statusCode < 500)
+                        statusMessage = chalk.red(`${statusCode} ${getResponseMessage(statusCode)}`)
+                      else if (statusCode >= 500)
+                        statusMessage = chalk.bold.red(`${statusCode} ${getResponseMessage(statusCode)}`)
+
+                      if (self.debug) {
+                        console.log(statusMessage, fullUrl)
+                        console.log({
+                          'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
+                          'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
+                          'x-rate-limit-count': response.headers['x-rate-limit-count'],
+                          'retry-after': response.headers['retry-after']
+                        })
+                        console.log()
+                      }
+
+                      if (typeof callback === 'function') {
+                        if (statusCode >= 500) {
+                          if (self.debug) console.log('!!! resending request !!!')
+                          setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
+                        }
+
+                        if (statusCode === 429) {
+                          if (self.debug) console.log('!!! resending request !!!')
+                          setTimeout(() => {
+                            sendRequest.bind(self)(callback)
+                          }, (response.headers['retry-after'] * 1000) + 50)
+                        }
+
+                        if (statusCode >= 400) return callback(statusMessage + ' : ' + chalk.yellow(reqUrl))
+                        else {
+                          if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0)
+                            self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body)
+                          return callback(error, JSON.parse(body))
+                        }
+                      } else {
+                        if (statusCode === 500) {
+                          if (self.debug) console.log('!!! resending promise request !!!')
+                          setTimeout(() => { return reject('retry') }, 1000)
+                        } else if (statusCode === 429) {
+                          if (self.debug) console.log('!!! resending promise request !!!')
+                          setTimeout(() => { return reject('retry') }, (response.headers['retry-after'] * 1000) + 50)
+                        } else if (error || statusCode >= 400) {
+                          return reject('err:', error, statusCode)
+                        } else {
+                          if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0)
+                            self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body)
+                          return resolve(JSON.parse(body))
+                        }
+                      }
+                    } else {
+                      console.log(error, fullUrl)
+                    }
+                  })
+                } else {
+                  setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
+                }
+              })(cb)
+            } else {
+              request({ url: fullUrl }, (error, response, body) => {
+                if (response) {
                   let statusMessage
                   const { statusCode } = response
 
@@ -291,41 +404,22 @@ class Kindred {
                   else if (statusCode >= 500)
                     statusMessage = chalk.bold.red(`${statusCode} ${getResponseMessage(statusCode)}`)
 
-                  if (self.debug) {
-                    console.log(statusMessage, reqUrl)
+                  if (this.debug) {
+                    console.log(response && statusMessage, reqUrl)
                     console.log({
                       'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
                       'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
                       'x-rate-limit-count': response.headers['x-rate-limit-count'],
                       'retry-after': response.headers['retry-after']
                     })
-                    console.log()
                   }
 
-                  if (typeof callback === 'function') {
-                    if (statusCode >= 500) {
-                      if (self.debug) console.log('!!! resending request !!!')
-                      setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
-                    }
-
-                    if (statusCode === 429) {
-                      if (self.debug) console.log('!!! resending request !!!')
-                      setTimeout(() => {
-                        sendRequest.bind(self)(callback)
-                      }, (response.headers['retry-after'] * 1000) + 50)
-                    }
-
-                    if (statusCode >= 400) return callback(statusMessage + ' : ' + chalk.yellow(reqUrl))
-                    else return callback(error, JSON.parse(body))
+                  if (typeof cb === 'function') {
+                    if (statusCode >= 400) return cb(statusMessage + ' : ' + chalk.yellow(reqUrl))
+                    else return cb(error, JSON.parse(body))
                   } else {
-                    if (statusCode === 500) {
-                      if (self.debug) console.log('!!! resending promise request !!!')
-                      setTimeout(() => { return reject('retry') }, 1000)
-                    } else if (statusCode === 429) {
-                      if (self.debug) console.log('!!! resending promise request !!!')
-                      setTimeout(() => { return reject('retry') }, (response.headers['retry-after'] * 1000) + 50)
-                    } else if (error || statusCode >= 400) {
-                      return reject('err:', error, statusCode)
+                    if (error) {
+                      return reject('err:', error)
                     } else {
                       return resolve(JSON.parse(body))
                     }
@@ -334,81 +428,62 @@ class Kindred {
                   console.log(error, reqUrl)
                 }
               })
-            } else {
-              setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
             }
-          })(cb)
-        } else {
-          request({ url: reqUrl }, (error, response, body) => {
-            if (response) {
-              let statusMessage
-              const { statusCode } = response
-
-              if (statusCode >= 200 && statusCode < 300)
-                statusMessage = chalk.green(statusCode)
-              else if (statusCode >= 400 && statusCode < 500)
-                statusMessage = chalk.red(`${statusCode} ${getResponseMessage(statusCode)}`)
-              else if (statusCode >= 500)
-                statusMessage = chalk.bold.red(`${statusCode} ${getResponseMessage(statusCode)}`)
-
-              if (this.debug) {
-                console.log(response && statusMessage, reqUrl)
-                console.log({
-                  'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
-                  'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
-                  'x-rate-limit-count': response.headers['x-rate-limit-count'],
-                  'retry-after': response.headers['retry-after']
-                })
-              }
-
-              if (typeof cb === 'function') {
-                if (statusCode >= 400) return cb(statusMessage + ' : ' + chalk.yellow(reqUrl))
-                else return cb(error, JSON.parse(body))
-              } else {
-                if (error) {
-                  return reject('err:', error)
-                } else {
-                  return resolve(JSON.parse(body))
-                }
-              }
-            } else {
-              console.log(error, reqUrl)
-            }
-          })
-        }
+          }
+        })
       })
     }
 
-    if (!cb) return doAsync().catch(doAsync).catch(doAsync).catch(doAsync).then(data => data)
-    else return doAsync()
+    if (!cb) return tryRequest().catch(tryRequest).catch(tryRequest).catch(tryRequest).then(data => data)
+    else return tryRequest()
   }
 
-  _observerRequest({ endUrl, region }, cb) {
+  _observerRequest({ endUrl, region, cacheParams }, cb) {
     return this._baseRequest({
       endUrl: `observer-mode/rest/${endUrl}`,
       observerMode: true,
-      region
+      region,
+      cacheParams
     }, cb)
   }
 
   _championRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
       endUrl: `v${VERSIONS.CHAMPION}/${endUrl}`,
-      region, options
+      region, options,
+      cacheParams: {
+        ttl: this.CACHE_TIMERS.CHAMPION
+      }
     }, cb)
   }
 
   _championMasteryRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
       endUrl: `championmastery/location/${endUrl}`, region, options,
-      championMastery: true
+      championMastery: true,
+      cacheParams: {
+        ttl: this.CACHE_TIMERS.CHAMPION_MASTERY
+      }
     }, cb)
   }
 
   _currentGameRequest({ endUrl, region, platformId }, cb) {
     return this._observerRequest({
       endUrl: `consumer/getSpectatorGameInfo/${platformId}/${endUrl}`,
-      region
+      region,
+      cacheParams: {
+        ttl: this.CACHE_TIMERS.CURRENT_GAME
+      }
+    }, cb)
+  }
+
+  _featuredGamesRequest({ endUrl, region, platformId }, cb) {
+    return this._observerRequest({
+      endUrl: `${endUrl}`,
+      region,
+      cacheParams: {
+        ttl: this.CACHE_TIMERS.FEATURED_GAMES
+      }
     }, cb)
   }
 
@@ -417,7 +492,10 @@ class Kindred {
       endUrl: `static-data/${region}/v${VERSIONS.STATIC_DATA}/${endUrl}`,
       staticReq: true,
       region,
-      options
+      options,
+      cacheParams: {
+        ttl: this.CACHE_TIMERS.STATIC
+      }
     }, cb)
   }
 
@@ -425,47 +503,73 @@ class Kindred {
     return this._baseRequest({
       endUrl: `lol/status/v${VERSIONS.STATUS}/${endUrl}`,
       status: true,
-      options
+      options,
+      cacheParams: {
+        ttl: this.CACHE_TIMERS.STATUS
+      }
     }, cb)
   }
 
   _gameRequest({ endUrl, region }, cb) {
     return this._baseRequest({
-      endUrl: `v${VERSIONS.GAME}/game/${endUrl}`, region
+      endUrl: `v${VERSIONS.GAME}/game/${endUrl}`, region,
+      cacheParams: {
+        ttl: this.CACHE_TIMERS.GAME
+      }
     }, cb)
   }
 
   _leagueRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
-      endUrl: `v${VERSIONS.LEAGUE}/league/${endUrl}`, region, options
+      endUrl: `v${VERSIONS.LEAGUE}/league/${endUrl}`, region, options,
+      cacheParams: {
+        ttl: this.CACHE_TIMERS.LEAGUE
+      }
     }, cb)
   }
 
   _matchRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
-      endUrl: `v${VERSIONS.MATCH}/match/${endUrl}`, region, options
+      endUrl: `v${VERSIONS.MATCH}/match/${endUrl}`, region, options,
+      cacheParams: {
+        ttl: this.CACHE_TIMERS
+      }
     }, cb)
   }
 
   _matchListRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
-      endUrl: `v${VERSIONS.MATCH_LIST}/matchlist/by-summoner/${endUrl}`, region, options
+      endUrl: `v${VERSIONS.MATCH_LIST}/matchlist/by-summoner/${endUrl}`, region, options,
+      cacheParams: {
+        ttl: this.CACHE_TIMERS.MATCH_LIST
+      }
     }, cb)
   }
 
   _runesMasteriesRequest({ endUrl, region }, cb) {
-    return this._summonerRequest({ endUrl, region }, cb)
+    return this._summonerRequest({
+      endUrl, region,
+      cacheParams: {
+        ttl: this.CACHE_TIMERS.RUNES_MASTERIES
+      }
+    }, cb)
   }
 
   _statsRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
-      endUrl: `v${VERSIONS.STATS}/stats/by-summoner/${endUrl}`, region, options
+      endUrl: `v${VERSIONS.STATS}/stats/by-summoner/${endUrl}`, region, options,
+      cacheParams: {
+        ttl: this.CACHE_TIMERS.STATS
+      }
     }, cb)
   }
 
   _summonerRequest({ endUrl, region }, cb) {
     return this._baseRequest({
-      endUrl: `v${VERSIONS.SUMMONER}/summoner/${endUrl}`, region
+      endUrl: `v${VERSIONS.SUMMONER}/summoner/${endUrl}`, region,
+      cacheParams: {
+        ttl: this.CACHE_TIMERS.SUMMONER
+      }
     }, cb)
   }
 
@@ -646,7 +750,7 @@ class Kindred {
 
   /* FEATURED-GAMES-V1.0 */
   getFeaturedGames({ region } = {}, cb) {
-    return this._observerRequest({
+    return this._featuredGamesRequest({
       endUrl: 'featured',
       region
     }, cb = region ? cb : arguments[0])
@@ -780,7 +884,7 @@ class Kindred {
 
   getChallengers({
     region,
-    options = { type: 'RANKED_SOLO_5x5' }
+    options = { type: 'TEAM_BUILDER_RANKED_SOLO' }
   } = {}, cb) {
     return this._leagueRequest({
       endUrl: 'challenger', region, options
@@ -789,7 +893,7 @@ class Kindred {
 
   getMasters({
     region,
-    options = { type: 'RANKED_SOLO_5x5' }
+    options = { type: 'TEAM_BUILDER_RANKED_SOLO' }
   } = {}, cb) {
     return this._leagueRequest({
       endUrl: 'master', region, options
@@ -948,7 +1052,7 @@ class Kindred {
     region,
     id, summonerID, playerID,
     name,
-    options = { rankedQueues: 'RANKED_SOLO_5x5' }
+    options = { rankedQueues: 'TEAM_BUILDER_RANKED_SOLO' }
   } = {}, cb) {
     if (Number.isInteger(id || summonerID || playerID)) {
       return this._matchListRequest({
@@ -1228,5 +1332,6 @@ class Kindred {
 export default {
   Kindred,
   REGIONS,
-  LIMITS
+  LIMITS,
+  TIME_CONSTANTS
 }
