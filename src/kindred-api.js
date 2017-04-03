@@ -54,7 +54,7 @@ class Kindred {
         this.cache = new RC()
       else
         this.cache = cacheOptions
-      console.log(cacheTTL)
+
       this.CACHE_TIMERS = cacheTTL ? cacheTTL : CACHE_TIMERS
     }
 

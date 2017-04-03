@@ -351,7 +351,7 @@
         };
       } else {
         if (cacheOptions === caches[0]) this.cache = new InMemoryCache();else if (cacheOptions === caches[1]) this.cache = new RedisCache();else this.cache = cacheOptions;
-        console.log(cacheTTL);
+
         this.CACHE_TIMERS = cacheTTL ? cacheTTL : endpointCacheTimers;
       }
 
