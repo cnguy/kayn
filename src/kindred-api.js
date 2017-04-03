@@ -1333,5 +1333,6 @@ export default {
   Kindred,
   REGIONS,
   LIMITS,
-  TIME_CONSTANTS
+  TIME_CONSTANTS,
+  CACHE_TYPES
 }

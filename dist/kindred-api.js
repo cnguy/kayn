@@ -2058,7 +2058,8 @@
     Kindred: Kindred$1,
     REGIONS: regions,
     LIMITS: limits,
-    TIME_CONSTANTS: cacheTimers
+    TIME_CONSTANTS: cacheTimers,
+    CACHE_TYPES: caches
   };
 
   module.exports = Kindred$2;
