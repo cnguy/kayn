@@ -909,7 +909,7 @@
         return this._baseRequest({
           endUrl: 'v' + versions.MATCH + '/match/' + endUrl, region: region, options: options,
           cacheParams: {
-            ttl: this.CACHE_TIMERS
+            ttl: this.CACHE_TIMERS.MATCH
           }
         }, cb);
       }

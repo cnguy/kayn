@@ -380,11 +380,9 @@ k.Static.runes(rprint)
 
 /*
     I have recently added namespacing to the methods.
-    You can check out all the namespaces and the aliases in the code
-    since I didn't mention them in the endpoints-covered
-    section yet.
 
-    All the namespaces are named after the official names Riot have given them.
+    All the namespaces are named after the official endpoint names (there
+    are shorthand ones too).
 */
 k.League.getChallengers(rprint)
 k.League.challengers(rprint)

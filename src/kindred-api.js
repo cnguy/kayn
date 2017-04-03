@@ -532,7 +532,7 @@ class Kindred {
     return this._baseRequest({
       endUrl: `v${VERSIONS.MATCH}/match/${endUrl}`, region, options,
       cacheParams: {
-        ttl: this.CACHE_TIMERS
+        ttl: this.CACHE_TIMERS.MATCH
       }
     }, cb)
   }
