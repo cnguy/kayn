@@ -154,6 +154,7 @@
 
   var cacheTimers = {
     MONTH: 2592000,
+    WEEK: 604800,
     DAY: 846400,
     SIX_HOURS: 21600,
     THREE_HOURS: 10800,
@@ -174,7 +175,7 @@
     STATUS: cacheTimers.NONE,
     MATCH: cacheTimers.MONTH,
     MATCH_LIST: cacheTimers.ONE_HOUR,
-    RUNES_MASTERIES: cacheTimers.HOUR,
+    RUNES_MASTERIES: cacheTimers.WEEK,
     STATS: cacheTimers.HOUR,
     SUMMONER: cacheTimers.DAY
   };

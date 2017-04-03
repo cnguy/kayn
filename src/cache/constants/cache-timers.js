@@ -1,5 +1,6 @@
 const cacheTimers = {
   MONTH: 2592000,
+  WEEK: 604800,
   DAY: 846400,
   SIX_HOURS: 21600,
   THREE_HOURS: 10800,

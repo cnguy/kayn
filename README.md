@@ -605,7 +605,7 @@ const endpointCacheTimers = {
   STATUS: cacheTimers.NONE,
   MATCH: cacheTimers.MONTH,
   MATCH_LIST: cacheTimers.ONE_HOUR,
-  RUNES_MASTERIES: cacheTimers.HOUR,
+  RUNES_MASTERIES: cacheTimers.WEEK,
   STATS: cacheTimers.HOUR,
   SUMMONER: cacheTimers.DAY
 }
