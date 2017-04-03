@@ -1,6 +1,6 @@
 # Kindred
 
-Kindred is a thin Node.js wrapper (with an optional rate limiter) on top of [Riot Games API for League of Legends](http://www.developer.riotgames.com).
+Kindred is a thin Node.js wrapper with built-in rate-limiting and caching on top of [Riot Games API for League of Legends](http://www.developer.riotgames.com).
 
 ## Table of Contents
 * [Core Features](#core-features)
@@ -625,7 +625,7 @@ var k = new KindredAPI.Kindred({
   debug: true, // you can see if you're retrieving from cache with lack of requests showing
   limits: [ [10, 10], [500, 600] ],
   cacheOptions: CACHE_TYPES[0] // in-memory
-  cacheTTL :{
+  cacheTTL: {
     // All values in SECONDS.
     CHAMPION: whatever,
     CHAMPION_MASTERY: whatever,
