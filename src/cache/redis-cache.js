@@ -1,4 +1,4 @@
-var redis = require('redis')
+const redis = require('redis')
 
 class RedisCache {
   constructor(opts) {

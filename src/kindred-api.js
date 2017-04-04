@@ -1,6 +1,5 @@
 const request = require('request')
 const chalk = require('chalk')
-const XRegExp = require('xregexp')
 const queryString = require('query-string')
 
 import IMC from './cache/in-memory-cache'
@@ -21,8 +20,9 @@ import re from './constants/valid-summoner-name-regex'
 
 import checkAll from './helpers/array-checkers'
 import checkValidRegion from './helpers/check-valid-region'
-import getResponseMessage from './helpers/get-response-message'
+import colorizeStatusMessage from './helpers/colorize-status-message'
 import invalidLimits from './helpers/limits-checker'
+import printResponseDebug from './helpers/print-response-debug'
 
 class Kindred {
   constructor({
@@ -50,7 +50,7 @@ class Kindred {
     } else {
       if (cacheOptions === CACHE_TYPES[0])
         this.cache = new IMC()
-      else if (cacheOptions ===  CACHE_TYPES[1])
+      else if (cacheOptions === CACHE_TYPES[1])
         this.cache = new RC()
       else
         this.cache = cacheOptions
@@ -305,8 +305,8 @@ class Kindred {
     const tryRequest = () => {
       return new Promise((resolve, reject) => {
         const proxy = staticReq ? 'global' : region
-        const stringified = queryString.stringify(options)
-        const postfix = stringified ? '?' + stringified : ''
+        const stringifiedOpts = queryString.stringify(options)
+        const postfix = stringifiedOpts ? '?' + stringifiedOpts : ''
         const reqUrl = this._makeUrl(endUrl + postfix, proxy, staticReq, status, observerMode, championMastery)
         const fullUrl = reqUrl + (reqUrl.lastIndexOf('?') === -1 ? '?' : '&') + `api_key=${this.key}`
 
@@ -328,26 +328,10 @@ class Kindred {
 
                   request({ url: fullUrl }, (error, response, body) => {
                     if (response && body) {
-                      let statusMessage
                       const { statusCode } = response
+                      const statusMessage = colorizeStatusMessage(statusCode)
 
-                      if (statusCode >= 200 && statusCode < 300)
-                        statusMessage = chalk.green(statusCode)
-                      else if (statusCode >= 400 && statusCode < 500)
-                        statusMessage = chalk.red(`${statusCode} ${getResponseMessage(statusCode)}`)
-                      else if (statusCode >= 500)
-                        statusMessage = chalk.bold.red(`${statusCode} ${getResponseMessage(statusCode)}`)
-
-                      if (self.debug) {
-                        console.log(statusMessage, fullUrl)
-                        console.log({
-                          'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
-                          'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
-                          'x-rate-limit-count': response.headers['x-rate-limit-count'],
-                          'retry-after': response.headers['retry-after']
-                        })
-                        console.log()
-                      }
+                      if (self.debug) printResponseDebug(response, statusMessage, fullUrl)
 
                       if (typeof callback === 'function') {
                         if (statusCode >= 500) {
@@ -362,8 +346,9 @@ class Kindred {
                           }, (response.headers['retry-after'] * 1000) + 50)
                         }
 
-                        if (statusCode >= 400) return callback(statusMessage + ' : ' + chalk.yellow(reqUrl))
-                        else {
+                        if (statusCode >= 400) {
+                          return callback(statusMessage + ' : ' + chalk.yellow(reqUrl))
+                        } else {
                           if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0)
                             self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body)
                           return callback(error, JSON.parse(body))
@@ -394,25 +379,10 @@ class Kindred {
             } else {
               request({ url: fullUrl }, (error, response, body) => {
                 if (response) {
-                  let statusMessage
                   const { statusCode } = response
+                  const statusMessage = colorizeStatusMessage(statusCode)
 
-                  if (statusCode >= 200 && statusCode < 300)
-                    statusMessage = chalk.green(statusCode)
-                  else if (statusCode >= 400 && statusCode < 500)
-                    statusMessage = chalk.red(`${statusCode} ${getResponseMessage(statusCode)}`)
-                  else if (statusCode >= 500)
-                    statusMessage = chalk.bold.red(`${statusCode} ${getResponseMessage(statusCode)}`)
-
-                  if (this.debug) {
-                    console.log(response && statusMessage, reqUrl)
-                    console.log({
-                      'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
-                      'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
-                      'x-rate-limit-count': response.headers['x-rate-limit-count'],
-                      'retry-after': response.headers['retry-after']
-                    })
-                  }
+                  if (self.debug) printResponseDebug(response, statusMessage, fullUrl)
 
                   if (typeof cb === 'function') {
                     if (statusCode >= 400) return cb(statusMessage + ' : ' + chalk.yellow(reqUrl))
@@ -434,7 +404,9 @@ class Kindred {
       })
     }
 
-    if (!cb) return tryRequest().catch(tryRequest).catch(tryRequest).catch(tryRequest).then(data => data)
+    if (!cb) return tryRequest()
+      .catch(tryRequest).catch(tryRequest).catch(tryRequest)
+      .then(data => data)
     else return tryRequest()
   }
 
@@ -580,7 +552,11 @@ class Kindred {
   }
 
   setRegion(region) {
-    this.defaultRegion = region
+    this.defaultRegion = checkValidRegion(region) ? region : undefined
+
+    console.log(`${chalk.red(`setRegion() by Kindred failed: ${chalk.yellow(region)} is an invalid region.`)}`)
+    console.log(`${(chalk.red(`Try importing ${chalk.yellow("require('./dist/kindred-api').REGIONS")} and using one of those values instead.`))}`)
+    process.exit(1)
   }
 
   /* CHAMPION-V1.2 */
@@ -627,7 +603,12 @@ class Kindred {
     }
   }
 
-  getChampMasteries({ region = this.defaultRegion, id, summonerID, playerID, name, options } = {}, cb) {
+  getChampMasteries({
+    region = this.defaultRegion,
+    id, summonerID, playerID,
+    name,
+    options
+  } = {}, cb) {
     if (Number.isInteger(id || summonerID || playerID)) {
       const location = PLATFORM_IDS[REGIONS_BACK[region]]
 
@@ -807,13 +788,12 @@ class Kindred {
       return new Promise((resolve, reject) => {
         return this.getSummoners({ names, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
+          const ids = names.map(name => data[this._sanitizeName(name)].id)
 
-          let args = []
-
-          for (let name of names)
-            args.push(data[this._sanitizeName(name)].id)
-
-          return resolve(this._leagueRequest({ endUrl: `by-summoner/${args.join(',')}`, region, options }, cb))
+          return resolve(this._leagueRequest({
+            endUrl: `by-summoner/${ids.join(',')}`,
+            region, options
+          }, cb))
         })
       })
     } else if (typeof arguments[0] === 'object' && (typeof names === 'string' || typeof name === 'string')) {
@@ -855,13 +835,12 @@ class Kindred {
       return new Promise((resolve, reject) => {
         return this.getSummoners({ names, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
+          const ids = names.map(name => data[this._sanitizeName(name)].id)
 
-          let args = []
-
-          for (let name of names)
-            args.push(data[this._sanitizeName(name)].id)
-
-          return resolve(this._leagueRequest({ endUrl: `by-summoner/${args.join(',')}/entry`, region }, cb))
+          return resolve(this._leagueRequest({
+            endUrl: `by-summoner/${ids.join(',')}/entry`,
+            region
+          }, cb))
         })
       })
     } else if (typeof arguments[0] === 'object' && (typeof names === 'string' || typeof name === 'string')) {
@@ -1099,14 +1078,10 @@ class Kindred {
       return new Promise((resolve, reject) => {
         return this.getSummoners({ names, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
-
-          let args = []
-
-          for (let name of names)
-            args.push(data[this._sanitizeName(name)].id)
+          const ids = names.map(name => data[this._sanitizeName(name)].id)
 
           return resolve(this._runesMasteriesRequest({
-            endUrl: `${args.join(',')}/runes`,
+            endUrl: `${ids.join(',')}/runes`,
             region
           }, cb))
         })
@@ -1150,14 +1125,10 @@ class Kindred {
       return new Promise((resolve, reject) => {
         return this.getSummoners({ names, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
-
-          let args = []
-
-          for (let name of names)
-            args.push(data[this._sanitizeName(name)].id)
+          const ids = names.map(name => data[this._sanitizeName(name)].id)
 
           return resolve(this._runesMasteriesRequest({
-            endUrl: `${args.join(',')}/masteries`,
+            endUrl: `${ids.join(',')}/masteries`,
             region
           }, cb))
         })

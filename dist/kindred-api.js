@@ -1,16 +1,16 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define('kindred-api', ['module', 'redis', 'double-ended-queue', 'xregexp', 'request', 'chalk', 'xregexp', 'query-string'], factory);
+    define('kindred-api', ['module', 'redis', 'double-ended-queue', 'xregexp', 'chalk', 'request', 'chalk', 'query-string'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(module, require('redis'), require('double-ended-queue'), require('xregexp'), require('request'), require('chalk'), require('xregexp'), require('query-string'));
+    factory(module, require('redis'), require('double-ended-queue'), require('xregexp'), require('chalk'), require('request'), require('chalk'), require('query-string'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod, global.redis, global.doubleEndedQueue, global.xregexp, global.request, global.chalk, global.xregexp, global.queryString);
+    factory(mod, global.redis, global.doubleEndedQueue, global.xregexp, global.chalk, global.request, global.chalk, global.queryString);
     global.kindredApi = mod.exports;
   }
-})(this, function (module, redis, Deque, XRegExp$1, request, chalk, XRegExp, queryString) {
+})(this, function (module, redis, Deque, XRegExp, chalk$1, request, chalk, queryString) {
   'use strict';
 
   var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
@@ -245,7 +245,7 @@
 
   var caches = ['in-memory-cache', 'redis'];
 
-  var re = XRegExp$1('^[0-9\\p{L} _\\.]+$');
+  var re = XRegExp('^[0-9\\p{L} _\\.]+$');
 
   var checkAllHelpers = {
     int: function int(arr) {
@@ -314,8 +314,25 @@
     return message;
   };
 
+  var statusCodeBisector = [200, 400, 500];
+
+  var colorizeStatusMessage = function colorizeStatusMessage(statusCode) {
+    if (statusCode >= statusCodeBisector[0] && statusCode <= statusCodeBisector[1]) return chalk$1.green(statusCode);else if (statusCode >= statusCodeBisector[1] && statusCode <= statusCodeBisector[2]) return chalk$1.red(statusCode + ' ' + getResponseMessage(statusCode));else return chalk$1.bold.red(statusCode + ' ' + getResponseMessage(statusCode));
+  };
+
   var check$1 = function check$1(l) {
     return (Array.isArray(l) && l.length !== 2 || !checkAll.int(l[0]) || l[0].length !== 2 || !checkAll.int(l[1]) || l[1].length !== 2) && l !== 'dev' && l !== 'prod';
+  };
+
+  var printResponseDebug = function printResponseDebug(response, statusMessage, reqUrl) {
+    console.log(statusMessage, reqUrl);
+    console.log({
+      'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
+      'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
+      'x-rate-limit-count': response.headers['x-rate-limit-count'],
+      'retry-after': response.headers['retry-after']
+    });
+    console.log();
   };
 
   var Kindred$1 = function () {
@@ -636,8 +653,8 @@
         var tryRequest = function tryRequest() {
           return new Promise(function (resolve, reject) {
             var proxy = staticReq ? 'global' : region;
-            var stringified = queryString.stringify(options);
-            var postfix = stringified ? '?' + stringified : '';
+            var stringifiedOpts = queryString.stringify(options);
+            var postfix = stringifiedOpts ? '?' + stringifiedOpts : '';
             var reqUrl = _this._makeUrl(endUrl + postfix, proxy, staticReq, status, observerMode, championMastery);
             var fullUrl = reqUrl + (reqUrl.lastIndexOf('?') === -1 ? '?' : '&') + ('api_key=' + _this.key);
 
@@ -658,22 +675,11 @@
 
                       request({ url: fullUrl }, function (error, response, body) {
                         if (response && body) {
-                          var statusMessage = void 0;
                           var statusCode = response.statusCode;
 
+                          var statusMessage = colorizeStatusMessage(statusCode);
 
-                          if (statusCode >= 200 && statusCode < 300) statusMessage = chalk.green(statusCode);else if (statusCode >= 400 && statusCode < 500) statusMessage = chalk.red(statusCode + ' ' + getResponseMessage(statusCode));else if (statusCode >= 500) statusMessage = chalk.bold.red(statusCode + ' ' + getResponseMessage(statusCode));
-
-                          if (self.debug) {
-                            console.log(statusMessage, fullUrl);
-                            console.log({
-                              'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
-                              'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
-                              'x-rate-limit-count': response.headers['x-rate-limit-count'],
-                              'retry-after': response.headers['retry-after']
-                            });
-                            console.log();
-                          }
+                          if (self.debug) printResponseDebug(response, statusMessage, fullUrl);
 
                           if (typeof callback === 'function') {
                             if (statusCode >= 500) {
@@ -690,7 +696,9 @@
                               }, response.headers['retry-after'] * 1000 + 50);
                             }
 
-                            if (statusCode >= 400) return callback(statusMessage + ' : ' + chalk.yellow(reqUrl));else {
+                            if (statusCode >= 400) {
+                              return callback(statusMessage + ' : ' + chalk.yellow(reqUrl));
+                            } else {
                               if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0) self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body);
                               return callback(error, JSON.parse(body));
                             }
@@ -725,21 +733,11 @@
                 } else {
                   request({ url: fullUrl }, function (error, response, body) {
                     if (response) {
-                      var statusMessage = void 0;
                       var statusCode = response.statusCode;
 
+                      var statusMessage = colorizeStatusMessage(statusCode);
 
-                      if (statusCode >= 200 && statusCode < 300) statusMessage = chalk.green(statusCode);else if (statusCode >= 400 && statusCode < 500) statusMessage = chalk.red(statusCode + ' ' + getResponseMessage(statusCode));else if (statusCode >= 500) statusMessage = chalk.bold.red(statusCode + ' ' + getResponseMessage(statusCode));
-
-                      if (_this.debug) {
-                        console.log(response && statusMessage, reqUrl);
-                        console.log({
-                          'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
-                          'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
-                          'x-rate-limit-count': response.headers['x-rate-limit-count'],
-                          'retry-after': response.headers['retry-after']
-                        });
-                      }
+                      if (self.debug) printResponseDebug(response, statusMessage, fullUrl);
 
                       if (typeof cb === 'function') {
                         if (statusCode >= 400) return cb(statusMessage + ' : ' + chalk.yellow(reqUrl));else return cb(error, JSON.parse(body));
@@ -975,7 +973,11 @@
     }, {
       key: 'setRegion',
       value: function setRegion(region) {
-        this.defaultRegion = region;
+        this.defaultRegion = check(region) ? region : undefined;
+
+        console.log('' + chalk.red('setRegion() by Kindred failed: ' + chalk.yellow(region) + ' is an invalid region.'));
+        console.log('' + chalk.red('Try importing ' + chalk.yellow("require('./dist/kindred-api').REGIONS") + ' and using one of those values instead.'));
+        process.exit(1);
       }
     }, {
       key: 'getChamps',
@@ -1270,35 +1272,14 @@
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
+              var ids = names.map(function (name) {
+                return data[_this7._sanitizeName(name)].id;
+              });
 
-              var args = [];
-
-              var _iteratorNormalCompletion3 = true;
-              var _didIteratorError3 = false;
-              var _iteratorError3 = undefined;
-
-              try {
-                for (var _iterator3 = names[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                  var _name = _step3.value;
-
-                  args.push(data[_this7._sanitizeName(_name)].id);
-                }
-              } catch (err) {
-                _didIteratorError3 = true;
-                _iteratorError3 = err;
-              } finally {
-                try {
-                  if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                    _iterator3.return();
-                  }
-                } finally {
-                  if (_didIteratorError3) {
-                    throw _iteratorError3;
-                  }
-                }
-              }
-
-              return resolve(_this7._leagueRequest({ endUrl: 'by-summoner/' + args.join(','), region: region, options: options }, cb));
+              return resolve(_this7._leagueRequest({
+                endUrl: 'by-summoner/' + ids.join(','),
+                region: region, options: options
+              }, cb));
             });
           });
         } else if (_typeof(arguments[0]) === 'object' && (typeof names === 'string' || typeof name === 'string')) {
@@ -1351,35 +1332,14 @@
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
+              var ids = names.map(function (name) {
+                return data[_this8._sanitizeName(name)].id;
+              });
 
-              var args = [];
-
-              var _iteratorNormalCompletion4 = true;
-              var _didIteratorError4 = false;
-              var _iteratorError4 = undefined;
-
-              try {
-                for (var _iterator4 = names[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-                  var _name2 = _step4.value;
-
-                  args.push(data[_this8._sanitizeName(_name2)].id);
-                }
-              } catch (err) {
-                _didIteratorError4 = true;
-                _iteratorError4 = err;
-              } finally {
-                try {
-                  if (!_iteratorNormalCompletion4 && _iterator4.return) {
-                    _iterator4.return();
-                  }
-                } finally {
-                  if (_didIteratorError4) {
-                    throw _iteratorError4;
-                  }
-                }
-              }
-
-              return resolve(_this8._leagueRequest({ endUrl: 'by-summoner/' + args.join(',') + '/entry', region: region }, cb));
+              return resolve(_this8._leagueRequest({
+                endUrl: 'by-summoner/' + ids.join(',') + '/entry',
+                region: region
+              }, cb));
             });
           });
         } else if (_typeof(arguments[0]) === 'object' && (typeof names === 'string' || typeof name === 'string')) {
@@ -1735,36 +1695,12 @@
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-
-              var args = [];
-
-              var _iteratorNormalCompletion5 = true;
-              var _didIteratorError5 = false;
-              var _iteratorError5 = undefined;
-
-              try {
-                for (var _iterator5 = names[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-                  var _name3 = _step5.value;
-
-                  args.push(data[_this10._sanitizeName(_name3)].id);
-                }
-              } catch (err) {
-                _didIteratorError5 = true;
-                _iteratorError5 = err;
-              } finally {
-                try {
-                  if (!_iteratorNormalCompletion5 && _iterator5.return) {
-                    _iterator5.return();
-                  }
-                } finally {
-                  if (_didIteratorError5) {
-                    throw _iteratorError5;
-                  }
-                }
-              }
+              var ids = names.map(function (name) {
+                return data[_this10._sanitizeName(name)].id;
+              });
 
               return resolve(_this10._runesMasteriesRequest({
-                endUrl: args.join(',') + '/runes',
+                endUrl: ids.join(',') + '/runes',
                 region: region
               }, cb));
             });
@@ -1819,36 +1755,12 @@
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-
-              var args = [];
-
-              var _iteratorNormalCompletion6 = true;
-              var _didIteratorError6 = false;
-              var _iteratorError6 = undefined;
-
-              try {
-                for (var _iterator6 = names[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-                  var _name4 = _step6.value;
-
-                  args.push(data[_this11._sanitizeName(_name4)].id);
-                }
-              } catch (err) {
-                _didIteratorError6 = true;
-                _iteratorError6 = err;
-              } finally {
-                try {
-                  if (!_iteratorNormalCompletion6 && _iterator6.return) {
-                    _iterator6.return();
-                  }
-                } finally {
-                  if (_didIteratorError6) {
-                    throw _iteratorError6;
-                  }
-                }
-              }
+              var ids = names.map(function (name) {
+                return data[_this11._sanitizeName(name)].id;
+              });
 
               return resolve(_this11._runesMasteriesRequest({
-                endUrl: args.join(',') + '/masteries',
+                endUrl: ids.join(',') + '/masteries',
                 region: region
               }, cb));
             });
