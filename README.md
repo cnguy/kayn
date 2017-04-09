@@ -19,7 +19,8 @@ Kindred is a thin Node.js wrapper with built-in rate-limiting and caching on top
         * Promise-based requests retry up to three times.
         * Callback-based requests are infinite at the moment.
 * Tells you what parameters you can pass in when you make a parameter-related error.
-* Built-in, flexible caching (in memory and redis).
+* Built-in, flexible caching (in-memory and redis).
+    * Customized expiration timers. You can set a timer for each endpoint type. Refer to [Caching](#caching) for more info.
 
 Hopefully there aren't *too* many bugs! I'm currently focusing on refactoring the code now.
 
@@ -323,7 +324,7 @@ var CACHE_TYPES = KindredAPI.CACHE_TYPES
   but you can set it during initialization as shown below.
   You can also change it with 'setRegion(region)' as well.
   To NOT use the built-in rate limiter, do NOT pass in anything
-  into limits.
+  into limits. Same if you don't want to use the cache (cacheOptions).
 */
 var k = new KindredAPI.Kindred({
   key: RIOT_API_KEY,
