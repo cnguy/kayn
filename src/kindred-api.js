@@ -45,7 +45,7 @@ class Kindred {
     if (!cacheOptions) {
       this.cache = {
         get: (args, cb) => cb(null, null),
-        set: (args, value) => { }
+        set: (args, value) => {}
       }
     } else {
       if (cacheOptions === CACHE_TYPES[0])
@@ -305,6 +305,13 @@ class Kindred {
     const tryRequest = () => {
       return new Promise((resolve, reject) => {
         const proxy = staticReq ? 'global' : region
+        
+        for (const key of Object.keys(options)) {
+          if (Array.isArray(options[key])) {
+            options[key] = options[key].join(',')
+          }
+        }
+
         const stringifiedOpts = queryString.stringify(options)
         const postfix = stringifiedOpts ? '?' + stringifiedOpts : ''
         const reqUrl = this._makeUrl(endUrl + postfix, proxy, staticReq, status, observerMode, championMastery)
@@ -385,14 +392,15 @@ class Kindred {
                   if (self.debug) printResponseDebug(response, statusMessage, fullUrl)
 
                   if (typeof cb === 'function') {
-                    if (statusCode >= 400) return cb(statusMessage + ' : ' + chalk.yellow(reqUrl))
-                    else return cb(error, JSON.parse(body))
+                    if (statusCode >= 400)
+                      return cb(statusMessage + ' : ' + chalk.yellow(reqUrl))
+                    else
+                      return cb(error, JSON.parse(body))
                   } else {
-                    if (error) {
+                    if (error)
                       return reject('err:', error)
-                    } else {
+                    else
                       return resolve(JSON.parse(body))
-                    }
                   }
                 } else {
                   console.log(error, reqUrl)
@@ -405,9 +413,10 @@ class Kindred {
     }
 
     if (!cb) return tryRequest()
-      .catch(tryRequest).catch(tryRequest).catch(tryRequest)
-      .then(data => data)
-    else return tryRequest()
+                      .catch(tryRequest).catch(tryRequest).catch(tryRequest)
+                      .then(data => data)
+
+    return tryRequest()
   }
 
   _observerRequest({ endUrl, region, cacheParams }, cb) {
@@ -1287,7 +1296,8 @@ class Kindred {
   }
 
   getSummonerName({
-    region, id, summonerID, playerID
+    region,
+    id, summonerID, playerID
   } = {}, cb) {
     if (Number.isInteger(id)) {
       return this.getSummonerNames({ region, id: id || summonerID || playerID }, cb)

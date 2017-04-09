@@ -549,12 +549,19 @@ k.getSummoners({ region: 'na', names: name }, function (err, data) {
     k.getMatchList({ region: 'na', id: data[name].id, options: {
       /*
         According to Riot API, query parameters that can accept multiple values
-        must be a comma separated list (or a single value), which is why I do the below 'join'.
+        must be a comma separated list (or a single value), which is why one can do the below join.
 
-        You can also simply do 'RANKED_SOLO_5x5,RANKED_FLEX_SR'.
+        However, both these options are inconvenient, and so I check if you pass in array values
+        for every option parameter, and manually join it for you. You can still pass in string values
+        if you want though.
+
+        Note, for arrays of values that are conceptually integers,
+        both strings and integers work because they're joined together as a string anyways.
       */
-      rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'].join(','),
-      championIds: '67' // '267,67' or ['267', '67'].join(',')
+      // rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'].join(','), STILL VALID
+      // championIds: '67' // '267,67' or ['267', '67'].join(',') STILL VALID
+      rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'], // valid
+      championIDs: [67, 62, '61'] // valid
     } }, rprint)
   }
 })
@@ -578,10 +585,10 @@ k.getSummoner({ name, region: opts.region })
 
 var furyMasteryId = 6111
 k.getMastery({ id: furyMasteryId }, rprint)
-k.Static.getMastery({ id: furyMasteryId }, rprint)
+k.Static.mastery({ id: furyMasteryId }, rprint)
 
 var msRuneId = 10002
-k.Static.getRune({ id: msRuneId }, rprint)
+k.Static.rune({ id: msRuneId }, rprint)
 ```
 
 ## Caching

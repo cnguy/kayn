@@ -653,6 +653,34 @@
         var tryRequest = function tryRequest() {
           return new Promise(function (resolve, reject) {
             var proxy = staticReq ? 'global' : region;
+
+            var _iteratorNormalCompletion3 = true;
+            var _didIteratorError3 = false;
+            var _iteratorError3 = undefined;
+
+            try {
+              for (var _iterator3 = Object.keys(options)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                var key = _step3.value;
+
+                if (Array.isArray(options[key])) {
+                  options[key] = options[key].join(',');
+                }
+              }
+            } catch (err) {
+              _didIteratorError3 = true;
+              _iteratorError3 = err;
+            } finally {
+              try {
+                if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                  _iterator3.return();
+                }
+              } finally {
+                if (_didIteratorError3) {
+                  throw _iteratorError3;
+                }
+              }
+            }
+
             var stringifiedOpts = queryString.stringify(options);
             var postfix = stringifiedOpts ? '?' + stringifiedOpts : '';
             var reqUrl = _this._makeUrl(endUrl + postfix, proxy, staticReq, status, observerMode, championMastery);
@@ -742,11 +770,7 @@
                       if (typeof cb === 'function') {
                         if (statusCode >= 400) return cb(statusMessage + ' : ' + chalk.yellow(reqUrl));else return cb(error, JSON.parse(body));
                       } else {
-                        if (error) {
-                          return reject('err:', error);
-                        } else {
-                          return resolve(JSON.parse(body));
-                        }
+                        if (error) return reject('err:', error);else return resolve(JSON.parse(body));
                       }
                     } else {
                       console.log(error, reqUrl);
@@ -760,7 +784,9 @@
 
         if (!cb) return tryRequest().catch(tryRequest).catch(tryRequest).catch(tryRequest).then(function (data) {
           return data;
-        });else return tryRequest();
+        });
+
+        return tryRequest();
       }
     }, {
       key: '_observerRequest',
