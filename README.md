@@ -27,12 +27,6 @@ Hopefully there aren't *too* many bugs! I'm currently focusing on refactoring th
 ## Philosophy
 My goal is to make a wrapper that is simple, sensible, and consistent. This project is heavily inspired by [psuedonym117's Python wrapper](https://github.com/pseudonym117/Riot-Watcher). Look at the [Usage Section](#usage) to see what I mean.
 
-This is my first try at making an API wrapper. I am open to any advice and help!
-
-***March 28, 2017***
-
-**I'm pretty proud of the end result. The rate limiting isn't the best, but it does work and is enforced per region! Also, the method names are kinda iffy (minor inconsistencies), but it works really well for my other project and for when I need a quick script. I'll try to improve this library over the next few weeks.**
-
 ## Installation
 ```
 yarn add kindred-api
@@ -145,13 +139,14 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
     * Example 1: ```k.League.getEntries({ summonerID: 20026563 }, rprint)```
 3. **/api/lol/{region}/v2.5/league/challenger**
     * Get challenger tier leagues. (REST)
-    * getChallengers({ region, options = { type: 'RANKED_SOLO_5x5' } }, cb)
+    * getChallengers({ region, options: { type: 'RANKED_SOLO_5x5' } }, cb)
     * Namespaced Functions: *League.getChallengers, League.challengers*
     * Example 1: ```k.League.challengers(rprint)```
     * Example 2: ```k.League.challengers({ region: 'na' }, rprint)```
+    * Example 3: ```k.League.challengers({ options: { type: 'RANKED_FLEX_SR' } }, rprint)```
 4. **/api/lol/{region}/v2.5/league/master**
     * Get master tier leagues. (REST)
-    * getMasters({ region, options = { type: 'RANKED_SOLO_5x5' } }, cb)
+    * getMasters({ region, options: { type: 'RANKED_SOLO_5x5' } }, cb)
     * Namespaced Functions: *League.getMasters, League.masters*
     * Example 1: ```k.League.masters().then(data => console.log(data))```
 
@@ -238,18 +233,20 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
 
 1. **/api/lol/{region}/v2.2/match/{matchId}**
     * Retrieve match by match ID. (REST)
-    * getMatch({ region, id/matchID (int), options = { includeTimeline: true } }, cb) 
+    * getMatch({ region, id/matchID (int), options: { includeTimeline: true } }, cb) 
     * Namespaced Functions: *Match.getMatch, Match.get*
     * Example 1: ```k.Match.get({ id: 1912829920 }, rprint)```
+    * Example 2: ```k.Match.get({ id: 1912829920, options: { includeTimeline: false } }, rprint)```
 
 ### MatchList
 [docs](https://developer.riotgames.com/api-methods/#matchlist-v2.2)
 
 1. **/api/lol/{region}/v2.2/matchlist/by-summoner/{summonerId}**
     * Retrieve match list by match ID. (REST)
-    * getMatchList({ region, id/summonerID/playerID (int), name (str), options = { rankedQueues: 'RANKED_SOLO_5x5' } }, cb)
+    * getMatchList({ region, id/summonerID/playerID (int), name (str), options: { rankedQueues: 'RANKED_SOLO_5x5' } }, cb)
     * Namespaced Functions: *MatchList.getMatchList, MatchList.get*
     * Example 1: ```k.MatchList.get({ id: 20026563 }, rprint)```
+    * Example 2: ```k.MatchList.get({ id: 20026563, options: { rankedQueues: 'RANKED_FLEX_SR' } }, rprint)```
 
 ### Runes Masteries
 [docs](https://developer.riotgames.com/api-methods/#runes-masteries-v1.4)
@@ -273,6 +270,7 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
     * getRankedStats({ region, id/summonerID/playerID (int), name (str), options (object) }, cb)
     * Namespaced Functions: *Stats.getRankedStats, Stats.ranked*
     * Example 1: ```k.Stats.ranked({ id: 20026563 }, rprint)```
+    * Example 2: ```k.Stats.ranked({ id: 20026563, options: { season: 'SEASON2016' } }, function(err,data){})```
 2. **/api/lol/{region}/v1.3/stats/by-summoner/{summonerId}/summary**
     * Get player stats summaries by summoner ID. (REST)
     * getStatsSummary({ region, id/summonerID/playerID (int), name (str), options (object) }, cb)
@@ -343,8 +341,35 @@ console.log(CACHE_TYPES)
 function rprint(err, data) { console.log(data) }
 
 /*
-  NOTE: Making any form of parameter error will inform you
-  what parameters you can pass in!
+  The important thing about this wrapper is that it does not
+  take in parameters the usual way. Instead, the only parameter,
+  excluding the callback parameter, is an object of parameters.
+*/
+k.Summoner.get({ id: 354959 }, rprint)
+k.Summoner.name({ id: 354959 }, rprint)
+k.Summoner.get({ id: 354959 }).then(data => console.log(data))
+
+k.Match.get({ id: 2459973154, options: {
+    includeTimeline: false
+}}, rprint)
+
+k.League.challengers({ region: 'na', options: {
+  type: 'RANKED_FLEX_SR'
+}}, rprint)
+
+/*
+  All functions essentially have the following form:
+
+  functionName({ arg1, arg2... argN, options: {} }, optionalCallback) -> promise
+
+  If a method does not have the `options` parameter within my code, that simply means
+  there are no possible query parameters that you can pass in to that method.
+*/
+
+/*
+  Making any form of parameter error will inform you
+  what parameters you can pass in so you hopefully
+  don't have to refer to the documentation as much.
 */
 k.getSummoner(rprint)
 // getSummoners request FAILED; required params `ids` (array of ints), `id` (int), `names` (array of strings), or `name` (string) not passed in
@@ -369,7 +394,7 @@ k.ChampionMastery.get(rprint)
 */
 
 /*
-  The first parameter of all endpoint methods will ALWAYS be an object.
+  Let me reiterate: the first parameter of all endpoint methods will ALWAYS be an object.
   However, when the parameters are satisfied by default parameters and/or
   only have optional parameters, you can simply pass your callback in.
 */
@@ -399,12 +424,9 @@ k.League.challengers()
   The example above targets the by-name endpoint, while
   the example below targets the by-id endpoint.
 */
+
 k.getSummoner({ id: 354959 }, rprint)
 k.Summoner.getSummoner({ id: 354959 }, rprint)
-k.Summoner.get({ id: 354959 }, rprint)
-k.Summoner.get({ id: 354959 })
-          .then(data => console.log(data))
-          .catch(err => console.error(err))
 
 /*
   The 'id', 'ids', 'name', and 'names' parameters
@@ -442,8 +464,8 @@ k.getSummoners({ names: 'caaaaaaaaaria' }, rprint)
 k.getSummoners({ name: 'caaaaaaaaaria' }, rprint)
 
 /* Every method has an optional 'region' parameter. */
-var options = { name: 'sktt1peanut', region: REGIONS.KOREA }
-k.getSummoner(options, rprint) // peanut's data
+var params = { name: 'sktt1peanut', region: REGIONS.KOREA }
+k.getSummoner(params, rprint) // peanut's data
 
 /* Changing the default region! */
 k.setRegion(REGIONS.KOREA)
@@ -529,8 +551,8 @@ k.Masteries.get({ name })
   that are required by using the most sensible defaults.
 
   For example, the required parameter for many methods is 'type' (of queue).
-  I made it so that the default is 'RANKED_SOLO_5x5' if 'type' is not passed
-  in.
+  I made it so that the default is 'RANKED_SOLO_5x5' (or 'TEAM_BUILDER_RANKED_SOLO')
+  if 'type' is not passed in.
 */
 k.getChallengers({ region: 'na' }, rprint) // get challengers from ranked solo queue ladder
 k.getChallengers({ region: 'na', options: {
@@ -630,7 +652,7 @@ var k = new KindredAPI.Kindred({
   defaultRegion: REGIONS.NORTH_AMERICA,
   debug: true, // you can see if you're retrieving from cache with lack of requests showing
   limits: [ [10, 10], [500, 600] ],
-  cacheOptions: CACHE_TYPES[0] // in-memory
+  cacheOptions: CACHE_TYPES[0], // in-memory
   cacheTTL: {
     // All values in SECONDS.
     CHAMPION: whatever,
