@@ -256,11 +256,13 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
     * getMasteries({ region, ids/summonerIDs/playerIDs ([int]/int), id/summonerID/playerID (int), names ([str]/str), name (str)}, cb)
     * Namespaced Functions: *RunesMasteries.getRunes, RunesMasteries.runes, Runes.get*
     * Example 1: ```k.RunesMasteries.runes({ id: 20026563 }, rprint)```
+    * Example 2: ```k.Runes.get({ id: 20026563 }, rprint)```
 2. **/api/lol/{region}/v1.4/summoner/{summonerIds}/runes**
     * Retrieve match list by match ID. (REST)
     * getRunes({ region, ids/summonerIDs/playerIDs ([int]/int), id/summonerID/playerID (int), names ([str]/str), name (str) }, cb)
     * Namespaced Functions: *RunesMasteries.getMasteries, RunesMasteries.masteries, Masteries.get*
     * Example 1: ```k.RunesMasteries.masteries({ id: 20026563 }, rprint)```
+    * Example 2: ```k.Masteries.get({ id: 20026563 }, rprint)```
 
 ### Stats
 [docs](https://developer.riotgames.com/api-methods/#stats-v1.3)
