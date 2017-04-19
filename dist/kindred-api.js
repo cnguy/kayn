@@ -110,8 +110,8 @@
     }, {
       key: 'set',
       value: function set(args, value) {
-        this.client.setex(this.prefix + args.key, args.ttl * 1000, value, redis.print);
-        console.log('set for ' + args.ttl * 1000 + ' milliiseconds');
+        this.client.setex(this.prefix + args.key, args.ttl, value, redis.print);
+        console.log('set for ' + args.ttl + ' seconds');
       }
     }]);
 
