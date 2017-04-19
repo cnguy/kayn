@@ -1993,12 +1993,28 @@
     return Kindred$1;
   }();
 
+  function QuickStart(apiKey, debug) {
+    return new Kindred$1({
+      key: apiKey,
+      debug: debug,
+      limits: limits.DEV,
+      cacheOptions: caches[0]
+    });
+  }
+
+  function print(err, data) {
+    console.log('myprint');
+    if (err) console.log(err);else console.log(data);
+  }
+
   var Kindred$2 = {
     Kindred: Kindred$1,
     REGIONS: regions,
     LIMITS: limits,
     TIME_CONSTANTS: cacheTimers,
-    CACHE_TYPES: caches
+    CACHE_TYPES: caches,
+    QuickStart: QuickStart,
+    print: print
   };
 
   module.exports = Kindred$2;

@@ -1310,10 +1310,27 @@ class Kindred {
   }
 }
 
+function QuickStart(apiKey, debug) {
+  return new Kindred({
+    key: apiKey,
+    debug,
+    limits: LIMITS.DEV,
+    cacheOptions: CACHE_TYPES[0],
+  })
+}
+
+function print(err, data) {
+  console.log('myprint')
+  if (err) console.log(err)
+  else console.log(data)
+}
+
 export default {
   Kindred,
   REGIONS,
   LIMITS,
   TIME_CONSTANTS,
-  CACHE_TYPES
+  CACHE_TYPES,
+  QuickStart,
+  print
 }

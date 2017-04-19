@@ -1,31 +1,30 @@
 # Kindred
-
-Kindred is a thin Node.js wrapper with built-in rate-limiting and caching on top of [Riot Games API for League of Legends](http://www.developer.riotgames.com).
+Kindred is a Node.js wrapper with built-in rate-limiting (enforced per region), caching (Redis), and parameter checking on top of [Riot's League of Legends API](http://www.developer.riotgames.com).
 
 ## Table of Contents
 * [Core Features](#core-features)
 * [Philosophy](#philosophy)
 * [Installation](#installation)
 * [Endpoints Covered](#endpoints-covered)
-* [Usage](#usage)
+* [Quickstart](#quickstart)
+* [Detailed Usage](#detailed-usage)
 * [Caching](#caching)
 * [Contributing and Issues](#contributing-and-issues)
 
 ## Core Features
 * All standard endpoints covered but one (get summoner by accountIDs).
 * Supports both callbacks and promises.
-* Basic rate-limiting that is enforced per region.
-    * Retries on 429 and >= 500 (should it just be 500?).
+* Rate limiter that is enforced per region.
+    * Retries on 429 and >= 500.
         * Promise-based requests retry up to three times.
         * Callback-based requests are infinite at the moment.
-* Tells you what parameters you can pass in when you make a parameter-related error.
+* Built-in parameter checks so you can hopefully refer to documentation less! :)
 * Built-in, flexible caching (in-memory and redis).
     * Customized expiration timers. You can set a timer for each endpoint type. Refer to [Caching](#caching) for more info.
-
-Hopefully there aren't *too* many bugs! I'm currently focusing on refactoring the code now.
+* Designed to be simple but convenient. For example, you can call an exclusively by-id endpoint (such as grabbing the runes of a player) with just the name.
 
 ## Philosophy
-My goal is to make a wrapper that is simple, sensible, and consistent. This project is heavily inspired by [psuedonym117's Python wrapper](https://github.com/pseudonym117/Riot-Watcher). Look at the [Usage Section](#usage) to see what I mean.
+My goal is to make a wrapper that is simple, sensible, and consistent. This project is heavily inspired by [psuedonym117's Python wrapper](https://github.com/pseudonym117/Riot-Watcher). Look at the [Quickstart Section](#quickstart) to see what I mean.
 
 ## Installation
 ```
@@ -306,8 +305,40 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
     * Namespaced Functions: *Summoner.getSummonerNames, Summoner.getNames, Summoner.names, Summoner.getSummonerName, Summoner.getName, Summoner.name*
     * Example 1: ```k.Summoner.names({ ids: [20026563, 32932398] }, rprint)```
 
-## Usage
+## Quickstart
+Debug on, dev key rate limiting per region, in-memory cache with default settings on for quick scripts
+```javascript
+var KindredAPI = require('kindred-api')
 
+var debug = true
+var k = KindredAPI.QuickStart('YOUR_KEY', debug)
+
+/* Summoners! */
+k.Summoner.get({ id: 32932398 }, KindredAPI.print)
+k.Summoner.get({ name: 'Contractz' }, KindredAPI.print)
+
+/* No need to wrap nested API calls for exclusively by-id endpoints, the client does it for you. */
+k.Runes.get({ region: 'na', name: 'Contractz' }).then(data => console.log(data))
+
+/* How to pass in options 101. */
+var name = 'caaaaaaaaaria'
+var opts = {
+  region: KindredAPI.REGIONS.NORTH_AMERICA,
+  options: {
+    rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'], // no need for joins or messy strings
+    championIDs: '67'
+  }
+}
+
+k.getSummoner({ name, region: opts.region })
+  .then(data => k.getMatchList(
+    Object.assign({ id: data[name].id }, opts)
+  ))
+  .then(data => console.log(data))
+  .catch(err => console.err(error))
+```
+
+## Detailed Usage
 ```javascript
 var KindredAPI = require('kindred-api')
 
@@ -596,7 +627,7 @@ var name = 'caaaaaaaaaria'
 var opts = {
   region: 'na',
   options: {
-    rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'].join(','),
+    rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'],
     championIDs: '67'
   }
 }
