@@ -13,6 +13,7 @@ const endpointCacheTimers = {
   MATCH: cacheTimers.MONTH,
   MATCH_LIST: cacheTimers.ONE_HOUR,
   RUNES_MASTERIES: cacheTimers.WEEK,
+  SPECTATOR: cacheTimers.NONE,
   STATS: cacheTimers.HOUR,
   SUMMONER: cacheTimers.DAY
 }

@@ -85,7 +85,7 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
 3. **/championmastery/location/{location}/player/{playerId}/score**
     * Get a player's total champion mastery score, which is sum of individual champion mastery levels. (RPC)
     * getTotalChampMasteryScore({ region = this.defaultRegion, id/summonerID/playerID (int), name (string), options (object) }, cb)
-    * Namespaced Functions: *ChampionMastery.getTotalChampMasteryScore, ChampionMastery.getTotalScore, ChampionMastery.totalScore, ChampionMastery.total*
+    * Namespaced Functions: *ChampionMastery.getTotalChampMasteryScore, ChampionMastery.getTotalScore, ChampionMastery.totalScore, ChampionMastery.total, ChampionMastery.score*
     * Example 1: ```k.ChampionMastery.totalScore({ id: 20026563 }, rprint)```
 4. **/championmastery/location/{location}/player/{playerId}/topchampions**
     * Get specified number of top champion mastery entries sorted by number of champion points descending. (RPC) 
@@ -178,8 +178,8 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
     * Namespaced Functions: *Static.getLanguages, Static.languages*
 7. **/api/lol/static-data/{region}/v1.2/map**
     * Retrieve map data. (REST)
-    * getMap({ region, options (object) }, cb)
-    * Namespaced Functions: *Static.getMap, Static.map*
+    * getMapData({ region, options (object) }, cb)
+    * Namespaced Functions: *Static.getMapData, Static.mapData, Static.map, Static.maps*
 8. **/api/lol/static-data/{region}/v1.2/mastery**
     * Retrieve mastery list. (REST)
     * getMasteryList({ region, options (object) }, cb)
