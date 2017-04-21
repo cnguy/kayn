@@ -631,6 +631,7 @@
         var oldPrefix = !status && !observerMode && !championMastery ? 'api/lol/' + mid : '';
         var prefix = 'lol/';
         var base = 'api.riotgames.com';
+
         var oldUrl = 'https://' + region + '.api.riotgames.com/' + oldPrefix + encodeURI(query);
         var newUrl = 'https://' + platformIds[regions$1[region]].toLowerCase() + '.' + base + '/' + prefix + encodeURI(query);
 
@@ -661,8 +662,6 @@
 
         var tryRequest = function tryRequest() {
           return new Promise(function (resolve, reject) {
-            var proxy = staticReq ? 'global' : region;
-
             var _iteratorNormalCompletion3 = true;
             var _didIteratorError3 = false;
             var _iteratorError3 = undefined;
@@ -692,7 +691,7 @@
 
             var stringifiedOpts = queryString.stringify(options);
             var postfix = stringifiedOpts ? '?' + stringifiedOpts : '';
-            var reqUrl = _this._makeUrl(endUrl + postfix, proxy, staticReq, status, observerMode, championMastery);
+            var reqUrl = _this._makeUrl(endUrl + postfix, region, staticReq, status, observerMode, championMastery);
             var fullUrl = reqUrl + (reqUrl.lastIndexOf('?') === -1 ? '?' : '&') + ('api_key=' + _this.key);
 
             _this.cache.get({ key: reqUrl }, function (err, data) {

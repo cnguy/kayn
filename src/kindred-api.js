@@ -277,7 +277,7 @@ class Kindred {
     const oldPrefix = !status && !observerMode && !championMastery ? `api/lol/${mid}` : ''
     const prefix = `lol/`// `api/lol/${mid}`
     const base = 'api.riotgames.com' // future: api.pvp.net
-    // console.log(`https://${PLATFORM_IDS[REGIONS_BACK[region]].toLowerCase()}.${base}/${prefix}${encodeURI(query)}`)
+    
     const oldUrl = `https://${region}.api.riotgames.com/${oldPrefix}${encodeURI(query)}`
     const newUrl = `https://${PLATFORM_IDS[REGIONS_BACK[region]].toLowerCase()}.${base}/${prefix}${encodeURI(query)}`
 
@@ -297,8 +297,6 @@ class Kindred {
   }, cb) {
     const tryRequest = () => {
       return new Promise((resolve, reject) => {
-        const proxy = staticReq ? 'global' : region
-
         for (const key of Object.keys(options)) {
           if (Array.isArray(options[key])) {
             options[key] = options[key].join(',')
@@ -307,7 +305,7 @@ class Kindred {
 
         const stringifiedOpts = queryString.stringify(options)
         const postfix = stringifiedOpts ? '?' + stringifiedOpts : ''
-        const reqUrl = this._makeUrl(endUrl + postfix, proxy, staticReq, status, observerMode, championMastery)
+        const reqUrl = this._makeUrl(endUrl + postfix, region, staticReq, status, observerMode, championMastery)
         const fullUrl = reqUrl + (reqUrl.lastIndexOf('?') === -1 ? '?' : '&') + `api_key=${this.key}`
 
         this.cache.get({ key: reqUrl }, (err, data) => {
