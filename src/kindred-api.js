@@ -422,6 +422,16 @@ class Kindred {
     }, cb)
   }
 
+  _championRequest({ endUrl, region, options }, cb) {
+    return this._baseRequest({
+      endUrl: `${ENDPOINTS_PREFIXES.CHAMPION}/v${VERSIONS.CHAMPION}/${endUrl}`,
+      region, options,
+      cacheParams: {
+        ttl: this.CACHE_TIMERS.CHAMPION
+      }
+    }, cb)
+  }
+
   _spectatorRequest({ endUrl, region }, cb) {
     return this._baseRequest({
       endUrl: `${ENDPOINTS_PREFIXES.SPECTATOR}/v${VERSIONS.SPECTATOR}/${endUrl}`,
