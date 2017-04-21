@@ -361,11 +361,10 @@ function rprint(err, data) { console.log(data) }
   excluding the callback parameter, is an object of parameters.
 */
 k.Summoner.get({ id: 354959 }, rprint)
-k.Summoner.name({ id: 354959 }, rprint)
 k.Summoner.get({ id: 354959 }).then(data => console.log(data))
 
 k.Match.get({ id: 2459973154, options: {
-    includeTimeline: false
+    includeTimeline: false // of course, option params must be the same as the ones in Riot Docs
 }}, rprint)
 
 k.League.challengers({ region: 'na', options: {
@@ -386,21 +385,11 @@ k.League.challengers({ region: 'na', options: {
   what parameters you can pass in so you hopefully
   don't have to refer to the documentation as much.
 */
-k.getSummoner(rprint)
-// getSummoners request FAILED; required params `ids` (array of ints), `id` (int), `names` (array of strings), or `name` (string) not passed in
 k.Summoner.get(rprint)
-// same as above
-
-k.getSummoner(rprint)
 // getSummoner request FAILED; required params `id` (int) or `name` (string) not passed in
 
-k.getTopChamps(rprint)
-// getTopChamps request FAILED; required params `id` (int) or `playerID` (int) not passed in
-
-k.getChampMastery(rprint)
-// getChampMastery request FAILED; required params `playerID` (int) AND `championID` (int) not passed in
 k.ChampionMastery.get(rprint)
-// same as above
+// getChampMastery request FAILED; required params `playerID` (int) AND `championID` (int) not passed in
 
 /*
   Notice the OR and the AND!!
@@ -413,74 +402,40 @@ k.ChampionMastery.get(rprint)
   However, when the parameters are satisfied by default parameters and/or
   only have optional parameters, you can simply pass your callback in.
 */
-k.getChallengers(rprint) // default region, default solo queue mode, valid
-k.League.challengers(rprint) // same as above
+k.League.challengers(rprint) // default region, default solo queue mode, valid
 
-k.getRuneList(rprint) // only optional arguments & not passing in any optional arguments, valid
-k.Static.runes(rprint)
-
-/*
-    I have recently added namespacing to the methods.
-
-    All the namespaces are named after the official endpoint names (there
-    are shorthand ones too).
-*/
-k.League.getChallengers(rprint)
-k.League.challengers(rprint)
-k.League.challengers()
-        .then(data => console.log(data))
-        .catch(err => console.error(err))
+k.Static.runes(rprint) // only optional arguments & not passing in any optional arguments, valid
 
 /*
   getSummoners & getSummoner target both the by-name and by-id endpoints.
   In the case of the summoner endpoints, it made a lot more sense for the two
   functions to target both the by-name and by-id summoner endpoints.
-
-  The example above targets the by-name endpoint, while
-  the example below targets the by-id endpoint.
 */
 
-k.getSummoner({ id: 354959 }, rprint)
-k.Summoner.getSummoner({ id: 354959 }, rprint)
+k.Summoner.get({ name: 'Contractz' }, rprint)
+k.Summoner.get({ id: 354959 }, rprint)
 
 /*
-  The 'id', 'ids', 'name', and 'names' parameters
-  stay consistent throughout the API but for the one
-  exception above. However, I do have aliases for them.
+  There are aliases for the `id` param.
   
   For example, for summoners, you have summonerID, summonerIDs,
   playerID, and playerIDs.
-
-  Plural parameters can take in both arrays and singular values.
-  Single parameters, however, can only take singular values.
 */
-k.getSummoner({ summonerID: 354959 }, rprint)
+k.Summoner.get({ summonerID: 354959 }, rprint)
 
-k.getSummoner({ summonerID: 354959 })
+k.Summoner.get({ summonerID: 354959 })
  .then(json => console.log(json))
  .catch(err => console.log(err))
 
-k.getSummoners({ summonerIDs: [354959, 21542029] }, rprint)
-
-k.getMatch({ id: 2459973154 }, rprint)
-k.getMatch({ matchID: 2459973154 }, rprint)
 k.Match.get({ id: 2459973154 }, rprint)
-k.Match.get({ id: 2459973154 })
+k.Match.get({ matchID: 2459973154 })
        .then(data => console.log(data))
        .catch(err => console.error(err))
 
-var names = ['beautifulkorean', 'c9gun', 'caaaaaaaaarIa']
-k.Summoner.getAll({ names }, rprint) // getSummoners
-
-var ids = [22059766, 20026563, 44989337]
-k.Summoner.names({ ids }, rprint)
-
-k.getSummoners({ names: 'caaaaaaaaaria' }, rprint)
-k.getSummoners({ name: 'caaaaaaaaaria' }, rprint)
 
 /* Every method has an optional 'region' parameter. */
 var params = { name: 'sktt1peanut', region: REGIONS.KOREA }
-k.getSummoner(params, rprint) // peanut's data
+k.Summoner.get(params, rprint) // peanut's data
 
 /* Changing the default region! */
 k.setRegion(REGIONS.KOREA)
@@ -488,20 +443,10 @@ k.setRegion(REGIONS.KOREA)
 /* Note that you can use spaces in the name. */
 var fakerIgn = { name: 'hide on bush' }
 var fakerId
-k.getSummoner(fakerIgn, function (err, data) {
-  /*
-    But you should sanitize the name if you want to access the dictionary.
-
-    { hideonbush:
-      { id: 4460427,
-        name: 'Hide on bush',
-        profileIconId: 6,
-        revisionDate: 1490355284000,
-        summonerLevel: 30 } }
-  */
-  fakerId = data[fakerIgn.name.replace(/\s/g, '').toLowerCase()].id
+k.Summoner.get(fakerIgn, function (err, data) {
+  fakerId = data.id
   console.log('fakerId:', fakerId)
-}) // faker's data
+})
 
 /*
   Note that the player runes endpoint only accepts
@@ -510,48 +455,42 @@ k.getSummoner(fakerIgn, function (err, data) {
 
 k.setRegion(REGIONS.NORTH_AMERICA)
 
-k.getRunes({ ids: [354959, 21542029] }, rprint)
-k.getRunes({ id: 354959 }, rprint)
-k.getRunes({ ids: 354959 }, rprint)
+k.Runes.get({ id: 354959 }, rprint)
 
-k.getRunes({ id: 354959 })
+k.Runes.get({ id: 354959 })
  .then(json => console.log(json))
  .catch(err => console.error(err))
-k.Runes.get({ id: 354959 })
-       .then(json => console.log(json))
-       .catch(err => console.log(err))
 
 /*
-  But what if you want to quickly get the rune pages given
-  that you have a list of names?
+  But what if you want to quickly get the rune page of
+  some random summoner given their name?
 
   You'd chain it like in many other clients:
-  Get the ids from the names, get the runes from the ids.
+  Get the id from the name, get the runes from the id.
 */
-names = ['Richelle', 'Grigne']
-k.getSummoners({ names }, function (err, data) {
-  var ids = []
-
-  for (var name of names)
-    ids.push(data[name.replace(/\s/g, '').toLowerCase()].id)
-  
-  k.getRunes({ ids }, rprint)
+var name = 'Richelle'
+k.Summoner.get({ name }, function (err, data) {
+  if (data) k.Runes.get({ id: data.id }, rprint)
+  else console.err(err)
 })
+
+// or with promises
+k.Summoner.get({ name })
+          .then(data => k.Runes.get({ id: data.id }))
+          .then(data => console.log(data))
+          .catch(err => console.log(err))
 
 /* I find that inconvenient, and so I just chain it for you in my code. */
 // all methods that target endpoints that only accept ids
-k.getRunes({ names: ['Richelle', 'Grigne'] }, rprint)
-k.getRunes({ name: 'Richelle' }, rprint)
-k.getRecentGames({ name: 'Richelle' }, rprint)
-k.getLeagues({ names: ['Richelle', 'Grigne'] }, rprint)
+k.Runes.get({ name: 'Richelle' }, rprint)
+k.Game.get({ name: 'Richelle' }, rprint)
+k.League.get({ name: '5tunt' }, rprint)
 
-k.getCurrentGame({ name: 'Fràe', region: REGIONS.OCEANIA }, rprint)
-k.getLeagues({ names: ['Richelle', 'Grigne'] })
+k.CurrentGame.get({ name: 'Fràe', region: REGIONS.OCEANIA }, rprint)
+k.League.get({ name: '5tunt' })
  .then(data => console.log(data))
 
 var name = 'Grigne'
-k.RunesMasteries.runes({ name })
-                .then(data => console.log(data))
 k.Runes.get({ name })
        .then(data => console.log(data))
 k.Masteries.get({ name })
@@ -569,8 +508,8 @@ k.Masteries.get({ name })
   I made it so that the default is 'RANKED_SOLO_5x5' (or 'TEAM_BUILDER_RANKED_SOLO')
   if 'type' is not passed in.
 */
-k.getChallengers({ region: 'na' }, rprint) // get challengers from ranked solo queue ladder
-k.getChallengers({ region: 'na', options: {
+k.League.challengers({ region: 'na' }, rprint) // get challengers from ranked solo queue ladder
+k.League.challengers({ region: 'na', options: {
   type: 'RANKED_FLEX_SR'
 }}, rprint) // get challengers from ranked flex ladder
 k.Match.get({ id: 2459973154 }, rprint) // includes timeline by default
@@ -582,31 +521,27 @@ k.Match.get({ id: 2459973154, options: { includeTimeline: false } }, rprint)
   I still set the default to RANKED_SOLO_5x5 though.
 */
 var name = 'caaaaaaaaaria'
-k.getSummoners({ region: 'na', names: name }, function (err, data) {
-  if (data) {
-    k.getMatchList({ region: 'na', id: data[name].id, options: {
-      /*
-        According to Riot API, query parameters that can accept multiple values
-        must be a comma separated list (or a single value), which is why one can do the below join.
+k.MatchList.get({ name, region: 'na', options: {
+    /*
+    According to Riot API, query parameters that can accept multiple values
+    must be a comma separated list (or a single value), which is why one can do the below join.
 
-        However, both these options are inconvenient, and so I check if you pass in array values
-        for every option parameter, and manually join it for you. You can still pass in string values
-        if you want though.
+    However, both these options are inconvenient, and so I check if you pass in array values
+    for every option parameter, and manually join it for you. You can still pass in string values
+    if you want though.
 
-        Note, for arrays of values that are conceptually integers,
-        both strings and integers work because they're joined together as a string anyways.
-      */
-      // rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'].join(','), STILL VALID
-      // championIds: '67' // '267,67' or ['267', '67'].join(',') STILL VALID
-      rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'], // valid
-      championIDs: [67, 62, '61'] // valid
-    } }, rprint)
-  }
-})
+    Note, for arrays of values that are conceptually integers,
+    both strings and integers work because they're joined together as a string anyways.
+    */
+    // rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'].join(','), STILL VALID
+    // championIds: '67' // '267,67' or ['267', '67'].join(',') STILL VALID
+  rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'], // valid
+  championIDs: [67, 62, '61'] // valid
+} }, rprint)
 
 /* The above example with promises. */
-var name = 'caaaaaaaaaria'
 var opts = {
+  name: 'caaaaaaaaaria',
   region: 'na',
   options: {
     rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'],
@@ -614,15 +549,11 @@ var opts = {
   }
 }
 
-k.getSummoner({ name, region: opts.region })
-  .then(data => k.getMatchList(
-    Object.assign({ id: data[name].id }, opts)
-  ))
-  .then(data => console.log(data))
-  .catch(err => console.err(error))
+k.MatchList.get({ name: opts.name, region: opts.region, options: opts.options })
+           .then(data => console.log(data))
+           .catch(err => console.err(error))
 
 var furyMasteryId = 6111
-k.getMastery({ id: furyMasteryId }, rprint)
 k.Static.mastery({ id: furyMasteryId }, rprint)
 
 var msRuneId = 10002
