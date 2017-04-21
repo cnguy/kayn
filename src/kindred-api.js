@@ -118,10 +118,6 @@ class Kindred {
       totalScore: this.getTotalChampMasteryScore.bind(this),
       total: this.getTotalChampMasteryScore.bind(this),
       score: this.getTotalChampMasteryScore.bind(this),
-
-      getTopChampions: this.getTopChamps.bind(this),
-      top: this.getTopChamps.bind(this),
-      best: this.getTopChamps.bind(this)
     }
 
     this.CurrentGame = {
@@ -251,20 +247,8 @@ class Kindred {
     }
 
     this.Summoner = {
-      getSummoners: this.getSummoners.bind(this),
-      getAll: this.getSummoners.bind(this),
-      all: this.getSummoners.bind(this),
-
       getSummoner: this.getSummoner.bind(this),
       get: this.getSummoner.bind(this),
-
-      getSummonerNames: this.getSummonerNames.bind(this),
-      getNames: this.getSummonerNames.bind(this),
-      names: this.getSummonerNames.bind(this),
-
-      getSummonerName: this.getSummonerName.bind(this),
-      getName: this.getSummonerName.bind(this),
-      name: this.getSummonerName.bind(this)
     }
   }
 
@@ -646,46 +630,12 @@ class Kindred {
     }
   }
 
-  getTopChamps({
-    region = this.defaultRegion,
-    id, summonerID, playerID,
-    name,
-    options
-  } = {}, cb) {
-    if (Number.isInteger(id || summonerID || playerID)) {
-      const location = PLATFORM_IDS[REGIONS_BACK[region]]
-
-      return this._championMasteryRequest({
-        endUrl: `${location}/player/${id || summonerID || playerID}/topchampions`, region, options
-      }, cb)
-    } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
-      const location = PLATFORM_IDS[REGIONS_BACK[region]]
-
-      return new Promise((resolve, reject) => {
-        return this.getSummoner({ name, region }, (err, data) => {
-          if (err) { cb ? cb(err) : reject(err); return }
-          return resolve(this._championMasteryRequest({
-            endUrl: `${location}/player/${data.id}/topchampions`,
-            region
-          }, cb))
-        })
-      })
-    } else {
-      return this._logError(
-        this.getTopChamps.name,
-        `required params ${chalk.yellow('`id/summonerID/playerID` (int)')} or ${chalk.yellow('`name` (str)')} not passed in`
-      )
-    }
-  }
-
   /* CURRENT-GAME-V1.0 */
   getCurrentGame({
     region = this.defaultRegion,
     id, summonerID, playerID,
     name
   } = {}, cb) {
-    const platformId = PLATFORM_IDS[REGIONS_BACK[region]]
-
     if (Number.isInteger(id || summonerID || playerID)) {
       return this._spectatorRequest({
         endUrl: `active-games/by-summoner/${id || summonerID || playerID}`,
@@ -748,37 +698,18 @@ class Kindred {
   /* LEAGUE-V2.5 */
   getLeagues({
     region,
-    ids, summonerIDs, playerIDs,
     id, summonerID, playerID,
-    names,
     name,
     options
   } = {}, cb) {
-    if (checkAll.int(ids || summonerIDs || playerIDs)) {
+    if (Number.isInteger(id || summonerID || playerID)) {
       return this._leagueRequest({
-        endUrl: `by-summoner/${(ids || summonerIDs || playerIDs).join(',')}`,
+        endUrl: `by-summoner/${id || summonerID || playerID}`,
         region, options
       }, cb)
-    } else if (Number.isInteger(ids || id || summonerIDs || summonerID || playerIDs || playerID)) {
-      return this._leagueRequest({
-        endUrl: `by-summoner/${ids || id || summonerIDs || summonerID || playerIDs || playerID}`,
-        region, options
-      }, cb)
-    } else if (checkAll.string(names)) {
+    } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
       return new Promise((resolve, reject) => {
-        return this.getSummoners({ names, region }, (err, data) => {
-          if (err) { cb ? cb(err) : reject(err); return }
-          const ids = names.map(name => data.id)
-
-          return resolve(this._leagueRequest({
-            endUrl: `by-summoner/${ids.join(',')}`,
-            region, options
-          }, cb))
-        })
-      })
-    } else if (typeof arguments[0] === 'object' && (typeof names === 'string' || typeof name === 'string')) {
-      return new Promise((resolve, reject) => {
-        return this.getSummoner({ name: names || name, region }, (err, data) => {
+        return this.getSummoner({ name, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
           return resolve(this._leagueRequest({
             endUrl: `by-summoner/${data.id}`,
@@ -789,43 +720,24 @@ class Kindred {
     } else {
       return this._logError(
         this.getLeagues.name,
-        `required params ${chalk.yellow('`ids/summonerIDs/playerIDs` ([int]/int)')}, ${chalk.yellow('`id/summonerID/playerID` (int)')}, ${chalk.yellow('`names` ([str]/str)')}, or ${chalk.yellow('`name` (str)')} not passed in`
+        `required params ${chalk.yellow('`id/summonerID/playerID` (int)')} or ${chalk.yellow('`name` (str)')} not passed in`
       )
     }
   }
 
   getLeagueEntries({
     region,
-    ids, summonerIDs, playerIDs,
     id, summonerID, playerID,
-    names,
     name
   } = {}, cb) {
-    if (checkAll.int(ids || summonerIDs || playerIDs)) {
+    if (Number.isInteger(id || summonerID || playerID)) {
       return this._leagueRequest({
-        endUrl: `by-summoner/${(ids || summonerIDs || playerIDs).join(',')}/entry`,
+        endUrl: `by-summoner/${id || summonerID || playerID}/entry`,
         region
       }, cb)
-    } else if (Number.isInteger(ids || id || summonerIDs || summonerID || playerIDs || playerID)) {
-      return this._leagueRequest({
-        endUrl: `by-summoner/${ids || id || summonerIDs || summonerID || playerIDs || playerID}/entry`,
-        region
-      }, cb)
-    } else if (checkAll.string(names)) {
+    } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
       return new Promise((resolve, reject) => {
-        return this.getSummoners({ names, region }, (err, data) => {
-          if (err) { cb ? cb(err) : reject(err); return }
-          const ids = names.map(name => data.id)
-
-          return resolve(this._leagueRequest({
-            endUrl: `by-summoner/${ids.join(',')}/entry`,
-            region
-          }, cb))
-        })
-      })
-    } else if (typeof arguments[0] === 'object' && (typeof names === 'string' || typeof name === 'string')) {
-      return new Promise((resolve, reject) => {
-        return this.getSummoner({ name: names || name, region }, (err, data) => {
+        return this.getSummoner({ name, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
           return resolve(this._leagueRequest({
             endUrl: `by-summoner/${data.id}/entry`,
@@ -836,7 +748,7 @@ class Kindred {
     } else {
       this._logError(
         this.getLeagueEntries.name,
-        `required params ${chalk.yellow('`ids/summonerIDs/playerIDs` ([int]/int)')}, ${chalk.yellow('`id/summonerID/playerID` (int)')}, ${chalk.yellow('`names` ([str]/str)')}, or ${chalk.yellow('`name` (str)')} not passed in`
+        `required params ${chalk.yellow('`id/summonerID/playerID` (int)')} or ${chalk.yellow('`name` (str)')} not passed in`
       )
     }
   }
@@ -1035,36 +947,17 @@ class Kindred {
   /* RUNES-MASTERIES-V1.4 */
   getRunes({
     region,
-    ids, summonerIDs, playerIDs,
     id, summonerID, playerID,
-    names,
     name
   } = {}, cb) {
-    if (checkAll.int(ids || summonerIDs || playerIDs)) {
+    if (Number.isInteger(id || summonerID || playerID)) {
       return this._runesMasteriesRequest({
-        endUrl: `${(ids || summonerIDs || playerIDs).join()}/runes`,
+        endUrl: `runes/by-summoner/${id || summonerID || playerID}`,
         region
       }, cb)
-    } else if (Number.isInteger(ids || id || summonerIDs || summonerID || playerIDs || playerID)) {
-      return this._runesMasteriesRequest({
-        endUrl: `runes/by-summoner/${ids || id || summonerIDs || summonerID || playerIDs || playerID}`,
-        region
-      }, cb)
-    } else if (checkAll.string(names)) {
+    } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
       return new Promise((resolve, reject) => {
-        return this.getSummoners({ names, region }, (err, data) => {
-          if (err) { cb ? cb(err) : reject(err); return }
-          const ids = names.map(name => data.id)
-
-          return resolve(this._runesMasteriesRequest({
-            endUrl: `${ids.join(',')}/runes`,
-            region
-          }, cb))
-        })
-      })
-    } else if (typeof arguments[0] === 'object' && (typeof names === 'string' || typeof name === 'string')) {
-      return new Promise((resolve, reject) => {
-        return this.getSummoner({ name: names || name, region }, (err, data) => {
+        return this.getSummoner({ name, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
           return resolve(this._runesMasteriesRequest({
             endUrl: `runes/by-summoner/${data.id}`,
@@ -1075,43 +968,24 @@ class Kindred {
     } else {
       return this._logError(
         this.getRunes.name,
-        `required params ${chalk.yellow('`ids/summonerIDs/playerIDs` ([int]/int)')}, ${chalk.yellow('`id/summonerID/playerID` (int)')}, ${chalk.yellow('`names` ([str]/str)')}, or ${chalk.yellow('`name` (str)')} not passed in`
+        `required params ${chalk.yellow('`id/summonerID/playerID` (int)')} or ${chalk.yellow('`name` (str)')} not passed in`
       )
     }
   }
 
   getMasteries({
     region,
-    ids, summonerIDs, playerIDs,
     id, summonerID, playerID,
-    names,
     name
   } = {}, cb) {
-    if (checkAll.int(ids || summonerIDs || playerIDs)) {
+    if (Number.isInteger(id || summonerID || playerID)) {
       return this._runesMasteriesRequest({
-        endUrl: `${(ids || summonerIDs || playerIDs).join()}/masteries`,
+        endUrl: `masteries/by-summoner/${id || summonerID || playerID}`,
         region
       }, cb)
-    } else if (Number.isInteger(ids || id || summonerIDs || summonerID || playerIDs || playerID)) {
-      return this._runesMasteriesRequest({
-        endUrl: `masteries/by-summoner/${ids || id || summonerIDs || summonerID || playerIDs || playerID}`,
-        region
-      }, cb)
-    } else if (checkAll.string(names)) {
+    } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
       return new Promise((resolve, reject) => {
-        return this.getSummoners({ names, region }, (err, data) => {
-          if (err) { cb ? cb(err) : reject(err); return }
-          const ids = names.map(name => data.id)
-
-          return resolve(this._runesMasteriesRequest({
-            endUrl: `masteries/${ids.join(',')}`,
-            region
-          }, cb))
-        })
-      })
-    } else if (typeof arguments[0] === 'object' && (typeof names === 'string' || typeof name === 'string')) {
-      return new Promise((resolve, reject) => {
-        return this.getSummoner({ name: names || name, region }, (err, data) => {
+        return this.getSummoner({ name, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
           return resolve(this._runesMasteriesRequest({
             endUrl: `masteries/by-summoner/${data.id}`,
@@ -1122,7 +996,7 @@ class Kindred {
     } else {
       return this._logError(
         this.getMasteries.name,
-        `required params ${chalk.yellow('`ids/summonerIDs/playerIDs` ([int]/int)')}, ${chalk.yellow('`id/summonerID/playerID` (int)')}, ${chalk.yellow('`names` ([str]/str)')}, or ${chalk.yellow('`name` (str)')} not passed in`
+        `required params ${chalk.yellow('`id/summonerID/playerID` (int)')} or ${chalk.yellow('`name` (str)')} not passed in`
       )
     }
   }
@@ -1189,35 +1063,23 @@ class Kindred {
   /* SUMMONER-V1.4 */
   getSummoners({
     region,
-    ids, summonerIDs, playerIDs,
     id, summonerID, playerID,
-    names,
     name
   } = {}, cb) {
-    if (checkAll.int(ids || summonerIDs || playerIDs)) {
+    if (Number.isInteger(id || summonerID || playerID)) {
       return this._summonerRequest({
-        endUrl: `${(ids || summonerIDs || playerIDs).join(',')}`,
+        endUrl: `${id || summonerID || playerID}`,
         region
       }, cb)
-    } else if (Number.isInteger(ids || id || summonerIDs || summonerID || playerIDs || playerID)) {
+    } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
       return this._summonerRequest({
-        endUrl: `${ids || id || summonerIDs || summonerID || playerIDs || playerID}`,
-        region
-      }, cb)
-    } else if (checkAll.string(names)) {
-      return this._summonerRequest({
-        endUrl: `by-name/${names.map(name => this._sanitizeName(name)).join(',')}`,
-        region
-      }, cb)
-    } else if (typeof arguments[0] === 'object' && (typeof names === 'string' || typeof name === 'string')) {
-      return this._summonerRequest({
-        endUrl: `by-name/${this._sanitizeName(names || name)}`,
+        endUrl: `by-name/${this._sanitizeName(name)}`,
         region
       }, cb)
     } else {
       this._logError(
         this.getSummoners.name,
-        `required params ${chalk.yellow('`ids/summonerIDs/playerIDs` ([int]/int)')}, ${chalk.yellow('`id/summonerID/playerID` (int)')}, ${chalk.yellow('`names` ([str]/str)')}, or ${chalk.yellow('`name` (str)')} not passed in`
+        `required params ${chalk.yellow('`id/summonerID/playerID` (int)')} or ${chalk.yellow('`name` (str)')} not passed in`
       )
     }
   }
@@ -1228,50 +1090,19 @@ class Kindred {
     name
   } = {}, cb) {
     if (Number.isInteger(id || summonerID || playerID)) {
-      return this.getSummoners({ region, ids: [id || summonerID || playerID] }, cb)
+      return this._summonerRequest({
+        endUrl: `${id || summonerID || playerID}`,
+        region
+      }, cb)
     } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
-      return this.getSummoners({ region, names: [name] }, cb)
+      return this._summonerRequest({
+        endUrl: `by-name/${this._sanitizeName(name)}`,
+        region
+      }, cb)
     } else {
       return this._logError(
         this.getSummoner.name,
         `required params ${chalk.yellow('`id/summonerID/playerID` (int)')} or ${chalk.yellow('`name` (string)')} not passed in`
-      )
-    }
-  }
-
-  getSummonerNames({
-    region,
-    ids, summonerIDs, playerIDs,
-    id, summonerID, playerID
-  } = {}, cb) {
-    if (checkAll.int(ids || summonerIDs || playerIDs)) {
-      return this._summonerRequest({
-        endUrl: `${(ids || summonerIDs || playerIDs).join(',')}/name`,
-        region
-      }, cb)
-    } else if (Number.isInteger(ids || id || summonerIDs || summonerID || playerIDs || playerID)) {
-      return this._summonerRequest({
-        endUrl: `${ids || id || summonerIDs || summonerID || playerIDs || playerID}/name`,
-        region
-      }, cb)
-    } else {
-      this._logError(
-        this.getSummonerNames.name,
-        `required params ${chalk.yellow('required params `ids/summonerIDs/playerIDs` ([int]/int)')} or ${chalk.yellow('`id/summonerID/playerID` (int)')} not passed in`
-      )
-    }
-  }
-
-  getSummonerName({
-    region,
-    id, summonerID, playerID
-  } = {}, cb) {
-    if (Number.isInteger(id)) {
-      return this.getSummonerNames({ region, id: id || summonerID || playerID }, cb)
-    } else {
-      this._logError(
-        this.getSummonerName.name,
-        `required params ${chalk.yellow('`id/summonerID/playerID` (int)')} not passed in`
       )
     }
   }
