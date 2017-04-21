@@ -851,7 +851,7 @@
 
         return this._baseRequest({
           endUrl: endpointsPrefixes.STATIC_DATA + '/v' + versions.STATIC_DATA + '/' + endUrl,
-
+          staticReq: true,
           region: region,
           options: options,
           cacheParams: {

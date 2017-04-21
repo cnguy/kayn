@@ -445,7 +445,7 @@ class Kindred {
   _staticRequest({ endUrl, region = this.defaultRegion, options }, cb) {
     return this._baseRequest({
       endUrl: `${ENDPOINTS_PREFIXES.STATIC_DATA}/v${VERSIONS.STATIC_DATA}/${endUrl}`,
-      // staticReq: true,
+      staticReq: true,
       region,
       options,
       cacheParams: {
