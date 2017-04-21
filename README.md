@@ -280,6 +280,7 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
 
 ## Quickstart
 Debug on, dev key rate limiting per region, in-memory cache with default settings on for quick scripts
+
 ```javascript
 var KindredAPI = require('kindred-api')
 
@@ -299,16 +300,24 @@ var opts = {
   region: KindredAPI.REGIONS.NORTH_AMERICA,
   options: {
     rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'], // no need for joins or messy strings
-    championIDs: '67'
-  }
+    championIDs: '67' // single values can be integers as well
+  } // option params should be spelled and capitalized the same as it is in Riot's docs!
 }
 
-k.getSummoner({ name, region: opts.region })
-  .then(data => k.getMatchList(
-    Object.assign({ id: data[name].id }, opts)
+k.Summoner.get({ name: name, region: opts.region })
+  .then(data => k.MatchList.get(
+    Object.assign({ id: data.id }, opts)
   ))
   .then(data => console.log(data))
   .catch(err => console.err(error))
+
+/*
+    Instead of chaining requests like in the above, you can simply call
+    k.MatchList.get with the `name` param.
+*/
+k.MatchList.get({ name: name, options: opts.options })
+           .then(data => console.log(data))
+           .catch(err => console.error(err))
 ```
 
 ## Detailed Usage
