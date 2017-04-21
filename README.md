@@ -17,7 +17,6 @@ Kindred is a Node.js wrapper with built-in rate-limiting (enforced per region), 
 * Rate limiter that is enforced per region.
     * Retries on 429 and >= 500.
         * Promise-based requests retry up to three times.
-        * Callback-based requests are infinite at the moment.
 * Built-in parameter checks so you can hopefully refer to documentation less! :)
 * Built-in, flexible caching (in-memory and redis).
     * Customized expiration timers. You can set a timer for each endpoint type. Refer to [Caching](#caching) for more info.
@@ -37,82 +36,57 @@ Make sure to check the [official Riot Documentation](https://developer.riotgames
 
 Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters are **OPTIONAL** unless stated otherwise.
 
-* [CHAMPION-V1.2](#champion)
-* [CHAMPIONMASTERY](#champion-mastery)
-* [CURRENT-GAME-V1.0](#current-game)
-* [FEATURED-GAMES-V1.0](#featured-games)
+* [CHAMPION-MASTERY-V3](#champion-mastery)
+* [CHAMPION-V3](#champion)
 * [GAME-V1.3](#game)
 * [LEAGUE-V2.5](#league)
-* [LOL-STATIC-DATA-V1.2](#lol-static-data)
-* [LOL-STATUS-V1.0](#lol-status)
+* [LOL-STATUS-V3](#lol-status)
+* [MASTERIES-V3](#masteries)
 * [MATCH-V.2.2](#match)
 * [MATCHLIST-V2.2](#matchlist)
-* [RUNES-MASTERIES-V1.4](#runes-masteries)
+* [RUNES-V3](#runes)
+* [SPECTATOR-V3](#spectator)
+* [STATIC-DATA-V3](#static-data)
 * [STATS-V1.3](#stats)
-* [SUMMONER-V1.4](#summoner)
+* [SUMMONER-V3](#summoner)
+
+### Champion Mastery
+[docs](https://developer.riotgames.com/api-methods/#champion-mastery-v3)
+
+1. **/lol/champion-mastery/v3/champion-masteries/by-summoner/{summonerId}**
+    * Get all champion mastery entries sorted by number of champion points descending. (RPC)
+    * getChampMasteries({ region = this.defaultRegion, id/summonerID/playerID (int), name (string), options (object) }, cb)
+    * Namespaced Functions: *ChampionMastery.getChampionMasteries, ChampionMastery.getAll, ChampionMastery.all*
+    * Example 1: ```k.ChampionMastery.all({ id: 20026563 }, rprint)```
+    * Example 2: ```k.ChampionMastery.all({ id: 20026563 }).then(data => console.log(data))```
+2. **/lol/champion-mastery/v3/champion-masteries/by-summoner/{summonerId}/by-champion/{championId}**
+    * Get a champion mastery by player id and champion id.(RPC)
+    * getChampMastery({ region = this.defaultRegion, playerID (int), championID (int), options (object) }, cb)
+    * Namespaced Functions: *ChampionMastery.getChampionMastery, ChampionMastery.get*
+    * Example 1: ```k.ChampionMastery.get({ playerID: 20026563, championID: 203 }, rprint)```
+    * Example 2: ```k.ChampionMastery.get({ playerID: 20026563, championID: 203 }).then(data => console.log(data))```
+3. **/lol/champion-mastery/v3/scores/by-summoner/{summonerId}**
+    * Get a player's total champion mastery score, which is sum of individual champion mastery levels (RPC)
+    * getTotalChampMasteryScore({ region = this.defaultRegion, id/summonerID/playerID (int), name (string), options (object) }, cb)
+    * Namespaced Functions: *ChampionMastery.getTotalChampMasteryScore, ChampionMastery.getTotalScore, ChampionMastery.totalScore, ChampionMastery.total, ChampionMastery.score*
+    * Example 1: ```k.ChampionMastery.score({ id: 20026563 }, rprint)```
 
 ### Champion
-[docs](https://developer.riotgames.com/api-methods/#champion-v1.2)
+[docs](https://developer.riotgames.com/api-methods/#champion-v3)
 
-1. **/api/lol/{region}/v1.2/champion**
-    * Retrieve all champions. (REST)
+1. **/lol/platform/v3/champions**
+    * Retrieve all champions.
     * getChamps({ region, id (int), options (object) }, cb)
     * Namespaced Functions: *Champion.getChampions, Champion.getAll, Champion.all*
-    * Example 1: ```k.Champion.getAll({ region: REGIONS.KOREA }, rprint)```
-2. **/api/lol/{region}/v1.2/champion/{id}**
-    * Retrieve champion by ID. (REST)
+    * Example 1: ```k.Champion.all({ region: REGIONS.KOREA }, rprint)```
+2. **/lol/platform/v3/champions/{id}**
+    * Retrieve champion by ID.
     * getChamp({ region, id/championID (int) }, cb)
     * Namespaced Functions: *Champion.getChampion, Champion.get*
     * Example 1: ```k.Champion.get({ championID: 67 }, rprint)```
     * Example 2: ```k.Champion.get({ championID: 67 }).then(data => console.log(data))```
     * Example 3: ```k.Champion.get({ championID: 67, region: 'kr' }, rprint)```
 
-### Champion Mastery
-[docs](https://developer.riotgames.com/api-methods/#championmastery)
-
-1. **/championmastery/location/{location}/player/{playerId}/champion/{championId}**
-    * Get a champion mastery by player id and champion id. Response code 204 means there were no masteries found for given player id or player id and champion id combination. (RPC)
-    * getChampMastery({ region = this.defaultRegion, playerID (int), championID (int), options (object) }, cb)
-    * Namespaced Functions: *ChampionMastery.getChampionMastery, ChampionMastery.get*
-    * Example 1: ```k.ChampionMastery.get({ playerID: 20026563, championID: 203 }, rprint)```
-    * Example 2: ```k.ChampionMastery.get({ playerID: 20026563, championID: 203 }).then(data => console.log(data))```
-2. **/championmastery/location/{location}/player/{playerId}/champions**
-    * Get all champion mastery entries sorted by number of champion points descending. (RPC)
-    * getChampMasteries({ region = this.defaultRegion, id/summonerID/playerID (int), name (string), options (object) }, cb)
-    * Namespaced Functions: *ChampionMastery.getChampionMasteries, ChampionMastery.getAll, ChampionMastery.all*
-    * Example 1: ```k.ChampionMastery.getChampionMasteries({ id: 20026563 }, rprint)```
-    * Example 2: ```k.ChampionMastery.getAll({ id: 20026563 }).then(data => console.log(data))```
-3. **/championmastery/location/{location}/player/{playerId}/score**
-    * Get a player's total champion mastery score, which is sum of individual champion mastery levels. (RPC)
-    * getTotalChampMasteryScore({ region = this.defaultRegion, id/summonerID/playerID (int), name (string), options (object) }, cb)
-    * Namespaced Functions: *ChampionMastery.getTotalChampMasteryScore, ChampionMastery.getTotalScore, ChampionMastery.totalScore, ChampionMastery.total, ChampionMastery.score*
-    * Example 1: ```k.ChampionMastery.totalScore({ id: 20026563 }, rprint)```
-4. **/championmastery/location/{location}/player/{playerId}/topchampions**
-    * Get specified number of top champion mastery entries sorted by number of champion points descending. (RPC) 
-    * getTopChamps({ region = this.defaultRegion, id/summonerID/playerID (int), name (string), options (object) }, cb)
-    * Namespaced Functions: *ChampionMastery.getTopChampions, ChampionMastery.top, ChampionMastery.best*
-    * Example 1: ```k.ChampionMastery.best({ id: 20026563 }, rprint)```
-
-### Current Game
-[docs](https://developer.riotgames.com/api-methods/#current-game-v1.0)
-
-1. **/observer-mode/rest/consumer/getSpectatorGameInfo/{platformId}/{summonerId}**
-    * Get current game information for the given summoner ID. (REST)
-    * getCurrentGame({ region = this.defaultRegion, id/summonerID/playerID (int), name (str) }, cb)
-    * Namespaced Functions: *CurrentGame.getCurrentGame, CurrentGame.get*
-    * Example 1: ```k.CurrentGame.get({ name: 'Contractz' }, rprint)```
-
-### Featured Games
-[docs](https://developer.riotgames.com/api-methods/#featured-games-v1.0)
-
-1. **/observer-mode/rest/featured**
-    * Get list of featured games. (REST)
-    * getFeaturedGames({ region }, cb)
-    * Namespaced Functions: *FeaturedGames.getFeaturedGames, FeaturedGames.get*
-    * Example 1: ```k.FeaturedGames.getFeaturedGames(rprint)```
-    * Example 2: ```k.FeaturedGames.get().then(data => console.log(data))```
-    * Example 3: ```k.FeaturedGames.get({ region: 'na' }, rprint)```
-    
 ### Game
 [docs](https://developer.riotgames.com/api-methods/#game-v1.3)
 
@@ -127,15 +101,15 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
 
 1. **/api/lol/{region}/v2.5/league/by-summoner/{summonerIds}**
     * Get leagues mapped by summoner ID for a given list of summoner IDs. (REST)
-    * getLeagues({ region, ids/summonerIDs/playerIDs ([int]/int), id/summonerID/player/ID (int), names ([str]/str), name (str) }, cb)
+    * getLeagues({ region, id/summonerID/player/ID (int), name (str) }, cb)
     * Namespaced Functions: *League.getLeagues, League.get*
     * Example 1: ```k.League.getLeagues({ summonerID: 20026563 }, rprint)```
     * Example 2: ```k.League.get({ summonerID: 20026563 }, rprint)```
 2. **/api/lol/{region}/v2.5/league/by-summoner/{summonerIds}/entry**
     * Get league entries mapped by summoner ID for a given list of summoner IDs. (REST)
-    * getLeagueEntries({ region, ids/summonerIDs/playerIDs ([int]/int), id/summonerID/playerID (int), names ([str]/str), name (str) }, cb)
+    * getLeagueEntries({ region, id/summonerID/playerID (int), name (str) }, cb)
     * Namespaced Functions: *League.getLeagueEntries, League.getEntries, League.entries*
-    * Example 1: ```k.League.getEntries({ summonerID: 20026563 }, rprint)```
+    * Example 1: ```k.League.entries({ summonerID: 20026563 }, rprint)```
 3. **/api/lol/{region}/v2.5/league/challenger**
     * Get challenger tier leagues. (REST)
     * getChallengers({ region, options: { type: 'RANKED_SOLO_5x5' } }, cb)
@@ -149,83 +123,22 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
     * Namespaced Functions: *League.getMasters, League.masters*
     * Example 1: ```k.League.masters().then(data => console.log(data))```
 
-### LoL Static Data
-[docs](https://developer.riotgames.com/api-methods/#lol-static-data-v1.2)
-
-1. **/api/lol/static-data/{region}/v1.2/champion**
-    * Retrieves champion list. (REST)
-    * getChampionList({ region, options (object) }, cb)
-    * Namespaced Functions: *Static.getChampions, Static.champions*
-2. **/api/lol/static-data/{region}/v1.2/champion/{id}**
-    * Retrieves a champion by its id. (REST)
-    * getChampion({ region, id/championID (int), options (object) }, cb)
-    * Namespaced Functions: *Static.getChampion, Static.champion*
-3. **/api/lol/static-data/{region}/v1.2/item**
-    * Retrieves item list. (REST)
-    * getItems({ region, options (object) }, cb)
-    * Namespaced Functions: *Static.getItems, Static.items*
-4. **/api/lol/static-data/{region}/v1.2/item/{id}**
-    * Get master tier leagues. (REST)
-    * getItem({ region, id/itemID (int), options (object) }, cb)
-    * Namespaced Functions: *Static.getItem, Static.item*
-5. **/api/lol/static-data/{region}/v1.2/language-strings**
-    * Retrieve language strings data. (REST)
-    * getLanguageStrings({ region, options (object) }, cb)
-    * Namespaced Functions: *Static.getLanguageStrings, Static.languageStrings*
-6. **/api/lol/static-data/{region}/v1.2/languages**
-    * Retrieve supported languages data. (REST)
-    * getLanguages({ region }, cb)
-    * Namespaced Functions: *Static.getLanguages, Static.languages*
-7. **/api/lol/static-data/{region}/v1.2/map**
-    * Retrieve map data. (REST)
-    * getMapData({ region, options (object) }, cb)
-    * Namespaced Functions: *Static.getMapData, Static.mapData, Static.map, Static.maps*
-8. **/api/lol/static-data/{region}/v1.2/mastery**
-    * Retrieve mastery list. (REST)
-    * getMasteryList({ region, options (object) }, cb)
-    * Namespaced Functions: *Static.getMasteries, Static.masteries*
-9. **/api/lol/static-data/{region}/v1.2/mastery/{id}**
-    * Retrieves mastery item by its unique id. (REST)
-    * getMastery({ region, id/masteryID (int), options (object) }, cb)
-    * Namespaced Functions: *Static.getMastery, Static.mastery*
-10. **/api/lol/static-data/{region}/v1.2/realm**
-    * Retrieve realm data. (REST)
-    * getRealmData({ region }, cb)
-    * Namespaced Functions: *Static.getRealmData, Static.realmData, Static.realm, Static.realms*
-11. **/api/lol/static-data/{region}/v1.2/rune**
-    * Retrieves rune list. (REST)
-    * getRuneList({ region, options (object) }, cb)
-    * Namespaced Functions: *Static.getRunes, Static.runes*
-12. **/api/lol/static-data/{region}/v1.2/rune/{id}**
-    * Retrieves rune by its unique id. (REST)
-    * getRune({ region, id/runeID (int), options (object) }, cb)
-    * Namespaced Functions: *Static.getRune, Static.rune*
-13. **/api/lol/static-data/{region}/v1.2/summoner-spell**
-    * Retrieves summoner spell list. (REST)
-    * getSummonerSpells({ region, options (object) }, cb)
-    * Namespaced Functions: *Static.getSummonerSpells, Static.summonerSpells, Static.spells*
-14. **/api/lol/static-data/{region}/v1.2/summoner-spell/{id}**
-    * Retrieves summoner spell by its unique id. (REST)
-    * getSummonerSpell({ region, id/spellID/summonerSpellID (int), options (object) }, cb)
-    * Namespaced Functions: *Static.getSummonerSpell, Static.summonerSpell, Static.spell*
-15. **/api/lol/static-data/{region}/v1.2/versions**
-    * Retrieve version data. (REST)
-    * getVersionData({ region, options (object) }, cb)
-    * Namespaced Functions: *Static.getVersionData, Static.versionData, Static.version, Static.versions*
-
 ### LoL Status
-[docs](https://developer.riotgames.com/api-methods/#lol-status-v1.0)
+[docs](https://developer.riotgames.com/api-methods/#lol-status-v3)
 
-1. **/lol/status/v1/shard**
-    * Get shard status. Returns the data available on the status.leagueoflegends.com website for the given region. (REST)
+1. **/lol/status/v3/shard-data**
+    * Get League of Legends status for the given shard.
     * getShardStatus({ region }, cb)
     * Namespaced Functions: *Status.getShardStatus, Status.getStatus, Status.get*
     * Example 1: ```k.Status.get().then(data => console.log(data))```
-2. **/lol/status/v1/shards**
-    * Get shard list. (REST)
-    * getShardList({ region }, cb)
-    * Namepsaced Functions: *Status.getShardList, Status.getShards, Status.getAll, Status.all*
-    * Example 1: ```k.Status.all().then(data => console.log(data))```
+
+### Masteries
+[docs](https://developer.riotgames.com/api-methods/#masteries-v3)
+1. **/api/lol/{region}/v1.4/summoner/{summonerIds}/masteries**
+    * Get mastery pages for a given summoner ID.
+    * getMasteries({ region, id/summonerID/playerID (int), name (str)}, cb)
+    * Namespaced Functions: *RunesMasteries.getMasteries, RunesMasteries.masteries, Masteries.get*
+    * Example 1: ```k.Masteries.get({ id: 20026563 }, rprint)```
 
 ### Match
 [docs](https://developer.riotgames.com/api-methods/#match-v2.2)
@@ -247,21 +160,94 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
     * Example 1: ```k.MatchList.get({ id: 20026563 }, rprint)```
     * Example 2: ```k.MatchList.get({ id: 20026563, options: { rankedQueues: 'RANKED_FLEX_SR' } }, rprint)```
 
-### Runes Masteries
-[docs](https://developer.riotgames.com/api-methods/#runes-masteries-v1.4)
+### Runes
+[docs](https://developer.riotgames.com/api-methods/#runes-v3)
 
-1. **/api/lol/{region}/v1.4/summoner/{summonerIds}/masteries**
-    * Get mastery pages mapped by summoner ID for a given list of summoner IDs. (REST)
-    * getMasteries({ region, ids/summonerIDs/playerIDs ([int]/int), id/summonerID/playerID (int), names ([str]/str), name (str)}, cb)
+1. **/api/lol/{region}/v1.4/summoner/{summonerIds}/runes**
+    * Get rune pages for a given summoner ID.
+    * getRunes({ region, id/summonerID/playerID (int), name (str) }, cb)
     * Namespaced Functions: *RunesMasteries.getRunes, RunesMasteries.runes, Runes.get*
-    * Example 1: ```k.RunesMasteries.runes({ id: 20026563 }, rprint)```
-    * Example 2: ```k.Runes.get({ id: 20026563 }, rprint)```
-2. **/api/lol/{region}/v1.4/summoner/{summonerIds}/runes**
-    * Retrieve match list by match ID. (REST)
-    * getRunes({ region, ids/summonerIDs/playerIDs ([int]/int), id/summonerID/playerID (int), names ([str]/str), name (str) }, cb)
-    * Namespaced Functions: *RunesMasteries.getMasteries, RunesMasteries.masteries, Masteries.get*
-    * Example 1: ```k.RunesMasteries.masteries({ id: 20026563 }, rprint)```
-    * Example 2: ```k.Masteries.get({ id: 20026563 }, rprint)```
+    * Example 1: ```k.Runes.get({ id: 20026563 }, rprint)```
+
+### Spectator
+[docs](https://developer.riotgames.com/api-methods/#spectator-v3)
+
+1. **/lol/spectator/v3/active-games/by-summoner/{summonerId}**
+    * Get current game information for the given summoner ID. (REST)
+    * getCurrentGame({ region = this.defaultRegion, id/summonerID/playerID (int), name (str) }, cb)
+    * Namespaced Functions: *CurrentGame.getCurrentGame, CurrentGame.get*
+    * Example 1: ```k.CurrentGame.get({ name: 'Contractz' }, rprint)```
+2. **/lol/spectator/v3/featured-games**
+    * Get list of featured games. (REST)
+    * getFeaturedGames({ region }, cb)
+    * Namespaced Functions: *FeaturedGames.getFeaturedGames, FeaturedGames.get*
+    * Example 1: ```k.FeaturedGames.get().then(data => console.log(data))```
+    * Example 2: ```k.FeaturedGames.get({ region: 'na' }, rprint)```
+
+### Static Data
+[docs](https://developer.riotgames.com/api-methods/#static-data-v3)
+
+1. **/lol/static-data/v3/champions**
+    * Retrieves champion list. (REST)
+    * getChampionList({ region, options (object) }, cb)
+    * Namespaced Functions: *Static.getChampions, Static.champions*
+2. **/lol/static-data/v3/champions/{id}**
+    * Retrieves a champion by its id. (REST)
+    * getChampion({ region, id/championID (int), options (object) }, cb)
+    * Namespaced Functions: *Static.getChampion, Static.champion*
+3. **/lol/static-data/v3/items**
+    * Retrieves item list. (REST)
+    * getItems({ region, options (object) }, cb)
+    * Namespaced Functions: *Static.getItems, Static.items*
+4. **/lol/static-data/v3/items/{id}**
+    * Get master tier leagues. (REST)
+    * getItem({ region, id/itemID (int), options (object) }, cb)
+    * Namespaced Functions: *Static.getItem, Static.item*
+5. **/lol/static-data/v3/language-strings**
+    * Retrieve language strings data. (REST)
+    * getLanguageStrings({ region, options (object) }, cb)
+    * Namespaced Functions: *Static.getLanguageStrings, Static.languageStrings*
+6. **/lol/static-data/v3/languages**
+    * Retrieve supported languages data. (REST)
+    * getLanguages({ region }, cb)
+    * Namespaced Functions: *Static.getLanguages, Static.languages*
+7. **/lol/static-data/v3/maps**
+    * Retrieve map data. (REST)
+    * getMapData({ region, options (object) }, cb)
+    * Namespaced Functions: *Static.getMapData, Static.mapData, Static.map, Static.maps*
+8. **/lol/static-data/v3/masteries**
+    * Retrieve mastery list. (REST)
+    * getMasteryList({ region, options (object) }, cb)
+    * Namespaced Functions: *Static.getMasteries, Static.masteries*
+9. **/lol/static-data/v3/masteries/{id}**
+    * Retrieves mastery item by its unique id. (REST)
+    * getMastery({ region, id/masteryID (int), options (object) }, cb)
+    * Namespaced Functions: *Static.getMastery, Static.mastery*
+10. **/lol/static-data/v3/profile-icons**
+11. **/lol/static-data/v3/realms**
+    * Retrieve realm data. (REST)
+    * getRealmData({ region }, cb)
+    * Namespaced Functions: *Static.getRealmData, Static.realmData, Static.realm, Static.realms*
+12. **/lol/static-data/v3/runes**
+    * Retrieves rune list. (REST)
+    * getRuneList({ region, options (object) }, cb)
+    * Namespaced Functions: *Static.getRunes, Static.runes*
+13. **/lol/static-data/v3/runes/{id}**
+    * Retrieves rune by its unique id. (REST)
+    * getRune({ region, id/runeID (int), options (object) }, cb)
+    * Namespaced Functions: *Static.getRune, Static.rune*
+14. **/lol/static-data/v3/summoner-spells**
+    * Retrieves summoner spell list. (REST)
+    * getSummonerSpells({ region, options (object) }, cb)
+    * Namespaced Functions: *Static.getSummonerSpells, Static.summonerSpells, Static.spells*
+15. **/lol/static-data/v3/summoner-spells/{id}**
+    * Retrieves summoner spell by its unique id. (REST)
+    * getSummonerSpell({ region, id/spellID/summonerSpellID (int), options (object) }, cb)
+    * Namespaced Functions: *Static.getSummonerSpell, Static.summonerSpell, Static.spell*
+16. **/lol/static-data/v3/versions**
+    * Retrieve version data. (REST)
+    * getVersionData({ region, options (object) }, cb)
+    * Namespaced Functions: *Static.getVersionData, Static.versionData, Static.version, Static.versions*
 
 ### Stats
 [docs](https://developer.riotgames.com/api-methods/#stats-v1.3)
@@ -279,31 +265,18 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
     * Example 1: ```k.Stats.summary({ id: 20026563 }, rprint)```
 
 ### Summoner
-[docs](https://developer.riotgames.com/api-methods/#summoner-v1.4)
+[docs](https://developer.riotgames.com/api-methods/#summoner-v3)
 
 1. **/api/lol/{region}/v1.4/summoner/by-account/{accountIds}**
     * Get a list of summoners by account ids (RPC).
     * N/A
-2. **/api/lol/{region}/v1.4/summoner/by-name/{summonerNames}**
-    * Get a list of summoners by summoner names. (RPC)
-    * getSummoners({ region, ids/summonerIDs/playerIDs ([int]/int), id (int), names ([str]/ str), name (str) }, cb)
+2. **/lol/summoner/v3/summoners/by-name/{summonerName}**, **/lol/summoner/v3/summoners/{summonerId}**
+    * Get a summoner by summoner name, Get a summoner by summoner id
+    * getSummoners({ region, name (str) }, cb)
     * getSummoner({ region, id (int), name (str) }, cb)
     * Namespaced Functions: *Summoner.getSummoners, Summoner.getAll, Summoner.all, Summoner.getSummoner, Summoner.get*
     * Example 1: ```k.Summoner.get({ name: 'caaaaaaaaarIa' }, rprint)```
-    * Example 2: ```k.Summoner.all({ names: ['caaaaaaaaarIa', 'Contractz'] }, rprint)```
-3. **/api/lol/{region}/v1.4/summoner/{summonerIds}**
-    * Get challenger tier leagues. (REST)
-    * getSummoners({ region, ids/summonerIDs/playerIDs ([int]/int), id (int), names ([str]/ str), name (str) }, cb)
-    * getSummoner({ region, id (int), name (str) }, cb)
-    * Namespaced Functions: *Summoner.getSummoners, Summoner.getAll, Summoner.all, Summoner.getSummoner, Summoner.get*
-    * Example 1: ```k.Summoner.get({ id: 20026563 }, rprint)```
-    * Example 2: ```k.Summoner.getAll({ ids: [20026563, 32932398] }, rprint)```
-4. **/api/lol/{region}/v1.4/summoner/{summonerIds}/name**
-    * Get master tier leagues. (REST)
-    * getSummonerNames({ region, ids/summonerIDs/playerIDs ([int]/int), id/summonerID/playerID (int) }, cb)
-    * getSummonerName({ region, id/summonerID/playerID (int) }, cb)
-    * Namespaced Functions: *Summoner.getSummonerNames, Summoner.getNames, Summoner.names, Summoner.getSummonerName, Summoner.getName, Summoner.name*
-    * Example 1: ```k.Summoner.names({ ids: [20026563, 32932398] }, rprint)```
+    * Example 2: ```k.Summoner.get({ id: 20026563 }, rprint)```
 
 ## Quickstart
 Debug on, dev key rate limiting per region, in-memory cache with default settings on for quick scripts
