@@ -291,9 +291,6 @@ var k = KindredAPI.QuickStart('YOUR_KEY', debug)
 k.Summoner.get({ id: 32932398 }, KindredAPI.print)
 k.Summoner.get({ name: 'Contractz' }, KindredAPI.print)
 
-/* No need to wrap nested API calls for exclusively by-id endpoints, the client does it for you. */
-k.Runes.get({ region: 'na', name: 'Contractz' }).then(data => console.log(data))
-
 /* How to pass in options 101. */
 var name = 'caaaaaaaaaria'
 var opts = {
