@@ -689,7 +689,7 @@
               }
             }
 
-            var stringifiedOpts = queryString.stringify(options);
+            var stringifiedOpts = queryString.stringify(options).replace(/%2C/, ',');
             var postfix = stringifiedOpts ? '?' + stringifiedOpts : '';
             var reqUrl = _this._makeUrl(endUrl + postfix, region, staticReq, status, observerMode, championMastery);
             var fullUrl = reqUrl + (reqUrl.lastIndexOf('?') === -1 ? '?' : '&') + ('api_key=' + _this.key);

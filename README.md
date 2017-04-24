@@ -32,6 +32,8 @@ yarn add kindred-api
 ```
 
 ## Endpoints Covered
+All examples here should be able to be run alone individually.
+
 Make sure to check the [official Riot Documentation](https://developer.riotgames.com/api-methods/) to see what query parameters you can pass in to each endpoint (through the options parameter)!
 
 Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters are **OPTIONAL** unless stated otherwise.
@@ -191,63 +193,88 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
     * Retrieves champion list. (REST)
     * getChampionList({ region, options (object) }, cb)
     * Namespaced Functions: *Static.getChampions, Static.champions*
+    * Example 1: ```k.Static.champions(rprint)```
+    * Example 2: ```k.Static.champions({ options: { champData: 'all' } }).then(data => console.log(data))```
 2. **/lol/static-data/v3/champions/{id}**
     * Retrieves a champion by its id. (REST)
     * getChampion({ region, id/championID (int), options (object) }, cb)
     * Namespaced Functions: *Static.getChampion, Static.champion*
+    * Example 1: ```k.Static.champion({ id: 131 }, rprint)```
+    * Example 2: ```k.Static.champion({ id: 131, options: { champData: 'enemytips', version: '7.7.1' } }, rprint)```
 3. **/lol/static-data/v3/items**
     * Retrieves item list. (REST)
     * getItems({ region, options (object) }, cb)
     * Namespaced Functions: *Static.getItems, Static.items*
+    * Example 1: ```k.Static.items({ options: { itemListData: all } }, rprint)```
 4. **/lol/static-data/v3/items/{id}**
     * Get master tier leagues. (REST)
     * getItem({ region, id/itemID (int), options (object) }, cb)
     * Namespaced Functions: *Static.getItem, Static.item*
+    * Example 1: ```k.Static.item({ id: 3901, options: { itemData: ['image', 'gold'] } }, rprint)```
+    * Example 2: ```k.Static.items(rprint)```
 5. **/lol/static-data/v3/language-strings**
     * Retrieve language strings data. (REST)
     * getLanguageStrings({ region, options (object) }, cb)
     * Namespaced Functions: *Static.getLanguageStrings, Static.languageStrings*
+    * Example 1: ```k.Static.languageStrings(rprint)```
 6. **/lol/static-data/v3/languages**
     * Retrieve supported languages data. (REST)
     * getLanguages({ region }, cb)
     * Namespaced Functions: *Static.getLanguages, Static.languages*
+    * Example 1: ```k.Static.languages().then(data => console.log(data)).catch(err => console.log(err))```
 7. **/lol/static-data/v3/maps**
     * Retrieve map data. (REST)
     * getMapData({ region, options (object) }, cb)
     * Namespaced Functions: *Static.getMapData, Static.mapData, Static.map, Static.maps*
+    * Example 1: ```k.Static.mapData().then(data => console.log(data))```
 8. **/lol/static-data/v3/masteries**
     * Retrieve mastery list. (REST)
     * getMasteryList({ region, options (object) }, cb)
     * Namespaced Functions: *Static.getMasteries, Static.masteries*
+    * Example 1: ```k.Static.masteries({ options: { masteryListData: 'image' } }, rprint)```
+    * Example 2: ```k.Static.masteries(rprint)```
 9. **/lol/static-data/v3/masteries/{id}**
     * Retrieves mastery item by its unique id. (REST)
     * getMastery({ region, id/masteryID (int), options (object) }, cb)
     * Namespaced Functions: *Static.getMastery, Static.mastery*
+    * Example 1: ```k.Static.mastery({ id: 6361 }, rprint)```
+    * Example 2: ```k.Static.mastery({ id: 6361, options: { masteryData: ['image', 'masteryTree'] } }, rprint)```
+    * Example 3: ```k.Static.mastery({ id: 6361, options: { masteryData: 'image' } }, rprint)```
 10. **/lol/static-data/v3/profile-icons**
 11. **/lol/static-data/v3/realms**
     * Retrieve realm data. (REST)
     * getRealmData({ region }, cb)
     * Namespaced Functions: *Static.getRealmData, Static.realmData, Static.realm, Static.realms*
+    * Example 1: ```k.Static.realmData().then(data => console.log(data))```
 12. **/lol/static-data/v3/runes**
     * Retrieves rune list. (REST)
     * getRuneList({ region, options (object) }, cb)
     * Namespaced Functions: *Static.getRunes, Static.runes*
+    * Example 1: ```k.Static.runes().then(data => console.log(data))```
+    * Example 2: ```k.Static.runes({ options: { runeListData: 'basic' } }, rprint)```
 13. **/lol/static-data/v3/runes/{id}**
     * Retrieves rune by its unique id. (REST)
     * getRune({ region, id/runeID (int), options (object) }, cb)
     * Namespaced Functions: *Static.getRune, Static.rune*
+    * Example 1: ```k.Static.rune({ id: 10002 }, rprint)```
+    * Example 2: ```k.Static.rune({ id: 10001, options: { runeData: 'image' } }, rprint)```
 14. **/lol/static-data/v3/summoner-spells**
     * Retrieves summoner spell list. (REST)
     * getSummonerSpells({ region, options (object) }, cb)
     * Namespaced Functions: *Static.getSummonerSpells, Static.summonerSpells, Static.spells*
+    * Example 1: ```k.Static.spells(rprint)```
+    * Example 2: ```k.Static.spells({ options: { spellData: 'cost', dataById: true } }, rprint)```
 15. **/lol/static-data/v3/summoner-spells/{id}**
     * Retrieves summoner spell by its unique id. (REST)
     * getSummonerSpell({ region, id/spellID/summonerSpellID (int), options (object) }, cb)
     * Namespaced Functions: *Static.getSummonerSpell, Static.summonerSpell, Static.spell*
+    * Example 1: ```k.Static.spell({ id: 31 }, rprint)```
+    * Example 2: ```k.Static.spell({ id: 31, options: { spellData: 'cooldown' } }, rprint)```
 16. **/lol/static-data/v3/versions**
     * Retrieve version data. (REST)
     * getVersionData({ region, options (object) }, cb)
     * Namespaced Functions: *Static.getVersionData, Static.versionData, Static.version, Static.versions*
+    * Example 1: ```k.Static.versions(rprint)```
 
 ### Stats
 [docs](https://developer.riotgames.com/api-methods/#stats-v1.3)
