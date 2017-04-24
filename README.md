@@ -283,9 +283,9 @@ Debug on, dev key rate limiting per region, in-memory cache with default setting
 
 ```javascript
 var KindredAPI = require('kindred-api')
-
+var REGIONS = KindredAPI.REGIONS
 var debug = true
-var k = KindredAPI.QuickStart('YOUR_KEY', debug)
+var k = KindredAPI.QuickStart('YOUR_KEY', REGIONS.NORTH_AMERICA, debug)
 
 /* Summoners! */
 k.Summoner.get({ id: 32932398 }, KindredAPI.print)
@@ -294,7 +294,7 @@ k.Summoner.get({ name: 'Contractz' }, KindredAPI.print)
 /* How to pass in options 101. */
 var name = 'caaaaaaaaaria'
 var opts = {
-  region: KindredAPI.REGIONS.NORTH_AMERICA,
+  region: REGIONS.NORTH_AMERICA, // for the sake of example
   options: {
     rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'], // no need for joins or messy strings
     championIDs: '67' // single values can be integers as well

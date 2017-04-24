@@ -1116,9 +1116,10 @@ class Kindred {
   }
 }
 
-function QuickStart(apiKey, debug) {
+function QuickStart(apiKey, region, debug) {
   return new Kindred({
     key: apiKey,
+    defaultRegion: region,
     debug,
     limits: LIMITS.DEV,
     cacheOptions: CACHE_TYPES[0],

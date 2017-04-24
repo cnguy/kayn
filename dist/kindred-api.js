@@ -1754,9 +1754,10 @@
     return Kindred$1;
   }();
 
-  function QuickStart(apiKey, debug) {
+  function QuickStart(apiKey, region, debug) {
     return new Kindred$1({
       key: apiKey,
+      defaultRegion: region,
       debug: debug,
       limits: limits.DEV,
       cacheOptions: caches[0]
