@@ -181,6 +181,9 @@ class Kindred {
       getMastery: this.getMastery.bind(this),
       mastery: this.getMastery.bind(this),
 
+      getProfileIcons: this.getProfileIcons.bind(this),
+      profileIcons: this.getProfileIcons.bind(this),
+
       getRealmData: this.getRealmData.bind(this),
       realmData: this.getRealmData.bind(this),
       realm: this.getRealmData.bind(this),
@@ -852,6 +855,10 @@ class Kindred {
     }
   }
 
+  getProfileIcons({ region, options }, cb) {
+    return this._staticRequest({ endUrl: 'profile-icons', region, options }, cb = arguments.length === 2 ? cb : arguments[0])
+  }
+
   getRealmData({ region } = {}, cb) {
     return this._staticRequest({ endUrl: 'realms', region }, cb = region ? cb : arguments[0])
   }
@@ -1069,32 +1076,10 @@ class Kindred {
   }
 
   /* SUMMONER-V1.4 */
-  getSummoners({
-    region,
-    id, summonerID, playerID,
-    name
-  } = {}, cb) {
-    if (Number.isInteger(id || summonerID || playerID)) {
-      return this._summonerRequest({
-        endUrl: `${id || summonerID || playerID}`,
-        region
-      }, cb)
-    } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
-      return this._summonerRequest({
-        endUrl: `by-name/${this._sanitizeName(name)}`,
-        region
-      }, cb)
-    } else {
-      this._logError(
-        this.getSummoners.name,
-        `required params ${chalk.yellow('`id/summonerID/playerID` (int)')} or ${chalk.yellow('`name` (str)')} not passed in`
-      )
-    }
-  }
-
   getSummoner({
     region,
     id, summonerID, playerID,
+    accountID,
     name
   } = {}, cb) {
     if (Number.isInteger(id || summonerID || playerID)) {
@@ -1105,12 +1090,17 @@ class Kindred {
     } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
       return this._summonerRequest({
         endUrl: `by-name/${this._sanitizeName(name)}`,
+        region
+      }, cb)
+    } else if (Number.isInteger(accountID)) {
+      return this._summonerRequest({
+        endUrl: `by-account/${accountID}`,
         region
       }, cb)
     } else {
       return this._logError(
         this.getSummoner.name,
-        `required params ${chalk.yellow('`id/summonerID/playerID` (int)')} or ${chalk.yellow('`name` (string)')} not passed in`
+        `required params ${chalk.yellow('`id/summonerID/playerID` (int)')}, ${chalk.yellow('`accountID` (int)')}, or ${chalk.yellow('`name` (string)')} not passed in`
       )
     }
   }

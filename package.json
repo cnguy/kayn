@@ -1,6 +1,6 @@
 {
   "name": "kindred-api",
-  "version": "2.0.6",
+  "version": "2.0.10",
   "description": "Kindred is a thin Node.js wrapper on top of Riot Games API for League of Legends",
   "main": "index.js",
   "jsnext:main": "src/index.js",
@@ -25,9 +25,13 @@
     "javascript",
     "es6",
     "es2015",
-    "babel",
     "riot api",
     "league of legends",
+    "league api",
+    "league of legends api",
+    "javascript league api",
+    "nodejs league api",
+    "lol api",
     "riot api wrapper",
     "node.js riot api wrapper"
   ],

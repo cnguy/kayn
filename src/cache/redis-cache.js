@@ -29,8 +29,7 @@ class RedisCache {
   }
 
   set(args, value) {
-    this.client.setex(this.prefix + args.key, args.ttl, value, redis.print)
-    console.log('set for ' + args.ttl + ' seconds')
+    this.client.setex(this.prefix + args.key, args.ttl, value)
   }
 }
 
