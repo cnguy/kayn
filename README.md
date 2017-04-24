@@ -18,7 +18,7 @@ Kindred is a Node.js wrapper with built-in rate-limiting (enforced per region), 
     * Retries on 429 and >= 500.
         * Promise-based requests retry up to three times.
 * Built-in parameter checks so you can hopefully refer to documentation less! :)
-* Built-in, flexible caching (in-memory and redis).
+* Built-in, flexible caching (in-memory and Redis).
     * Customized expiration timers. You can set a timer for each endpoint type. Refer to [Caching](#caching) for more info.
 * Designed to be simple but convenient. For example, you can call an exclusively by-id endpoint (such as grabbing the runes of a player) with just the name.
 
@@ -297,8 +297,10 @@ var opts = {
   region: REGIONS.NORTH_AMERICA, // for the sake of example
   options: {
     rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'], // no need for joins or messy strings
-    championIDs: '67' // single values can be integers as well
+    // you can pass in arrays into any options params; array values will always be joined into a string
+    championIds: '67' // single values can be integers as well
   } // option params should be spelled and capitalized the same as it is in Riot's docs!
+  // for example, matchlist query params in Riot's docs include `championIds`, `beginIndex`, `beginTime`, `seasons`
 }
 
 k.Summoner.get({ name: name, region: opts.region })
@@ -415,8 +417,7 @@ k.Summoner.get({ id: 354959 }, rprint)
 /*
   There are aliases for the `id` param.
   
-  For example, for summoners, you have summonerID, summonerIDs,
-  playerID, and playerIDs.
+  For example, for summoners, you have summonerID and playerID.
 */
 k.Summoner.get({ summonerID: 354959 }, rprint)
 
@@ -533,7 +534,7 @@ k.MatchList.get({ name, region: 'na', options: {
     // rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'].join(','), STILL VALID
     // championIds: '67' // '267,67' or ['267', '67'].join(',') STILL VALID
   rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'], // valid
-  championIDs: [67, 62, '61'] // valid
+  championIds: [67, 62, '61'] // valid
 } }, rprint)
 
 /* The above example with promises. */
@@ -542,7 +543,7 @@ var opts = {
   region: 'na',
   options: {
     rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'],
-    championIDs: '67'
+    championIds: '67'
   }
 }
 
@@ -561,7 +562,7 @@ k.Static.rune({ id: msRuneId }, rprint)
 
 *April 2*
 I have added caching support. Right now, the library supports in-memory caching as well as
-caching with redis. These are the default timers that made sense to me.
+caching with Redis. These are the default timers that made sense to me.
 
 ``` javascript
 const endpointCacheTimers = {
