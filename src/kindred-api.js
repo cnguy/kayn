@@ -543,7 +543,7 @@ class Kindred {
     process.exit(1)
   }
 
-  /* CHAMPION-V1.2 */
+  /* CHAMPION-V3 */
   getChamps({ region, options } = {}, cb) {
     return this._championRequest({
       endUrl: 'champions', region, options
@@ -567,7 +567,7 @@ class Kindred {
     }
   }
 
-  /* CHAMPIONMASTERY */
+  /* CHAMPION-MASTERY-V3 */
   getChampMastery({
     region = this.defaultRegion,
     playerID, championID,
@@ -641,7 +641,7 @@ class Kindred {
     }
   }
 
-  /* CURRENT-GAME-V1.0 */
+  /* SPECTATOR-V3 */
   getCurrentGame({
     region = this.defaultRegion,
     id, summonerID, playerID,
@@ -670,7 +670,6 @@ class Kindred {
     }
   }
 
-  /* FEATURED-GAMES-V1.0 */
   getFeaturedGames({ region } = {}, cb) {
     return this._spectatorRequest({
       endUrl: 'featured-games',
@@ -959,7 +958,7 @@ class Kindred {
     }
   }
 
-  /* RUNES-MASTERIES-V1.4 */
+  /* RUNES-V3 */
   getRunes({
     region,
     id, summonerID, playerID,
@@ -988,6 +987,7 @@ class Kindred {
     }
   }
 
+  /* MASTERIES-V3 */
   getMasteries({
     region,
     id, summonerID, playerID,
@@ -1075,7 +1075,7 @@ class Kindred {
     }
   }
 
-  /* SUMMONER-V1.4 */
+  /* SUMMONER-V3 */
   getSummoner({
     region,
     id, summonerID, playerID,
