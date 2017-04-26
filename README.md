@@ -137,7 +137,7 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
 
 ### Masteries
 [docs](https://developer.riotgames.com/api-methods/#masteries-v3)
-1. **/api/lol/{region}/v1.4/summoner/{summonerIds}/masteries**
+1. **/lol/platform/v3/masteries/by-summoner/{summonerId}**
     * Get mastery pages for a given summoner ID.
     * getMasteries({ region, accountID/accID (int), id/summonerID/playerID (int), name (str)}, cb)
     * Namespaced Functions: *RunesMasteries.getMasteries, RunesMasteries.masteries, Masteries.get*
@@ -177,7 +177,7 @@ Note that this section has two different namespaces (Match and Matchlist).
 ### Runes
 [docs](https://developer.riotgames.com/api-methods/#runes-v3)
 
-1. **/api/lol/{region}/v1.4/summoner/{summonerIds}/runes**
+1. **/lol/platform/v3/runes/by-summoner/{summonerId}**
     * Get rune pages for a given summoner ID.
     * getRunes({ region, accountID/accID (int), id/summonerID/playerID (int), name (str) }, cb)
     * Namespaced Functions: *RunesMasteries.getRunes, RunesMasteries.runes, Runes.get*
