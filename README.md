@@ -12,7 +12,7 @@ Kindred is a Node.js wrapper with built-in rate-limiting (enforced per region), 
 * [Contributing and Issues](#contributing-and-issues)
 
 ## Core Features
-* All standard endpoints covered but one (get summoner by accountIDs).
+* All standard endpoints covered but tournament endpoints.
 * Supports both callbacks and promises.
 * Rate limiter that is enforced per region.
     * Retries on 429 and >= 500.
