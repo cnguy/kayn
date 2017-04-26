@@ -262,6 +262,14 @@ class Kindred {
       getSummoner: this.getSummoner.bind(this),
       get: this.getSummoner.bind(this),
     }
+
+    this.Ex = {
+      getSummonerByAccID: this.getSummonerByAccID.bind(this),
+      getMatchlistByName: this.getMatchlistByName.bind(this),
+      getRunesBySummonerID: this.getRunesBySummonerID.bind(this),
+      getRunesByAccountID: this.getRunesByAccountID.bind(this),
+      staticRuneList: this.staticRuneList.bind(this)
+    }
   }
 
   canMakeRequest(region) {
@@ -1288,6 +1296,42 @@ class Kindred {
         `required params ${chalk.yellow('`id/summonerID/playerID` (int)')}, ${chalk.yellow('`accountID/accID` (int)')}, or ${chalk.yellow('`name` (string)')} not passed in`
       )
     }
+  }
+
+  /* Examples */
+  getSummonerByAccID(id, region, cb) {
+    return this.Summoner.get({
+      region,
+      accID: id
+    }, cb)
+  }
+
+  getMatchlistByName(name, region, options, cb) {
+    return this.Matchlist.get({
+      region,
+      name,
+      options
+    }, cb)
+  }
+
+  getRunesBySummonerID(id, region, cb) {
+    return this.Runes.get({
+      region,
+      id
+    }, cb)
+  }
+
+  getRunesByAccountID(id, region, cb) {
+    return this.Runes.get({
+      region,
+      id
+    }, cb)
+  }
+
+  staticRuneList(region, options, cb) {
+    return this.Static.runes({
+      region, options
+    }, cb)
   }
 }
 

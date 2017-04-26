@@ -613,6 +613,14 @@
         getSummoner: this.getSummoner.bind(this),
         get: this.getSummoner.bind(this)
       };
+
+      this.Ex = {
+        getSummonerByAccID: this.getSummonerByAccID.bind(this),
+        getMatchlistByName: this.getMatchlistByName.bind(this),
+        getRunesBySummonerID: this.getRunesBySummonerID.bind(this),
+        getRunesByAccountID: this.getRunesByAccountID.bind(this),
+        staticRuneList: this.staticRuneList.bind(this)
+      };
     }
 
     _createClass(Kindred$1, [{
@@ -1969,6 +1977,46 @@
         } else {
           return this._logError(this.getSummoner.name, 'required params ' + chalk.yellow('`id/summonerID/playerID` (int)') + ', ' + chalk.yellow('`accountID/accID` (int)') + ', or ' + chalk.yellow('`name` (string)') + ' not passed in');
         }
+      }
+    }, {
+      key: 'getSummonerByAccID',
+      value: function getSummonerByAccID(id, region, cb) {
+        return this.Summoner.get({
+          region: region,
+          accID: id
+        }, cb);
+      }
+    }, {
+      key: 'getMatchlistByName',
+      value: function getMatchlistByName(name, region, options, cb) {
+        return this.Matchlist.get({
+          region: region,
+          name: name,
+          options: options
+        }, cb);
+      }
+    }, {
+      key: 'getRunesBySummonerID',
+      value: function getRunesBySummonerID(id, region, cb) {
+        return this.Runes.get({
+          region: region,
+          id: id
+        }, cb);
+      }
+    }, {
+      key: 'getRunesByAccountID',
+      value: function getRunesByAccountID(id, region, cb) {
+        return this.Runes.get({
+          region: region,
+          id: id
+        }, cb);
+      }
+    }, {
+      key: 'staticRuneList',
+      value: function staticRuneList(region, options, cb) {
+        return this.Static.runes({
+          region: region, options: options
+        }, cb);
       }
     }]);
 

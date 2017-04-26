@@ -10,6 +10,7 @@ Kindred is a Node.js wrapper with built-in rate-limiting (enforced per region), 
 * [Detailed Usage](#detailed-usage)
 * [Rate Limiter](#rate-limiter)
 * [Caching](#caching)
+* [Ugly Parameters: Extending the Libary](#ugly)
 * [Contributing and Issues](#contributing-and-issues)
 
 ## Core Features
@@ -710,6 +711,78 @@ var k = new KindredAPI.Kindred({
   }
 })
 ```
+
+## Ugly
+Some people might disagree with how I formed my functions.
+
+It's actually not really idiomatic JavaScript, and with an object inside an object it gets ugly really fast.
+
+The benefits of this approach is that it's implementing Python's named parameters in a way, which was my original goal with this project.
+
+However, the problem is that some of the functions could be simplified a lot as they only have one parameter and no options such as grabbing a summoner by their summoner ID. You would want something like
+
+```getSummonerByID(id, region, cb)```
+
+I decided to make the first parameter always an object for my main library methods though because it made my functions very consistent with each other, and so I wouldn't have to look at the method documentation as much.
+
+It was very easy to switch between functions and have the call still be successful with the same parameters.
+
+### However, it's easy to add functions.
+You would simply have to define new functions within the class that return calls to my methods.
+
+```javascript
+this.Ex = {
+    getSummonerByAccID: this.getSummonerByAccID.bind(this),
+    getMatchlistByName: this.getMatchlistByName.bind(this),
+    getRunesBySummonerID: this.getRunesBySummonerID.bind(this)
+}
+
+getSummonerByAccID(id, region, cb) {
+    return this.Summoner.get({
+        region,
+        accID: id
+    }, cb)
+  }
+
+getMatchlistByName(name, region, options, cb) {
+    return this.Matchlist.get({
+        region,
+        name,
+        options
+    }, cb)
+}
+
+getRunesBySummonerID(id, region, cb) {
+    return this.Runes.get({
+        region,
+        id
+    }, cb)
+}
+
+getRunesByAccountID(id, region, cb) {
+    return this.Runes.get({
+        region,
+        id
+    }, cb)
+}
+
+staticRuneList(region, options, cb) {
+    return this.Static.runes({
+        region, options
+    }, cb)
+}
+```
+
+It could still be kinda funky, but now you can call the functions like this:
+
+```javascript
+k.Ex.getRunesBySummonerID(32932398, 'na', KindredAPI.print)
+k.Ex.getRunesByAccountID(47776491, 'na', KindredAPI.print)
+k.Ex.staticRuneList('na', {}, KindredAPI.print)
+k.Ex.staticRuneList('na').then(data => console.log(data))
+```
+
+You can decide on how you want to namespace everything though.
 
 ## Contributing and Issues
 **Right now, the code is also quite messy and there is a lot of repeated code.** Function definitions are quite long because I include many aliases as well. I haven't thought of an elegant way to make a magic function that manages to work for every single endpoint request yet.
