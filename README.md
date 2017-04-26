@@ -8,13 +8,14 @@ Kindred is a Node.js wrapper with built-in rate-limiting (enforced per region), 
 * [Endpoints Covered](#endpoints-covered)
 * [Quickstart](#quickstart)
 * [Detailed Usage](#detailed-usage)
+* [Rate Limiter](#rate-limiter)
 * [Caching](#caching)
 * [Contributing and Issues](#contributing-and-issues)
 
 ## Core Features
 * All standard endpoints covered but tournament endpoints.
 * Supports both callbacks and promises.
-* Rate limiter that is enforced per region.
+* Rate limiter that is enforced per region and follows retry headers.
     * Retries on 429 and >= 500.
         * Promise-based requests retry up to three times.
 * Built-in parameter checks so you can hopefully refer to documentation less! :)
@@ -624,13 +625,41 @@ var msRuneId = 10002
 k.Static.rune({ id: msRuneId }, rprint)
 ```
 
-## Caching
+## Rate Limiter
+So basically, I'm using [psuedonym117's Python wrapper](https://github.com/pseudonym117/Riot-Watcher)'s rate limiter class and modified it a bunch to make it work. I'm simply doing a primitive rate-limiting-by-timestamps approach, nothing fancy.
 
+You can test out the rate limiter (and see that it supports simultaneous requests to multiple regions) with the following code:
+
+```javascript
+var num = 45 // # of requests
+
+function count(err, data) {
+  if (data) --num
+  if (err) console.error(err)
+  if (num == 0) console.timeEnd('api')
+}
+
+console.time('api')
+for (var i = 0; i < 15; ++i) {
+  k.Champion.all({ region: 'na' }, count)
+  k.Champion.all({ region: 'kr' }, count)
+  k.Champion.all({ region: 'euw' }, count)
+}
+```
+This should output something like ```api: 20779.116ms```.
+
+To test that it works with retry headers, just run the program
+while sending a few requests from your browser to intentionally
+rate limit yourself.
+
+Because of these lines, ```if (data) --num``` and ```if (num == 0) console.timeEnd('api')```, you can tell if all your requests went through.
+
+## Caching
 *April 2*
 I have added caching support. Right now, the library supports in-memory caching as well as
 caching with Redis. These are the default timers that made sense to me.
 
-``` javascript
+```javascript
 const endpointCacheTimers = {
   // defaults
   CHAMPION: cacheTimers.MONTH,
@@ -683,22 +712,6 @@ var k = new KindredAPI.Kindred({
 ```
 
 ## Contributing and Issues
-
-**Feel free to make a PR regarding anything (even the smallest typo or inconsistency).**
-
-There are a few inconsistencies and weird things within this libary that I don't know how to address since this is my first API wrapper and I'm still quite a big newbie.
-
-~~For example, the two methods getChamp() and getChampion() are actually different.~~
-
-~~getChamp() targets the champ endpoint~~
-
-~~getChampion() targets the static endpoint~~
-
-~~I didn't want to attach getChampion() with 'static' in any way or form since I thought it looked kind of annoying because then I would want to attach static to the other static methods as well (maybe that's better?).~~
-
-March 31: I decided to combat the above by just namespacing the functions
-(k.Static.getChampion vs k.Champion.getChampion/get). The original functions are still usable though.
-
 **Right now, the code is also quite messy and there is a lot of repeated code.** Function definitions are quite long because I include many aliases as well. I haven't thought of an elegant way to make a magic function that manages to work for every single endpoint request yet.
 
 Any help and/or advice is appreciated!
