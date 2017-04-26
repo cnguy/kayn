@@ -1299,10 +1299,10 @@ class Kindred {
   }
 
   /* Examples */
-  getSummonerByAccID(id, region, cb) {
+  getSummonerByAccID(accID, region, cb) {
     return this.Summoner.get({
       region,
-      accID: id
+      accID
     }, cb)
   }
 
@@ -1321,10 +1321,10 @@ class Kindred {
     }, cb)
   }
 
-  getRunesByAccountID(id, region, cb) {
+  getRunesByAccountID(accID, region, cb) {
     return this.Runes.get({
       region,
-      id
+      accID
     }, cb)
   }
 

@@ -1980,10 +1980,10 @@
       }
     }, {
       key: 'getSummonerByAccID',
-      value: function getSummonerByAccID(id, region, cb) {
+      value: function getSummonerByAccID(accID, region, cb) {
         return this.Summoner.get({
           region: region,
-          accID: id
+          accID: accID
         }, cb);
       }
     }, {
@@ -2005,10 +2005,10 @@
       }
     }, {
       key: 'getRunesByAccountID',
-      value: function getRunesByAccountID(id, region, cb) {
+      value: function getRunesByAccountID(accID, region, cb) {
         return this.Runes.get({
           region: region,
-          id: id
+          accID: accID
         }, cb);
       }
     }, {

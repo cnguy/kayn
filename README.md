@@ -10,7 +10,7 @@ Kindred is a Node.js wrapper with built-in rate-limiting (enforced per region), 
 * [Detailed Usage](#detailed-usage)
 * [Rate Limiter](#rate-limiter)
 * [Caching](#caching)
-* [Ugly Parameters: Extending the Libary](#ugly)
+* [Ugly Object Parameters: Extending the Libary](#ugly)
 * [Contributing and Issues](#contributing-and-issues)
 
 ## Core Features
@@ -346,20 +346,19 @@ k.Summoner.get({ name: 'Contractz' }, KindredAPI.print)
 
 /* How to pass in options 101. */
 var name = 'caaaaaaaaaria'
-var opts = {
-  region: REGIONS.NORTH_AMERICA, // for the sake of example
-  options: {
-    rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'], // no need for joins or messy strings
-    // you can pass in arrays into any options params; array values will always be joined into a string
-    championIds: '67' // single values can be integers as well
-  } // option params should be spelled and capitalized the same as it is in Riot's docs!
+var region = REGIONS.NORTH_AMERICA
+var options = {
+  rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'], // no need for joins or messy strings
+  // you can pass in arrays into any options params; array values will always be joined into a string
+  championIds: '67' // single values can be integers as well
+  // option params should be spelled and capitalized the same as it is in Riot's docs!
   // for example, Matchlist query params in Riot's docs include `championIds`, `beginIndex`, `beginTime`, `seasons`
 }
 
 k.Summoner
- .get({ name, region: opts.region })
+ .get({ name, region })
  .then(data => k.Matchlist.get(
-    Object.assign({ id: data.accountID }, opts)
+    Object.assign({ accID: data.accountId }, options)
  ))
  .then(data => console.log(data))
  .catch(err => console.error(err))
@@ -541,7 +540,7 @@ k.Summoner.get({ name }, function (err, data) {
 // or with promises
 k.Summoner
  .get({ name })
- .then(data => k.Runes.get({ id: data.accountID }))
+ .then(data => k.Runes.get({ id: data.accountId }))
  .then(data => console.log(data))
  .catch(err => console.error(err))
 
@@ -719,7 +718,7 @@ It's actually not really idiomatic JavaScript, and with an object inside an obje
 
 The benefits of this approach is that it's implementing Python's named parameters in a way, which was my original goal with this project.
 
-However, the problem is that some of the functions could be simplified a lot as they only have one parameter and no options such as grabbing a summoner by their summoner ID. You would want something like
+However, the problem is that some of the functions could be simplified a lot as they only have one parameter and no options such as grabbing a summoner by their summoner ID. You would want something like:
 
 ```getSummonerByID(id, region, cb)```
 
@@ -728,19 +727,21 @@ I decided to make the first parameter always an object for my main library metho
 It was very easy to switch between functions and have the call still be successful with the same parameters.
 
 ### However, it's easy to add functions.
-You would simply have to define new functions within the class that return calls to my methods.
+You would simply have to define new functions within the class that return calls to my methods. I have a few examples within my code.
 
 ```javascript
 this.Ex = {
     getSummonerByAccID: this.getSummonerByAccID.bind(this),
     getMatchlistByName: this.getMatchlistByName.bind(this),
-    getRunesBySummonerID: this.getRunesBySummonerID.bind(this)
+    getRunesBySummonerID: this.getRunesBySummonerID.bind(this),
+    getRunesByAccountID: this.getRunesByAccountID.bind(this)
+    staticRuneList: this.staticRuneList.bind(this)
 }
 
-getSummonerByAccID(id, region, cb) {
+getSummonerByAccID(accID, region, cb) {
     return this.Summoner.get({
         region,
-        accID: id
+        accID
     }, cb)
   }
 
@@ -759,10 +760,10 @@ getRunesBySummonerID(id, region, cb) {
     }, cb)
 }
 
-getRunesByAccountID(id, region, cb) {
+getRunesByAccountID(accID, region, cb) {
     return this.Runes.get({
         region,
-        id
+        accID
     }, cb)
 }
 
@@ -776,10 +777,34 @@ staticRuneList(region, options, cb) {
 It could still be kinda funky, but now you can call the functions like this:
 
 ```javascript
-k.Ex.getRunesBySummonerID(32932398, 'na', KindredAPI.print)
+k.Ex
+ .getMatchlistByName('Contractz')
+ .then(data => console.log(data))
+ .catch(err => console.error(err))
+
+k.Ex
+ .getRunesByAccountID(47776491)
+ .then(data => console.log(data))
+ .catch(err => console.error(err))
+
+k.Ex
+ .getSummonerByAccID(47776491)
+ .then(data => console.log(data))
+ .catch(err => console.error(err))
+
 k.Ex.getRunesByAccountID(47776491, 'na', KindredAPI.print)
+k.Ex.getRunesBySummonerID(32932398, 'na', KindredAPI.print)
 k.Ex.staticRuneList('na', {}, KindredAPI.print)
 k.Ex.staticRuneList('na').then(data => console.log(data))
+
+k.Ex
+ .getMatchlistByName('Contractz', 'na', {
+    season: 3, queue: [41, 42]
+ })
+ .then(data => console.log(data))
+ .catch(err => console.error(err))
+
+k.Ex.staticRuneList('na', { runeListData: 'all' }, KindredAPI.print)
 ```
 
 You can decide on how you want to namespace everything though.
