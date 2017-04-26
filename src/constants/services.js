@@ -1,11 +1,11 @@
-const endpointsPrefixes = {
+const services = {
   'CHAMPION': 'platform',
   'CHAMPION_MASTERY': 'champion-mastery',
   'GAME': null,
   'LEAGUE': null,
   'STATUS': 'status',
   'MASTERIES': 'platform',
-  'MATCH': null,
+  'MATCH': 'match',
   'MATCH_LIST': null,
   'RUNES': 'platform',
   'RUNES_MASTERIES': 'platform',
@@ -15,4 +15,4 @@ const endpointsPrefixes = {
   'SUMMONER': 'summoner'
 }
 
-export default endpointsPrefixes
+export default services

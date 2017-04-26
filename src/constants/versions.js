@@ -8,7 +8,7 @@ const versions = {
   'LEAGUE': 2.5,
   'STATIC_DATA': 3,
   'STATUS': 3,
-  'MATCH': 2.2,
+  'MATCH': 3,
   'MATCH_LIST': 2.2,
   'RUNES_MASTERIES': 3,
   'SPECTATOR': 3,
