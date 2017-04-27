@@ -611,7 +611,25 @@
 
       this.Summoner = {
         getSummoner: this.getSummoner.bind(this),
-        get: this.getSummoner.bind(this)
+        get: this.getSummoner.bind(this),
+
+        getRunes: this.getRunes.bind(this),
+        runes: this.getRunes.bind(this),
+
+        getMasteries: this.getMasteries.bind(this),
+        masteries: this.getMasteries.bind(this),
+
+        getMatchHistory: this.getRecentMatchlist.bind(this),
+        matchHistory: this.getRecentMatchlist.bind(this),
+
+        getMatchlist: this.getMatchlist.bind(this),
+        matchlist: this.getMatchlist.bind(this),
+
+        getChampionMasteries: this.getChampMasteries.bind(this),
+        championMasteries: this.getChampMasteries.bind(this),
+
+        getTotalChampionMasteryScore: this.getTotalChampMasteryScore.bind(this),
+        totalChampionMasteryScore: this.getTotalChampMasteryScore.bind(this)
       };
 
       this.Ex = {

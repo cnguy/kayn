@@ -261,6 +261,24 @@ class Kindred {
     this.Summoner = {
       getSummoner: this.getSummoner.bind(this),
       get: this.getSummoner.bind(this),
+
+      getRunes: this.getRunes.bind(this),
+      runes: this.getRunes.bind(this),
+
+      getMasteries: this.getMasteries.bind(this),
+      masteries: this.getMasteries.bind(this),
+
+      getMatchHistory: this.getRecentMatchlist.bind(this),
+      matchHistory: this.getRecentMatchlist.bind(this),
+
+      getMatchlist: this.getMatchlist.bind(this),
+      matchlist: this.getMatchlist.bind(this),
+
+      getChampionMasteries: this.getChampMasteries.bind(this),
+      championMasteries: this.getChampMasteries.bind(this),
+
+      getTotalChampionMasteryScore: this.getTotalChampMasteryScore.bind(this),
+      totalChampionMasteryScore: this.getTotalChampMasteryScore.bind(this)
     }
 
     this.Ex = {
@@ -864,7 +882,7 @@ class Kindred {
     }, cb = arguments.length === 2 ? cb : arguments[0])
   }
 
-  /* LOL-STATIC-DATA-V1.2 */
+  /* STATIC-DATA-V3 */
   getChampionList({ region, options } = {}, cb) {
     return this._staticRequest({ endUrl: 'champions', region, options }, cb = arguments.length === 2 ? cb : arguments[0])
   }
@@ -990,7 +1008,7 @@ class Kindred {
     return this._staticRequest({ endUrl: 'versions', region, options }, cb = arguments.length === 2 ? cb : arguments[0])
   }
 
-  /* LOL-STATUS-V1.0 */
+  /* STATUS-V3 */
   getShardStatus({ region } = {}, cb) {
     return this._statusRequest({ endUrl: 'shard-data', region }, cb = region ? cb : arguments[0])
   }
