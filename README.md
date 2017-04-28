@@ -1,5 +1,5 @@
 # Kindred
-Kindred is a Node.js wrapper with built-in rate-limiting (enforced per region), caching (Redis), and parameter checking on top of [Riot's League of Legends API](http://www.developer.riotgames.com).
+Kindred is a Node.js wrapper with built-in rate-limiting (enforced per region), caching (in-memory and Redis), and parameter checking on top of [Riot's League of Legends API](http://www.developer.riotgames.com).
 
 ## Table of Contents
 * [Core Features](#core-features)
@@ -18,9 +18,8 @@ Kindred is a Node.js wrapper with built-in rate-limiting (enforced per region), 
 * Supports both callbacks and promises.
 * Rate limiter that is enforced per region and follows retry headers.
     * Retries on 429 and >= 500.
-        * Promise-based requests retry up to three times.
 * Built-in parameter checks so you can hopefully refer to documentation less! :)
-* Built-in, flexible caching (in-memory and Redis).
+* Built-in caching (in-memory and Redis).
     * Customized expiration timers. You can set a timer for each endpoint type. Refer to [Caching](#caching) for more info.
 * Designed to be simple but convenient. For example, you can call an exclusively by-id endpoint (such as grabbing the runes of a player) with just the name.
 
@@ -158,7 +157,7 @@ Note that this section has two different namespaces (Match and Matchlist).
     * Example 1: ```k.Match.get({ id: 2482174957 }, KindredAPI.print)```
 2. **/lol/match/v3/matchlists/by-account/{accountId}**
     * Get matchlist for given account ID and platform ID.
-    * getMatchlist({ region, accountID/accID (int), id/summonerID/playerID (int), name (str), options = { rankedQueues: 'TEAM_BUILDER_RANKED_SOLO' } }, cb)
+    * getMatchlist({ region, accountID/accID (int), id/summonerID/playerID (int), name (str), options = { queue: QUEUES.TEAM_BUILDER_RANKED_SOLO } }, cb)
     * Namespaced Functions: *Matchlist.getMatchlist, Matchlist.get, Summoner.getMatchlist, Summoner.matchlist*
     * Example 1: ```k.Matchlist.get({ accID: 47776491 }, KindredAPI.print)```
     * Example 2: ```k.Matchlist.get({ id: 32932398 }, KindredAPI.print)```
@@ -337,6 +336,7 @@ Debug on, dev key rate limiting per region, in-memory cache with default setting
 ```javascript
 var KindredAPI = require('kindred-api')
 var REGIONS = KindredAPI.REGIONS
+var QUEUES = KindredAPI.QUEUE_TYPES
 var debug = true
 var k = KindredAPI.QuickStart('YOUR_KEY', REGIONS.NORTH_AMERICA, debug)
 
@@ -348,18 +348,19 @@ k.Summoner.get({ name: 'Contractz' }, KindredAPI.print)
 var name = 'caaaaaaaaaria'
 var region = REGIONS.NORTH_AMERICA
 var options = {
-  rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'], // no need for joins or messy strings
+  queue: [QUEUES.TEAM_BUILDER_RANKED_SOLO, QUEUES.RANKED_FLEX_SR], // no need for joins or messy strings
   // you can pass in arrays into any options params; array values will always be joined into a string
-  championIds: '67' // single values can be integers as well
+  champion: 79
   // option params should be spelled and capitalized the same as it is in Riot's docs!
-  // for example, Matchlist query params in Riot's docs include `championIds`, `beginIndex`, `beginTime`, `seasons`
+  // for example, Matchlist query params in Riot's docs include `champion`, `beginIndex`, `beginTime`, `season`
 }
 
 k.Summoner
  .get({ name, region })
  .then(data => k.Matchlist.get(
-    Object.assign({ accID: data.accountId }, options)
- ))
+   { accID: data.accountId, options }
+   )
+ )
  .then(data => console.log(data))
  .catch(err => console.error(err))
 
@@ -582,20 +583,21 @@ k.Masteries.get({ name })
   I made it so that the default is 'RANKED_SOLO_5x5' (or 'TEAM_BUILDER_RANKED_SOLO')
   if 'type' is not passed in.
 */
-k.League.challengers({ region: 'na' }, rprint) // get challengers from ranked solo queue ladder
-k.League.challengers({ region: 'na', options: {
-  type: 'RANKED_FLEX_SR'
+k.League.challengers({ region: REGIONS.NORTH_AMERICA }, rprint) // get challengers from ranked solo queue ladder
+k.League.challengers({ region: REGIONS.NORTH_AMERICA, options: {
+  type: 'RANKED_FLEX_SR' // league v2.5 still uses strings
 }}, rprint) // get challengers from ranked flex ladder
 k.Match.get({ id: 2459973154 }, rprint) // includes timeline by default
 k.Match.get({ id: 2459973154, options: { includeTimeline: false } }, rprint)
 
 /*
   However, for getMatchlist, the endpoint uses an optional
-  'rankedQueues' instead of 'type' to allow multiple options.
-  I still set the default to RANKED_SOLO_5x5 though.
+  'queue' instead of 'type' to allow multiple options.
+  I set the default in this case to TEAM_BUILDER_RANKED_SOLO.
 */
-var name = 'caaaaaaaaaria'
-k.Matchlist.get({ name, region: 'na', options: {
+var name = 'Contractz'
+var region = REGIONS.NORTH_AMERICA
+k.Matchlist.get({ name, region, options: {
     /*
     According to Riot API, query parameters that can accept multiple values
     must be a comma separated list (or a single value), which is why one can do the below join.
@@ -607,24 +609,22 @@ k.Matchlist.get({ name, region: 'na', options: {
     Note, for arrays of values that are conceptually integers,
     both strings and integers work because they're joined together as a string anyways.
     */
-    // rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'].join(','), STILL VALID
-    // championIds: '67' // '267,67' or ['267', '67'].join(',') STILL VALID
-  rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'], // valid
-  championIds: [67, 62, '61'] // valid
+    // queue: [QUEUES.RANKED_SOLO_5x5, QUEUES.RANKED_FLEX_SR].join(','), STILL VALID
+    // champion: '67' // '267,67' or ['267', '67'].join(',') STILL VALID
+  queue: [QUEUES.TEAM_BUILDER_RANKED_SOLO, QUEUES.RANKED_FLEX_SR], // valid
+  champion: [236, 432, 81, '432', 7], // valid
+  season: 6
 } }, rprint)
 
 /* The above example with promises. */
-var opts = {
-  name: 'caaaaaaaaaria',
-  region: 'na',
-  options: {
-    rankedQueues: ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'],
-    championIds: '67'
-  }
+var options = {
+    queue: [QUEUES.TEAM_BUILDER_RANKED_SOLO, QUEUES.RANKED_FLEX_SR],
+    champion: [236, 432, 81, '432', 7],
+    season: 6
 }
 
 k.Matchlist
- .get({ name: opts.name, region: opts.region, options: opts.options })
+ .get({ name, region, options })
  .then(data => console.log(data))
  .catch(err => console.error(err))
 

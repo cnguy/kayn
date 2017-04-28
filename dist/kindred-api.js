@@ -217,6 +217,55 @@
     JAPAN: 'JP1'
   };
 
+  var queueTypes = {
+    CUSTOM: 0,
+    NORMAL_3x3: 8,
+    NORMAL_5x5_BLIND: 2,
+    NORMAL_5x5_DRAFT: 14,
+    RANKED_SOLO_5x5: 4,
+    RANKED_PREMADE_5x5: 6,
+    RANKED_PREMADE_3x3: 9,
+    RANKED_FLEX_TT: 9,
+    RANKED_TEAM_3x3: 41,
+    RANKED_TEAM_5x5: 42,
+    ODIN_5x5_BLIND: 16,
+    ODIN_5x5_DRAFT: 17,
+    BOT_5x5: 7,
+    BOT_ODIN_5x5: 25,
+    BOT_5x5_INTRO: 31,
+    BOT_5x5_BEGINNER: 32,
+    BOT_5x5_INTERMEDIATE: 33,
+    BOT_TT_3x3: 52,
+    GROUP_FINDER_5x5: 61,
+    ARAM_5x5: 65,
+    ONEFORALL_5x5: 70,
+    FIRSTBLOOD_1x1: 72,
+    FIRSTBLOOD_2x2: 73,
+    SR_6x6: 75,
+    URF_5x5: 76,
+    ONEFORALL_MIRRORMODE_5x5: 78,
+    BOT_URF_5x5: 83,
+    NIGHTMARE_BOT_5x5_RANK1: 91,
+    NIGHTMARE_BOT_5x5_RANK2: 92,
+    NIGHTMARE_BOT_5x5_RANK5: 93,
+    ASCENSION_5x5: 96,
+    HEXAKILL: 98,
+    BILGEWATER_ARAM_5x5: 100,
+    KING_PORO_5x5: 300,
+    COUNTER_PICK: 310,
+    BILGEWATER_5x5: 313,
+    SIEGE: 315,
+    DEFINITELY_NOT_DOMINION_5x5: 317,
+    ARURF_5X5: 318,
+    ARSR_5x5: 325,
+    TEAM_BUILDER_DRAFT_UNRANKED_5x5: 400,
+    TEAM_BUILDER_DRAFT_RANKED_5x5: 410,
+    TEAM_BUILDER_RANKED_SOLO: 420,
+    RANKED_FLEX_SR: 440,
+    ASSASSINATE_5x5: 600,
+    DARKSTAR_3x3: 610
+  };
+
   var regions = {
     BRAZIL: 'br',
     EUROPE: 'eune',
@@ -699,34 +748,72 @@
 
         var tryRequest = function tryRequest() {
           return new Promise(function (resolve, reject) {
-            var _iteratorNormalCompletion3 = true;
-            var _didIteratorError3 = false;
-            var _iteratorError3 = undefined;
+            var stringifiedOpts = '';
 
-            try {
-              for (var _iterator3 = Object.keys(options)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                var key = _step3.value;
+            if (endUrl.lastIndexOf('v3') == -1) {
+              var _iteratorNormalCompletion3 = true;
+              var _didIteratorError3 = false;
+              var _iteratorError3 = undefined;
 
-                if (Array.isArray(options[key])) {
-                  options[key] = options[key].join(',');
+              try {
+                for (var _iterator3 = Object.keys(options)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                  var key = _step3.value;
+
+                  if (Array.isArray(options[key])) {
+                    options[key] = options[key].join(',');
+                  }
+                }
+              } catch (err) {
+                _didIteratorError3 = true;
+                _iteratorError3 = err;
+              } finally {
+                try {
+                  if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                    _iterator3.return();
+                  }
+                } finally {
+                  if (_didIteratorError3) {
+                    throw _iteratorError3;
+                  }
                 }
               }
-            } catch (err) {
-              _didIteratorError3 = true;
-              _iteratorError3 = err;
-            } finally {
+
+              stringifiedOpts = queryString.stringify(options).replace(/%2C/, ',');
+            } else {
+              var _iteratorNormalCompletion4 = true;
+              var _didIteratorError4 = false;
+              var _iteratorError4 = undefined;
+
               try {
-                if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                  _iterator3.return();
+                for (var _iterator4 = Object.keys(options)[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                  var _key = _step4.value;
+
+                  if (Array.isArray(options[_key])) {
+                    for (var i = 0; i < options[_key].length; ++i) {
+                      if (stringifiedOpts) stringifiedOpts += '&';
+                      stringifiedOpts += _key + '=' + options[_key][i];
+                    }
+                  } else {
+                    if (stringifiedOpts) stringifiedOpts += '&';
+                    stringifiedOpts += _key + '=' + options[_key];
+                  }
                 }
+              } catch (err) {
+                _didIteratorError4 = true;
+                _iteratorError4 = err;
               } finally {
-                if (_didIteratorError3) {
-                  throw _iteratorError3;
+                try {
+                  if (!_iteratorNormalCompletion4 && _iterator4.return) {
+                    _iterator4.return();
+                  }
+                } finally {
+                  if (_didIteratorError4) {
+                    throw _iteratorError4;
+                  }
                 }
               }
             }
 
-            var stringifiedOpts = queryString.stringify(options).replace(/%2C/, ',');
             var postfix = stringifiedOpts ? '?' + stringifiedOpts : '';
             var reqUrl = _this._makeUrl(endUrl + postfix, region, staticReq, status, observerMode, championMastery);
             var fullUrl = reqUrl + (reqUrl.lastIndexOf('?') === -1 ? '?' : '&') + ('api_key=' + _this.key);
@@ -1660,7 +1747,7 @@
             playerID = _ref45.playerID,
             name = _ref45.name,
             _ref45$options = _ref45.options,
-            options = _ref45$options === undefined ? { rankedQueues: 'TEAM_BUILDER_RANKED_SOLO' } : _ref45$options;
+            options = _ref45$options === undefined ? { queue: queueTypes.TEAM_BUILDER_RANKED_SOLO } : _ref45$options;
 
         var cb = arguments[1];
 
@@ -2061,6 +2148,7 @@
     LIMITS: limits,
     TIME_CONSTANTS: cacheTimers,
     CACHE_TYPES: caches,
+    QUEUE_TYPES: queueTypes,
     QuickStart: QuickStart,
     print: print
   };

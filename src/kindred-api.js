@@ -12,6 +12,7 @@ import TIME_CONSTANTS from './cache/constants/cache-timers'
 import CACHE_TIMERS from './cache/constants/endpoint-cache-timers'
 import LIMITS from './constants/limits'
 import PLATFORM_IDS from './constants/platform-ids'
+import QUEUE_TYPES from './constants/queue-types'
 import REGIONS from './constants/regions'
 import REGIONS_BACK from './constants/regions-back'
 import VERSIONS from './constants/versions'
@@ -335,13 +336,30 @@ class Kindred {
   }, cb) {
     const tryRequest = () => {
       return new Promise((resolve, reject) => {
-        for (const key of Object.keys(options)) {
-          if (Array.isArray(options[key])) {
-            options[key] = options[key].join(',')
+        let stringifiedOpts = ''
+
+        if (endUrl.lastIndexOf('v3') == -1) {
+          for (const key of Object.keys(options)) {
+            if (Array.isArray(options[key])) {
+              options[key] = options[key].join(',')
+            }
+          }
+
+          stringifiedOpts = queryString.stringify(options).replace(/%2C/, ',')
+        } else {
+          for (const key of Object.keys(options)) {
+            if (Array.isArray(options[key])) {
+              for (let i = 0; i < options[key].length; ++i) {
+                if (stringifiedOpts) stringifiedOpts += '&'
+                stringifiedOpts += `${key}=${options[key][i]}`
+              }
+            } else {
+              if (stringifiedOpts) stringifiedOpts += '&'
+              stringifiedOpts += `${key}=${options[key]}`
+            }
           }
         }
 
-        const stringifiedOpts = queryString.stringify(options).replace(/%2C/, ',')
         const postfix = stringifiedOpts ? '?' + stringifiedOpts : ''
         const reqUrl = this._makeUrl(endUrl + postfix, region, staticReq, status, observerMode, championMastery)
         const fullUrl = reqUrl + (reqUrl.lastIndexOf('?') === -1 ? '?' : '&') + `api_key=${this.key}`
@@ -1034,7 +1052,7 @@ class Kindred {
     accountID, accID,
     id, summonerID, playerID,
     name,
-    options = { rankedQueues: 'TEAM_BUILDER_RANKED_SOLO' }
+    options = { queue: QUEUE_TYPES.TEAM_BUILDER_RANKED_SOLO }
   } = {}, cb) {
     if (Number.isInteger(accountID || accID)) {
       return this._matchRequest({
@@ -1374,6 +1392,7 @@ export default {
   LIMITS,
   TIME_CONSTANTS,
   CACHE_TYPES,
+  QUEUE_TYPES,
   QuickStart,
   print
 }
