@@ -57,20 +57,20 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
 
 1. **/lol/champion-mastery/v3/champion-masteries/by-summoner/{summonerId}**
     * Get all champion mastery entries sorted by number of champion points descending. (RPC)
-    * getChampMasteries({ region = this.defaultRegion, accountID/accID (int), id/summonerID/playerID (int), name (string), options (object) }, cb)
+    * getChampMasteries({ region = this.defaultRegion, accountId/accId (int), id/summonerId/playerId (int), name (string), options (object) }, cb)
     * Namespaced Functions: *ChampionMastery.getChampionMasteries, ChampionMastery.getAll, ChampionMastery.all, Summoner.getChampionMasteries, Summoner.championMasteries*
-    * Example 1: ```k.ChampionMastery.all({ accID: 47776491 }, KindredAPI.print)```
+    * Example 1: ```k.ChampionMastery.all({ accId: 47776491 }, KindredAPI.print)```
     * Example 2: ```k.ChampionMastery.all({ id: 20026563 }, KindredAPI.print)```
     * Example 3: ```k.ChampionMastery.all({ id: 20026563 }).then(data => console.log(data))```
 2. **/lol/champion-mastery/v3/champion-masteries/by-summoner/{summonerId}/by-champion/{championId}**
     * Get a champion mastery by player id and champion id.(RPC)
-    * getChampMastery({ region = this.defaultRegion, playerID (int), championID (int), options (object) }, cb)
+    * getChampMastery({ region = this.defaultRegion, playerId (int), championId (int), options (object) }, cb)
     * Namespaced Functions: *ChampionMastery.getChampionMastery, ChampionMastery.get*
-    * Example 1: ```k.ChampionMastery.get({ playerID: 20026563, championID: 203 }, KindredAPI.print)```
-    * Example 2: ```k.ChampionMastery.get({ playerID: 20026563, championID: 203 }).then(data => console.log(data))```
+    * Example 1: ```k.ChampionMastery.get({ playerId: 20026563, championId: 203 }, KindredAPI.print)```
+    * Example 2: ```k.ChampionMastery.get({ playerId: 20026563, championId: 203 }).then(data => console.log(data))```
 3. **/lol/champion-mastery/v3/scores/by-summoner/{summonerId}**
     * Get a player's total champion mastery score, which is sum of individual champion mastery levels (RPC)
-    * getTotalChampMasteryScore({ region = this.defaultRegion, accountID/accID (int), id/summonerID/playerID (int), name (string), options (object) }, cb)
+    * getTotalChampMasteryScore({ region = this.defaultRegion, accountId/accId (int), id/summonerId/playerId (int), name (string), options (object) }, cb)
     * Namespaced Functions: *ChampionMastery.getTotalChampMasteryScore, ChampionMastery.getTotalScore, ChampionMastery.totalScore, ChampionMastery.total, ChampionMastery.score, Summoner.getTotalChampionMasteryScore, Summoner.totalChampionMasteryScore*
     * Example 1: ```k.ChampionMastery.score({ id: 20026563 }, KindredAPI.print)```
 
@@ -83,37 +83,37 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
     * Namespaced Functions: *Champion.getChampions, Champion.getAll, Champion.all*
     * Example 1: ```k.Champion.all({ region: REGIONS.KOREA }, KindredAPI.print)```
 2. **/lol/platform/v3/champions/{id}**
-    * Retrieve champion by ID.
-    * getChamp({ region, id/championID (int) }, cb)
+    * Retrieve champion by Id.
+    * getChamp({ region, id/championId (int) }, cb)
     * Namespaced Functions: *Champion.getChampion, Champion.get*
-    * Example 1: ```k.Champion.get({ championID: 67 }, KindredAPI.print)```
-    * Example 2: ```k.Champion.get({ championID: 67 }).then(data => console.log(data))```
-    * Example 3: ```k.Champion.get({ championID: 67, region: 'kr' }, KindredAPI.print)```
+    * Example 1: ```k.Champion.get({ championId: 67 }, KindredAPI.print)```
+    * Example 2: ```k.Champion.get({ championId: 67 }).then(data => console.log(data))```
+    * Example 3: ```k.Champion.get({ championId: 67, region: 'kr' }, KindredAPI.print)```
 
 ### Game
 [docs](https://developer.riotgames.com/api-methods/#game-v1.3)
 
 1. **/api/lol/{region}/v1.3/game/by-summoner/{summonerId}/recent**
-    * Get recent games by summoner ID. (REST)
-    * getRecentGames({ region, accountID/accID (int), id/summonerID/playerID (int), name (str) }, cb)
+    * Get recent games by summoner Id. (REST)
+    * getRecentGames({ region, accountId/accId (int), id/summonerId/playerId (int), name (str) }, cb)
     * Namespaced Functions: *Game.getRecentGames, Game.getRecent, Game.recent, Game.get*
-    * Example 1: ```k.Game.get({ summonerID: 20026563 }, KindredAPI.print)```
+    * Example 1: ```k.Game.get({ summonerId: 20026563 }, KindredAPI.print)```
     * Example 2: ```k.Game.recent({ id: 20026563 }, KindredAPI.print)```
 
 ### League
 [docs](https://developer.riotgames.com/api-methods/#league-v2.5)
 
 1. **/api/lol/{region}/v2.5/league/by-summoner/{summonerIds}**
-    * Get leagues mapped by summoner ID for a given list of summoner IDs. (REST)
-    * getLeagues({ region, accountID/accID (int), id/summonerID/player/ID (int), name (str) }, cb)
+    * Get leagues mapped by summoner Id for a given list of summoner Ids. (REST)
+    * getLeagues({ region, accountId/accId (int), id/summonerId/player/Id (int), name (str) }, cb)
     * Namespaced Functions: *League.getLeagues, League.leagues, League.get*
-    * Example 1: ```k.League.getLeagues({ summonerID: 20026563 }, KindredAPI.print)```
-    * Example 2: ```k.League.get({ summonerID: 20026563 }, KindredAPI.print)```
+    * Example 1: ```k.League.getLeagues({ summonerId: 20026563 }, KindredAPI.print)```
+    * Example 2: ```k.League.get({ summonerId: 20026563 }, KindredAPI.print)```
 2. **/api/lol/{region}/v2.5/league/by-summoner/{summonerIds}/entry**
-    * Get league entries mapped by summoner ID for a given list of summoner IDs. (REST)
-    * getLeagueEntries({ region, accountID/accID (int), id/summonerID/playerID (int), name (str) }, cb)
+    * Get league entries mapped by summoner Id for a given list of summoner Ids. (REST)
+    * getLeagueEntries({ region, accountId/accId (int), id/summonerId/playerId (int), name (str) }, cb)
     * Namespaced Functions: *League.getLeagueEntries, League.getEntries, League.entries*
-    * Example 1: ```k.League.entries({ summonerID: 20026563 }, KindredAPI.print)```
+    * Example 1: ```k.League.entries({ summonerId: 20026563 }, KindredAPI.print)```
 3. **/api/lol/{region}/v2.5/league/challenger**
     * Get challenger tier leagues. (REST)
     * getChallengers({ region, options: { type: 'RANKED_SOLO_5x5' } }, cb)
@@ -139,8 +139,8 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
 ### Masteries
 [docs](https://developer.riotgames.com/api-methods/#masteries-v3)
 1. **/lol/platform/v3/masteries/by-summoner/{summonerId}**
-    * Get mastery pages for a given summoner ID.
-    * getMasteries({ region, accountID/accID (int), id/summonerID/playerID (int), name (str)}, cb)
+    * Get mastery pages for a given summoner Id.
+    * getMasteries({ region, accountId/accId (int), id/summonerId/playerId (int), name (str)}, cb)
     * Namespaced Functions: *RunesMasteries.getMasteries, RunesMasteries.masteries, Masteries.get, Summoner.getMasteries, Summoner.masteries*
     * Example 1: ```k.Masteries.get({ id: 20026563 }, KindredAPI.print)```
 
@@ -148,30 +148,30 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
 [docs](https://developer.riotgames.com/api-methods/#match-v3/)
 
 Note that this section has two different namespaces (Match and Matchlist).
-`id` parameter still refers to summonerID (not accountID).
+`id` parameter still refers to summonerId (not accountId).
 
 1. **/lol/match/v3/matches/{matchId}**
-    * Get match by match ID.
-    * getMatch({ region, id/matchID (int), options (object) }, cb)
+    * Get match by match Id.
+    * getMatch({ region, id/matchId (int), options (object) }, cb)
     * Namespaced Functions: *Match.getMatch, Match.get*
     * Example 1: ```k.Match.get({ id: 2482174957 }, KindredAPI.print)```
 2. **/lol/match/v3/matchlists/by-account/{accountId}**
-    * Get matchlist for given account ID and platform ID.
-    * getMatchlist({ region, accountID/accID (int), id/summonerID/playerID (int), name (str), options = { queue: QUEUES.TEAM_BUILDER_RANKED_SOLO } }, cb)
+    * Get matchlist for given account Id and platform Id.
+    * getMatchlist({ region, accountId/accId (int), id/summonerId/playerId (int), name (str), options = { queue: QUEUES.TEAM_BUILDER_RANKED_SOLO } }, cb)
     * Namespaced Functions: *Matchlist.getMatchlist, Matchlist.get, Summoner.getMatchlist, Summoner.matchlist*
-    * Example 1: ```k.Matchlist.get({ accID: 47776491 }, KindredAPI.print)```
+    * Example 1: ```k.Matchlist.get({ accId: 47776491 }, KindredAPI.print)```
     * Example 2: ```k.Matchlist.get({ id: 32932398 }, KindredAPI.print)```
     * Example 3: ```k.Matchlist.get({ name: 'Contractz' }, KindredAPI.print)```
 3. **/lol/match/v3/matchlists/by-account/{accountId}/recent**
-    * Get recent matchlist for given account ID and platform ID.
-    * getRecentMatchlist({ region, accountID/accID (int), id/summonerID/playerID (int), name (str) }, cb)
+    * Get recent matchlist for given account Id and platform Id.
+    * getRecentMatchlist({ region, accountId/accId (int), id/summonerId/playerId (int), name (str) }, cb)
     * Namespaced Functions: *Matchlist.getRecentMatchlist, Matchlist.recent, Summoner.getMatchHistory, Summoner.matchHistory*
-    * Example 1: ```k.Matchlist.recent({ accID: 47776491 }, KindredAPI.print)```
-    * Example 2: ```k.Matchlist.recent({ id: 32932398 }, KindredAPI.print)``` // by summonerID
+    * Example 1: ```k.Matchlist.recent({ accId: 47776491 }, KindredAPI.print)```
+    * Example 2: ```k.Matchlist.recent({ id: 32932398 }, KindredAPI.print)``` // by summonerId
     * Example 3: ```k.Matchlist.recent({ name: 'Contractz' }, KindredAPI.print)```
 4. **/lol/match/v3/timelines/by-match/{matchId}**
-    * Get match timeline by match ID.
-    * getMatchTimeline({ region, id/matchID (int) }, cb) 
+    * Get match timeline by match Id.
+    * getMatchTimeline({ region, id/matchId (int) }, cb) 
     * Namespaced Functions: *Match.getMatchTimeline, Match.getTimeline, Match.timeline*
     * Example 1: ```k.Match.timeline({ id: 2478544123 }, KindredAPI.print)```
 
@@ -179,19 +179,19 @@ Note that this section has two different namespaces (Match and Matchlist).
 [docs](https://developer.riotgames.com/api-methods/#runes-v3)
 
 1. **/lol/platform/v3/runes/by-summoner/{summonerId}**
-    * Get rune pages for a given summoner ID.
-    * getRunes({ region, accountID/accID (int), id/summonerID/playerID (int), name (str) }, cb)
+    * Get rune pages for a given summoner Id.
+    * getRunes({ region, accountId/accId (int), id/summonerId/playerId (int), name (str) }, cb)
     * Namespaced Functions: *RunesMasteries.getRunes, RunesMasteries.runes, Runes.get, Summoner.getRunes, Summoner.runes*
     * Example 1: ```k.Runes.get({ id: 20026563 }, KindredAPI.print)```
     * Example 2: ```k.Runes.get({ name: 'Contractz' }, KindredAPI.print)```
-    * Example 3: ```k.Runes.get({ accID: 47776491 }, KindredAPI.print)```
+    * Example 3: ```k.Runes.get({ accId: 47776491 }, KindredAPI.print)```
 
 ### Spectator
 [docs](https://developer.riotgames.com/api-methods/#spectator-v3)
 
 1. **/lol/spectator/v3/active-games/by-summoner/{summonerId}**
-    * Get current game information for the given summoner ID. (REST)
-    * getCurrentGame({ region = this.defaultRegion, accountID/accID (int), id/summonerID/playerID (int), name (str) }, cb)
+    * Get current game information for the given summoner Id. (REST)
+    * getCurrentGame({ region = this.defaultRegion, accountId/accId (int), id/summonerId/playerId (int), name (str) }, cb)
     * Namespaced Functions: *CurrentGame.getCurrentGame, CurrentGame.get*
     * Example 1: ```k.CurrentGame.get({ name: 'Contractz' }, KindredAPI.print)```
     * Example 2: ```k.CurrentGame.get({ id: 32932398 }, KindredAPI.print)```
@@ -213,7 +213,7 @@ Note that this section has two different namespaces (Match and Matchlist).
     * Example 2: ```k.Static.champions({ options: { champData: 'all' } }).then(data => console.log(data))```
 2. **/lol/static-data/v3/champions/{id}**
     * Retrieves a champion by its id. (REST)
-    * getChampion({ region, id/championID (int), options (object) }, cb)
+    * getChampion({ region, id/championId (int), options (object) }, cb)
     * Namespaced Functions: *Static.getChampion, Static.champion*
     * Example 1: ```k.Static.champion({ id: 131 }, KindredAPI.print)```
     * Example 2: ```k.Static.champion({ id: 131, options: { champData: 'enemytips', version: '7.7.1' } }, KindredAPI.print)```
@@ -224,7 +224,7 @@ Note that this section has two different namespaces (Match and Matchlist).
     * Example 1: ```k.Static.items({ options: { itemListData: all } }, KindredAPI.print)```
 4. **/lol/static-data/v3/items/{id}**
     * Get master tier leagues. (REST)
-    * getItem({ region, id/itemID (int), options (object) }, cb)
+    * getItem({ region, id/itemId (int), options (object) }, cb)
     * Namespaced Functions: *Static.getItem, Static.item*
     * Example 1: ```k.Static.item({ id: 3901, options: { itemData: ['image', 'gold'] } }, KindredAPI.print)```
     * Example 2: ```k.Static.items(KindredAPI.print)```
@@ -251,7 +251,7 @@ Note that this section has two different namespaces (Match and Matchlist).
     * Example 2: ```k.Static.masteries(KindredAPI.print)```
 9. **/lol/static-data/v3/masteries/{id}**
     * Retrieves mastery item by its unique id. (REST)
-    * getMastery({ region, id/masteryID (int), options (object) }, cb)
+    * getMastery({ region, id/masteryId (int), options (object) }, cb)
     * Namespaced Functions: *Static.getMastery, Static.mastery*
     * Example 1: ```k.Static.mastery({ id: 6361 }, KindredAPI.print)```
     * Example 2: ```k.Static.mastery({ id: 6361, options: { masteryData: ['image', 'masteryTree'] } }, KindredAPI.print)```
@@ -274,7 +274,7 @@ Note that this section has two different namespaces (Match and Matchlist).
     * Example 2: ```k.Static.runes({ options: { runeListData: 'basic' } }, KindredAPI.print)```
 13. **/lol/static-data/v3/runes/{id}**
     * Retrieves rune by its unique id. (REST)
-    * getRune({ region, id/runeID (int), options (object) }, cb)
+    * getRune({ region, id/runeId (int), options (object) }, cb)
     * Namespaced Functions: *Static.getRune, Static.rune*
     * Example 1: ```k.Static.rune({ id: 10002 }, KindredAPI.print)```
     * Example 2: ```k.Static.rune({ id: 10001, options: { runeData: 'image' } }, KindredAPI.print)```
@@ -286,7 +286,7 @@ Note that this section has two different namespaces (Match and Matchlist).
     * Example 2: ```k.Static.spells({ options: { spellData: 'cost', dataById: true } }, KindredAPI.print)```
 15. **/lol/static-data/v3/summoner-spells/{id}**
     * Retrieves summoner spell by its unique id. (REST)
-    * getSummonerSpell({ region, id/spellID/summonerSpellID (int), options (object) }, cb)
+    * getSummonerSpell({ region, id/spellId/summonerSpellId (int), options (object) }, cb)
     * Namespaced Functions: *Static.getSummonerSpell, Static.summonerSpell, Static.spell*
     * Example 1: ```k.Static.spell({ id: 31 }, KindredAPI.print)```
     * Example 2: ```k.Static.spell({ id: 31, options: { spellData: 'cooldown' } }, KindredAPI.print)```
@@ -300,14 +300,14 @@ Note that this section has two different namespaces (Match and Matchlist).
 [docs](https://developer.riotgames.com/api-methods/#stats-v1.3)
 
 1. **/api/lol/{region}/v1.3/stats/by-summoner/{summonerId}/ranked**
-    * Get ranked stats by summoner ID. (REST)
-    * getRankedStats({ region, id/summonerID/playerID (int), name (str), options (object) }, cb)
+    * Get ranked stats by summoner Id. (REST)
+    * getRankedStats({ region, id/summonerId/playerId (int), name (str), options (object) }, cb)
     * Namespaced Functions: *Stats.getRankedStats, Stats.ranked*
     * Example 1: ```k.Stats.ranked({ id: 20026563 }, KindredAPI.print)```
     * Example 2: ```k.Stats.ranked({ id: 20026563, options: { season: 'SEASON2016' } }, KindredAPI.print)```
 2. **/api/lol/{region}/v1.3/stats/by-summoner/{summonerId}/summary**
-    * Get player stats summaries by summoner ID. (REST)
-    * getStatsSummary({ region, id/summonerID/playerID (int), name (str), options (object) }, cb)
+    * Get player stats summaries by summoner Id. (REST)
+    * getStatsSummary({ region, id/summonerId/playerId (int), name (str), options (object) }, cb)
     * Namespaced Functions: *Stats.getStatsSummary, Stats.summary*
     * Example 1: ```k.Stats.summary({ id: 20026563 }, KindredAPI.print)```
 
@@ -316,17 +316,17 @@ Note that this section has two different namespaces (Match and Matchlist).
 
 1. **/lol/summoner/v3/summoners/by-account/{accountId}**
     * Get a summoner by account id
-    * getSummoner({ region, accountID/accID (int), name (str) }, cb)
+    * getSummoner({ region, accountId/accId (int), name (str) }, cb)
     * Namespaced Functions: *Summoner.getSummoner, Summoner.get*
-    * Example 1: ```k.Summoner.get({ accountID: 123123 }, KindredAPI.print)```
+    * Example 1: ```k.Summoner.get({ accountId: 123123 }, KindredAPI.print)```
 2. **/lol/summoner/v3/summoners/by-name/{summonerName}**
     * Get a summoner by summoner name
-    * getSummoner({ region, id/summonerID/playerID (int) }, cb)
+    * getSummoner({ region, id/summonerId/playerId (int) }, cb)
     * Namespaced Functions: *Summoner.getSummoner, Summoner.get*
     * Example 1: ```k.Summoner.get({ name: 'Contractz' }, KindredAPI.print)```
 3. **/lol/summoner/v3/summoners/{summonerId}**
     * Get a summoner by summoner id
-    * getSummoner({ region, id/summonerID/playerID (int) }, cb)
+    * getSummoner({ region, id/summonerId/playerId (int) }, cb)
     * Namespaced Functions: *Summoner.getSummoner, Summoner.get*
     * Example 1: ```k.Summoner.get({ id: 20026563 }, KindredAPI.print)```
 
@@ -358,7 +358,7 @@ var options = {
 k.Summoner
  .get({ name, region })
  .then(data => k.Matchlist.get(
-   { accID: data.accountId, options }
+   { accId: data.accountId, options }
    )
  )
  .then(data => console.log(data))
@@ -366,19 +366,19 @@ k.Summoner
 
 /*
     Instead of chaining requests like in the above, you can simply call
-    k.Matchlist.get with the `name` param or the `id` (summonerID) param.
-    Any function that targets just IDs or accountIDs can use all three
-    different type of params (summonerID, accountID, name).
+    k.Matchlist.get with the `name` param or the `id` (summonerId) param.
+    Any function that targets just Ids or accountIds can use all three
+    different type of params (summonerId, accountId, name).
 */
 k.Matchlist
  .get({ name, options })
  .then(data => console.log(data))
  .catch(err => console.error(err))
 
-var accID = 47776491
-var id = 32932398 // summonerID
+var accId = 47776491
+var id = 32932398 // summonerId
 k.Matchlist.get({ name }, KindredAPI.print)
-k.Matchlist.get({ accID }, KindredAPI.print)
+k.Matchlist.get({ accId }, KindredAPI.print)
 k.Matchlist.get({ id }, KindredAPI.print)
 
 /* Up to preference. */
@@ -461,12 +461,12 @@ k.Summoner.get(rprint)
 // getSummoner request FAILED; required params `id` (int) or `name` (string) not passed in
 
 k.ChampionMastery.get(rprint)
-// getChampMastery request FAILED; required params `playerID` (int) AND `championID` (int) not passed in
+// getChampMastery request FAILED; required params `playerId` (int) AND `championId` (int) not passed in
 
 /*
   Notice the OR and the AND!!
   Note: getChampMastery is the only method that can't take in an 'id' parameter,
-  because it requires both a 'playerID' and a 'championID'!
+  because it requires both a 'playerId' and a 'championId'!
 */
 
 /*
@@ -490,19 +490,19 @@ k.Summoner.get({ id: 354959 }, rprint)
 /*
   There are aliases for the `id` param.
   
-  For example, for summoners, you have summonerID and playerID.
+  For example, for summoners, you have summonerId and playerId.
 */
-k.Summoner.get({ summonerID: 354959 }, rprint)
+k.Summoner.get({ summonerId: 354959 }, rprint)
 
 k.Summoner
- .get({ summonerID: 354959 })
+ .get({ summonerId: 354959 })
  .then(json => console.log(json))
  .catch(err => console.error(err))
 
 k.Match.get({ id: 2459973154 }, rprint)
 
 k.Match
- .get({ matchID: 2459973154 })
+ .get({ matchId: 2459973154 })
  .then(data => console.log(data))
  .catch(err => console.error(err))
 
@@ -609,8 +609,8 @@ k.Matchlist.get({ name, region, options: {
     Note, for arrays of values that are conceptually integers,
     both strings and integers work because they're joined together as a string anyways.
     */
-    // queue: [QUEUES.RANKED_SOLO_5x5, QUEUES.RANKED_FLEX_SR].join(','), STILL VALID
-    // champion: '67' // '267,67' or ['267', '67'].join(',') STILL VALID
+    // queue: [QUEUES.RANKED_SOLO_5x5, QUEUES.RANKED_FLEX_SR].join(','), STILL VALId
+    // champion: '67' // '267,67' or ['267', '67'].join(',') STILL VALId
   queue: [QUEUES.TEAM_BUILDER_RANKED_SOLO, QUEUES.RANKED_FLEX_SR], // valid
   champion: [236, 432, 81, '432', 7], // valid
   season: 6
@@ -728,9 +728,9 @@ It's actually not really idiomatic JavaScript, and with an object inside an obje
 
 The benefits of this approach is that it's implementing Python's named parameters in a way, which was my original goal with this project.
 
-However, the problem is that some of the functions could be simplified a lot as they only have one parameter and no options such as grabbing a summoner by their summoner ID. You would want something like:
+However, the problem is that some of the functions could be simplified a lot as they only have one parameter and no options such as grabbing a summoner by their summoner Id. You would want something like:
 
-```getSummonerByID(id, region, cb)```
+```getSummonerById(id, region, cb)```
 
 I decided to make the first parameter always an object for my main library methods though because it made my functions very consistent with each other, and so I wouldn't have to look at the method documentation as much.
 
@@ -741,17 +741,17 @@ You would simply have to define new functions within the class that return calls
 
 ```javascript
 this.Ex = {
-    getSummonerByAccID: this.getSummonerByAccID.bind(this),
+    getSummonerByAccId: this.getSummonerByAccId.bind(this),
     getMatchlistByName: this.getMatchlistByName.bind(this),
-    getRunesBySummonerID: this.getRunesBySummonerID.bind(this),
-    getRunesByAccountID: this.getRunesByAccountID.bind(this)
+    getRunesBySummonerId: this.getRunesBySummonerId.bind(this),
+    getRunesByAccountId: this.getRunesByAccountId.bind(this)
     staticRuneList: this.staticRuneList.bind(this)
 }
 
-getSummonerByAccID(accID, region, cb) {
+getSummonerByAccId(accId, region, cb) {
     return this.Summoner.get({
         region,
-        accID
+        accId
     }, cb)
   }
 
@@ -763,17 +763,17 @@ getMatchlistByName(name, region, options, cb) {
     }, cb)
 }
 
-getRunesBySummonerID(id, region, cb) {
+getRunesBySummonerId(id, region, cb) {
     return this.Runes.get({
         region,
         id
     }, cb)
 }
 
-getRunesByAccountID(accID, region, cb) {
+getRunesByAccountId(accId, region, cb) {
     return this.Runes.get({
         region,
-        accID
+        accId
     }, cb)
 }
 
@@ -793,17 +793,17 @@ k.Ex
  .catch(err => console.error(err))
 
 k.Ex
- .getRunesByAccountID(47776491)
+ .getRunesByAccountId(47776491)
  .then(data => console.log(data))
  .catch(err => console.error(err))
 
 k.Ex
- .getSummonerByAccID(47776491)
+ .getSummonerByAccId(47776491)
  .then(data => console.log(data))
  .catch(err => console.error(err))
 
-k.Ex.getRunesByAccountID(47776491, 'na', KindredAPI.print)
-k.Ex.getRunesBySummonerID(32932398, 'na', KindredAPI.print)
+k.Ex.getRunesByAccountId(47776491, 'na', KindredAPI.print)
+k.Ex.getRunesBySummonerId(32932398, 'na', KindredAPI.print)
 k.Ex.staticRuneList('na', {}, KindredAPI.print)
 k.Ex.staticRuneList('na').then(data => console.log(data))
 
