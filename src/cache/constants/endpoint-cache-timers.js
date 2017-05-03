@@ -15,7 +15,9 @@ const endpointCacheTimers = {
   RUNES_MASTERIES: cacheTimers.WEEK,
   SPECTATOR: cacheTimers.NONE,
   STATS: cacheTimers.HOUR,
-  SUMMONER: cacheTimers.DAY
+  SUMMONER: cacheTimers.DAY,
+  TOURNAMENT_STUB: cacheTimers.HOUR, // TODO: ??
+  TOURNAMENT: cacheTimers.HOUR // TODO: ??
 }
 
 export default endpointCacheTimers

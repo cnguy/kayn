@@ -282,6 +282,20 @@ class Kindred {
       totalChampionMasteryScore: this.getTotalChampMasteryScore.bind(this),
     }
 
+    this.Tournament = {
+      getDTOByCode: this.getDTOByCode.bind(this),
+
+      DTO: { // hmm i like this
+        byCode: this.getDTOByCode.bind(this)
+      },
+
+      getLobbyListEventsByCode: this.getLobbyListEventsByCode.bind(this),
+
+      LobbyListEvents: {
+        byCode: this.getLobbyListEventsByCode.bind(this)
+      }
+    }
+
     this.Ex = {
       getSummonerByAccId: this.getSummonerByAccId.bind(this),
       getMatchlistByName: this.getMatchlistByName.bind(this),
@@ -583,10 +597,20 @@ class Kindred {
     }, cb)
   }
 
+  _tournamentRequest({ endUrl, region }, cb) {
+    return this._baseRequest({
+      endUrl: `${SERVICES.TOURNAMENT}/v${VERSIONS.TOURNAMENT}`, region,
+      cacheParams: {
+        ttl: this.CACHE_TIMERS.TOURNAMENT
+      }
+    }, cb)
+  }
+
   _logError(message, expected) {
     console.log(
       chalk.bold.yellow(message), chalk.red('request'), chalk.bold.red('FAILED') + chalk.red(`; ${expected}`)
     )
+    process.exit(1)
   }
 
   setRegion(region) {
@@ -1348,6 +1372,33 @@ class Kindred {
       return this._logError(
         this.getSummoner.name,
         `required params ${chalk.yellow('`id/summonerId/playerId` (int)')}, ${chalk.yellow('`accountId/accId` (int)')}, or ${chalk.yellow('`name` (string)')} not passed in`
+      )
+    }
+  }
+
+  /* TOURNAMENT-V3 */
+  getDTOByCode(code, cb) {
+    if (typeof code === 'string') {
+      return this._tournamentRequest({
+        endUrl: `lobby-events/codes/${code}`
+      }, cb)
+    } else {
+      return this._logError(
+        this.getDTOByCode.name,
+        `required params ${chalk.yellow('`code` (int)')} not passed in`
+      )
+    }
+  }
+
+  getLobbyListEventsByCode(code, cb) {
+    if (typeof code === 'string') {
+      return this._tournamentRequest({
+        endUrl: `lobby-events/by-code/${code}`
+      }, cb)
+    } else {
+      return this._logError(
+        this.getLobbyListEventsByCode.name,
+        `required params ${chalk.yellow('`code` (int)')} not passed in`
       )
     }
   }

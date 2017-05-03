@@ -51,6 +51,7 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
 * [STATIC-DATA-V3](#static-data)
 * [STATS-V1.3](#stats)
 * [SUMMONER-V3](#summoner)
+* [TOURNAMENT-V3](#tournament)
 
 ### Champion Mastery
 [docs](https://developer.riotgames.com/api-methods/#champion-mastery-v3)
@@ -332,6 +333,16 @@ Note that this section has two different namespaces (Match and Matchlist).
     * getSummoner({ region, id/summonerId/playerId (int) }, cb)
     * Namespaced Functions: *Summoner.getSummoner, Summoner.get*
     * Example 1: ```k.Summoner.get({ id: 20026563 }, KindredAPI.print)```
+
+### Tournament
+[docs](https://developer.riotgames.com/api-methods/#tournament-v3)
+
+1. **/lol/tournament/v3/codes/{tournamentCode}**
+    * Returns the tournament code DTO associated with a tournament code string.
+    * getDTOByCode(code (string), cb)
+2. **/lol/tournament/v3/lobby-events/by-code/{tournamentCode}**
+    * Gets a list of lobby events by tournament code.
+    * getLobbyListEventsByCode(code (string), cb)
 
 ## Quickstart
 Debug on, dev key rate limiting per region, in-memory cache with default settings on for quick scripts

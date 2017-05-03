@@ -13,7 +13,9 @@ const versions = {
   'RUNES_MASTERIES': 3,
   'SPECTATOR': 3,
   'STATS': 1.3,
-  'SUMMONER': 3
+  'SUMMONER': 3,
+  'TOURNAMENT_STUB': 3,
+  'TOURNAMENT': 3
 }
 
 export default versions

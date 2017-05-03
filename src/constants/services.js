@@ -12,7 +12,9 @@ const services = {
   'SPECTATOR': 'spectator',
   'STATIC_DATA': 'static-data',
   'STATS': null,
-  'SUMMONER': 'summoner'
+  'SUMMONER': 'summoner',
+  'TOURNAMENT_STUB': 'tournament-stub',
+  'TOURNAMENT': 'tournament'
 }
 
 export default services
