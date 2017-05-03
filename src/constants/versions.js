@@ -5,7 +5,7 @@ const versions = {
   'CURRENT_GAME': 1.0,
   'FEATURED_GAMES': 1.0,
   'GAME': 1.3,
-  'LEAGUE': 2.5,
+  'LEAGUE': 3,
   'STATIC_DATA': 3,
   'STATUS': 3,
   'MATCH': 3,

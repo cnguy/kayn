@@ -143,9 +143,9 @@ class Kindred {
       leagues: this.getLeagues.bind(this),
       get: this.getLeagues.bind(this),
 
-      getLeagueEntries: this.getLeagueEntries.bind(this),
-      getEntries: this.getLeagueEntries.bind(this),
-      entries: this.getLeagueEntries.bind(this),
+      getLeaguePositions: this.getLeaguePositions.bind(this),
+      getPositions: this.getLeaguePositions.bind(this),
+      positions: this.getLeaguePositions.bind(this),
 
       getChallengers: this.getChallengers.bind(this),
       challengers: this.getChallengers.bind(this),
@@ -531,7 +531,7 @@ class Kindred {
 
   _leagueRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
-      endUrl: `v${VERSIONS.LEAGUE}/league/${endUrl}`, region, options,
+      endUrl: `${SERVICES.LEAGUE}/v${VERSIONS.LEAGUE}/${endUrl}`, region, options,
       cacheParams: {
         ttl: this.CACHE_TIMERS.LEAGUE
       }
@@ -802,7 +802,7 @@ class Kindred {
     }
   }
 
-  /* LEAGUE-V2.5 */
+  /* LEAGUE-V3 */
   getLeagues({
     region,
     accountId, accId,
@@ -815,14 +815,14 @@ class Kindred {
         return this.getSummoner({ accId: accountId || accId, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
           return resolve(this._leagueRequest({
-            endUrl: `by-summoner/${data.id}`,
+            endUrl: `leagues/by-summoner/${data.id}`,
             region, options
           }, cb))
         })
       })
     } else if (Number.isInteger(id || summonerId || playerId)) {
       return this._leagueRequest({
-        endUrl: `by-summoner/${id || summonerId || playerId}`,
+        endUrl: `leagues/by-summoner/${id || summonerId || playerId}`,
         region, options
       }, cb)
     } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
@@ -830,7 +830,7 @@ class Kindred {
         return this.getSummoner({ name, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
           return resolve(this._leagueRequest({
-            endUrl: `by-summoner/${data.id}`,
+            endUrl: `leagues/by-summoner/${data.id}`,
             region, options
           }, cb))
         })
@@ -843,7 +843,7 @@ class Kindred {
     }
   }
 
-  getLeagueEntries({
+  getLeaguePositions({
     region,
     accountId, accId,
     id, summonerId, playerId,
@@ -854,14 +854,14 @@ class Kindred {
         return this.getSummoner({ accId: accountId || accId, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
           return resolve(this._leagueRequest({
-            endUrl: `by-summoner/${data.id}/entry`,
+            endUrl: `positions/by-summoner/${data.id}`,
             region
           }, cb))
         })
       })
     } else if (Number.isInteger(id || summonerId || playerId)) {
       return this._leagueRequest({
-        endUrl: `by-summoner/${id || summonerId || playerId}/entry`,
+        endUrl: `positions/by-summoner/${id || summonerId || playerId}`,
         region
       }, cb)
     } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
@@ -869,14 +869,14 @@ class Kindred {
         return this.getSummoner({ name, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
           return resolve(this._leagueRequest({
-            endUrl: `by-summoner/${data.id}/entry`,
+            endUrl: `positions/by-summoner/${data.id}`,
             region
           }, cb))
         })
       })
     } else {
       this._logError(
-        this.getLeagueEntries.name,
+        this.getLeaguePositions.name,
         `required params ${chalk.yellow('`id/summonerId/playerId` (int)')}, ${chalk.yellow('`accountId/accId` (int)')}, or ${chalk.yellow('`name` (string)')} not passed in`
       )
     }
@@ -884,20 +884,38 @@ class Kindred {
 
   getChallengers({
     region,
-    options = { type: 'RANKED_SOLO_5x5' }
+    queue = 'RANKED_SOLO_5x5'
   } = {}, cb) {
-    return this._leagueRequest({
-      endUrl: 'challenger', region, options
-    }, cb = arguments.length === 2 ? cb : arguments[0])
+    cb = typeof arguments[0] === 'function' ? arguments[0] : arguments[1]
+
+    if (typeof queue === 'string') {
+      return this._leagueRequest({
+        endUrl: `challengerleagues/by-queue/${queue}`, region
+      }, cb)
+    } else {
+      this._logError(
+        this.getChallengers.name,
+        `required params ${chalk.yellow('`queue` (string)')} not passed in`
+      )
+    }
   }
 
   getMasters({
     region,
-    options = { type: 'RANKED_SOLO_5x5' }
+    queue = 'RANKED_SOLO_5x5'
   } = {}, cb) {
-    return this._leagueRequest({
-      endUrl: 'master', region, options
-    }, cb = arguments.length === 2 ? cb : arguments[0])
+    cb = typeof arguments[0] === 'function' ? arguments[0] : arguments[1]
+
+    if (typeof queue === 'string') {
+      return this._leagueRequest({
+        endUrl: `masterleagues/by-queue/${queue}`, region
+      }, cb)
+    } else {
+      this._logError(
+        this.getMasters.name,
+        `required params ${chalk.yellow('`queue` (string)')} not passed in`
+      )
+    }
   }
 
   /* STATIC-DATA-V3 */

@@ -2,7 +2,7 @@ const services = {
   'CHAMPION': 'platform',
   'CHAMPION_MASTERY': 'champion-mastery',
   'GAME': null,
-  'LEAGUE': null,
+  'LEAGUE': 'league',
   'STATUS': 'status',
   'MASTERIES': 'platform',
   'MATCH': 'match',

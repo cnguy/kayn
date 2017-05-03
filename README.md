@@ -42,7 +42,7 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
 * [CHAMPION-MASTERY-V3](#champion-mastery)
 * [CHAMPION-V3](#champion)
 * [GAME-V1.3](#game)
-* [LEAGUE-V2.5](#league)
+* [LEAGUE-V3](#league)
 * [LOL-STATUS-V3](#lol-status)
 * [MASTERIES-V3](#masteries)
 * [MATCH-V3](#match)
@@ -101,31 +101,33 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
     * Example 2: ```k.Game.recent({ id: 20026563 }, KindredAPI.print)```
 
 ### League
-[docs](https://developer.riotgames.com/api-methods/#league-v2.5)
+[docs](https://developer.riotgames.com/api-methods/#league-v3)
 
-1. **/api/lol/{region}/v2.5/league/by-summoner/{summonerIds}**
-    * Get leagues mapped by summoner Id for a given list of summoner Ids. (REST)
+1. **/lol/league/v3/challengerleagues/by-queue/{queue}**
+    * Get the challenger league for a given queue.
+    * getChallengers({ region, queue = 'RANKED_SOLO_5x5' } }, cb)
+    * Namespaced Functions: *League.getChallengers, League.challengers*
+    * Example 1: ```k.League.challengers(KindredAPI.print)```
+    * Example 2: ```k.League.challengers({ region: 'na' }, KindredAPI.print)```
+    * Example 3: ```k.League.challengers({ queue:'RANKED_FLEX_5x5' }, KindredAPI.print)```
+2. **/lol/league/v3/leagues/by-summoner/{summonerId**
+    * Get leagues in all queues for a given summoner ID.
     * getLeagues({ region, accountId/accId (int), id/summonerId/player/Id (int), name (str) }, cb)
     * Namespaced Functions: *League.getLeagues, League.leagues, League.get*
     * Example 1: ```k.League.getLeagues({ summonerId: 20026563 }, KindredAPI.print)```
     * Example 2: ```k.League.get({ summonerId: 20026563 }, KindredAPI.print)```
-2. **/api/lol/{region}/v2.5/league/by-summoner/{summonerIds}/entry**
-    * Get league entries mapped by summoner Id for a given list of summoner Ids. (REST)
-    * getLeagueEntries({ region, accountId/accId (int), id/summonerId/playerId (int), name (str) }, cb)
-    * Namespaced Functions: *League.getLeagueEntries, League.getEntries, League.entries*
-    * Example 1: ```k.League.entries({ summonerId: 20026563 }, KindredAPI.print)```
-3. **/api/lol/{region}/v2.5/league/challenger**
-    * Get challenger tier leagues. (REST)
-    * getChallengers({ region, options: { type: 'RANKED_SOLO_5x5' } }, cb)
-    * Namespaced Functions: *League.getChallengers, League.challengers*
-    * Example 1: ```k.League.challengers(KindredAPI.print)```
-    * Example 2: ```k.League.challengers({ region: 'na' }, KindredAPI.print)```
-    * Example 3: ```k.League.challengers({ options: { type: 'RANKED_FLEX_SR' } }, KindredAPI.print)```
-4. **/api/lol/{region}/v2.5/league/master**
-    * Get master tier leagues. (REST)
-    * getMasters({ region, options: { type: 'RANKED_SOLO_5x5' } }, cb)
+3. **/lol/league/v3/masterleagues/by-queue/{queue}**
+    * Get the master league for a given queue.
+    * getMasters({ region, queue = 'RANKED_SOLO_5x5' }, cb)
     * Namespaced Functions: *League.getMasters, League.masters*
-    * Example 1: ```k.League.masters().then(data => console.log(data))```
+    * Example 1: ```k.League.masters(KindredAPI.print)```
+    * Example 2: ```k.League.masters({ region: 'na' }, KindredAPI.print)```
+    * Example 3: ```k.League.masters({ queue:'RANKED_FLEX_5x5' }, KindredAPI.print)```
+4. **/lol/league/v3/positions/by-summoner/{summonerId}**
+    * Get league positions in all queues for a given summoner ID.
+    * getLeaguePositions({ region, accountId/accId (int), id/summonerId/playerId (int), name (str) }, cb)
+    * Namespaced Functions: *League.getLeaguePositions, League.getPositions, League.positions*
+    * Example 1: ```k.League.positions({ summonerId: 20026563 }, KindredAPI.print)```
 
 ### LoL Status
 [docs](https://developer.riotgames.com/api-methods/#lol-status-v3)
@@ -138,6 +140,7 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
 
 ### Masteries
 [docs](https://developer.riotgames.com/api-methods/#masteries-v3)
+
 1. **/lol/platform/v3/masteries/by-summoner/{summonerId}**
     * Get mastery pages for a given summoner Id.
     * getMasteries({ region, accountId/accId (int), id/summonerId/playerId (int), name (str)}, cb)
@@ -439,9 +442,7 @@ k.Match.get({ id: 2459973154, options: {
     includeTimeline: false // of course, option params must be the same as the ones in Riot Docs
 }}, rprint)
 
-k.League.challengers({ region: 'na', options: {
-  type: 'RANKED_FLEX_SR'
-}}, rprint)
+k.League.challengers({ region: 'na', queue: 'RANKED_FLEX_SR' }, rprint)
 
 /*
   All functions essentially have the following form:
@@ -584,9 +585,7 @@ k.Masteries.get({ name })
   if 'type' is not passed in.
 */
 k.League.challengers({ region: REGIONS.NORTH_AMERICA }, rprint) // get challengers from ranked solo queue ladder
-k.League.challengers({ region: REGIONS.NORTH_AMERICA, options: {
-  type: 'RANKED_FLEX_SR' // league v2.5 still uses strings
-}}, rprint) // get challengers from ranked flex ladder
+k.League.challengers({ region: REGIONS.NORTH_AMERICA, queue: 'RANKED_FLEX_SR' }, rprint) // get challengers from ranked flex ladder
 k.Match.get({ id: 2459973154 }, rprint) // includes timeline by default
 k.Match.get({ id: 2459973154, options: { includeTimeline: false } }, rprint)
 

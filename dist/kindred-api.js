@@ -155,7 +155,7 @@
     'CHAMPION': 'platform',
     'CHAMPION_MASTERY': 'champion-mastery',
     'GAME': null,
-    'LEAGUE': null,
+    'LEAGUE': 'league',
     'STATUS': 'status',
     'MASTERIES': 'platform',
     'MATCH': 'match',
@@ -300,7 +300,7 @@
     'CURRENT_GAME': 1.0,
     'FEATURED_GAMES': 1.0,
     'GAME': 1.3,
-    'LEAGUE': 2.5,
+    'LEAGUE': 3,
     'STATIC_DATA': 3,
     'STATUS': 3,
     'MATCH': 3,
@@ -542,9 +542,9 @@
         leagues: this.getLeagues.bind(this),
         get: this.getLeagues.bind(this),
 
-        getLeagueEntries: this.getLeagueEntries.bind(this),
-        getEntries: this.getLeagueEntries.bind(this),
-        entries: this.getLeagueEntries.bind(this),
+        getLeaguePositions: this.getLeaguePositions.bind(this),
+        getPositions: this.getLeaguePositions.bind(this),
+        positions: this.getLeaguePositions.bind(this),
 
         getChallengers: this.getChallengers.bind(this),
         challengers: this.getChallengers.bind(this),
@@ -1020,7 +1020,7 @@
             options = _ref9.options;
 
         return this._baseRequest({
-          endUrl: 'v' + versions.LEAGUE + '/league/' + endUrl, region: region, options: options,
+          endUrl: services.LEAGUE + '/v' + versions.LEAGUE + '/' + endUrl, region: region, options: options,
           cacheParams: {
             ttl: this.CACHE_TIMERS.LEAGUE
           }
@@ -1395,14 +1395,14 @@
                 cb ? cb(err) : reject(err);return;
               }
               return resolve(_this6._leagueRequest({
-                endUrl: 'by-summoner/' + data.id,
+                endUrl: 'leagues/by-summoner/' + data.id,
                 region: region, options: options
               }, cb));
             });
           });
         } else if (Number.isInteger(id || summonerId || playerId)) {
           return this._leagueRequest({
-            endUrl: 'by-summoner/' + (id || summonerId || playerId),
+            endUrl: 'leagues/by-summoner/' + (id || summonerId || playerId),
             region: region, options: options
           }, cb);
         } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
@@ -1412,7 +1412,7 @@
                 cb ? cb(err) : reject(err);return;
               }
               return resolve(_this6._leagueRequest({
-                endUrl: 'by-summoner/' + data.id,
+                endUrl: 'leagues/by-summoner/' + data.id,
                 region: region, options: options
               }, cb));
             });
@@ -1422,8 +1422,8 @@
         }
       }
     }, {
-      key: 'getLeagueEntries',
-      value: function getLeagueEntries() {
+      key: 'getLeaguePositions',
+      value: function getLeaguePositions() {
         var _this7 = this;
 
         var _ref24 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
@@ -1444,14 +1444,14 @@
                 cb ? cb(err) : reject(err);return;
               }
               return resolve(_this7._leagueRequest({
-                endUrl: 'by-summoner/' + data.id + '/entry',
+                endUrl: 'positions/by-summoner/' + data.id,
                 region: region
               }, cb));
             });
           });
         } else if (Number.isInteger(id || summonerId || playerId)) {
           return this._leagueRequest({
-            endUrl: 'by-summoner/' + (id || summonerId || playerId) + '/entry',
+            endUrl: 'positions/by-summoner/' + (id || summonerId || playerId),
             region: region
           }, cb);
         } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
@@ -1461,13 +1461,13 @@
                 cb ? cb(err) : reject(err);return;
               }
               return resolve(_this7._leagueRequest({
-                endUrl: 'by-summoner/' + data.id + '/entry',
+                endUrl: 'positions/by-summoner/' + data.id,
                 region: region
               }, cb));
             });
           });
         } else {
-          this._logError(this.getLeagueEntries.name, 'required params ' + chalk.yellow('`id/summonerId/playerId` (int)') + ', ' + chalk.yellow('`accountId/accId` (int)') + ', or ' + chalk.yellow('`name` (string)') + ' not passed in');
+          this._logError(this.getLeaguePositions.name, 'required params ' + chalk.yellow('`id/summonerId/playerId` (int)') + ', ' + chalk.yellow('`accountId/accId` (int)') + ', or ' + chalk.yellow('`name` (string)') + ' not passed in');
         }
       }
     }, {
@@ -1475,28 +1475,40 @@
       value: function getChallengers() {
         var _ref25 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref25.region,
-            _ref25$options = _ref25.options,
-            options = _ref25$options === undefined ? { type: 'RANKED_SOLO_5x5' } : _ref25$options;
+            _ref25$queue = _ref25.queue,
+            queue = _ref25$queue === undefined ? 'RANKED_SOLO_5x5' : _ref25$queue;
 
         var cb = arguments[1];
 
-        return this._leagueRequest({
-          endUrl: 'challenger', region: region, options: options
-        }, cb = arguments.length === 2 ? cb : arguments[0]);
+        cb = typeof arguments[0] === 'function' ? arguments[0] : arguments[1];
+
+        if (typeof queue === 'string') {
+          return this._leagueRequest({
+            endUrl: 'challengerleagues/by-queue/' + queue, region: region
+          }, cb);
+        } else {
+          this._logError(this.getChallengers.name, 'required params ' + chalk.yellow('`queue` (string)') + ' not passed in');
+        }
       }
     }, {
       key: 'getMasters',
       value: function getMasters() {
         var _ref26 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref26.region,
-            _ref26$options = _ref26.options,
-            options = _ref26$options === undefined ? { type: 'RANKED_SOLO_5x5' } : _ref26$options;
+            _ref26$queue = _ref26.queue,
+            queue = _ref26$queue === undefined ? 'RANKED_SOLO_5x5' : _ref26$queue;
 
         var cb = arguments[1];
 
-        return this._leagueRequest({
-          endUrl: 'master', region: region, options: options
-        }, cb = arguments.length === 2 ? cb : arguments[0]);
+        cb = typeof arguments[0] === 'function' ? arguments[0] : arguments[1];
+
+        if (typeof queue === 'string') {
+          return this._leagueRequest({
+            endUrl: 'masterleagues/by-queue/' + queue, region: region
+          }, cb);
+        } else {
+          this._logError(this.getMasters.name, 'required params ' + chalk.yellow('`queue` (string)') + ' not passed in');
+        }
       }
     }, {
       key: 'getChampionList',
