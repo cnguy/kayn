@@ -280,19 +280,29 @@ class Kindred {
 
       getTotalChampionMasteryScore: this.getTotalChampMasteryScore.bind(this),
       totalChampionMasteryScore: this.getTotalChampMasteryScore.bind(this),
+
+      by: {
+        accountId: this.getSummonerByAccountId.bind(this),
+        id: this.getSummonerById.bind(this),
+        name: this.getSummonerByName.bind(this)
+      }
     }
 
     this.Tournament = {
       getDTOByCode: this.getDTOByCode.bind(this),
 
       DTO: { // hmm i like this
-        byCode: this.getDTOByCode.bind(this)
+        by: {
+          code: this.getDTOByCode.bind(this)
+        }
       },
 
       getLobbyListEventsByCode: this.getLobbyListEventsByCode.bind(this),
 
       LobbyListEvents: {
-        byCode: this.getLobbyListEventsByCode.bind(this)
+        by: {
+          code: this.getLobbyListEventsByCode.bind(this)
+        }
       }
     }
 
@@ -1385,7 +1395,7 @@ class Kindred {
     } else {
       return this._logError(
         this.getDTOByCode.name,
-        `required params ${chalk.yellow('`code` (int)')} not passed in`
+        `required params ${chalk.yellow('`code` (string)')} not passed in`
       )
     }
   }
@@ -1398,9 +1408,46 @@ class Kindred {
     } else {
       return this._logError(
         this.getLobbyListEventsByCode.name,
-        `required params ${chalk.yellow('`code` (int)')} not passed in`
+        `required params ${chalk.yellow('`code` (string)')} not passed in`
       )
     }
+  }
+
+  /* Non-parameter-destructuring-thingy functions */
+  getSummonerByAccountId(accId, region, cb) {
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    return this.Summoner.get({
+      region,
+      accId
+    }, cb)
+  }
+
+  getSummonerById(id, region, cb) {
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    return this.Summoner.get({
+      region,
+      id
+    }, cb)
+  }
+
+  getSummonerByName(name, region, cb) {
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    return this.Summoner.get({
+      name,
+      region
+    }, cb)
   }
 
   /* Examples */

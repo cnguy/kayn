@@ -684,20 +684,30 @@
         championMasteries: this.getChampMasteries.bind(this),
 
         getTotalChampionMasteryScore: this.getTotalChampMasteryScore.bind(this),
-        totalChampionMasteryScore: this.getTotalChampMasteryScore.bind(this)
+        totalChampionMasteryScore: this.getTotalChampMasteryScore.bind(this),
+
+        by: {
+          accountId: this.getSummonerByAccountId.bind(this),
+          id: this.getSummonerById.bind(this),
+          name: this.getSummonerByName.bind(this)
+        }
       };
 
       this.Tournament = {
         getDTOByCode: this.getDTOByCode.bind(this),
 
         DTO: {
-          byCode: this.getDTOByCode.bind(this)
+          by: {
+            code: this.getDTOByCode.bind(this)
+          }
         },
 
         getLobbyListEventsByCode: this.getLobbyListEventsByCode.bind(this),
 
         LobbyListEvents: {
-          byCode: this.getLobbyListEventsByCode.bind(this)
+          by: {
+            code: this.getLobbyListEventsByCode.bind(this)
+          }
         }
       };
 
@@ -2137,7 +2147,7 @@
             endUrl: 'lobby-events/codes/' + code
           }, cb);
         } else {
-          return this._logError(this.getDTOByCode.name, 'required params ' + chalk.yellow('`code` (int)') + ' not passed in');
+          return this._logError(this.getDTOByCode.name, 'required params ' + chalk.yellow('`code` (string)') + ' not passed in');
         }
       }
     }, {
@@ -2148,8 +2158,47 @@
             endUrl: 'lobby-events/by-code/' + code
           }, cb);
         } else {
-          return this._logError(this.getLobbyListEventsByCode.name, 'required params ' + chalk.yellow('`code` (int)') + ' not passed in');
+          return this._logError(this.getLobbyListEventsByCode.name, 'required params ' + chalk.yellow('`code` (string)') + ' not passed in');
         }
+      }
+    }, {
+      key: 'getSummonerByAccountId',
+      value: function getSummonerByAccountId(accId, region, cb) {
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        return this.Summoner.get({
+          region: region,
+          accId: accId
+        }, cb);
+      }
+    }, {
+      key: 'getSummonerById',
+      value: function getSummonerById(id, region, cb) {
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        return this.Summoner.get({
+          region: region,
+          id: id
+        }, cb);
+      }
+    }, {
+      key: 'getSummonerByName',
+      value: function getSummonerByName(name, region, cb) {
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        return this.Summoner.get({
+          name: name,
+          region: region
+        }, cb);
       }
     }, {
       key: 'getSummonerByAccId',
