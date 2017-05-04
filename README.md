@@ -145,8 +145,17 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
 1. **/lol/platform/v3/masteries/by-summoner/{summonerId}**
     * Get mastery pages for a given summoner Id.
     * getMasteries({ region, accountId/accId (int), id/summonerId/playerId (int), name (str)}, cb)
-    * Namespaced Functions: *RunesMasteries.getMasteries, RunesMasteries.masteries, Masteries.get, Summoner.getMasteries, Summoner.masteries*
-    * Example 1: ```k.Masteries.get({ id: 20026563 }, KindredAPI.print)```
+        * Namespaced Functions: *Masteries.get, Summoner.getMasteries, Summoner.masteries*
+        * Example 1: ```k.Masteries.get({ id: 20026563 }, KindredAPI.print)```
+    * getMasteriesByAccountId(accId, [region], [cb])
+        * Namespaced Functions: *Masteries.by.account*
+        * Example 1: ```k.Masteries.by.account(47776491, REGIONS.NORTH_AMERICA, KindredAPI.print)```
+    * getMasteriesById(id, [region], [cb])
+        * Namespaced Functions: *Masteries.by.id*
+        * Example 1: ```k.Masteries.by.id(32932398).then(data => console.log(data))```
+    * getMasteriesByName(id, [region], [name])
+        * Namespaced Functions: *Masteries.by.name*
+        * Example 1: ```k.Masteries.by.name('Contractz', KindredAPI.print)```
 
 ### Match
 [docs](https://developer.riotgames.com/api-methods/#match-v3/)
@@ -185,7 +194,7 @@ Note that this section has two different namespaces (Match and Matchlist).
 1. **/lol/platform/v3/runes/by-summoner/{summonerId}**
     * Get rune pages for a given summoner Id.
     * getRunes({ region, accountId/accId (int), id/summonerId/playerId (int), name (str) }, cb)
-    * Namespaced Functions: *RunesMasteries.getRunes, RunesMasteries.runes, Runes.get, Summoner.getRunes, Summoner.runes*
+    * Namespaced Functions: *Runes.get, Summoner.getRunes, Summoner.runes*
     * Example 1: ```k.Runes.get({ id: 20026563 }, KindredAPI.print)```
     * Example 2: ```k.Runes.get({ name: 'Contractz' }, KindredAPI.print)```
     * Example 3: ```k.Runes.get({ accId: 47776491 }, KindredAPI.print)```
@@ -324,9 +333,9 @@ Note that this section has two different namespaces (Match and Matchlist).
         * Namespaced Functions: *Summoner.getSummoner, Summoner.get*
         * Example 1: ```k.Summoner.get({ accountId: 123123 }, KindredAPI.print)```
     * getSummonerByAccountId(accId, [region], [cb])
-        * Namespaced Functions: *Summoner.by.accountId*
-        * Example 1: ```k.Summoner.by.accountId(47776491, KindredAPI.print)```
-        * Example 2: ```k.Summoner.by.accountId(47776491, REGIONS.NORTH_AMERICA, KindredAPI.print)```
+        * Namespaced Functions: *Summoner.by.account*
+        * Example 1: ```k.Summoner.by.account(47776491, KindredAPI.print)```
+        * Example 2: ```k.Summoner.by.account(47776491, REGIONS.NORTH_AMERICA, KindredAPI.print)```
 2. **/lol/summoner/v3/summoners/by-name/{summonerName}**
     * Get a summoner by summoner name
     * getSummoner({ region, id/summonerId/playerId (int) }, cb)

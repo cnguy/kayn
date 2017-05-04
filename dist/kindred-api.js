@@ -653,7 +653,13 @@
       };
 
       this.Masteries = {
-        get: this.getMasteries.bind(this)
+        get: this.getMasteries.bind(this),
+
+        by: {
+          account: this.getMasteriesByAccountId.bind(this),
+          id: this.getMasteriesById.bind(this),
+          name: this.getMasteriesByName.bind(this)
+        }
       };
 
       this.Stats = {
@@ -687,7 +693,7 @@
         totalChampionMasteryScore: this.getTotalChampMasteryScore.bind(this),
 
         by: {
-          accountId: this.getSummonerByAccountId.bind(this),
+          account: this.getSummonerByAccountId.bind(this),
           id: this.getSummonerById.bind(this),
           name: this.getSummonerByName.bind(this)
         }
@@ -855,9 +861,7 @@
                 if (cb) return cb(err, json);else return resolve(json);
               } else {
                 if (_this.limits) {
-                  var self = _this;
-
-                  (function sendRequest(callback) {
+                  var self = _this;(function sendRequest(callback) {
                     if (self.canMakeRequest(region)) {
                       if (!staticReq) {
                         self.limits[region][0].addRequest();
@@ -2196,8 +2200,47 @@
         }
 
         return this.Summoner.get({
-          name: name,
-          region: region
+          region: region,
+          name: name
+        }, cb);
+      }
+    }, {
+      key: 'getMasteriesByAccountId',
+      value: function getMasteriesByAccountId(accId, region, cb) {
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        return this.Masteries.get({
+          region: region,
+          accId: accId
+        }, cb);
+      }
+    }, {
+      key: 'getMasteriesById',
+      value: function getMasteriesById(id, region, cb) {
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        return this.Masteries.get({
+          region: region,
+          id: id
+        }, cb);
+      }
+    }, {
+      key: 'getMasteriesByName',
+      value: function getMasteriesByName(name, region, cb) {
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        return this.Masteries.get({
+          region: region,
+          name: name
         }, cb);
       }
     }, {

@@ -248,7 +248,13 @@ class Kindred {
     }
 
     this.Masteries = {
-      get: this.getMasteries.bind(this)
+      get: this.getMasteries.bind(this),
+
+      by: {
+        account: this.getMasteriesByAccountId.bind(this),
+        id: this.getMasteriesById.bind(this),
+        name: this.getMasteriesByName.bind(this)
+      }
     }
 
     this.Stats = {
@@ -282,7 +288,7 @@ class Kindred {
       totalChampionMasteryScore: this.getTotalChampMasteryScore.bind(this),
 
       by: {
-        accountId: this.getSummonerByAccountId.bind(this),
+        account: this.getSummonerByAccountId.bind(this),
         id: this.getSummonerById.bind(this),
         name: this.getSummonerByName.bind(this)
       }
@@ -396,9 +402,9 @@ class Kindred {
             else return resolve(json)
           } else {
             if (this.limits) {
-              var self = this;
+              var self = this
 
-              (function sendRequest(callback) {
+              ;(function sendRequest(callback) {
                 if (self.canMakeRequest(region)) {
                   if (!staticReq) {
                     self.limits[region][0].addRequest()
@@ -1445,8 +1451,44 @@ class Kindred {
     }
 
     return this.Summoner.get({
-      name,
-      region
+      region,
+      name
+    }, cb)
+  }
+
+  getMasteriesByAccountId(accId, region, cb) {
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    return this.Masteries.get({
+      region,
+      accId
+    }, cb)
+  }
+
+  getMasteriesById(id, region, cb) {
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    return this.Masteries.get({
+      region,
+      id
+    }, cb)
+  }
+
+  getMasteriesByName(name, region, cb) {
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    return this.Masteries.get({
+      region,
+      name
     }, cb)
   }
 
