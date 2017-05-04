@@ -153,7 +153,7 @@ Note: All ```region``` parameters are **OPTIONAL**. All ```options``` parameters
     * getMasteriesById(id, [region], [cb])
         * Namespaced Functions: *Masteries.by.id*
         * Example 1: ```k.Masteries.by.id(32932398).then(data => console.log(data))```
-    * getMasteriesByName(id, [region], [name])
+    * getMasteriesByName(name, [region], [cb])
         * Namespaced Functions: *Masteries.by.name*
         * Example 1: ```k.Masteries.by.name('Contractz', KindredAPI.print)```
 
