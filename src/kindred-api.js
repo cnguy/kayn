@@ -244,7 +244,13 @@ class Kindred {
     }
 
     this.Runes = {
-      get: this.getRunes.bind(this)
+      get: this.getRunes.bind(this),
+
+      by: {
+        account: this.getRunesByAccountId.bind(this),
+        id: this.getRunesById.bind(this),
+        name: this.getRunesByName.bind(this)
+      }
     }
 
     this.Masteries = {
@@ -1492,6 +1498,30 @@ class Kindred {
     }, cb)
   }
 
+  getRunesById(id, region, cb) {
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    return this.Runes.get({
+      region,
+      id
+    }, cb)
+  }
+
+  getRunesByName(name, region, cb) {
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    return this.Runes.get({
+      region,
+      name
+    }, cb)
+  }
+
   /* Examples */
   getSummonerByAccId(accId, region, cb) {
     return this.Summoner.get({
@@ -1516,6 +1546,11 @@ class Kindred {
   }
 
   getRunesByAccountId(accId, region, cb) {
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
     return this.Runes.get({
       region,
       accId

@@ -649,7 +649,13 @@
       };
 
       this.Runes = {
-        get: this.getRunes.bind(this)
+        get: this.getRunes.bind(this),
+
+        by: {
+          account: this.getRunesByAccountId.bind(this),
+          id: this.getRunesById.bind(this),
+          name: this.getRunesByName.bind(this)
+        }
       };
 
       this.Masteries = {
@@ -2244,6 +2250,32 @@
         }, cb);
       }
     }, {
+      key: 'getRunesById',
+      value: function getRunesById(id, region, cb) {
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        return this.Runes.get({
+          region: region,
+          id: id
+        }, cb);
+      }
+    }, {
+      key: 'getRunesByName',
+      value: function getRunesByName(name, region, cb) {
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        return this.Runes.get({
+          region: region,
+          name: name
+        }, cb);
+      }
+    }, {
       key: 'getSummonerByAccId',
       value: function getSummonerByAccId(accId, region, cb) {
         return this.Summoner.get({
@@ -2271,6 +2303,11 @@
     }, {
       key: 'getRunesByAccountId',
       value: function getRunesByAccountId(accId, region, cb) {
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
         return this.Runes.get({
           region: region,
           accId: accId

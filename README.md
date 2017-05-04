@@ -194,10 +194,19 @@ Note that this section has two different namespaces (Match and Matchlist).
 1. **/lol/platform/v3/runes/by-summoner/{summonerId}**
     * Get rune pages for a given summoner Id.
     * getRunes({ region, accountId/accId (int), id/summonerId/playerId (int), name (str) }, cb)
-    * Namespaced Functions: *Runes.get, Summoner.getRunes, Summoner.runes*
-    * Example 1: ```k.Runes.get({ id: 20026563 }, KindredAPI.print)```
-    * Example 2: ```k.Runes.get({ name: 'Contractz' }, KindredAPI.print)```
-    * Example 3: ```k.Runes.get({ accId: 47776491 }, KindredAPI.print)```
+        * Namespaced Functions: *Runes.get, Summoner.getRunes, Summoner.runes*
+        * Example 1: ```k.Runes.get({ id: 20026563 }, KindredAPI.print)```
+        * Example 2: ```k.Runes.get({ name: 'Contractz' }, KindredAPI.print)```
+        * Example 3: ```k.Runes.get({ accId: 47776491 }, KindredAPI.print)```
+    * getRunesByAccountId(accId, [region], [cb])
+        * Namespaced Functions: *k.Runes.by.account*
+        * Example 1: ```k.Runes.by.account(47776491, KindredAPI.print)```
+    * getRunesById(id, [region], [cb])
+        * Namespaced Functions: *k.Runes.by.id*
+        * Example 1: ```k.Runes.by.id(32932398, KindredAPI.print)```
+    * getRunesByName(name, [region], [cb])
+        * Namespaced Functions: *k.Runes.by.name*
+        * Example 1: ```k.Runes.by.name('Contractz').then(data => console.log(data)).catch(error => console.error(error))```
 
 ### Spectator
 [docs](https://developer.riotgames.com/api-methods/#spectator-v3)
