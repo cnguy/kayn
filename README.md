@@ -251,15 +251,22 @@ Note that this section has two different namespaces (Match and Matchlist).
         * Example 2: ```k.Static.champion({ id: 131, options: { champData: 'enemytips', version: '7.7.1' } }, KindredAPI.print)```
 3. **/lol/static-data/v3/items**
     * Retrieves item list. (REST)
+    * getStaticItemList([options], [region], [cb])
+        * Namespaced Functions: *Static.Item.list*
+        * Example 1: ```k.Static.Item.list(REGIONS.KOREA).then(data => console.log(data))```
+        * Example 2: ```k.Static.Item.list(KindredAPI.print)```
     * getItems({ region, options (object) }, cb)
-    * Namespaced Functions: *Static.getItems, Static.items*
-    * Example 1: ```k.Static.items({ options: { itemListData: all } }, KindredAPI.print)```
+        * Namespaced Functions: *Static.getItems, Static.items*
+        * Example 1: ```k.Static.items({ options: { itemListData: all } }, KindredAPI.print)```
 4. **/lol/static-data/v3/items/{id}**
-    * Get master tier leagues. (REST)
+    * Retrieves item by ID.
+    * getStaticItemById(id, [options], [region], [cb])
+        * Namespaced Functions: *Static.Item.by.id*
+        * Example 1: ```k.Static.Item.by.id(3903).then(data => console.log(data)).catch(error => console.error(error))```
     * getItem({ region, id/itemId (int), options (object) }, cb)
-    * Namespaced Functions: *Static.getItem, Static.item*
-    * Example 1: ```k.Static.item({ id: 3901, options: { itemData: ['image', 'gold'] } }, KindredAPI.print)```
-    * Example 2: ```k.Static.items(KindredAPI.print)```
+        * Namespaced Functions: *Static.getItem, Static.item*
+        * Example 1: ```k.Static.item({ id: 3901, options: { itemData: ['image', 'gold'] } }, KindredAPI.print)```
+        * Example 2: ```k.Static.items(KindredAPI.print)```
 5. **/lol/static-data/v3/language-strings**
     * Retrieve language strings data. (REST)
     * getLanguageStrings({ region, options (object) }, cb)

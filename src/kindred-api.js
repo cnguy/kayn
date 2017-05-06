@@ -162,7 +162,10 @@ class Kindred {
         }
       },
       Item: {
-
+        list: this.getStaticItemList.bind(this),
+        by: {
+          id: this.getStaticItemById.bind(this)
+        }
       },
       LanguageStrings: {
 
@@ -1603,7 +1606,47 @@ class Kindred {
     }, cb)
   }
 
+  getStaticItemList(options, region, cb) {
+    if (typeof options == 'function') {
+      cb = options
+      options = undefined
+    }
 
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    if (typeof options == 'string') {
+      region = options
+      options = undefined
+    }
+
+    return this.Static.items({
+      options, region
+    }, cb)
+  }
+
+  getStaticItemById(id, options, region, cb) {
+    if (typeof options == 'function') {
+      cb = options
+      options = undefined
+    }
+
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    if (typeof options == 'string') {
+      region = options
+      options = undefined
+    }
+
+    return this.Static.item({
+      id, options, region
+    }, cb)
+  }
 
   /* Examples */
   getSummonerByAccId(accId, region, cb) {
