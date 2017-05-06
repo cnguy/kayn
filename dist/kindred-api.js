@@ -587,9 +587,16 @@
             id: this.getStaticMasteryById.bind(this)
           }
         },
-        ProfileIcon: {},
-        Rune: {},
+        ProfileIcon: {
+          list: this.getStaticProfileIconList.bind(this)
+        },
         Realm: {},
+        Rune: {
+          list: this.getStaticRuneList.bind(this),
+          by: {
+            id: this.getStaticRuneById.bind(this)
+          }
+        },
         SummonerSpell: {},
         Version: {},
 
@@ -2493,6 +2500,72 @@
         }
 
         return this.Static.mastery({
+          id: id, options: options, region: region
+        }, cb);
+      }
+    }, {
+      key: 'getStaticProfileIconList',
+      value: function getStaticProfileIconList(options, region, cb) {
+        if (typeof options == 'function') {
+          cb = options;
+          options = undefined;
+        }
+
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        if (typeof options == 'string') {
+          region = options;
+          options = undefined;
+        }
+
+        return this.Static.profileIcons({
+          options: options, region: region
+        }, cb);
+      }
+    }, {
+      key: 'getStaticRuneList',
+      value: function getStaticRuneList(options, region, cb) {
+        if (typeof options == 'function') {
+          cb = options;
+          options = undefined;
+        }
+
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        if (typeof options == 'string') {
+          region = options;
+          options = undefined;
+        }
+
+        return this.Static.runes({
+          options: options, region: region
+        }, cb);
+      }
+    }, {
+      key: 'getStaticRuneById',
+      value: function getStaticRuneById(id, options, region, cb) {
+        if (typeof options == 'function') {
+          cb = options;
+          options = undefined;
+        }
+
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        if (typeof options == 'string') {
+          region = options;
+          options = undefined;
+        }
+
+        return this.Static.rune({
           id: id, options: options, region: region
         }, cb);
       }

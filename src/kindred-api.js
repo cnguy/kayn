@@ -183,13 +183,16 @@ class Kindred {
         }
       },
       ProfileIcon: {
-
-      },
-      Rune: {
-
+        list: this.getStaticProfileIconList.bind(this)
       },
       Realm: {
 
+      },
+      Rune: {
+        list: this.getStaticRuneList.bind(this),
+        by: {
+          id: this.getStaticRuneById.bind(this)
+        }
       },
       SummonerSpell: {
 
@@ -1742,6 +1745,69 @@ class Kindred {
     }
 
     return this.Static.mastery({
+      id, options, region
+    }, cb)
+  }
+
+  getStaticProfileIconList(options, region, cb) {
+    if (typeof options == 'function') {
+      cb = options
+      options = undefined
+    }
+
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    if (typeof options == 'string') {
+      region = options
+      options = undefined
+    }
+
+    return this.Static.profileIcons({
+      options, region
+    }, cb)
+  }
+
+  getStaticRuneList(options, region, cb) {
+    if (typeof options == 'function') {
+      cb = options
+      options = undefined
+    }
+
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    if (typeof options == 'string') {
+      region = options
+      options = undefined
+    }
+
+    return this.Static.runes({
+      options, region
+    }, cb)
+  }
+
+  getStaticRuneById(id, options, region, cb) {
+    if (typeof options == 'function') {
+      cb = options
+      options = undefined
+    }
+
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    if (typeof options == 'string') {
+      region = options
+      options = undefined
+    }
+
+    return this.Static.rune({
       id, options, region
     }, cb)
   }

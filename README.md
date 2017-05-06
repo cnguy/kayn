@@ -311,9 +311,12 @@ Note that this section has two different namespaces (Match and Matchlist).
         * Example 3: ```k.Static.mastery({ id: 6361, options: { masteryData: 'image' } }, KindredAPI.print)```
 10. **/lol/static-data/v3/profile-icons**
     * Retrieve profile icons. (REST)
+    * getStaticProfileIconList([options], [region], [cb])
+        * Namespaced Functions: *Static.ProfileIcon.list*
+        * Example 1: ```k.Static.ProfileIcon.list(KindredAPI.print)```
     * getProfileIcons({ region, options (object) }, cb)
-    * Namespaced Functions:  *Static.getProfileIcons, Static.profileIcons*
-    * Example 1: ```k.Static.profileIcons(KindredAPI.print)```
+        * Namespaced Functions:  *Static.getProfileIcons, Static.profileIcons*
+        * Example 1: ```k.Static.profileIcons(KindredAPI.print)```
 11. **/lol/static-data/v3/realms**
     * Retrieve realm data. (REST)
     * getRealmData({ region }, cb)
@@ -321,16 +324,22 @@ Note that this section has two different namespaces (Match and Matchlist).
     * Example 1: ```k.Static.realmData().then(data => console.log(data))```
 12. **/lol/static-data/v3/runes**
     * Retrieves rune list. (REST)
+    * getStaticRuneList([region], [options], [cb])
+        * Namespaced Functions: *Static.Rune.list*
+        * Example 1: ```k.Static.Rune.list({ runeListData: 'image' }, KindredAPI.print)```
     * getRuneList({ region, options (object) }, cb)
-    * Namespaced Functions: *Static.getRunes, Static.runes*
-    * Example 1: ```k.Static.runes().then(data => console.log(data))```
-    * Example 2: ```k.Static.runes({ options: { runeListData: 'basic' } }, KindredAPI.print)```
+        * Namespaced Functions: *Static.getRunes, Static.runes*
+        * Example 1: ```k.Static.runes().then(data => console.log(data))```
+        * Example 2: ```k.Static.runes({ options: { runeListData: 'basic' } }, KindredAPI.print)```
 13. **/lol/static-data/v3/runes/{id}**
     * Retrieves rune by its unique id. (REST)
+    * getStaticRuneById(id, [region], [options], [cb])
+        * Namespaced Functions: *Static.Rune.by.id*
+        * Example 1: ```k.Static.Rune.by.id(10002, { runeData: 'image' }, KindredAPI.print)```
     * getRune({ region, id/runeId (int), options (object) }, cb)
-    * Namespaced Functions: *Static.getRune, Static.rune*
-    * Example 1: ```k.Static.rune({ id: 10002 }, KindredAPI.print)```
-    * Example 2: ```k.Static.rune({ id: 10001, options: { runeData: 'image' } }, KindredAPI.print)```
+        * Namespaced Functions: *Static.getRune, Static.rune*
+        * Example 1: ```k.Static.rune({ id: 10002 }, KindredAPI.print)```
+        * Example 2: ```k.Static.rune({ id: 10001, options: { runeData: 'image' } }, KindredAPI.print)```
 14. **/lol/static-data/v3/summoner-spells**
     * Retrieves summoner spell list. (REST)
     * getSummonerSpells({ region, options (object) }, cb)
