@@ -235,16 +235,20 @@ Note that this section has two different namespaces (Match and Matchlist).
         * Example 2: ```k.Static.Champion.list({ champListData: 'all' }, KindredAPI.print)```
         * Example 3: ```k.Static.Champion.list(KindredAPI.print)```
         * Example 4: ```k.Static.Champion.list(REGIONS.KOREA, KindredAPI.print)```
+        * Example 5: ```k.Static.Champion.list({ champListData: 'all' }, REGIONS.KOREA, KindredAPI.print)```
     * getChampionList({ region, options (object) }, cb)
         * Namespaced Functions: *Static.getChampions, Static.champions*
         * Example 1: ```k.Static.champions(KindredAPI.print)```
         * Example 2: ```k.Static.champions({ options: { champData: 'all' } }).then(data => console.log(data))```
 2. **/lol/static-data/v3/champions/{id}**
     * Retrieves a champion by its id. (REST)
+    * staticGetChampionById(id, [options], [region], [cb])
+        * Example 1: ```k.Static.Champion.by.id(497, REGIONS.KOREA, KindredAPI.print)```
+        * Example 2: ```k.Static.Champion.by.id(497, { champListData: 'all' }, KindredAPI.print)```
     * getChampion({ region, id/championId (int), options (object) }, cb)
-    * Namespaced Functions: *Static.getChampion, Static.champion*
-    * Example 1: ```k.Static.champion({ id: 131 }, KindredAPI.print)```
-    * Example 2: ```k.Static.champion({ id: 131, options: { champData: 'enemytips', version: '7.7.1' } }, KindredAPI.print)```
+        * Namespaced Functions: *Static.getChampion, Static.champion*
+        * Example 1: ```k.Static.champion({ id: 131 }, KindredAPI.print)```
+        * Example 2: ```k.Static.champion({ id: 131, options: { champData: 'enemytips', version: '7.7.1' } }, KindredAPI.print)```
 3. **/lol/static-data/v3/items**
     * Retrieves item list. (REST)
     * getItems({ region, options (object) }, cb)
@@ -446,6 +450,38 @@ k.Summoner.matchlist({ name }, KindredAPI.print)
 
 k.Matchlist.recent({ name }, KindredAPI.print)
 k.Summoner.matchHistory({ name }, KindredAPI.print) // recent matches (20)
+
+const config = {
+  options: {
+    champListData: 'all'
+  },
+  region: REGIONS.KOREA
+}
+
+k.Static.champions(config)
+        .then(data => console.log(data))
+
+k.Static.champion({
+    id: 497,
+    config.options
+}).then(data => console.log(data))
+
+/*
+    `get` style functions always take in an object as the first parameter.
+    They can work with different type of parameters (id, name, accountId)
+    when applicable.
+
+    All `list` and `by.xxx` functions will have the standard way of
+    inserting arguments into the parameters.
+*/
+k.Static.Champion
+        .list({ champListData: 'all' }, REGIONS.KOREA)
+        .then(data => console.log(data))
+
+k.Static.Champion
+        .by.id(497, { champListData: 'all' })
+        .then(data => console.log(data))
+        .catch(error => console.error(err))
 ```
 
 ## Detailed Usage
@@ -774,7 +810,7 @@ var k = new KindredAPI.Kindred({
 ```
 
 ## Ugly
-*May 5*: I'm actually in the process of adding a bunch of the functions I described below. Summoner, Runes, and Masteries have these type of functions now. I'm working on Static currently!
+**May 5: I'm actually in the process of adding a bunch of the functions I described below. Summoner, Runes, and Masteries have these type of functions now. I'm working on Static currently!**
 
 Some people might disagree with how I formed my functions.
 

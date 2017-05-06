@@ -562,7 +562,9 @@
       this.Static = {
         Champion: {
           list: this.getStaticChampionList.bind(this),
-          get: this.getStaticChampionById.bind(this)
+          by: {
+            id: this.getStaticChampionById.bind(this)
+          }
         },
         Item: {},
         LanguageStrings: {},
@@ -2314,7 +2316,26 @@
       }
     }, {
       key: 'getStaticChampionById',
-      value: function getStaticChampionById(id) {}
+      value: function getStaticChampionById(id, options, region, cb) {
+        if (typeof options == 'function') {
+          cb = options;
+          options = undefined;
+        }
+
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        if (typeof options == 'string') {
+          region = options;
+          options = undefined;
+        }
+
+        return this.Static.champion({
+          id: id, options: options, region: region
+        }, cb);
+      }
     }, {
       key: 'getSummonerByAccId',
       value: function getSummonerByAccId(accId, region, cb) {

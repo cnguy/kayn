@@ -157,7 +157,9 @@ class Kindred {
     this.Static = {
       Champion: {
         list: this.getStaticChampionList.bind(this),
-        get: this.getStaticChampionById.bind(this)
+        by: {
+          id: this.getStaticChampionById.bind(this)
+        }
       },
       Item: {
 
@@ -1580,8 +1582,25 @@ class Kindred {
     }, cb)
   }
 
-  getStaticChampionById(id) {
+  getStaticChampionById(id, options, region, cb) {
+    if (typeof options == 'function') {
+      cb = options
+      options = undefined
+    }
 
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    if (typeof options == 'string') {
+      region = options
+      options = undefined
+    }
+
+    return this.Static.champion({
+      id, options, region
+    }, cb)
   }
 
 
