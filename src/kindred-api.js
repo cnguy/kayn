@@ -133,7 +133,9 @@ class Kindred {
 
     this.FeaturedGames = {
       getFeaturedGames: this.getFeaturedGames.bind(this),
-      get: this.getFeaturedGames.bind(this)
+      get: this.getFeaturedGames.bind(this),
+
+      list: this.listFeaturedGames.bind(this)
     }
 
     this.Game = {
@@ -208,8 +210,6 @@ class Kindred {
       Version: {
         list: this.getStaticVersionList.bind(this)
       },
-
-
 
       getChampions: this.getChampionList.bind(this),
       champions: this.getChampionList.bind(this),
@@ -817,14 +817,14 @@ class Kindred {
           return resolve(this._spectatorRequest({
             endUrl: `active-games/by-summoner/${data.id}`,
             region
-          }, cb = region ? cb : arguments[0]))
+          }, cb = arguments.length == 2 ? cb : arguments[0]))
         })
       })
     } else if (Number.isInteger(id || summonerId || playerId)) {
       return this._spectatorRequest({
         endUrl: `active-games/by-summoner/${id || summonerId || playerId}`,
         region
-      }, cb = region ? cb : arguments[0])
+      }, cb = arguments.length == 2 ? cb : arguments[0])
     } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
       return new Promise((resolve, reject) => {
         return this.getSummoner({ name, region }, (err, data) => {
@@ -832,7 +832,7 @@ class Kindred {
           return resolve(this._spectatorRequest({
             endUrl: `active-games/by-summoner/${data.id}`,
             region
-          }, cb = region ? cb : arguments[0]))
+          }, cb = arguments.length == 2 ? cb : arguments[0]))
         })
       })
     } else {
@@ -847,7 +847,7 @@ class Kindred {
     return this._spectatorRequest({
       endUrl: 'featured-games',
       region
-    }, cb = region ? cb : arguments[0])
+    }, cb = arguments.length == 2 ? cb : arguments[0])
   }
 
   /* GAME-V1.3 */
@@ -1495,6 +1495,17 @@ class Kindred {
 
     return this.Champion.get({
       id, region
+    }, cb)
+  }
+
+  listFeaturedGames(region, cb) {
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    return this.FeaturedGames.get({
+      region
     }, cb)
   }
 

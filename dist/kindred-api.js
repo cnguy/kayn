@@ -538,7 +538,9 @@
 
       this.FeaturedGames = {
         getFeaturedGames: this.getFeaturedGames.bind(this),
-        get: this.getFeaturedGames.bind(this)
+        get: this.getFeaturedGames.bind(this),
+
+        list: this.listFeaturedGames.bind(this)
       };
 
       this.Game = {
@@ -1358,14 +1360,14 @@
               return resolve(_this4._spectatorRequest({
                 endUrl: 'active-games/by-summoner/' + data.id,
                 region: region
-              }, cb = region ? cb : _arguments[0]));
+              }, cb = _arguments.length == 2 ? cb : _arguments[0]));
             });
           });
         } else if (Number.isInteger(id || summonerId || playerId)) {
           return this._spectatorRequest({
             endUrl: 'active-games/by-summoner/' + (id || summonerId || playerId),
             region: region
-          }, cb = region ? cb : arguments[0]);
+          }, cb = arguments.length == 2 ? cb : arguments[0]);
         } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
           return new Promise(function (resolve, reject) {
             return _this4.getSummoner({ name: name, region: region }, function (err, data) {
@@ -1375,7 +1377,7 @@
               return resolve(_this4._spectatorRequest({
                 endUrl: 'active-games/by-summoner/' + data.id,
                 region: region
-              }, cb = region ? cb : _arguments[0]));
+              }, cb = _arguments.length == 2 ? cb : _arguments[0]));
             });
           });
         } else {
@@ -1393,7 +1395,7 @@
         return this._spectatorRequest({
           endUrl: 'featured-games',
           region: region
-        }, cb = region ? cb : arguments[0]);
+        }, cb = arguments.length == 2 ? cb : arguments[0]);
       }
     }, {
       key: 'getRecentGames',
@@ -2220,6 +2222,18 @@
 
         return this.Champion.get({
           id: id, region: region
+        }, cb);
+      }
+    }, {
+      key: 'listFeaturedGames',
+      value: function listFeaturedGames(region, cb) {
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        return this.FeaturedGames.get({
+          region: region
         }, cb);
       }
     }, {
