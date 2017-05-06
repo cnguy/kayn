@@ -950,6 +950,8 @@
                 } else {
                   request({ url: fullUrl }, function (error, response, body) {
                     if (response) {
+                      var self = _this;
+
                       var statusCode = response.statusCode;
 
                       var statusMessage = colorizeStatusMessage(statusCode);

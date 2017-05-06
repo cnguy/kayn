@@ -509,6 +509,8 @@ class Kindred {
             } else {
               request({ url: fullUrl }, (error, response, body) => {
                 if (response) {
+                  var self = this
+
                   const { statusCode } = response
                   const statusMessage = colorizeStatusMessage(statusCode)
 
