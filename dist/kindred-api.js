@@ -578,8 +578,15 @@
         Language: {
           list: this.getStaticLanguageList.bind(this)
         },
-        Map: {},
-        Mastery: {},
+        Map: {
+          list: this.getStaticMapList.bind(this)
+        },
+        Mastery: {
+          list: this.getStaticMasteryList.bind(this),
+          by: {
+            id: this.getStaticMasteryById.bind(this)
+          }
+        },
         ProfileIcon: {},
         Rune: {},
         Realm: {},
@@ -2421,6 +2428,72 @@
 
         return this.Static.languages({
           region: region
+        }, cb);
+      }
+    }, {
+      key: 'getStaticMapList',
+      value: function getStaticMapList(options, region, cb) {
+        if (typeof options == 'function') {
+          cb = options;
+          options = undefined;
+        }
+
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        if (typeof options == 'string') {
+          region = options;
+          options = undefined;
+        }
+
+        return this.Static.mapData({
+          options: options, region: region
+        }, cb);
+      }
+    }, {
+      key: 'getStaticMasteryList',
+      value: function getStaticMasteryList(options, region, cb) {
+        if (typeof options == 'function') {
+          cb = options;
+          options = undefined;
+        }
+
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        if (typeof options == 'string') {
+          region = options;
+          options = undefined;
+        }
+
+        return this.Static.masteries({
+          options: options, region: region
+        }, cb);
+      }
+    }, {
+      key: 'getStaticMasteryById',
+      value: function getStaticMasteryById(id, options, region, cb) {
+        if (typeof options == 'function') {
+          cb = options;
+          options = undefined;
+        }
+
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        if (typeof options == 'string') {
+          region = options;
+          options = undefined;
+        }
+
+        return this.Static.mastery({
+          id: id, options: options, region: region
         }, cb);
       }
     }, {

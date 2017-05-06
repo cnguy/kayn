@@ -285,22 +285,30 @@ Note that this section has two different namespaces (Match and Matchlist).
         * Example 1: ```k.Static.languages().then(data => console.log(data)).catch(err => console.error(err))```
 7. **/lol/static-data/v3/maps**
     * Retrieve map data. (REST)
+    * getStaticMapList([region], [cb])
+        * Namespaced Functions: *Static.Map.list*
     * getMapData({ region, options (object) }, cb)
-    * Namespaced Functions: *Static.getMapData, Static.mapData, Static.map, Static.maps*
-    * Example 1: ```k.Static.mapData().then(data => console.log(data))```
+        * Namespaced Functions: *Static.getMapData, Static.mapData, Static.map, Static.maps*
+        * Example 1: ```k.Static.mapData().then(data => console.log(data))```
 8. **/lol/static-data/v3/masteries**
     * Retrieve mastery list. (REST)
+    * getStaticMasteryList([options], [region], [cb])
+        * Namespaced Functions: *Static.Mastery.list*
+        * Example 1: ```k.Static.Mastery.list(KindredAPI.print)```
     * getMasteryList({ region, options (object) }, cb)
-    * Namespaced Functions: *Static.getMasteries, Static.masteries*
-    * Example 1: ```k.Static.masteries({ options: { masteryListData: 'image' } }, KindredAPI.print)```
-    * Example 2: ```k.Static.masteries(KindredAPI.print)```
+        * Namespaced Functions: *Static.getMasteries, Static.masteries*
+        * Example 1: ```k.Static.masteries({ options: { masteryListData: 'image' } }, KindredAPI.print)```
+        * Example 2: ```k.Static.masteries(KindredAPI.print)```
 9. **/lol/static-data/v3/masteries/{id}**
     * Retrieves mastery item by its unique id. (REST)
+    * getStaticMasteryById(id, [options], [region], [cb])
+        * Namespaced Functions: *Static.Mastery.by.id*
+        * Example 1: ```k.Static.Mastery.by.id(6362, KindredAPI.print)```
     * getMastery({ region, id/masteryId (int), options (object) }, cb)
-    * Namespaced Functions: *Static.getMastery, Static.mastery*
-    * Example 1: ```k.Static.mastery({ id: 6361 }, KindredAPI.print)```
-    * Example 2: ```k.Static.mastery({ id: 6361, options: { masteryData: ['image', 'masteryTree'] } }, KindredAPI.print)```
-    * Example 3: ```k.Static.mastery({ id: 6361, options: { masteryData: 'image' } }, KindredAPI.print)```
+        * Namespaced Functions: *Static.getMastery, Static.mastery*
+        * Example 1: ```k.Static.mastery({ id: 6361 }, KindredAPI.print)```
+        * Example 2: ```k.Static.mastery({ id: 6361, options: { masteryData: ['image', 'masteryTree'] } }, KindredAPI.print)```
+        * Example 3: ```k.Static.mastery({ id: 6361, options: { masteryData: 'image' } }, KindredAPI.print)```
 10. **/lol/static-data/v3/profile-icons**
     * Retrieve profile icons. (REST)
     * getProfileIcons({ region, options (object) }, cb)
