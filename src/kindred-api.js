@@ -155,6 +155,43 @@ class Kindred {
     }
 
     this.Static = {
+      Champion: {
+        list: this.getStaticChampionList.bind(this),
+        get: this.getStaticChampionById.bind(this)
+      },
+      Item: {
+
+      },
+      LanguageStrings: {
+
+      },
+      Language: {
+
+      },
+      Map: {
+
+      },
+      Mastery: {
+
+      },
+      ProfileIcons: {
+
+      },
+      Rune: {
+
+      },
+      Realm: {
+
+      },
+      SummonerSpells: {
+
+      },
+      Version: {
+
+      },
+
+
+
       getChampions: this.getChampionList.bind(this),
       champions: this.getChampionList.bind(this),
 
@@ -1521,6 +1558,33 @@ class Kindred {
       name
     }, cb)
   }
+
+  getStaticChampionList(options, region, cb) {
+    if (typeof options == 'function') {
+      cb = options
+      options = undefined
+    }
+
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    if (typeof options == 'string') {
+      region = options
+      options = undefined
+    }
+
+    return this.Static.champions({
+      region, options
+    }, cb)
+  }
+
+  getStaticChampionById(id) {
+
+  }
+
+
 
   /* Examples */
   getSummonerByAccId(accId, region, cb) {

@@ -560,6 +560,21 @@
       };
 
       this.Static = {
+        Champion: {
+          list: this.getStaticChampionList.bind(this),
+          get: this.getStaticChampionById.bind(this)
+        },
+        Item: {},
+        LanguageStrings: {},
+        Language: {},
+        Map: {},
+        Mastery: {},
+        ProfileIcons: {},
+        Rune: {},
+        Realm: {},
+        SummonerSpells: {},
+        Version: {},
+
         getChampions: this.getChampionList.bind(this),
         champions: this.getChampionList.bind(this),
 
@@ -2275,6 +2290,31 @@
           name: name
         }, cb);
       }
+    }, {
+      key: 'getStaticChampionList',
+      value: function getStaticChampionList(options, region, cb) {
+        if (typeof options == 'function') {
+          cb = options;
+          options = undefined;
+        }
+
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        if (typeof options == 'string') {
+          region = options;
+          options = undefined;
+        }
+
+        return this.Static.champions({
+          region: region, options: options
+        }, cb);
+      }
+    }, {
+      key: 'getStaticChampionById',
+      value: function getStaticChampionById(id) {}
     }, {
       key: 'getSummonerByAccId',
       value: function getSummonerByAccId(accId, region, cb) {

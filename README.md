@@ -229,10 +229,16 @@ Note that this section has two different namespaces (Match and Matchlist).
 
 1. **/lol/static-data/v3/champions**
     * Retrieves champion list. (REST)
+    * getStaticChampionList([options], [region], [cb])
+        * Namespaced Functions: *Static.Champion.list*
+        * Example 1: ```k.Static.Champion.list()```
+        * Example 2: ```k.Static.Champion.list({ champListData: 'all' }, KindredAPI.print)```
+        * Example 3: ```k.Static.Champion.list(KindredAPI.print)```
+        * Example 4: ```k.Static.Champion.list(REGIONS.KOREA, KindredAPI.print)```
     * getChampionList({ region, options (object) }, cb)
-    * Namespaced Functions: *Static.getChampions, Static.champions*
-    * Example 1: ```k.Static.champions(KindredAPI.print)```
-    * Example 2: ```k.Static.champions({ options: { champData: 'all' } }).then(data => console.log(data))```
+        * Namespaced Functions: *Static.getChampions, Static.champions*
+        * Example 1: ```k.Static.champions(KindredAPI.print)```
+        * Example 2: ```k.Static.champions({ options: { champData: 'all' } }).then(data => console.log(data))```
 2. **/lol/static-data/v3/champions/{id}**
     * Retrieves a champion by its id. (REST)
     * getChampion({ region, id/championId (int), options (object) }, cb)
@@ -768,6 +774,8 @@ var k = new KindredAPI.Kindred({
 ```
 
 ## Ugly
+*May 5*: I'm actually in the process of adding a bunch of the functions I described below. Summoner, Runes, and Masteries have these type of functions now. I'm working on Static currently!
+
 Some people might disagree with how I formed my functions.
 
 It's actually not really idiomatic JavaScript, and with an object inside an object it gets ugly really fast.
