@@ -167,11 +167,11 @@ class Kindred {
           id: this.getStaticItemById.bind(this)
         }
       },
-      LanguageStrings: {
-
+      LanguageString: {
+        list: this.getStaticLanguageStringList.bind(this)
       },
       Language: {
-
+        list: this.getStaticLanguageList.bind(this)
       },
       Map: {
 
@@ -179,7 +179,7 @@ class Kindred {
       Mastery: {
 
       },
-      ProfileIcons: {
+      ProfileIcon: {
 
       },
       Rune: {
@@ -188,7 +188,7 @@ class Kindred {
       Realm: {
 
       },
-      SummonerSpells: {
+      SummonerSpell: {
 
       },
       Version: {
@@ -452,63 +452,63 @@ class Kindred {
             if (this.limits) {
               var self = this
 
-              ;(function sendRequest(callback) {
-                if (self.canMakeRequest(region)) {
-                  if (!staticReq) {
-                    self.limits[region][0].addRequest()
-                    self.limits[region][1].addRequest()
-                  }
+                ; (function sendRequest(callback) {
+                  if (self.canMakeRequest(region)) {
+                    if (!staticReq) {
+                      self.limits[region][0].addRequest()
+                      self.limits[region][1].addRequest()
+                    }
 
-                  request({ url: fullUrl }, (error, response, body) => {
-                    if (response && body) {
-                      const { statusCode } = response
-                      const statusMessage = colorizeStatusMessage(statusCode)
+                    request({ url: fullUrl }, (error, response, body) => {
+                      if (response && body) {
+                        const { statusCode } = response
+                        const statusMessage = colorizeStatusMessage(statusCode)
 
-                      if (self.debug) printResponseDebug(response, statusMessage, fullUrl)
+                        if (self.debug) printResponseDebug(response, statusMessage, fullUrl)
 
-                      if (typeof callback === 'function') {
-                        if (statusCode >= 500) {
-                          if (self.debug) console.log('!!! resending request !!!')
-                          setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
-                        }
+                        if (typeof callback === 'function') {
+                          if (statusCode >= 500) {
+                            if (self.debug) console.log('!!! resending request !!!')
+                            setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
+                          }
 
-                        if (statusCode === 429) {
-                          if (self.debug) console.log('!!! resending request !!!')
-                          setTimeout(() => {
-                            sendRequest.bind(self)(callback)
-                          }, (response.headers['retry-after'] * 1000) + 50)
-                        }
+                          if (statusCode === 429) {
+                            if (self.debug) console.log('!!! resending request !!!')
+                            setTimeout(() => {
+                              sendRequest.bind(self)(callback)
+                            }, (response.headers['retry-after'] * 1000) + 50)
+                          }
 
-                        if (statusCode >= 400) {
-                          return callback(statusMessage + ' : ' + chalk.yellow(reqUrl))
+                          if (statusCode >= 400) {
+                            return callback(statusMessage + ' : ' + chalk.yellow(reqUrl))
+                          } else {
+                            if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0)
+                              self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body)
+                            return callback(error, JSON.parse(body))
+                          }
                         } else {
-                          if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0)
-                            self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body)
-                          return callback(error, JSON.parse(body))
+                          if (statusCode === 500) {
+                            if (self.debug) console.log('!!! resending promise request !!!')
+                            setTimeout(() => { return reject('retry') }, 1000)
+                          } else if (statusCode === 429) {
+                            if (self.debug) console.log('!!! resending promise request !!!')
+                            setTimeout(() => { return reject('retry') }, (response.headers['retry-after'] * 1000) + 50)
+                          } else if (error || statusCode >= 400) {
+                            return reject('err:', error, statusCode)
+                          } else {
+                            if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0)
+                              self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body)
+                            return resolve(JSON.parse(body))
+                          }
                         }
                       } else {
-                        if (statusCode === 500) {
-                          if (self.debug) console.log('!!! resending promise request !!!')
-                          setTimeout(() => { return reject('retry') }, 1000)
-                        } else if (statusCode === 429) {
-                          if (self.debug) console.log('!!! resending promise request !!!')
-                          setTimeout(() => { return reject('retry') }, (response.headers['retry-after'] * 1000) + 50)
-                        } else if (error || statusCode >= 400) {
-                          return reject('err:', error, statusCode)
-                        } else {
-                          if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0)
-                            self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body)
-                          return resolve(JSON.parse(body))
-                        }
+                        console.log(error, fullUrl)
                       }
-                    } else {
-                      console.log(error, fullUrl)
-                    }
-                  })
-                } else {
-                  setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
-                }
-              })(cb)
+                    })
+                  } else {
+                    setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
+                  }
+                })(cb)
             } else {
               request({ url: fullUrl }, (error, response, body) => {
                 if (response) {
@@ -1050,7 +1050,7 @@ class Kindred {
   }
 
   getLanguages({ region } = {}, cb) {
-    return this._staticRequest({ endUrl: 'languages', region }, cb = region ? cb : arguments[0])
+    return this._staticRequest({ endUrl: 'languages', region }, cb = arguments.length === 2  ? cb : arguments[0])
   }
 
   getMapData({ region, options } = {}, cb) {
@@ -1645,6 +1645,38 @@ class Kindred {
 
     return this.Static.item({
       id, options, region
+    }, cb)
+  }
+
+  getStaticLanguageStringList(options, region, cb) {
+    if (typeof options == 'function') {
+      cb = options
+      options = undefined
+    }
+
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    if (typeof options == 'string') {
+      region = options
+      options = undefined
+    }
+
+    return this.Static.languageStrings({
+      options, region
+    }, cb)
+  }
+
+  getStaticLanguageList(region, cb) {
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    return this.Static.languages({
+      region
     }, cb)
   }
 

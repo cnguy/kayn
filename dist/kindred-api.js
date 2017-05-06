@@ -572,14 +572,18 @@
             id: this.getStaticItemById.bind(this)
           }
         },
-        LanguageStrings: {},
-        Language: {},
+        LanguageString: {
+          list: this.getStaticLanguageStringList.bind(this)
+        },
+        Language: {
+          list: this.getStaticLanguageList.bind(this)
+        },
         Map: {},
         Mastery: {},
-        ProfileIcons: {},
+        ProfileIcon: {},
         Rune: {},
         Realm: {},
-        SummonerSpells: {},
+        SummonerSpell: {},
         Version: {},
 
         getChampions: this.getChampionList.bind(this),
@@ -1661,7 +1665,7 @@
 
         var cb = arguments[1];
 
-        return this._staticRequest({ endUrl: 'languages', region: region }, cb = region ? cb : arguments[0]);
+        return this._staticRequest({ endUrl: 'languages', region: region }, cb = arguments.length === 2 ? cb : arguments[0]);
       }
     }, {
       key: 'getMapData',
@@ -2383,6 +2387,40 @@
 
         return this.Static.item({
           id: id, options: options, region: region
+        }, cb);
+      }
+    }, {
+      key: 'getStaticLanguageStringList',
+      value: function getStaticLanguageStringList(options, region, cb) {
+        if (typeof options == 'function') {
+          cb = options;
+          options = undefined;
+        }
+
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        if (typeof options == 'string') {
+          region = options;
+          options = undefined;
+        }
+
+        return this.Static.languageStrings({
+          options: options, region: region
+        }, cb);
+      }
+    }, {
+      key: 'getStaticLanguageList',
+      value: function getStaticLanguageList(region, cb) {
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        return this.Static.languages({
+          region: region
         }, cb);
       }
     }, {

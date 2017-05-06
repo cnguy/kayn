@@ -269,14 +269,20 @@ Note that this section has two different namespaces (Match and Matchlist).
         * Example 2: ```k.Static.items(KindredAPI.print)```
 5. **/lol/static-data/v3/language-strings**
     * Retrieve language strings data. (REST)
+    * getStaticLanguageString([options], [region], [cb])
+        * Namespaced Functions: *Static.LanguageString.list*
+        * Example 1: ```k.Static.LanguageString.list(KindredAPI.print)```
     * getLanguageStrings({ region, options (object) }, cb)
-    * Namespaced Functions: *Static.getLanguageStrings, Static.languageStrings*
-    * Example 1: ```k.Static.languageStrings(KindredAPI.print)```
+        * Namespaced Functions: *Static.getLanguageStrings, Static.languageStrings*
+        * Example 1: ```k.Static.languageStrings(KindredAPI.print)```
 6. **/lol/static-data/v3/languages**
     * Retrieve supported languages data. (REST)
+    * getStaticLanguageList([region], [cb])
+        * Namespaced Functions: *Static.Language.list*
+        * Example 1: ```k.Static.Language.list(KindredAPI.print)```
     * getLanguages({ region }, cb)
-    * Namespaced Functions: *Static.getLanguages, Static.languages*
-    * Example 1: ```k.Static.languages().then(data => console.log(data)).catch(err => console.error(err))```
+        * Namespaced Functions: *Static.getLanguages, Static.languages*
+        * Example 1: ```k.Static.languages().then(data => console.log(data)).catch(err => console.error(err))```
 7. **/lol/static-data/v3/maps**
     * Retrieve map data. (REST)
     * getMapData({ region, options (object) }, cb)
