@@ -103,7 +103,12 @@ class Kindred {
       all: this.getChamps.bind(this),
 
       getChampion: this.getChamp.bind(this),
-      get: this.getChamp.bind(this)
+      get: this.getChamp.bind(this),
+
+      list: this.listChampions.bind(this),
+      by: {
+        id: this.getChampionById.bind(this)
+      }
     }
 
     this.ChampionMastery = {
@@ -723,8 +728,7 @@ class Kindred {
     region = this.defaultRegion,
     accountId, accId,
     id, summonerId, playerId,
-    name,
-    options
+    name
   } = {}, cb) {
     if (Number.isInteger(accountId || accId)) {
       return new Promise((resolve, reject) => {
@@ -738,7 +742,7 @@ class Kindred {
       })
     } else if (Number.isInteger(id || summonerId || playerId)) {
       return this._championMasteryRequest({
-        endUrl: `champion-masteries/by-summoner/${id || summonerId || playerId}`, region, options
+        endUrl: `champion-masteries/by-summoner/${id || summonerId || playerId}`, region
       }, cb)
     } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
       return new Promise((resolve, reject) => {
@@ -1460,6 +1464,38 @@ class Kindred {
   }
 
   /* Non-parameter-destructuring-thingy functions */
+  listChampions(options, region, cb) {
+    if (typeof options == 'function') {
+      cb = options
+      options = undefined
+    }
+
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    if (typeof options == 'string') {
+      region = options
+      options = undefined
+    }
+
+    return this.Champion.all({
+      options, region
+    }, cb)
+  }
+
+  getChampionById(id, region, cb) {
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    return this.Champion.get({
+      id, region
+    }, cb)
+  }
+
   getSummonerByAccountId(accId, region, cb) {
     if (typeof region == 'function') {
       cb = region

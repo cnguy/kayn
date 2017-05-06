@@ -508,7 +508,12 @@
         all: this.getChamps.bind(this),
 
         getChampion: this.getChamp.bind(this),
-        get: this.getChamp.bind(this)
+        get: this.getChamp.bind(this),
+
+        list: this.listChampions.bind(this),
+        by: {
+          id: this.getChampionById.bind(this)
+        }
       };
 
       this.ChampionMastery = {
@@ -839,8 +844,6 @@
 
         var tryRequest = function tryRequest() {
           return new Promise(function (resolve, reject) {
-            var stringifiedOpts = '';
-
             var _iteratorNormalCompletion3 = true;
             var _didIteratorError3 = false;
             var _iteratorError3 = undefined;
@@ -868,8 +871,7 @@
               }
             }
 
-            stringifiedOpts = queryString.stringify(options).replace(/%2C/, ',');
-
+            var stringifiedOpts = queryString.stringify(options).replace(/%2C/, ',');
             var postfix = stringifiedOpts ? '?' + stringifiedOpts : '';
             var reqUrl = _this._makeUrl(endUrl + postfix, region, staticReq, status, observerMode, championMastery);
             var fullUrl = reqUrl + (reqUrl.lastIndexOf('?') === -1 ? '?' : '&') + ('api_key=' + _this.key);
@@ -1241,8 +1243,7 @@
             id = _ref19.id,
             summonerId = _ref19.summonerId,
             playerId = _ref19.playerId,
-            name = _ref19.name,
-            options = _ref19.options;
+            name = _ref19.name;
 
         var cb = arguments[1];
 
@@ -1260,7 +1261,7 @@
           });
         } else if (Number.isInteger(id || summonerId || playerId)) {
           return this._championMasteryRequest({
-            endUrl: 'champion-masteries/by-summoner/' + (id || summonerId || playerId), region: region, options: options
+            endUrl: 'champion-masteries/by-summoner/' + (id || summonerId || playerId), region: region
           }, cb);
         } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
           return new Promise(function (resolve, reject) {
@@ -2184,6 +2185,40 @@
         } else {
           return this._logError(this.getLobbyListEventsByCode.name, 'required params ' + chalk.yellow('`code` (string)') + ' not passed in');
         }
+      }
+    }, {
+      key: 'listChampions',
+      value: function listChampions(options, region, cb) {
+        if (typeof options == 'function') {
+          cb = options;
+          options = undefined;
+        }
+
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        if (typeof options == 'string') {
+          region = options;
+          options = undefined;
+        }
+
+        return this.Champion.all({
+          options: options, region: region
+        }, cb);
+      }
+    }, {
+      key: 'getChampionById',
+      value: function getChampionById(id, region, cb) {
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        return this.Champion.get({
+          id: id, region: region
+        }, cb);
       }
     }, {
       key: 'getSummonerByAccountId',
