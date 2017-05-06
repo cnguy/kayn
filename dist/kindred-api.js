@@ -590,15 +590,24 @@
         ProfileIcon: {
           list: this.getStaticProfileIconList.bind(this)
         },
-        Realm: {},
+        Realm: {
+          list: this.getStaticRealmList.bind(this)
+        },
         Rune: {
           list: this.getStaticRuneList.bind(this),
           by: {
             id: this.getStaticRuneById.bind(this)
           }
         },
-        SummonerSpell: {},
-        Version: {},
+        SummonerSpell: {
+          list: this.getStaticSummonerSpellList.bind(this),
+          by: {
+            id: this.getStaticSummonerSpellById.bind(this)
+          }
+        },
+        Version: {
+          list: this.getStaticVersionList.bind(this)
+        },
 
         getChampions: this.getChampionList.bind(this),
         champions: this.getChampionList.bind(this),
@@ -1739,7 +1748,7 @@
 
         var cb = arguments[1];
 
-        return this._staticRequest({ endUrl: 'realms', region: region }, cb = region ? cb : arguments[0]);
+        return this._staticRequest({ endUrl: 'realms', region: region }, cb = arguments.length === 2 ? cb : arguments[0]);
       }
     }, {
       key: 'getRuneList',
@@ -1820,7 +1829,7 @@
 
         var cb = arguments[1];
 
-        return this._statusRequest({ endUrl: 'shard-data', region: region }, cb = region ? cb : arguments[0]);
+        return this._statusRequest({ endUrl: 'shard-data', region: region }, cb = arguments.length === 2 ? cb : arguments[0]);
       }
     }, {
       key: 'getMatch',
@@ -2526,6 +2535,18 @@
         }, cb);
       }
     }, {
+      key: 'getStaticRealmList',
+      value: function getStaticRealmList(region, cb) {
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        return this.Static.realm({
+          region: region
+        }, cb);
+      }
+    }, {
       key: 'getStaticRuneList',
       value: function getStaticRuneList(options, region, cb) {
         if (typeof options == 'function') {
@@ -2567,6 +2588,62 @@
 
         return this.Static.rune({
           id: id, options: options, region: region
+        }, cb);
+      }
+    }, {
+      key: 'getStaticSummonerSpellList',
+      value: function getStaticSummonerSpellList(options, region, cb) {
+        if (typeof options == 'function') {
+          cb = options;
+          options = undefined;
+        }
+
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        if (typeof options == 'string') {
+          region = options;
+          options = undefined;
+        }
+
+        return this.Static.spells({
+          options: options, region: region
+        }, cb);
+      }
+    }, {
+      key: 'getStaticSummonerSpellById',
+      value: function getStaticSummonerSpellById(id, options, region, cb) {
+        if (typeof options == 'function') {
+          cb = options;
+          options = undefined;
+        }
+
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        if (typeof options == 'string') {
+          region = options;
+          options = undefined;
+        }
+
+        return this.Static.spell({
+          id: id, options: options, region: region
+        }, cb);
+      }
+    }, {
+      key: 'getStaticVersionList',
+      value: function getStaticVersionList(region, cb) {
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        return this.Static.versions({
+          region: region
         }, cb);
       }
     }, {

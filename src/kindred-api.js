@@ -186,7 +186,7 @@ class Kindred {
         list: this.getStaticProfileIconList.bind(this)
       },
       Realm: {
-
+        list: this.getStaticRealmList.bind(this)
       },
       Rune: {
         list: this.getStaticRuneList.bind(this),
@@ -195,10 +195,13 @@ class Kindred {
         }
       },
       SummonerSpell: {
-
+        list: this.getStaticSummonerSpellList.bind(this),
+        by: {
+          id: this.getStaticSummonerSpellById.bind(this)
+        }
       },
       Version: {
-
+        list: this.getStaticVersionList.bind(this)
       },
 
 
@@ -1090,7 +1093,7 @@ class Kindred {
   }
 
   getRealmData({ region } = {}, cb) {
-    return this._staticRequest({ endUrl: 'realms', region }, cb = region ? cb : arguments[0])
+    return this._staticRequest({ endUrl: 'realms', region }, cb = arguments.length === 2 ? cb : arguments[0])
   }
 
   getRuneList({ region, options } = {}, cb) {
@@ -1140,7 +1143,7 @@ class Kindred {
 
   /* STATUS-V3 */
   getShardStatus({ region } = {}, cb) {
-    return this._statusRequest({ endUrl: 'shard-data', region }, cb = region ? cb : arguments[0])
+    return this._statusRequest({ endUrl: 'shard-data', region }, cb = arguments.length === 2 ? cb : arguments[0])
   }
 
   /* MATCH-V3 */
@@ -1770,6 +1773,17 @@ class Kindred {
     }, cb)
   }
 
+  getStaticRealmList(region, cb) {
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    return this.Static.realm({
+      region
+    }, cb)
+  }
+
   getStaticRuneList(options, region, cb) {
     if (typeof options == 'function') {
       cb = options
@@ -1809,6 +1823,59 @@ class Kindred {
 
     return this.Static.rune({
       id, options, region
+    }, cb)
+  }
+
+  getStaticSummonerSpellList(options, region, cb) {
+    if (typeof options == 'function') {
+      cb = options
+      options = undefined
+    }
+
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    if (typeof options == 'string') {
+      region = options
+      options = undefined
+    }
+
+    return this.Static.spells({
+      options, region
+    }, cb)
+  }
+
+  getStaticSummonerSpellById(id, options, region, cb) {
+    if (typeof options == 'function') {
+      cb = options
+      options = undefined
+    }
+
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    if (typeof options == 'string') {
+      region = options
+      options = undefined
+    }
+
+    return this.Static.spell({
+      id, options, region
+    }, cb)
+  }
+
+  getStaticVersionList(region, cb) {
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    return this.Static.versions({
+      region
     }, cb)
   }
 

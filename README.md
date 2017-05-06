@@ -319,9 +319,13 @@ Note that this section has two different namespaces (Match and Matchlist).
         * Example 1: ```k.Static.profileIcons(KindredAPI.print)```
 11. **/lol/static-data/v3/realms**
     * Retrieve realm data. (REST)
+    * getStaticRealmList([region], [cb])
+        * Namespaced Functions: *Static.Realm.list*
+        * Example 1: ```k.Static.Realm.list(KindredAPI.print)```
+        * Example 2: ```k.Static.Realm.list(REGIONS.KOREA, KindredAPI.print)```
     * getRealmData({ region }, cb)
-    * Namespaced Functions: *Static.getRealmData, Static.realmData, Static.realm, Static.realms*
-    * Example 1: ```k.Static.realmData().then(data => console.log(data))```
+        * Namespaced Functions: *Static.getRealmData, Static.realmData, Static.realm, Static.realms*
+        * Example 1: ```k.Static.realmData().then(data => console.log(data))```
 12. **/lol/static-data/v3/runes**
     * Retrieves rune list. (REST)
     * getStaticRuneList([region], [options], [cb])
@@ -342,21 +346,31 @@ Note that this section has two different namespaces (Match and Matchlist).
         * Example 2: ```k.Static.rune({ id: 10001, options: { runeData: 'image' } }, KindredAPI.print)```
 14. **/lol/static-data/v3/summoner-spells**
     * Retrieves summoner spell list. (REST)
+    * getStaticSummonerSpellList([options], [region], [cb])
+        * Namespaced Functions: *Static.SummonerSpell.list*
+        * Example 1: ```k.Static.SummonerSpell.list(KindredAPI.print)```
+        * Example 2: ```k.Static.SummonerSpell.list({ dataById: true }, KindredAPI.print)```
     * getSummonerSpells({ region, options (object) }, cb)
-    * Namespaced Functions: *Static.getSummonerSpells, Static.summonerSpells, Static.spells*
-    * Example 1: ```k.Static.spells(KindredAPI.print)```
-    * Example 2: ```k.Static.spells({ options: { spellData: 'cost', dataById: true } }, KindredAPI.print)```
+        * Namespaced Functions: *Static.getSummonerSpells, Static.summonerSpells, Static.spells*
+        * Example 1: ```k.Static.spells(KindredAPI.print)```
+        * Example 2: ```k.Static.spells({ options: { spellData: 'cost', dataById: true } }, KindredAPI.print)```
 15. **/lol/static-data/v3/summoner-spells/{id}**
     * Retrieves summoner spell by its unique id. (REST)
+    * getStaticSummonerSpellById(id, [options], [region], [cb])
+        * Namespaced Functions: *Static.SummonerSpell.by.id*
+        * Example 1: ```k.Static.SummonerSpell.by.id(3, { spellData: 'cooldown' }, KindredAPI.print)```
     * getSummonerSpell({ region, id/spellId/summonerSpellId (int), options (object) }, cb)
-    * Namespaced Functions: *Static.getSummonerSpell, Static.summonerSpell, Static.spell*
-    * Example 1: ```k.Static.spell({ id: 31 }, KindredAPI.print)```
-    * Example 2: ```k.Static.spell({ id: 31, options: { spellData: 'cooldown' } }, KindredAPI.print)```
+        * Namespaced Functions: *Static.getSummonerSpell, Static.summonerSpell, Static.spell*
+        * Example 1: ```k.Static.spell({ id: 31 }, KindredAPI.print)```
+        * Example 2: ```k.Static.spell({ id: 31, options: { spellData: 'cooldown' } }, KindredAPI.print)```
 16. **/lol/static-data/v3/versions**
     * Retrieve version data. (REST)
+    * getStaticVersionList([region], [cb])
+        * Namespaced Functions: *Static.Version.list*
+        * Example 1: ```k.Static.Version.list(KindredAPI.print)```
     * getVersionData({ region }, cb)
-    * Namespaced Functions: *Static.getVersionData, Static.versionData, Static.version, Static.versions*
-    * Example 1: ```k.Static.versions(rprint)```
+        * Namespaced Functions: *Static.getVersionData, Static.versionData, Static.version, Static.versions*
+        * Example 1: ```k.Static.versions(rprint)```
 
 ### Stats
 [docs](https://developer.riotgames.com/api-methods/#stats-v1.3)
