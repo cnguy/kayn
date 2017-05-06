@@ -8,7 +8,11 @@ To get started, run one of the following!
 ```
 
 # Refer to [Wiki](https://github.com/ChauTNguyen/kindred-api/wiki) for Documentation!
+Currently, I'm changing the format of how methods are presented so that it's much easier
+to parse.
 
+Check out [SUMMONER-V3](https://github.com/ChauTNguyen/kindred-api/wiki/SUMMONER-V3) or
+[STATIC-DATA-V3](https://github.com/ChauTNguyen/kindred-api/wiki/STATIC-DATA-V3) to see what I mean.
 # Core Features
 * All standard endpoints covered but tournament endpoints.
 * Supports both **callbacks** and **promises**.
