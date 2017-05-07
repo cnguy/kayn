@@ -161,6 +161,14 @@ class Kindred {
       masters: this.getMasters.bind(this)
     }
 
+    this.Challenger = {
+      list: this.listChallengers.bind(this)
+    }
+
+    this.Master = {
+      list: this.listMasters.bind(this)
+    }
+
     this.Static = {
       Champion: {
         list: this.getStaticChampionList.bind(this),
@@ -1506,6 +1514,38 @@ class Kindred {
 
     return this.FeaturedGames.get({
       region
+    }, cb)
+  }
+
+  listChallengers(queue, region, cb) {
+    if (typeof queue == 'function') {
+      cb = queue
+      queue = undefined
+    }
+
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    return this.League.challengers({
+      queue, region
+    }, cb)
+  }
+
+  listMasters(queue, region, cb) {
+    if (typeof queue == 'function') {
+      cb = queue
+      queue = undefined
+    }
+
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    return this.League.masters({
+      queue, region
     }, cb)
   }
 

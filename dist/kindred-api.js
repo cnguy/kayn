@@ -566,6 +566,14 @@
         masters: this.getMasters.bind(this)
       };
 
+      this.Challenger = {
+        list: this.listChallengers.bind(this)
+      };
+
+      this.Master = {
+        list: this.listMasters.bind(this)
+      };
+
       this.Static = {
         Champion: {
           list: this.getStaticChampionList.bind(this),
@@ -2234,6 +2242,40 @@
 
         return this.FeaturedGames.get({
           region: region
+        }, cb);
+      }
+    }, {
+      key: 'listChallengers',
+      value: function listChallengers(queue, region, cb) {
+        if (typeof queue == 'function') {
+          cb = queue;
+          queue = undefined;
+        }
+
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        return this.League.challengers({
+          queue: queue, region: region
+        }, cb);
+      }
+    }, {
+      key: 'listMasters',
+      value: function listMasters(queue, region, cb) {
+        if (typeof queue == 'function') {
+          cb = queue;
+          queue = undefined;
+        }
+
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        return this.League.masters({
+          queue: queue, region: region
         }, cb);
       }
     }, {
