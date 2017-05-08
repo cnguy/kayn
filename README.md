@@ -20,7 +20,7 @@ Check out [SUMMONER-V3](https://github.com/ChauTNguyen/kindred-api/wiki/SUMMONER
     * Retries on 429 and >= 500.
 * Built-in **parameter checks** so you can hopefully refer to documentation less! :)
 * Built-in **caching** (in-memory and Redis).
-    * **Customized expiration timers**. You can set a timer for each endpoint type. Refer to [Caching](#caching) for more info.
+    * **Customized expiration timers**. You can set a timer for each endpoint type. Refer to [Caching](https://github.com/ChauTNguyen/kindred-api/wiki/Caching) for more info.
 * Designed to be simple but convenient. For example, you can call an exclusively by-id endpoint (such as grabbing the runes of a player) **with just the summoner name**.
 
 # How the Methods Work
@@ -29,6 +29,54 @@ All `list` and `by.xxx` functions will have standard parameters.
 **Any other method** will always take in an object as the first parameter, and an optional callback as the second.
 
 These methods can work with different type of parameters (id (summoner!!!), name, accountId) when applicable.
+
+These functions take in an optional `region` and an optional `options` parameter (whenever possible) WITHIN the same first parameter. Most of the time, when they're called, they look like this:
+
+```javascript
+const matchlistConfig = {
+    name: 'Contractz',
+    options: {
+        queue: 420,
+        champion: 67
+    }
+}
+
+k.Matchlist.get(matchlistConfig)
+
+const runesConfig = {
+  options: {
+    locale: 'es_ES',
+    runeListData: 'stats'
+  },
+  region: REGIONS.NORTH_AMERICA
+}
+
+k.Static.runes(runesConfig, KindredAPI.print)
+
+const championsConfig = {
+  options: {
+    champListData: 'all',
+    version: '7.9.1'
+  }
+}
+
+k.Static.champions(championsConfig, KindredAPI.print)
+
+const summonerConfig = {
+  name: 'Contractz'
+}
+
+k.Summoner.get(summonerConfig, KindredAPI.print)
+
+// As you can see in the above, all functions that aren't named `list` or `by-id`
+// will take in an object parameter as the first parameter ALWAYS.
+
+// I included normal methods too though.
+k.Summoner.by.name('Contractz', KindredAPI.print)
+```
+
+Make sure to check out the [Wiki](https://github.com/ChauTNguyen/kindred-api/wiki)
+for working, copy-pastable examples.
 
 # Quickstart
 * Debug on
@@ -49,6 +97,16 @@ k.Summoner.by.id(32932398, KindredAPI.print)
 k.Summoner.by.name('Contractz', REGIONS.NORTH_AMERICA, KindredAPI.print)
 
 /* How to pass in options 101. */
+const runesConfig = {
+  options: {
+    locale: 'es_ES',
+    runeListData: 'stats'
+  },
+  region: REGIONS.NORTH_AMERICA,
+}
+
+k.Static.runes(runesConfig, KindredAPI.print)
+
 var name = 'caaaaaaaaaria'
 var region = REGIONS.NORTH_AMERICA
 var options = {
@@ -105,15 +163,18 @@ const config = {
 
 k.Static.champions(config)
         .then(data => console.log(data))
+        .catch(error => console.error(error))
 
 k.Static.champion({
     id: 497,
     config.options
 }).then(data => console.log(data))
+  .catch(err => console.error(err))
 
 k.Static.Champion
         .list({ champListData: 'all' }, REGIONS.KOREA)
         .then(data => console.log(data))
+        .catch(error => console.error(error))
 
 k.Static.Champion
         .by.id(497, { champData: 'all' })
