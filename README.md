@@ -7,12 +7,18 @@ To get started, run one of the following!
 2) npm install --save kindred-api
 ```
 
-# Refer to [Wiki](https://github.com/ChauTNguyen/kindred-api/wiki) for Documentation!
+# Refer to [Wiki](https://github.com/ChauTNguyen/kindred-api/wiki) for Documentation and Working Examples!
 Currently, I'm changing the format of how methods are presented so that it's much easier
 to parse.
 
 Check out [SUMMONER-V3](https://github.com/ChauTNguyen/kindred-api/wiki/SUMMONER-V3) or
 [STATIC-DATA-V3](https://github.com/ChauTNguyen/kindred-api/wiki/STATIC-DATA-V3) to see what I mean.
+
+# Table of Contents:
+* [Core Features](#core-features)
+* [How the Methods Work](#how-the-methods-work)
+* [Quickstart](#quickstart)
+
 # Core Features
 * All standard endpoints covered but tournament endpoints.
 * Supports both **callbacks** and **promises**.
@@ -32,6 +38,7 @@ These methods can work with different type of parameters (id (summoner!!!), name
 
 These functions take in an optional `region` and an optional `options` parameter (whenever possible) WITHIN the same first parameter. Most of the time, when they're called, they look like this:
 
+## Object + Callback Functions
 ```javascript
 const matchlistConfig = {
     name: 'Contractz',
@@ -41,7 +48,7 @@ const matchlistConfig = {
     }
 }
 
-k.Matchlist.get(matchlistConfig)
+k.Matchlist.get(matchlistConfig, KindredAPI.print)
 
 const runesConfig = {
   options: {
@@ -62,6 +69,29 @@ const championsConfig = {
 
 k.Static.champions(championsConfig, KindredAPI.print)
 
+const koreaChampListConfig = {
+  options: {
+    champListData: 'all'
+  },
+  region: REGIONS.KOREA
+}
+
+k.Static.champions(koreaChampListConfig)
+        .then(data => console.log(data))
+        .catch(error => console.error(error))
+
+const rakanConfig = {
+  id: 497,
+  options: {
+    champData: 'all'
+  },
+  region: REGIONS.BRAZIL
+}
+
+k.Static.champion(rakanConfig)
+        .then(data => console.log(data))
+        .catch(err => console.error(err))
+
 const summonerConfig = {
   name: 'Contractz'
 }
@@ -70,9 +100,19 @@ k.Summoner.get(summonerConfig, KindredAPI.print)
 
 // As you can see in the above, all functions that aren't named `list` or `by-id`
 // will take in an object parameter as the first parameter ALWAYS.
+```
 
+## Standard Functions
+```javascript
 // I included normal methods too though.
 k.Summoner.by.name('Contractz', KindredAPI.print)
+
+const opts = {
+  queue: 420,
+  champion: 67
+}
+
+k.Matchlist.by.name('Contractz', opts, KindredAPI.print)
 ```
 
 Make sure to check out the [Wiki](https://github.com/ChauTNguyen/kindred-api/wiki)
@@ -154,22 +194,28 @@ k.Summoner.matchlist({ name }, KindredAPI.print)
 k.Matchlist.recent({ name }, KindredAPI.print)
 k.Summoner.matchHistory({ name }, KindredAPI.print) // recent matches (20)
 
-const config = {
+const koreaChampListConfig = {
   options: {
     champListData: 'all'
   },
   region: REGIONS.KOREA
 }
 
-k.Static.champions(config)
+k.Static.champions(koreaChampListConfig)
         .then(data => console.log(data))
         .catch(error => console.error(error))
 
-k.Static.champion({
-    id: 497,
-    config.options
-}).then(data => console.log(data))
-  .catch(err => console.error(err))
+const rakanConfig = {
+  id: 497,
+  options: {
+    champData: 'all'
+  },
+  region: REGIONS.BRAZIL
+}
+
+k.Static.champion(rakanConfig)
+        .then(data => console.log(data))
+        .catch(err => console.error(err))
 
 k.Static.Champion
         .list({ champListData: 'all' }, REGIONS.KOREA)
