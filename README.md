@@ -18,12 +18,13 @@ Check out [SUMMONER-V3](https://github.com/ChauTNguyen/kindred-api/wiki/SUMMONER
 * [Core Features](#core-features)
 * [How the Methods Work](#how-the-methods-work)
 * [Quickstart](#quickstart)
+* [Known Issues](#known-issues)
 
 # Core Features
 * All standard endpoints covered but tournament endpoints.
 * Supports both **callbacks** and **promises**.
 * Rate limiter that is **enforced per region** and **follows retry headers**.
-    * Retries on 429 and >= 500.
+    * Retries on 429 and >= 500. (Doesn't retry on 404)
 * Built-in **parameter checks** so you can hopefully refer to documentation less! :)
 * Built-in **caching** (in-memory and Redis).
     * **Customized expiration timers**. You can set a timer for each endpoint type. Refer to [Caching](https://github.com/ChauTNguyen/kindred-api/wiki/Caching) for more info.
@@ -227,3 +228,50 @@ k.Static.Champion
         .then(data => console.log(data))
         .catch(error => console.error(err))
 ```
+
+# Known Issues
+
+## Rate Limiter is not as optimized as it should be.
+
+## Promises retry on 404.
+
+This is problematic because certain calls such as getCurrentGame, which will hit 404's often, will always retry up to 3 times.
+
+This means it'll send a request, get a 404, and then send three more requests for a total of 3 unnecessary requests.
+
+```javascript
+k.CurrentGame.get({ name: 'Contractz' })
+
+/*
+200 https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/contractz?api_key=
+{ 'x-app-rate-limit-count': '1:10,1:600',
+  'x-method-rate-limit-count': '1:10,2:600',
+  'x-rate-limit-count': '1:10,1:600',
+  'retry-after': undefined }
+
+404 Not Found https://na1.api.riotgames.com/lol/spectator/v3/active-games/by-summoner/32932398?api_key=
+{ 'x-app-rate-limit-count': '2:10,2:600',
+  'x-method-rate-limit-count': '1:10,5:600',
+  'x-rate-limit-count': '2:10,2:600',
+  'retry-after': undefined }
+
+404 Not Found https://na1.api.riotgames.com/lol/spectator/v3/active-games/by-summoner/32932398?api_key=
+{ 'x-app-rate-limit-count': '3:10,3:600',
+  'x-method-rate-limit-count': '2:10,6:600',
+  'x-rate-limit-count': '3:10,3:600',
+  'retry-after': undefined }
+
+404 Not Found https://na1.api.riotgames.com/lol/spectator/v3/active-games/by-summoner/32932398?api_key=
+{ 'x-app-rate-limit-count': '4:10,4:600',
+  'x-method-rate-limit-count': '3:10,7:600',
+  'x-rate-limit-count': '4:10,4:600',
+  'retry-after': undefined }
+
+404 Not Found https://na1.api.riotgames.com/lol/spectator/v3/active-games/by-summoner/32932398?api_key=
+{ 'x-app-rate-limit-count': '5:10,5:600',
+  'x-method-rate-limit-count': '4:10,8:600',
+  'x-rate-limit-count': '5:10,5:600',
+  'retry-after': undefined }
+*/
+```
+

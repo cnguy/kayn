@@ -288,7 +288,11 @@ class Kindred {
 
       getMatchTimeline: this.getMatchTimeline.bind(this),
       getTimeline: this.getMatchTimeline.bind(this),
-      timeline: this.getMatchTimeline.bind(this)
+      timeline: this.getMatchTimeline.bind(this),
+
+      by: {
+        id: this.getMatchById.bind(this)
+      }
     }
 
     this.Matchlist = {
@@ -296,7 +300,19 @@ class Kindred {
       get: this.getMatchlist.bind(this),
 
       getRecentMatchlist: this.getRecentMatchlist.bind(this),
-      recent: this.getRecentMatchlist.bind(this)
+      recent: this.getRecentMatchlist.bind(this),
+
+      by: {
+        account: this.getMatchlistByAccountId.bind(this),
+        id: this.getMatchlistById.bind(this),
+        name: this.getMatchlistByName.bind(this)
+      }
+    }
+
+    this.MatchHistory = {
+      by: {
+        account: 'test',
+      }
     }
 
     this.RunesMasteries = {
@@ -338,6 +354,9 @@ class Kindred {
     this.Summoner = {
       getSummoner: this.getSummoner.bind(this),
       get: this.getSummoner.bind(this),
+
+
+      grab: this.getSummoner.bind(this),
 
       getRunes: this.getRunes.bind(this),
       runes: this.getRunes.bind(this),
@@ -694,9 +713,14 @@ class Kindred {
 
   /* CHAMPION-V3 */
   getChamps({ region, options } = {}, cb) {
+    if (typeof arguments[0] === 'function') {
+      cb = arguments[0]
+      arguments[0] = undefined
+    }
+
     return this._championRequest({
       endUrl: 'champions', region, options
-    }, cb = arguments.length === 2 ? cb : arguments[0])
+    }, cb)
   }
 
   getChamp({
@@ -812,8 +836,8 @@ class Kindred {
   }
 
   /* SPECTATOR-V3 */
-  getCurrentGame({
-    region = this.defaultRegion,
+  getCurrentGame({ // TODO: Rework promise requests for 404's.
+    region,
     accountId, accId,
     id, summonerId, playerId,
     name
@@ -825,14 +849,14 @@ class Kindred {
           return resolve(this._spectatorRequest({
             endUrl: `active-games/by-summoner/${data.id}`,
             region
-          }, cb = arguments.length == 2 ? cb : arguments[0]))
+          }, cb))
         })
       })
     } else if (Number.isInteger(id || summonerId || playerId)) {
       return this._spectatorRequest({
         endUrl: `active-games/by-summoner/${id || summonerId || playerId}`,
         region
-      }, cb = arguments.length == 2 ? cb : arguments[0])
+      }, cb)
     } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
       return new Promise((resolve, reject) => {
         return this.getSummoner({ name, region }, (err, data) => {
@@ -840,7 +864,7 @@ class Kindred {
           return resolve(this._spectatorRequest({
             endUrl: `active-games/by-summoner/${data.id}`,
             region
-          }, cb = arguments.length == 2 ? cb : arguments[0]))
+          }, cb))
         })
       })
     } else {
@@ -852,10 +876,15 @@ class Kindred {
   }
 
   getFeaturedGames({ region } = {}, cb) {
+    if (typeof arguments[0] === 'function') {
+      cb = arguments[0]
+      arguments[0] = undefined
+    }
+
     return this._spectatorRequest({
       endUrl: 'featured-games',
       region
-    }, cb = arguments.length == 2 ? cb : arguments[0])
+    }, cb)
   }
 
   /* GAME-V1.3 */
@@ -1014,7 +1043,12 @@ class Kindred {
 
   /* STATIC-DATA-V3 */
   getChampionList({ region, options } = {}, cb) {
-    return this._staticRequest({ endUrl: 'champions', region, options }, cb = arguments.length === 2 ? cb : arguments[0])
+    if (typeof arguments[0] === 'function') {
+      cb = arguments[0]
+      arguments[0] = undefined
+    }
+
+    return this._staticRequest({ endUrl: 'champions', region, options }, cb)
   }
 
   getChampion({
@@ -1033,7 +1067,12 @@ class Kindred {
   }
 
   getItems({ region, options } = {}, cb) {
-    return this._staticRequest({ endUrl: 'items', region, options }, cb = arguments.length === 2 ? cb : arguments[0])
+    if (typeof arguments[0] === 'function') {
+      cb = arguments[0]
+      arguments[0] = undefined
+    }
+
+    return this._staticRequest({ endUrl: 'items', region, options }, cb)
   }
 
   getItem({
@@ -1052,19 +1091,39 @@ class Kindred {
   }
 
   getLanguageStrings({ region, options } = {}, cb) {
-    return this._staticRequest({ endUrl: 'language-strings', region, options }, cb = arguments.length === 2 ? cb : arguments[0])
+    if (typeof arguments[0] === 'function') {
+      cb = arguments[0]
+      arguments[0] = undefined
+    }
+
+    return this._staticRequest({ endUrl: 'language-strings', region, options }, cb)
   }
 
   getLanguages({ region } = {}, cb) {
-    return this._staticRequest({ endUrl: 'languages', region }, cb = arguments.length === 2  ? cb : arguments[0])
+    if (typeof arguments[0] === 'function') {
+      cb = arguments[0]
+      arguments[0] = undefined
+    }
+
+    return this._staticRequest({ endUrl: 'languages', region }, cb)
   }
 
   getMapData({ region, options } = {}, cb) {
-    return this._staticRequest({ endUrl: 'maps', region, options }, cb = arguments.length === 2 ? cb : arguments[0])
+    if (typeof arguments[0] === 'function') {
+      cb = arguments[0]
+      arguments[0] = undefined
+    }
+
+    return this._staticRequest({ endUrl: 'maps', region, options }, cb)
   }
 
   getMasteryList({ region, options } = {}, cb) {
-    return this._staticRequest({ endUrl: 'masteries', region, options }, cb = arguments.length === 2 ? cb : arguments[0])
+    if (typeof arguments[0] === 'function') {
+      cb = arguments[0]
+      arguments[0] = undefined
+    }
+
+    return this._staticRequest({ endUrl: 'masteries', region, options }, cb)
   }
 
   getMastery({
@@ -1086,15 +1145,30 @@ class Kindred {
   }
 
   getProfileIcons({ region, options }, cb) {
-    return this._staticRequest({ endUrl: 'profile-icons', region, options }, cb = arguments.length === 2 ? cb : arguments[0])
+    if (typeof arguments[0] === 'function') {
+      cb = arguments[0]
+      arguments[0] = undefined
+    }
+
+    return this._staticRequest({ endUrl: 'profile-icons', region, options }, cb)
   }
 
   getRealmData({ region } = {}, cb) {
-    return this._staticRequest({ endUrl: 'realms', region }, cb = arguments.length === 2 ? cb : arguments[0])
+    if (typeof arguments[0] === 'function') {
+      cb = arguments[0]
+      arguments[0] = undefined
+    }
+
+    return this._staticRequest({ endUrl: 'realms', region }, cb)
   }
 
   getRuneList({ region, options } = {}, cb) {
-    return this._staticRequest({ endUrl: 'runes', region, options }, cb = arguments.length === 2 ? cb : arguments[0])
+    if (typeof arguments[0] === 'function') {
+      cb = arguments[0]
+      arguments[0] = undefined
+    }
+
+    return this._staticRequest({ endUrl: 'runes', region, options }, cb)
   }
 
   getRune({
@@ -1113,7 +1187,12 @@ class Kindred {
   }
 
   getSummonerSpells({ region, options } = {}, cb) {
-    return this._staticRequest({ endUrl: 'summoner-spells', region, options }, cb = arguments.length === 2 ? cb : arguments[0])
+    if (typeof arguments[0] === 'function') {
+      cb = arguments[0]
+      arguments[0] = undefined
+    }
+
+    return this._staticRequest({ endUrl: 'summoner-spells', region, options }, cb)
   }
 
   getSummonerSpell({
@@ -1135,12 +1214,22 @@ class Kindred {
   }
 
   getVersionData({ region, options } = {}, cb) {
-    return this._staticRequest({ endUrl: 'versions', region, options }, cb = arguments.length === 2 ? cb : arguments[0])
+    if (typeof arguments[0] === 'function') {
+      cb = arguments[0]
+      arguments[0] = undefined
+    }
+
+    return this._staticRequest({ endUrl: 'versions', region, options }, cb)
   }
 
   /* STATUS-V3 */
   getShardStatus({ region } = {}, cb) {
-    return this._statusRequest({ endUrl: 'shard-data', region }, cb = arguments.length === 2 ? cb : arguments[0])
+    if (typeof arguments[0] === 'function') {
+      cb = arguments[0]
+      arguments[0] = undefined
+    }
+
+    return this._statusRequest({ endUrl: 'shard-data', region }, cb)
   }
 
   /* MATCH-V3 */
@@ -1621,6 +1710,95 @@ class Kindred {
     }, cb)
   }
 
+  getMatchById(id, region, cb) {
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    return this.Match.get({
+      region,
+      id
+    }, cb)
+  }
+
+  getMatchlistByAccountId(accId, options, region, cb) {
+    if (typeof options == 'function') {
+      cb = options
+      options = undefined
+    }
+
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    if (typeof options == 'string') {
+      region = options
+      options = undefined
+    }
+
+    return this.Matchlist.get({
+      region,
+      accId
+    }, cb)
+  }
+
+  getMatchlistById(id, options, region, cb) {
+    if (typeof options == 'function') {
+      cb = options
+      options = undefined
+    }
+
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    if (typeof options == 'string') {
+      region = options
+      options = undefined
+    }
+
+    return this.Matchlist.get({
+      region,
+      id
+    }, cb)
+  }
+
+  getMatchlistByName(name, options, region, cb) {
+    if (typeof options == 'function') {
+      cb = options
+      options = undefined
+    }
+
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    if (typeof options == 'string') {
+      region = options
+      options = undefined
+    }
+
+    return this.Matchlist.get({
+      name, options, region
+    }, cb)
+  }
+
+  getRunesByAccountId(accId, region, cb) {
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    return this.Runes.get({
+      region,
+      accId
+    }, cb)
+  }
+
   getRunesById(id, region, cb) {
     if (typeof region == 'function') {
       cb = region
@@ -1959,30 +2137,10 @@ class Kindred {
     }, cb)
   }
 
-  getMatchlistByName(name, region, options, cb) {
-    return this.Matchlist.get({
-      region,
-      name,
-      options
-    }, cb)
-  }
-
   getRunesBySummonerId(id, region, cb) {
     return this.Runes.get({
       region,
       id
-    }, cb)
-  }
-
-  getRunesByAccountId(accId, region, cb) {
-    if (typeof region == 'function') {
-      cb = region
-      region = undefined
-    }
-
-    return this.Runes.get({
-      region,
-      accId
     }, cb)
   }
 
