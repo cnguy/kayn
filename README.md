@@ -109,8 +109,8 @@ k.Summoner.get(summonerConfig, KindredAPI.print)
 k.Summoner.by.name('Contractz', KindredAPI.print)
 
 const opts = {
-  queue: 420,
-  champion: 67
+  queue: [QUEUES.TEAM_BUILDER_RANKED_SOLO, QUEUES.RANKED_FLEX_SR],
+  champion: 81 // Ezreal
 }
 
 k.Matchlist.by.name('Contractz', opts, KindredAPI.print)

@@ -455,13 +455,30 @@ class Kindred {
   }, cb) {
     const tryRequest = () => {
       return new Promise((resolve, reject) => {
-        for (const key of Object.keys(options)) {
-          if (Array.isArray(options[key])) {
-            options[key] = options[key].join(',')
+        let stringifiedOpts = ''
+
+        if (endUrl.lastIndexOf('v3') == -1) {
+          for (const key of Object.keys(options)) {
+            if (Array.isArray(options[key])) {
+              options[key] = options[key].join(',')
+            }
+          }
+
+          stringifiedOpts = queryString.stringify(options).replace(/%2C/, ',')
+        } else {
+          for (const key of Object.keys(options)) {
+            if (Array.isArray(options[key])) {
+              for (let i = 0; i < options[key].length; ++i) {
+                if (stringifiedOpts) stringifiedOpts += '&'
+                stringifiedOpts += `${key}=${options[key][i]}`
+              }
+            } else {
+              if (stringifiedOpts) stringifiedOpts += '&'
+              stringifiedOpts += `${key}=${options[key]}`
+            }
           }
         }
 
-        const stringifiedOpts = queryString.stringify(options).replace(/%2C/, ',')
         const postfix = stringifiedOpts ? '?' + stringifiedOpts : ''
         const reqUrl = this._makeUrl(endUrl + postfix, region, staticReq, status, observerMode, championMastery)
         const fullUrl = reqUrl + (reqUrl.lastIndexOf('?') === -1 ? '?' : '&') + `api_key=${this.key}`

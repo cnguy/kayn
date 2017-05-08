@@ -872,34 +872,72 @@
 
         var tryRequest = function tryRequest() {
           return new Promise(function (resolve, reject) {
-            var _iteratorNormalCompletion3 = true;
-            var _didIteratorError3 = false;
-            var _iteratorError3 = undefined;
+            var stringifiedOpts = '';
 
-            try {
-              for (var _iterator3 = Object.keys(options)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                var key = _step3.value;
+            if (endUrl.lastIndexOf('v3') == -1) {
+              var _iteratorNormalCompletion3 = true;
+              var _didIteratorError3 = false;
+              var _iteratorError3 = undefined;
 
-                if (Array.isArray(options[key])) {
-                  options[key] = options[key].join(',');
+              try {
+                for (var _iterator3 = Object.keys(options)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                  var key = _step3.value;
+
+                  if (Array.isArray(options[key])) {
+                    options[key] = options[key].join(',');
+                  }
+                }
+              } catch (err) {
+                _didIteratorError3 = true;
+                _iteratorError3 = err;
+              } finally {
+                try {
+                  if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                    _iterator3.return();
+                  }
+                } finally {
+                  if (_didIteratorError3) {
+                    throw _iteratorError3;
+                  }
                 }
               }
-            } catch (err) {
-              _didIteratorError3 = true;
-              _iteratorError3 = err;
-            } finally {
+
+              stringifiedOpts = queryString.stringify(options).replace(/%2C/, ',');
+            } else {
+              var _iteratorNormalCompletion4 = true;
+              var _didIteratorError4 = false;
+              var _iteratorError4 = undefined;
+
               try {
-                if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                  _iterator3.return();
+                for (var _iterator4 = Object.keys(options)[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                  var _key = _step4.value;
+
+                  if (Array.isArray(options[_key])) {
+                    for (var i = 0; i < options[_key].length; ++i) {
+                      if (stringifiedOpts) stringifiedOpts += '&';
+                      stringifiedOpts += _key + '=' + options[_key][i];
+                    }
+                  } else {
+                    if (stringifiedOpts) stringifiedOpts += '&';
+                    stringifiedOpts += _key + '=' + options[_key];
+                  }
                 }
+              } catch (err) {
+                _didIteratorError4 = true;
+                _iteratorError4 = err;
               } finally {
-                if (_didIteratorError3) {
-                  throw _iteratorError3;
+                try {
+                  if (!_iteratorNormalCompletion4 && _iterator4.return) {
+                    _iterator4.return();
+                  }
+                } finally {
+                  if (_didIteratorError4) {
+                    throw _iteratorError4;
+                  }
                 }
               }
             }
 
-            var stringifiedOpts = queryString.stringify(options).replace(/%2C/, ',');
             var postfix = stringifiedOpts ? '?' + stringifiedOpts : '';
             var reqUrl = _this._makeUrl(endUrl + postfix, region, staticReq, status, observerMode, championMastery);
             var fullUrl = reqUrl + (reqUrl.lastIndexOf('?') === -1 ? '?' : '&') + ('api_key=' + _this.key);
