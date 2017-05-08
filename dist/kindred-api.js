@@ -131,7 +131,7 @@
       value: function __reload() {
         var t = new Date().getTime();
 
-        while (this.madeRequests.length > 0 && t - this.madeRequests.peekFront() >= this.seconds * 1000) {
+        while (this.madeRequests.length > 0 && t - this.madeRequests.peekFront() >= this.seconds * 100) {
           this.madeRequests.shift();
         }
       }

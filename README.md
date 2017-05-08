@@ -231,7 +231,7 @@ k.Static.Champion
 
 # Known Issues
 
-## Rate Limiter is not as optimized as it should be.
+## ~~Rate Limiter is not as optimized as it should be.~~ (FIXED 2.0.33)
 
 ## Promises retry on 404.
 
