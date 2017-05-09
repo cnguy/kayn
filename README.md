@@ -19,6 +19,7 @@ Check out [SUMMONER-V3](https://github.com/ChauTNguyen/kindred-api/wiki/SUMMONER
 * [How the Methods Work](#how-the-methods-work)
 * [Quickstart](#quickstart)
 * [Known Issues](#known-issues)
+* [Changelog](https://github.com/ChauTNguyen/kindred-api/blob/master/CHANGELOG.md)
 
 # Core Features
 * All standard endpoints covered but tournament endpoints.
@@ -230,6 +231,16 @@ k.Static.Champion
 ```
 
 # Known Issues
+
+## Both caches currently (JS in-memory, Redis) are primitive implementations, and can possibly exceed memory limitations.
+
+I haven't had to deal with this in my smaller applications ([One Tricks](www.onetricks.net) for example) and scripts, but I'm guessing some people might use this library for bigger applications. I can add an LRU cache (and MongoDB) as well as a reset() function or something if people start asking.
+
+`One Tricks` is simple, but does take a lot of requests currently (probably 25000~ if nothing's cached).
+
+However, I simply use the cache to store all the summoner information and champion information, grind the stats information, and put the *algorithmically-processed* data in my database.
+
+The difference between my site and other applications people seem to be working on is everyone seems to be doing some mini-op.gg type of thing which would probably demand a more concrete library with better tools, especially with the deprecation of the Stats endpoint.
 
 ## ~~Rate Limiter is not as optimized as it should be.~~ (FIXED 2.0.33)
 
