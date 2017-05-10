@@ -11,7 +11,7 @@ describe('Core', function() {
       require('../../dist/kindred-api.min')
   ).is.not.undefined )
 
-  it('it should not init thru standard init', () => {
+  it('it should not init thru standard init with 0 args', () => {
     const api = require('../../dist/kindred-api.min')
     const { REGIONS } = api
     const debug = true
@@ -45,5 +45,15 @@ describe('Core', function() {
     const k = api.QuickStart(process.env.KEY, true)
 
     expect(k).is.not.undefined
+  })
+
+  it('it returns a promise', () => {
+    const api = require('../../dist/kindred-api.min')
+    const { REGIONS } = api
+    debug = true
+
+    const k = api.QuickStart(process.env.KEY, REGIONS.NORTH_AMERICA, true)
+
+    assert.instanceOf(k.Summoner.get({ id: 32932398 }), Promise, 'this is a promise')
   })
 })

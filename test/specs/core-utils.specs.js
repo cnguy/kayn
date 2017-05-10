@@ -28,8 +28,9 @@ describe('Core Utils', function() {
   it('it throws on invalid name', () => {
     const api = require('../../dist/kindred-api.min')
     const REGIONS = api.REGIONS
+    const debug = true
 
-    const k = api.QuickStart(process.env.KEY, true)
+    const k = api.QuickStart(process.env.KEY, debug)
 
     // name parameters -> valid name -> sanitize name -> throw
     assert.throws(() => k.Summoner.get('foo%'), Error)

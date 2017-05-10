@@ -11,7 +11,7 @@ import SERVICES from './constants/services'
 import TIME_CONSTANTS from './cache/constants/cache-timers'
 import CACHE_TIMERS from './cache/constants/endpoint-cache-timers'
 import LIMITS from './constants/limits'
-import PLATFORM_IdS from './constants/platform-ids'
+import PLATFORM_IDS from './constants/platform-ids'
 import QUEUE_TYPES from './constants/queue-types'
 import REGIONS from './constants/regions'
 import REGIONS_BACK from './constants/regions-back'
@@ -437,7 +437,7 @@ class Kindred {
     const base = 'api.riotgames.com' // future: api.pvp.net
 
     const oldUrl = `https://${region}.api.riotgames.com/${oldPrefix}${encodeURI(query)}`
-    const newUrl = `https://${PLATFORM_IdS[REGIONS_BACK[region]].toLowerCase()}.${base}/${prefix}${encodeURI(query)}`
+    const newUrl = `https://${PLATFORM_IDS[REGIONS_BACK[region]].toLowerCase()}.${base}/${prefix}${encodeURI(query)}`
 
     /* TODO: Small hack. Leave here until Riot has implemented all endpoints. */
     if (newUrl.lastIndexOf('v3') == -1)
