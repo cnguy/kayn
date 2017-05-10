@@ -234,6 +234,17 @@ k.Static.Champion
 
 # Known Issues
 
+## Burst rate limiter would not work well for production.
+
+Good explanation by Matviy##4429 in #RiotAPIDevCommunity
+
+```
+The issue with the "burst and stop" method is that the API queues all incoming requests and can only process them so fast. If the requests get stale in the queue (few seconds), then the API won't even try processing them and will just return an error 500 instead.
+You'll see this if you burst more than a few hundred requests or so at once, a couple will go through, and then suddenly you'll get a few hundred 500 errors all at once
+```
+
+This is now in the [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md).
+
 ## Both caches currently (JS in-memory, Redis) are primitive implementations, and can possibly exceed memory limitations.
 
 I haven't had to deal with this in my smaller applications ([One Tricks](www.onetricks.net) for example) and scripts, but I'm guessing some people might use this library for bigger applications. I can add an LRU cache (and MongoDB) as well as a reset() function or something if people start asking.
