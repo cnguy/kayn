@@ -10,20 +10,20 @@ require('dotenv').config()
 
 var init = require('../../../utils/init')
 
-describe('Summoner', function() {
+describe('Masteries', function() {
   it('(object-param) get fails on empty', () => {
-    assert.throws(() => init().Summoner.get(), Error)
+    assert.throws(() => init().Masteries.get(), Error)
   })
 
   it('(standard-param) by.id fails on empty', () => {
-    assert.throws(() => init().Summoner.by.id(), Error)
+    assert.throws(() => init().Masteries.by.id(), Error)
   })
 
   it('(standard-param) by.name fails on empty', () => {
-    assert.throws(() => init().Summoner.by.name(), Error)
+    assert.throws(() => init().Masteries.by.name(), Error)
   })
 
   it('(standard-param) by.account fails on empty', () => {
-    assert.throws(() => init().Summoner.by.account(), Error)
+    assert.throws(() => init().Masteries.by.account(), Error)
   })
 })
