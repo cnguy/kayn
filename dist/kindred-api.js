@@ -427,9 +427,7 @@
       this.defaultRegion = check(defaultRegion) ? defaultRegion : undefined;
 
       if (!this.defaultRegion) {
-        console.log('' + chalk.red('Initialization of Kindred failed: ' + chalk.yellow(defaultRegion) + ' is an invalid region.'));
-        console.log('' + chalk.red('Try importing ' + chalk.yellow("require('./dist/kindred-api').REGIONS") + ' and using one of those values instead.'));
-        process.exit(1);
+        throw new Error(chalk.red('setRegion() by Kindred failed: ' + chalk.yellow(defaultRegion) + ' is an invalid region.') + '\n' + ('' + chalk.red('Try importing ' + chalk.yellow("require('./dist/kindred-api').REGIONS") + ' and using one of those values instead.')));
       }
 
       this.debug = debug;
@@ -468,7 +466,7 @@
           console.log(chalk.red('Initialization of Kindred failed: Invalid ' + chalk.yellow('limits') + '. Valid examples: ' + chalk.yellow('[[10, 10], [500, 600]]')) + '.');
           console.log(chalk.red('You can also pass in one of these two strings:') + ' dev/prod ');
           console.log('' + chalk.red('and Kindred will set the limits appropriately.'));
-          process.exit(1);
+          throw new Error();
         }
 
         this.limits = {};
@@ -826,7 +824,6 @@
           return name.replace(/\s/g, '').toLowerCase();
         } else {
           this._logError(this._validName.name, 'Name ' + chalk.yellow(name) + ' is not valid. Request failed.');
-          process.exit(1);
         }
       }
     }, {
@@ -1234,17 +1231,14 @@
     }, {
       key: '_logError',
       value: function _logError(message, expected) {
-        console.log(chalk.bold.yellow(message), chalk.red('request'), chalk.bold.red('FAILED') + chalk.red('; ' + expected));
-        process.exit(1);
+        throw new Error(chalk.bold.yellow(message) + " " + chalk.red('request') + " " + chalk.bold.red('FAILED') + chalk.red('; ' + expected));
       }
     }, {
       key: 'setRegion',
       value: function setRegion(region) {
         this.defaultRegion = check(region) ? region : undefined;
 
-        console.log('' + chalk.red('setRegion() by Kindred failed: ' + chalk.yellow(region) + ' is an invalid region.'));
-        console.log('' + chalk.red('Try importing ' + chalk.yellow("require('./dist/kindred-api').REGIONS") + ' and using one of those values instead.'));
-        process.exit(1);
+        if (!this.defaultRegion) throw new Error(chalk.red('setRegion() by Kindred failed: ' + chalk.yellow(region) + ' is an invalid region.') + '\n' + ('' + chalk.red('Try importing ' + chalk.yellow("require('./dist/kindred-api').REGIONS") + ' and using one of those values instead.')));
       }
     }, {
       key: 'getChamps',
@@ -2951,6 +2945,11 @@
   }();
 
   function QuickStart(apiKey, region, debug) {
+    if (typeof region == 'boolean') {
+      debug = region;
+      region = undefined;
+    }
+
     return new Kindred$1({
       key: apiKey,
       defaultRegion: region,

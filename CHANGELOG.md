@@ -2,6 +2,13 @@ From here onwards I'll try to adhere to [Semantic Versioning](http://semver.org)
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
+# 2.0.35
+* Fixed setRegion. It had a guaranteed exit function previously (brainfart).
+
+* Converted process.exit(1)'s into throws for testing purposes.
+
+* Added basic tests! Will be adding more as I have more time.
+
 # 2.0.34
 
 v3 API endpoints are back to accepting param=x&param=y style strings, and so I reverted how baseRequest works.

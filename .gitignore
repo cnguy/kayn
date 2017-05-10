@@ -18,3 +18,5 @@ coverage
 
 test.js
 test.md
+
+.env
