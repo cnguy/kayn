@@ -11,19 +11,33 @@ require('dotenv').config()
 var init = require('../../../utils/init')
 
 describe('Summoner', function() {
-  it('(object-param) get fails on empty', () => {
-    assert.throws(() => init().Summoner.get(), Error)
-  })
+  describe('get', () => {
+    describe('object param', () => {
+      it('should fail on empty', () => {
+        assert.throws(() => init().Summoner.get(), Error)
+      })
+    })
 
-  it('(standard-param) by.id fails on empty', () => {
-    assert.throws(() => init().Summoner.by.id(), Error)
-  })
+    describe('standard params', () => {
+      describe('by', () => {
+        describe('id', () => {
+          it('should fail on empty', () => {
+            assert.throws(() => init().Summoner.by.id(), Error)
+          })
+        })
 
-  it('(standard-param) by.name fails on empty', () => {
-    assert.throws(() => init().Summoner.by.name(), Error)
-  })
+        describe('name', () => {
+          it('should fail on empty', () => {
+            assert.throws(() => init().Summoner.by.name(), Error)
+          })
+        })
 
-  it('(standard-param) by.account fails on empty', () => {
-    assert.throws(() => init().Summoner.by.account(), Error)
+        describe('account', () => {
+          it('should fail on empty', () => {
+            assert.throws(() => init().Summoner.by.account(), Error)
+          })
+        })
+      })
+    })
   })
 })
