@@ -16,7 +16,8 @@ node_modules
 coverage
 .DS_Store
 
+.env
+
 test.js
 test.md
-
-.env
+save.js

@@ -7,6 +7,8 @@ To get started, run one of the following!
 2) npm install --save kindred-api
 ```
 
+### Treat my [versioning](https://github.com/ChauTNguyen/kindred-api/blob/master/CHANGELOG.md). as 0.x.y!
+
 # Refer to [Wiki](https://github.com/ChauTNguyen/kindred-api/wiki) for Documentation and Working Examples!
 Currently, I'm changing the format of how methods are presented so that it's much easier
 to parse.
