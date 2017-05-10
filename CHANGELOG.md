@@ -4,6 +4,8 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
+## 2.0.38 - Simplified [.env](https://github.com/ChauTNguyen/kindred-api/wiki/Tests) setup.
+
 ## 2.0.37 - Set of core, core-utils, in-memory-cache, summoner, runes, masteries tests complete.
 
 ## 2.0.36 - Constructor needs API key.
