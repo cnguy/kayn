@@ -1,4 +1,4 @@
-require('../core-utils.specs.js')
+require('../in-memory-cache.specs.js')
 
 var chai = require('chai')
 

@@ -17,9 +17,13 @@ class InMemoryCache {
 
   set(args, value) {
     this.cache[args.key] = {
-      expires: args.ttl ? Date.now() + args.ttl * 1000 : null,
+      expires: args.ttl ? this.setExp(Date.now(), args.ttl) : null,
       value: value
     }
+  }
+
+  setExp(date, secs)  {
+    return date + secs * 1000
   }
 }
 

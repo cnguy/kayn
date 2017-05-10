@@ -7,7 +7,7 @@
   "scripts": {
     "go": "yarn lint && yarn build && yarn minify && node test.js",
     "prepare": "yarn build && yarn minify",
-    "test": "./node_modules/mocha/bin/mocha test \"test/**/*.js\"",
+    "test": "./node_modules/mocha/bin/mocha --slow 0 test \"test/**/*.js\"",
     "lint": "node make eslint",
     "build": "node make build",
     "watch": "node make watch",

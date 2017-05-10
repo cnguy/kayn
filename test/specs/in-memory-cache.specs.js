@@ -17,17 +17,42 @@ describe('In-memory (JS) Cache', function() {
     k.cache.set({ key: 'http://abc.com', ttl: 3 }, { foo: 'bar' })
 
     k.cache.get({ key: 'http://abc.com' }, (err, data) => {
+      expect(err).is.null // errors return as null with my cbs
       expect(data).is.not.undefined
     })
   })
 
-  it('set/get data does not exist', () => {
+  it('set/get data does not exist with nonexistent cache key', () => {
     const k = init()
 
-    k.cache.set({ key: 'http://abc.com', ttl: 0 }, { foo: 'bar' }) // 100 * 1000 ms
-
-    k.cache.get({ key: 'http://abc.com' }, (err, data) => {
+    k.cache.get({ key: 'http://nonexistent.com' }, (err, data) => {
+      expect(err).is.not.undefined
       expect(data).is.undefined
     })
+  })
+
+  it('set/get data does not exist with expired cache key', () => {
+    // this is the same as being nonexistent, but I want
+    // to simulate expired keys!
+    const k = init()
+
+    k.cache.set({ key: 'http://abc.com', ttl: 0 }, { foo: 'bar' })
+
+    k.cache.get({ key: 'http://abc.com' }, (err, data) => {
+      expect(err).is.not.undefined
+      expect(data).is.undefined
+    })
+  })
+
+  it('set time accurate', () => {
+    const k = init()
+
+    const ttl = 10
+    const convertToMilliseconds = 1000
+
+    const d = Date.now()
+    const exp = k.cache.setExp(d, ttl)
+
+    assert(exp - d === ttl * convertToMilliseconds, 'date + 10*1000 = exp')
   })
 })
