@@ -410,8 +410,9 @@
   };
 
   var Kindred$1 = function () {
-    function Kindred$1(_ref) {
-      var key = _ref.key,
+    function Kindred$1() {
+      var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          key = _ref.key,
           _ref$defaultRegion = _ref.defaultRegion,
           defaultRegion = _ref$defaultRegion === undefined ? regions.NORTH_AMERICA : _ref$defaultRegion,
           _ref$debug = _ref.debug,
@@ -421,6 +422,10 @@
           cacheTTL = _ref.cacheTTL;
 
       _classCallCheck(this, Kindred$1);
+
+      if (arguments.length === 0 || _typeof(arguments[0]) !== 'object' || typeof key !== 'string') {
+        throw new Error('' + chalk.red('API key not passed in!'));
+      }
 
       this.key = key;
 
@@ -712,11 +717,7 @@
         }
       };
 
-      this.MatchHistory = {
-        by: {
-          account: 'test'
-        }
-      };
+      this.MatchHistory = {};
 
       this.RunesMasteries = {
         getRunes: this.getRunes.bind(this),
@@ -757,8 +758,6 @@
       this.Summoner = {
         getSummoner: this.getSummoner.bind(this),
         get: this.getSummoner.bind(this),
-
-        grab: this.getSummoner.bind(this),
 
         getRunes: this.getRunes.bind(this),
         runes: this.getRunes.bind(this),

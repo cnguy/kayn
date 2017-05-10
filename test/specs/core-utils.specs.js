@@ -6,6 +6,8 @@ var expect = chai.expect,
     should = chai.should,
     assert = chai.assert
 
+require('dotenv').config()
+
 describe('Core Utils', function() {
   it('it throws on invalid region thru init', () => {
     const api = require('../../dist/kindred-api.min')

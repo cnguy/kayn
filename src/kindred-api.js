@@ -31,7 +31,13 @@ class Kindred {
     key, defaultRegion = REGIONS.NORTH_AMERICA, debug = false,
     limits,
     cacheOptions, cacheTTL
-  }) {
+  } = {}) {
+    if (arguments.length === 0 || typeof arguments[0] !== 'object' || typeof key !== 'string') {
+      throw new Error(
+        `${chalk.red('API key not passed in!')}`
+      )
+    }
+
     this.key = key
 
     this.defaultRegion = checkValidRegion(defaultRegion) ? defaultRegion : undefined
@@ -311,9 +317,6 @@ class Kindred {
     }
 
     this.MatchHistory = {
-      by: {
-        account: 'test',
-      }
     }
 
     this.RunesMasteries = {
@@ -355,9 +358,6 @@ class Kindred {
     this.Summoner = {
       getSummoner: this.getSummoner.bind(this),
       get: this.getSummoner.bind(this),
-
-
-      grab: this.getSummoner.bind(this),
 
       getRunes: this.getRunes.bind(this),
       runes: this.getRunes.bind(this),
