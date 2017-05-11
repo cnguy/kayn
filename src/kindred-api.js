@@ -1642,6 +1642,11 @@ class Kindred {
   }
 
   listChallengers(queue, region, cb) {
+    if (checkValidRegion(queue)) {
+      region = queue
+      queue = undefined
+    }
+
     if (typeof queue == 'function') {
       cb = queue
       queue = undefined
@@ -1658,6 +1663,11 @@ class Kindred {
   }
 
   listMasters(queue, region, cb) {
+    if (checkValidRegion(queue)) {
+      region = queue
+      queue = undefined
+    }
+
     if (typeof queue == 'function') {
       cb = queue
       queue = undefined
