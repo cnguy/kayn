@@ -10,7 +10,7 @@ class RateLimit {
   __reload() {
     const t = (new Date()).getTime()
 
-    while (this.madeRequests.length > 0 && (t - this.madeRequests.peekFront() >= (this.seconds*100))) {
+    while (this.madeRequests.length > 0 && (t - this.madeRequests.peekFront() >= (this.seconds*50))) {
       this.madeRequests.shift()
     }
   }

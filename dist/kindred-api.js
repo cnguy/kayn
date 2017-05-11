@@ -136,7 +136,7 @@
       value: function __reload() {
         var t = new Date().getTime();
 
-        while (this.madeRequests.length > 0 && t - this.madeRequests.peekFront() >= this.seconds * 100) {
+        while (this.madeRequests.length > 0 && t - this.madeRequests.peekFront() >= this.seconds * 50) {
           this.madeRequests.shift();
         }
       }
@@ -501,7 +501,7 @@
           for (var _iterator2 = Object.keys(regions)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
             var region = _step2.value;
 
-            this.limits[regions[region]] = [new RateLimit(limits$$1[0][0], limits$$1[0][1]), new RateLimit(limits$$1[1][0], limits$$1[1][1]), this.spread ? new RateLimit(limits$$1[0][0] / 10, 0.8) : null];
+            this.limits[regions[region]] = [new RateLimit(limits$$1[0][0], limits$$1[0][1]), new RateLimit(limits$$1[1][0], limits$$1[1][1]), this.spread ? new RateLimit(limits$$1[0][0] / 10, 0.5) : null];
           }
         } catch (err) {
           _didIteratorError2 = true;
@@ -1110,8 +1110,7 @@
       key: '_staticRequest',
       value: function _staticRequest(_ref6, cb) {
         var endUrl = _ref6.endUrl,
-            _ref6$region = _ref6.region,
-            region = _ref6$region === undefined ? this.defaultRegion : _ref6$region,
+            region = _ref6.region,
             options = _ref6.options;
 
         return this._baseRequest({
@@ -1134,6 +1133,7 @@
         return this._baseRequest({
           endUrl: services.STATUS + '/v' + versions.STATUS + '/' + endUrl,
           status: true,
+          region: region,
           options: options,
           cacheParams: {
             ttl: this.CACHE_TIMERS.STATUS
@@ -1301,8 +1301,7 @@
       key: 'getChampMastery',
       value: function getChampMastery() {
         var _ref18 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            _ref18$region = _ref18.region,
-            region = _ref18$region === undefined ? this.defaultRegion : _ref18$region,
+            region = _ref18.region,
             playerId = _ref18.playerId,
             championId = _ref18.championId,
             options = _ref18.options;
@@ -1323,8 +1322,7 @@
         var _this2 = this;
 
         var _ref19 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            _ref19$region = _ref19.region,
-            region = _ref19$region === undefined ? this.defaultRegion : _ref19$region,
+            region = _ref19.region,
             accountId = _ref19.accountId,
             accId = _ref19.accId,
             id = _ref19.id,
@@ -1372,15 +1370,13 @@
         var _this3 = this;
 
         var _ref20 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            _ref20$region = _ref20.region,
-            region = _ref20$region === undefined ? this.defaultRegion : _ref20$region,
+            region = _ref20.region,
             accountId = _ref20.accountId,
             accId = _ref20.accId,
             id = _ref20.id,
             summonerId = _ref20.summonerId,
             playerId = _ref20.playerId,
-            name = _ref20.name,
-            options = _ref20.options;
+            name = _ref20.name;
 
         var cb = arguments[1];
 
@@ -1398,7 +1394,7 @@
           });
         } else if (Number.isInteger(id || summonerId || playerId)) {
           return this._championMasteryRequest({
-            endUrl: 'scores/by-summoner/' + (id || summonerId || playerId), region: region, options: options
+            endUrl: 'scores/by-summoner/' + (id || summonerId || playerId), region: region
           }, cb);
         } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
           return new Promise(function (resolve, reject) {
@@ -1943,6 +1939,10 @@
         if (typeof arguments[0] === 'function') {
           cb = arguments[0];
           arguments[0] = undefined;
+        }
+        console.log(arguments[0]);
+        if (typeof arguments[0] === 'string' && check(arguments[0])) {
+          return this._statusRequest({ endUrl: 'shard-data', region: arguments[0] }, cb);
         }
 
         return this._statusRequest({ endUrl: 'shard-data', region: region }, cb);
