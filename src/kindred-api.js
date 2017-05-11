@@ -29,7 +29,7 @@ import printResponseDebug from './helpers/print-response-debug'
 class Kindred {
   constructor({
     key, defaultRegion = REGIONS.NORTH_AMERICA, debug = false,
-    limits,
+    limits, spread,
     cacheOptions, cacheTTL
   } = {}) {
     if (arguments.length === 0 || typeof arguments[0] !== 'object' || typeof key !== 'string') {
@@ -96,10 +96,13 @@ class Kindred {
       if (limits === 'dev') limits = LIMITS.DEV
       if (limits === 'prod') limits = LIMITS.PROD
 
+      this.spread = spread
+
       for (const region of Object.keys(REGIONS)) {
         this.limits[REGIONS[region]] = [
           new RateLimit(limits[0][0], limits[0][1]),
-          new RateLimit(limits[1][0], limits[1][1])
+          new RateLimit(limits[1][0], limits[1][1]),
+          this.spread ? new RateLimit(limits[0][0] * 0.10, 1) : null
         ]
       }
     }
@@ -412,7 +415,18 @@ class Kindred {
   }
 
   canMakeRequest(region) {
-    return !(!this.limits[region][0].requestAvailable() || !this.limits[region][1].requestAvailable())
+    if (this.spread) {
+      return (
+        this.limits[region][0].requestAvailable() &&
+        this.limits[region][1].requestAvailable() &&
+        this.spread ? this.limits[region][2].requestAvailable() : false
+      )
+    }
+
+    return (
+      this.limits[region][0].requestAvailable() &&
+      this.limits[region][1].requestAvailable()
+    )
   }
 
   _sanitizeName(name) {
@@ -498,6 +512,7 @@ class Kindred {
                     if (!staticReq) {
                       self.limits[region][0].addRequest()
                       self.limits[region][1].addRequest()
+                      self.spread ? self.limits[region][2].addRequest() : null
                     }
 
                     request({ url: fullUrl }, (error, response, body) => {
@@ -528,7 +543,7 @@ class Kindred {
                             return callback(error, JSON.parse(body))
                           }
                         } else {
-                          if (statusCode === 500) {
+                          if (statusCode >= 500) {
                             if (self.debug) console.log('!!! resending promise request !!!')
                             setTimeout(() => { return reject('retry') }, 1000)
                           } else if (statusCode === 429) {

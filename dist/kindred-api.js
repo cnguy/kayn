@@ -423,6 +423,7 @@
           _ref$debug = _ref.debug,
           debug = _ref$debug === undefined ? false : _ref$debug,
           limits$$1 = _ref.limits,
+          spread = _ref.spread,
           cacheOptions = _ref.cacheOptions,
           cacheTTL = _ref.cacheTTL;
 
@@ -484,6 +485,8 @@
         if (limits$$1 === 'dev') limits$$1 = limits.DEV;
         if (limits$$1 === 'prod') limits$$1 = limits.PROD;
 
+        this.spread = spread;
+
         var _iteratorNormalCompletion2 = true;
         var _didIteratorError2 = false;
         var _iteratorError2 = undefined;
@@ -492,7 +495,7 @@
           for (var _iterator2 = Object.keys(regions)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
             var region = _step2.value;
 
-            this.limits[regions[region]] = [new RateLimit(limits$$1[0][0], limits$$1[0][1]), new RateLimit(limits$$1[1][0], limits$$1[1][1])];
+            this.limits[regions[region]] = [new RateLimit(limits$$1[0][0], limits$$1[0][1]), new RateLimit(limits$$1[1][0], limits$$1[1][1]), this.spread ? new RateLimit(limits$$1[0][0] * 0.10, 1) : null];
           }
         } catch (err) {
           _didIteratorError2 = true;
@@ -819,7 +822,11 @@
     _createClass(Kindred$1, [{
       key: 'canMakeRequest',
       value: function canMakeRequest(region) {
-        return !(!this.limits[region][0].requestAvailable() || !this.limits[region][1].requestAvailable());
+        if (this.spread) {
+          return this.limits[region][0].requestAvailable() && this.limits[region][1].requestAvailable() && this.spread ? this.limits[region][2].requestAvailable() : false;
+        }
+
+        return this.limits[region][0].requestAvailable() && this.limits[region][1].requestAvailable();
       }
     }, {
       key: '_sanitizeName',
@@ -955,6 +962,7 @@
                       if (!staticReq) {
                         self.limits[region][0].addRequest();
                         self.limits[region][1].addRequest();
+                        self.spread ? self.limits[region][2].addRequest() : null;
                       }
 
                       request({ url: fullUrl }, function (error, response, body) {
@@ -987,7 +995,7 @@
                               return callback(error, JSON.parse(body));
                             }
                           } else {
-                            if (statusCode === 500) {
+                            if (statusCode >= 500) {
                               if (self.debug) console.log('!!! resending promise request !!!');
                               setTimeout(function () {
                                 return reject('retry');
