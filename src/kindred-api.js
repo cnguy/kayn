@@ -13,6 +13,7 @@ import CACHE_TIMERS from './cache/constants/endpoint-cache-timers'
 import LIMITS from './constants/limits'
 import PLATFORM_IDS from './constants/platform-ids'
 import QUEUE_TYPES from './constants/queue-types'
+import QUEUE_STRINGS from './constants/queue-strings'
 import REGIONS from './constants/regions'
 import REGIONS_BACK from './constants/regions-back'
 import VERSIONS from './constants/versions'
@@ -2233,6 +2234,7 @@ export default {
   TIME_CONSTANTS,
   CACHE_TYPES,
   QUEUE_TYPES,
+  QUEUE_STRINGS,
   QuickStart,
   print
 }

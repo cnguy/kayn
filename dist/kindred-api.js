@@ -275,6 +275,12 @@
     DARKSTAR_3x3: 610
   };
 
+  var queueStrings = {
+    RANKED_SOLO_5x5: 'RANKED_SOLO_5x5',
+    RANKED_FLEX_SR: 'RANKED_FLEX_SR',
+    RANKED_FLEX_TT: 'RANKED_FLEX_TT'
+  };
+
   var regions = {
     BRAZIL: 'br',
     EUROPE: 'eune',
@@ -3004,6 +3010,7 @@
     TIME_CONSTANTS: cacheTimers,
     CACHE_TYPES: caches,
     QUEUE_TYPES: queueTypes,
+    QUEUE_STRINGS: queueStrings,
     QuickStart: QuickStart,
     print: print
   };
