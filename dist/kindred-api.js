@@ -2380,6 +2380,11 @@
       key: 'listChallengers',
       value: function listChallengers(queue, region, cb) {
         if (check(queue)) {
+          if (typeof region == 'function') {
+            cb = region;
+            region = undefined;
+          }
+
           region = queue;
           queue = undefined;
         }
@@ -2402,6 +2407,11 @@
       key: 'listMasters',
       value: function listMasters(queue, region, cb) {
         if (check(queue)) {
+          if (typeof region == 'function') {
+            cb = region;
+            region = undefined;
+          }
+
           region = queue;
           queue = undefined;
         }
