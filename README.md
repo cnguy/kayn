@@ -1,5 +1,5 @@
 # Kindred
-Kindred is a Node.js wrapper with built-in rate-limiting (enforced per region, burst vs spread), caching (in-memory and Redis), and parameter checking on top of [Riot's League of Legends API](http://www.developer.riotgames.com).
+Kindred is a Node.js wrapper with built-in rate-limiting (enforced per region, burst/spread), caching (in-memory and Redis), and parameter checking on top of [Riot's League of Legends API](http://www.developer.riotgames.com).
 
 To get started, run one of the following!
 ```
@@ -26,7 +26,7 @@ Check out [SUMMONER-V3](https://github.com/ChauTNguyen/kindred-api/wiki/SUMMONER
 # Core Features
 * All standard endpoints covered but tournament endpoints.
 * Supports both **callbacks** and **promises**.
-* Rate limiter that is **enforced per region** and **follows retry headers**.
+* Burst/Spread rate limiter that is **enforced per region** and **follows retry headers**.
     * Retries on 429 and >= 500. (Doesn't retry on 404)
 * Built-in **parameter checks** so you can hopefully refer to documentation less! :)
 * Built-in **caching** (in-memory and Redis).
