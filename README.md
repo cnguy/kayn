@@ -16,6 +16,8 @@ to parse.
 Check out [SUMMONER-V3](https://github.com/ChauTNguyen/kindred-api/wiki/SUMMONER-V3) or
 [STATIC-DATA-V3](https://github.com/ChauTNguyen/kindred-api/wiki/STATIC-DATA-V3) to see what I mean.
 
+**Note that all standard endpoints covered but tournament endpoints! The documentation is still in the works, but you should be able to find everything you need in every section (just scroll down a lot lol).**
+
 # Table of Contents:
 * [Core Features](#core-features)
 * [How the Methods Work](#how-the-methods-work)
@@ -40,10 +42,23 @@ All `list` and `by.xxx` functions will have standard parameters.
 
 These methods can work with different type of parameters (id (summoner!!!), name, accountId) when applicable.
 
+What I specifically like about the functions that take object parameters is that you can declare config objects
+and pass in things really cleanly instead of worrying about the order of parameters in standard function.
+
 These functions take in an optional `region` and an optional `options` parameter (whenever possible) WITHIN the same first parameter. Most of the time, when they're called, they look like this:
 
 ## Object + Callback Functions
 ```javascript
+const config = {
+    id: 6323,
+    region: REGIONS.NORTH_AMERICA,
+    options: {
+        masteryData: ['image', 'sanitizedDescription']
+    }
+}
+
+k.Static.mastery(config, KindredAPI.print)
+
 const matchlistConfig = {
     name: 'Contractz',
     options: {
