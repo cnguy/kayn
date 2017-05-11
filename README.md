@@ -1,5 +1,5 @@
 # Kindred
-Kindred is a Node.js wrapper with built-in rate-limiting (enforced per region), caching (in-memory and Redis), and parameter checking on top of [Riot's League of Legends API](http://www.developer.riotgames.com).
+Kindred is a Node.js wrapper with built-in rate-limiting (enforced per region, burst vs spread), caching (in-memory and Redis), and parameter checking on top of [Riot's League of Legends API](http://www.developer.riotgames.com).
 
 To get started, run one of the following!
 ```

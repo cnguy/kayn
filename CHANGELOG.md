@@ -4,6 +4,12 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
+## 2.0.39 - Added [spread rate limiting](https://github.com/ChauTNguyen/kindred-api/wiki/Rate-Limiter)
+
+* ^
+* Added QUEUE_STRINGS constant for Challenger/Master endpoints.
+* Fixed Challenger/Master parameters. ```.list()``` should be callable with region + callback now.
+
 ## 2.0.38 - Simplified [.env](https://github.com/ChauTNguyen/kindred-api/wiki/Tests) setup.
 
 ## 2.0.37 - Set of core, core-utils, in-memory-cache, summoner, runes, masteries tests complete.
