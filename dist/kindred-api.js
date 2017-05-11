@@ -495,7 +495,7 @@
           for (var _iterator2 = Object.keys(regions)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
             var region = _step2.value;
 
-            this.limits[regions[region]] = [new RateLimit(limits$$1[0][0], limits$$1[0][1]), new RateLimit(limits$$1[1][0], limits$$1[1][1]), this.spread ? new RateLimit(limits$$1[0][0] * 0.10, 1) : null];
+            this.limits[regions[region]] = [new RateLimit(limits$$1[0][0], limits$$1[0][1]), new RateLimit(limits$$1[1][0], limits$$1[1][1]), this.spread ? new RateLimit(limits$$1[0][0] / 10, 0.8) : null];
           }
         } catch (err) {
           _didIteratorError2 = true;
@@ -823,10 +823,10 @@
       key: 'canMakeRequest',
       value: function canMakeRequest(region) {
         if (this.spread) {
-          return this.limits[region][0].requestAvailable() && this.limits[region][1].requestAvailable() && this.spread ? this.limits[region][2].requestAvailable() : false;
+          return this.limits[region][0].requestAvailable() && this.limits[region][1].requestAvailable() && this.limits[region][2].requestAvailable();
+        } else {
+          return this.limits[region][0].requestAvailable() && this.limits[region][1].requestAvailable();
         }
-
-        return this.limits[region][0].requestAvailable() && this.limits[region][1].requestAvailable();
       }
     }, {
       key: '_sanitizeName',
@@ -962,7 +962,9 @@
                       if (!staticReq) {
                         self.limits[region][0].addRequest();
                         self.limits[region][1].addRequest();
-                        self.spread ? self.limits[region][2].addRequest() : null;
+                        if (self.spread) {
+                          self.limits[region][2].addRequest();
+                        }
                       }
 
                       request({ url: fullUrl }, function (error, response, body) {

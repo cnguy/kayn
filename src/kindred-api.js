@@ -102,7 +102,7 @@ class Kindred {
         this.limits[REGIONS[region]] = [
           new RateLimit(limits[0][0], limits[0][1]),
           new RateLimit(limits[1][0], limits[1][1]),
-          this.spread ? new RateLimit(limits[0][0] * 0.10, 1) : null
+          this.spread ? new RateLimit(limits[0][0] / 10, 0.8) : null
         ]
       }
     }
@@ -419,14 +419,14 @@ class Kindred {
       return (
         this.limits[region][0].requestAvailable() &&
         this.limits[region][1].requestAvailable() &&
-        this.spread ? this.limits[region][2].requestAvailable() : false
+        this.limits[region][2].requestAvailable()
+      )
+    } else {
+      return (
+        this.limits[region][0].requestAvailable() &&
+        this.limits[region][1].requestAvailable()
       )
     }
-
-    return (
-      this.limits[region][0].requestAvailable() &&
-      this.limits[region][1].requestAvailable()
-    )
   }
 
   _sanitizeName(name) {
@@ -512,7 +512,9 @@ class Kindred {
                     if (!staticReq) {
                       self.limits[region][0].addRequest()
                       self.limits[region][1].addRequest()
-                      self.spread ? self.limits[region][2].addRequest() : null
+                      if (self.spread) {
+                        self.limits[region][2].addRequest()
+                      }
                     }
 
                     request({ url: fullUrl }, (error, response, body) => {
