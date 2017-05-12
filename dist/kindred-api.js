@@ -1940,9 +1940,13 @@
           cb = arguments[0];
           arguments[0] = undefined;
         }
-        console.log(arguments[0]);
-        if (typeof arguments[0] === 'string' && check(arguments[0])) {
-          return this._statusRequest({ endUrl: 'shard-data', region: arguments[0] }, cb);
+
+        if (typeof arguments[0] === 'string') {
+          if (check(arguments[0])) {
+            return this._statusRequest({ endUrl: 'shard-data', region: arguments[0] }, cb);
+          } else {
+            return this._logError(this.getShardStatus.name, 'invalid region!');
+          }
         }
 
         return this._statusRequest({ endUrl: 'shard-data', region: region }, cb);
