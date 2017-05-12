@@ -303,6 +303,12 @@ class Kindred {
 
       by: {
         id: this.getMatchById.bind(this)
+      },
+
+      Timeline: {
+        by: {
+          id: this.getMatchTimelineById.bind(this)
+        }
       }
     }
 
@@ -1851,6 +1857,17 @@ class Kindred {
 
     return this.Matchlist.get({
       name, options, region
+    }, cb)
+  }
+
+  getMatchTimelineById(id, region, cb) {
+    if (typeof region == 'function') {
+      cb = region
+      region = undefined
+    }
+
+    return this.Match.timeline({
+      id, region
     }, cb)
   }
 

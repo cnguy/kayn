@@ -714,6 +714,12 @@
 
         by: {
           id: this.getMatchById.bind(this)
+        },
+
+        Timeline: {
+          by: {
+            id: this.getMatchTimelineById.bind(this)
+          }
         }
       };
 
@@ -2597,6 +2603,18 @@
 
         return this.Matchlist.get({
           name: name, options: options, region: region
+        }, cb);
+      }
+    }, {
+      key: 'getMatchTimelineById',
+      value: function getMatchTimelineById(id, region, cb) {
+        if (typeof region == 'function') {
+          cb = region;
+          region = undefined;
+        }
+
+        return this.Match.timeline({
+          id: id, region: region
         }, cb);
       }
     }, {
