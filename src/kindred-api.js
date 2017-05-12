@@ -103,7 +103,7 @@ class Kindred {
         this.limits[REGIONS[region]] = [
           new RateLimit(limits[0][0], limits[0][1]),
           new RateLimit(limits[1][0], limits[1][1]),
-          this.spread ? new RateLimit(limits[0][0] / 10, 0.8) : null
+          this.spread ? new RateLimit(limits[0][0] / 10, 0.5) : null
         ]
       }
     }
@@ -290,7 +290,7 @@ class Kindred {
     this.Status = {
       getShardStatus: this.getShardStatus.bind(this),
       getStatus: this.getShardStatus.bind(this),
-      get: this.getShardStatus.bind(this),
+      get: this.getShardStatus.bind(this)
     }
 
     this.Match = {
@@ -636,7 +636,7 @@ class Kindred {
     }, cb)
   }
 
-  _staticRequest({ endUrl, region = this.defaultRegion, options }, cb) {
+  _staticRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
       endUrl: `${SERVICES.STATIC_DATA}/v${VERSIONS.STATIC_DATA}/${endUrl}`,
       staticReq: true,
@@ -652,6 +652,7 @@ class Kindred {
     return this._baseRequest({
       endUrl: `${SERVICES.STATUS}/v${VERSIONS.STATUS}/${endUrl}`,
       status: true,
+      region,
       options,
       cacheParams: {
         ttl: this.CACHE_TIMERS.STATUS
@@ -778,7 +779,7 @@ class Kindred {
 
   /* CHAMPION-MASTERY-V3 */
   getChampMastery({
-    region = this.defaultRegion,
+    region,
     playerId, championId,
     options
   } = {}, cb) {
@@ -795,7 +796,7 @@ class Kindred {
   }
 
   getChampMasteries({
-    region = this.defaultRegion,
+    region,
     accountId, accId,
     id, summonerId, playerId,
     name
@@ -833,11 +834,10 @@ class Kindred {
   }
 
   getTotalChampMasteryScore({
-    region = this.defaultRegion,
+    region,
     accountId, accId,
     id, summonerId, playerId,
-    name,
-    options
+    name
   } = {}, cb) {
     if (Number.isInteger(accountId || accId)) {
       return new Promise((resolve, reject) => {
@@ -851,7 +851,7 @@ class Kindred {
       })
     } else if (Number.isInteger(id || summonerId || playerId)) {
       return this._championMasteryRequest({
-        endUrl: `scores/by-summoner/${id || summonerId || playerId}`, region, options
+        endUrl: `scores/by-summoner/${id || summonerId || playerId}`, region
       }, cb)
     } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
       return new Promise((resolve, reject) => {
@@ -1263,6 +1263,10 @@ class Kindred {
     if (typeof arguments[0] === 'function') {
       cb = arguments[0]
       arguments[0] = undefined
+    }
+    console.log(arguments[0])
+    if (typeof arguments[0] === 'string' && checkValidRegion(arguments[0])) {
+      return this._statusRequest({ endUrl: 'shard-data', region: arguments[0] }, cb)
     }
 
     return this._statusRequest({ endUrl: 'shard-data', region }, cb)
