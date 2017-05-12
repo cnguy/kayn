@@ -19,11 +19,12 @@ Check out [SUMMONER-V3](https://github.com/ChauTNguyen/kindred-api/wiki/SUMMONER
 **Note that all standard endpoints covered but tournament endpoints! The documentation is still in the works, but you should be able to find everything you need in every section (just scroll down a lot lol).**
 
 # Table of Contents:
-* [Core Features](#core-features)
-* [How the Methods Work](#how-the-methods-work)
-* [Quickstart](#quickstart)
-* [Known Issues](#known-issues)
-* [Changelog](https://github.com/ChauTNguyen/kindred-api/blob/master/CHANGELOG.md)
+* ## [Core Features](#core-features)
+* ## [How the Methods Work](#how-the-methods-work)
+* ## [Quickstart](#quickstart)
+* ## [Known Issues](#known-issues)
+* ## [Changelog](https://github.com/ChauTNguyen/kindred-api/blob/master/CHANGELOG.md)
+* ## [Performance & Other Libraries](https://github.com/ChauTNguyen/kindred-api/wiki/Benchmarks)
 
 # Core Features
 * All standard endpoints covered but tournament endpoints.
