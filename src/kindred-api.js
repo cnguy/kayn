@@ -63,7 +63,7 @@ class Kindred {
       else if (cacheOptions === CACHE_TYPES[1])
         this.cache = new RC()
       else
-        this.cache = cacheOptions
+        this.cache = new cacheOptions()
 
       this.CACHE_TIMERS = cacheTTL ? cacheTTL : CACHE_TIMERS
     }

@@ -209,7 +209,7 @@
   var limits = {
     'DEV': [[10, 10], [500, 600]],
 
-    'PROD': [[3000, 10], [180000, 600]]
+    'PROD': [[500, 10], [30000, 600]]
   };
 
   var platformIds = {
@@ -457,7 +457,7 @@
           set: function set(args, value) {}
         };
       } else {
-        if (cacheOptions === caches[0]) this.cache = new InMemoryCache();else if (cacheOptions === caches[1]) this.cache = new RedisCache();else this.cache = cacheOptions;
+        if (cacheOptions === caches[0]) this.cache = new InMemoryCache();else if (cacheOptions === caches[1]) this.cache = new RedisCache();else this.cache = new cacheOptions();
 
         this.CACHE_TIMERS = cacheTTL ? cacheTTL : endpointCacheTimers;
       }

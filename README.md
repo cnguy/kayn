@@ -7,7 +7,7 @@ To get started, run one of the following!
 2) npm install --save kindred-api
 ```
 
-### Treat my [versioning](https://github.com/ChauTNguyen/kindred-api/blob/master/CHANGELOG.md). as 0.x.y!
+### Treat my [versioning](https://github.com/ChauTNguyen/kindred-api/blob/master/CHANGELOG.md) as 0.x.y!
 
 # Refer to [Wiki](https://github.com/ChauTNguyen/kindred-api/wiki) for Documentation and Working Examples!
 Currently, I'm changing the format of how methods are presented so that it's much easier
@@ -19,17 +19,17 @@ Check out [SUMMONER-V3](https://github.com/ChauTNguyen/kindred-api/wiki/SUMMONER
 **Note that all standard endpoints covered but tournament endpoints! The documentation is still in the works, but you should be able to find everything you need in every section (just scroll down a lot lol).**
 
 # Table of Contents:
-* ## [Core Features](#core-features)
-* ## [How the Methods Work](#how-the-methods-work)
-* ## [Quickstart](#quickstart)
-* ## [Known Issues](#known-issues)
-* ## [Changelog](https://github.com/ChauTNguyen/kindred-api/blob/master/CHANGELOG.md)
-* ## [Performance & Other Libraries](https://github.com/ChauTNguyen/kindred-api/wiki/Benchmarks)
+* [Core Features](#core-features)
+* [How the Methods Work](#how-the-methods-work)
+* [Quickstart](#quickstart)
+* [Known Issues](#known-issues)
+* [Changelog](https://github.com/ChauTNguyen/kindred-api/blob/master/CHANGELOG.md)
+* [Performance & Other Libraries](https://github.com/ChauTNguyen/kindred-api/wiki/Benchmarks)
 
 # Core Features
 * All standard endpoints covered but tournament endpoints.
 * Supports both **callbacks** and **promises**.
-* Burst/Spread rate limiter that is **enforced per region** and **follows retry headers**.
+* **Burst/Spread** rate limiter that is **enforced per region** and **follows retry headers**.
     * Retries on 429 and >= 500. (Doesn't retry on 404)
 * Built-in **parameter checks** so you can hopefully refer to documentation less! :)
 * Built-in **caching** (in-memory and Redis).
@@ -255,7 +255,7 @@ k.Static.Champion
 
 # Known Issues
 
-## Burst rate limiter would not work well for production.
+## [~~Burst rate limiter would not work well for production.~~](https://github.com/ChauTNguyen/kindred-api/wiki/Rate-Limiter#spread)
 
 Good explanation by Matviy##4429 in #RiotAPIDevCommunity
 
