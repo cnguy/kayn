@@ -62,7 +62,7 @@ k.Static.mastery(config, KindredAPI.print)
 const matchlistConfig = {
     name: 'Contractz',
     options: {
-        queue: QUEUES.RANKED_SOLO_5x5, // 420
+        queue: QUEUES.TEAM_BUILDER_RANKED_SOLO, // 420
         champion: 67
     }
 }
