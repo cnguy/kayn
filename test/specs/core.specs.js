@@ -104,6 +104,21 @@ describe('Core', function() {
       assert.equal(k.spread, true)
       expect(k.limits).is.not.undefined
     })
+
+    describe('promises', () => {
+      it('should not retry on 404s', (done) => {
+        const k = init()
+
+
+        k.Summoner
+         .by.name('abcdefghichau')
+         .then(data => data)
+         .catch(error => {
+           expect(error).is.not.undefined
+           done()
+         })
+      })
+    })
   })
 
   describe('QuickStart Initialization', () => {
