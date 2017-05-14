@@ -10,12 +10,12 @@ var init = require('../../utils/init')
 
 describe('Core', function() {
   it('Kindred exists', () => expect(
-      require('../../dist/kindred-api.min')
+      require('../../dist/kindred-api')
   ).is.not.undefined)
 
   describe('Standard Initialization', () => {
     it('should not init w/o api key', () => {
-      const api = require('../../dist/kindred-api.min')
+      const api = require('../../dist/kindred-api')
 
       const { REGIONS } = api
       const debug = true
@@ -27,7 +27,7 @@ describe('Core', function() {
     })
 
     it('should init with key & region & debug (3 args)', () => {
-      const api = require('../../dist/kindred-api.min')
+      const api = require('../../dist/kindred-api')
 
       const region = api.REGIONS.NORTH_AMERICA
       const debug = true
@@ -40,7 +40,7 @@ describe('Core', function() {
     })
 
     it('should init with key (1 arg)', () => {
-      const api = require('../../dist/kindred-api.min')
+      const api = require('../../dist/kindred-api')
 
       const k = new api.Kindred({
         key: process.env.KEY
@@ -50,7 +50,7 @@ describe('Core', function() {
     })
 
     it('should init with key & debug (2 args)', () => {
-      const api = require('../../dist/kindred-api.min')
+      const api = require('../../dist/kindred-api')
 
       const debug = true
 
@@ -68,7 +68,7 @@ describe('Core', function() {
     })
 
     it('should init with key & region (2 args)', () => {
-      const api = require('../../dist/kindred-api.min')
+      const api = require('../../dist/kindred-api')
       const { REGIONS } = api
 
       const k = api.QuickStart(process.env.KEY, REGIONS.NORTH_AMERICA)
@@ -77,7 +77,7 @@ describe('Core', function() {
     })
 
     it('should init with key & debug (2 args)', () => {
-      const api = require('../../dist/kindred-api.min')
+      const api = require('../../dist/kindred-api')
       const { REGIONS } = api
 
       const k = api.QuickStart(process.env.KEY, true)

@@ -1,7 +1,7 @@
 const init = function() {
   require('dotenv').config()
 
-  const api = require('../dist/kindred-api.min')
+  const api = require('../dist/kindred-api')
   const { REGIONS } = api
   const debug = true
 
