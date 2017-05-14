@@ -11,29 +11,29 @@ require('dotenv').config()
 var init = require('../../../utils/init')
 
 describe('Masteries', function () {
-  describe('get', () => {
-    describe('object param', () => {
-      it('should throw on empty', () => {
+  describe('get', function () {
+    describe('object param', function () {
+      it('should throw on empty', function () {
         assert.throws(() => init().Masteries.get(), Error)
       })
     })
 
-    describe('standard params', () => {
-      describe('by', () => {
-        describe('id', () => {
-          it('should throw on empty', () => {
+    describe('standard params', function () {
+      describe('by', function () {
+        describe('id', function () {
+          it('should throw on empty', function () {
             assert.throws(() => init().Masteries.by.id(), Error)
           })
         })
 
-        describe('name', () => {
-          it('should throw on empty', () => {
+        describe('name', function () {
+          it('should throw on empty', function () {
             assert.throws(() => init().Masteries.by.name(), Error)
           })
         })
 
-        describe('account', () => {
-          it('should throw on empty', () => {
+        describe('account', function () {
+          it('should throw on empty', function () {
             assert.throws(() => init().Masteries.by.account(), Error)
           })
         })

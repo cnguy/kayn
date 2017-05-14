@@ -15,13 +15,13 @@ const matchId = 2450326677
 describe('Match', function () {
   this.timeout(0)
 
-  describe('get', () => {
-    describe('object param', () => {
-      it('should throw on empty', () => {
+  describe('get', function () {
+    describe('object param', function () {
+      it('should throw on empty', function () {
         assert.throws(() => init().Match.get(), Error)
       })
 
-      it('should not throw on non-empty', () => {
+      it('should not throw on non-empty', function () {
         assert.doesNotThrow(() => init().Match.get({ matchId }), Error)
       })
 
@@ -32,14 +32,14 @@ describe('Match', function () {
       })
     })
 
-    describe('standard params', () => {
-      describe('by', () => {
-        describe('id', () => {
-          it('should throw on empty', () => {
+    describe('standard params', function () {
+      describe('by', function () {
+        describe('id', function () {
+          it('should throw on empty', function () {
             assert.throws(() => init().Match.by.id(), Error)
           })
 
-          it('should not throw on non-empty', () => {
+          it('should not throw on non-empty', function () {
             assert.doesNotThrow(() => init().Match.get({ matchId }), Error)
           })
 
@@ -53,13 +53,13 @@ describe('Match', function () {
     })
   })
 
-  describe('timeline', () => {
-    describe('object param', () => {
-      it('should throw on empty', () => {
+  describe('timeline', function () {
+    describe('object param', function () {
+      it('should throw on empty', function () {
         assert.throws(() => init().Match.timeline(), Error)
       })
 
-      it('should not throw on non-empty', () => {
+      it('should not throw on non-empty', function () {
         assert.doesNotThrow(() => init().Match.timeline({ matchId }), Error)
       })
 
@@ -70,14 +70,14 @@ describe('Match', function () {
       })
     })
 
-    describe('standard params', () => {
-      describe('by', () => {
-        describe('id', () => {
-          it('should throw on empty', () => {
+    describe('standard params', function () {
+      describe('by', function () {
+        describe('id', function () {
+          it('should throw on empty', function () {
             assert.throws(() => init().Match.Timeline.by.id(), Error)
           })
 
-          it('should not throw on non-empty', () => {
+          it('should not throw on non-empty', function () {
             assert.doesNotThrow(() => init().Match.Timeline.by.id(matchId), Error)
           })
 

@@ -11,9 +11,9 @@ require('dotenv').config()
 var init = require('../../utils/init')
 
 describe('Core Utils', function () {
-  describe('setRegion ', () => {
-    describe('through init', () => {
-      it('should throw on invalid region', () => {
+  describe('setRegion ', function () {
+    describe('through init', function () {
+      it('should throw on invalid region', function () {
         const api = require('../../dist/kindred-api')
         const debug = true
         const garbageRegion = 'foo'
@@ -21,18 +21,18 @@ describe('Core Utils', function () {
         assert.throws(() => api.QuickStart(process.env.KEY, garbageRegion, true), Error)
       })
 
-      it('should not throw on valid region', () => {
+      it('should not throw on valid region', function () {
         assert.doesNotThrow(() => init(), Error)
       })
     })
 
-    describe('through manual set', () => {
-      it('should throw on invalid region', () => {
+    describe('through manual set', function () {
+      it('should throw on invalid region', function () {
         const garbageRegion = 'north_amurica' // jokez!
         assert.throws(() => init().setRegion(garbageRegion), Error)
       })
 
-      it('should not throw on valid region', () => {
+      it('should not throw on valid region', function () {
         const k = init()
         const nonGarbageRegion = require('../../dist/kindred-api').REGIONS.KOREA
 
@@ -41,43 +41,43 @@ describe('Core Utils', function () {
     })
   })
 
-  describe('validName', () => {
-    it('should return false', () => {
+  describe('validName', function () {
+    it('should return false', function () {
       const valid = init()._validName('foo%')
       assert.equal(valid, false)
     })
 
-    it('should return true', () => {
+    it('should return true', function () {
       const valid = init()._validName('foo')
       assert.equal(valid, true)
     })
 
-    describe('usage', () => {
-      it('should throw on invalid name', () => {
+    describe('usage', function () {
+      it('should throw on invalid name', function () {
         // name parameters -> valid name -> sanitize name -> throw
         const garbageName = 'foo%'
         assert.throws(() => init().Summoner.get(garbageName), Error)
       })
 
-      it('should not throw on valid name 1', () => {
+      it('should not throw on valid name 1', function () {
         // name parameters -> valid name -> sanitize name -> no throw
         assert.throws(() => init().Summoner.get('chauisthebest'), Error)
       })
 
-      it('should not throw on valid name 2', () => {
+      it('should not throw on valid name 2', function () {
         // name parameters -> valid name -> sanitize name -> no throw
         assert.throws(() => init().Summoner.get('chau.isthebest'), Error)
       })
     })
   })
 
-  describe('sanitizeName', () => {
-    it('should sanitize with valid name', () => {
+  describe('sanitizeName', function () {
+    it('should sanitize with valid name', function () {
       const name = init()._sanitizeName('foo Bar')
       assert.equal(name, 'foobar')
     })
 
-    it('should throw with invalid name', () => {
+    it('should throw with invalid name', function () {
       assert.throws(() => init()._sanitizeName('foo%'), Error)
     })
   })

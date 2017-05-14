@@ -11,29 +11,29 @@ require('dotenv').config()
 var init = require('../../../utils/init')
 
 describe('Runes', function () {
-  describe('get', () => {
-    describe('object param', () => {
-      it('should fail on empty', () => {
+  describe('get', function () {
+    describe('object param', function () {
+      it('should fail on empty', function () {
         assert.throws(() => init().Runes.get(), Error)
       })
     })
 
-    describe('standard params', () => {
-      describe('by', () => {
-        describe('id', () => {
-          it('should fail on empty', () => {
+    describe('standard params', function () {
+      describe('by', function () {
+        describe('id', function () {
+          it('should fail on empty', function () {
             assert.throws(() => init().Runes.by.id(), Error)
           })
         })
 
-        describe('name', () => {
-          it('should fail on empty', () => {
+        describe('name', function () {
+          it('should fail on empty', function () {
             assert.throws(() => init().Runes.by.name(), Error)
           })
         })
 
-        describe('account', () => {
-          it('should fail on empty', () => {
+        describe('account', function () {
+          it('should fail on empty', function () {
             assert.throws(() => init().Runes.by.account(), Error)
           })
         })

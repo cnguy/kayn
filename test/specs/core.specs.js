@@ -10,12 +10,14 @@ var init = require('../../utils/init')
 
 describe('Core', function () {
   this.timeout(0)
-  it('Kindred exists', () => expect(
-    require('../../dist/kindred-api')
-  ).is.not.undefined)
+  it('Kindred exists', function () {
+    expect(
+      require('../../dist/kindred-api')
+    ).is.not.undefined
+  })
 
-  describe('Standard Initialization', () => {
-    it('should not init w/o api key', () => {
+  describe('Standard Initialization', function () {
+    it('should not init w/o api key', function () {
       const api = require('../../dist/kindred-api')
 
       const { REGIONS } = api
@@ -27,7 +29,7 @@ describe('Core', function () {
       assert.throws(() => new api.Kindred({ region: REGIONS.NORTH_AMERICA, debug }), Error)
     })
 
-    it('should init with key & region & debug (3 args)', () => {
+    it('should init with key & region & debug (3 args)', function () {
       const api = require('../../dist/kindred-api')
 
       const region = api.REGIONS.NORTH_AMERICA
@@ -40,7 +42,7 @@ describe('Core', function () {
       expect(k).is.not.undefined
     })
 
-    it('should init with key (1 arg)', () => {
+    it('should init with key (1 arg)', function () {
       const api = require('../../dist/kindred-api')
 
       const k = new api.Kindred({
@@ -50,7 +52,7 @@ describe('Core', function () {
       expect(k).is.not.undefined
     })
 
-    it('should init with key & debug (2 args)', () => {
+    it('should init with key & debug (2 args)', function () {
       const api = require('../../dist/kindred-api')
 
       const debug = true
@@ -62,7 +64,7 @@ describe('Core', function () {
       expect(k).is.not.undefined
     })
 
-    it('should not have any limits', () => {
+    it('should not have any limits', function () {
       const api = require('../../dist/kindred-api')
 
       const debug = true
@@ -89,7 +91,7 @@ describe('Core', function () {
       expect(k.limits).is.not.undefined
     })
 
-    it('should init with spread rate limiter', () => {
+    it('should init with spread rate limiter', function () {
       const api = require('../../dist/kindred-api')
 
       const debug = true
@@ -107,12 +109,12 @@ describe('Core', function () {
     })
   })
 
-  describe('QuickStart Initialization', () => {
-    it('should init with key & region & debug (3 args)', () => {
+  describe('QuickStart Initialization', function () {
+    it('should init with key & region & debug (3 args)', function () {
       expect(init()).is.not.undefined
     })
 
-    it('should init with key & region (2 args)', () => {
+    it('should init with key & region (2 args)', function () {
       const api = require('../../dist/kindred-api')
       const { REGIONS } = api
 
@@ -121,7 +123,7 @@ describe('Core', function () {
       expect(k).is.not.undefined
     })
 
-    it('should init with key & debug (2 args)', () => {
+    it('should init with key & debug (2 args)', function () {
       const api = require('../../dist/kindred-api')
       const { REGIONS } = api
 
@@ -131,17 +133,17 @@ describe('Core', function () {
     })
   })
 
-  describe('Requests', () => {
-    it('should return a promise', () => {
+  describe('Requests', function () {
+    it('should return a promise', function () {
       assert.instanceOf(init().Summoner.get({ id: 32932398 }), Promise, 'this is a promise')
     })
 
-    describe('returning callbacks', () => {
-      it('should not retry on 404s', (done) => {
+    describe('returning callbacks', function () {
+      it('should not retry on 404s', function (done) {
         const k = init()
 
         k.Summoner
-          .by.name('abcdefghichau', (err, data) => {
+          .by.name('abcdefghichau', function (err, data) {
             if (err) {
               expect(err).is.not.undefined
               done()
@@ -170,8 +172,8 @@ describe('Core', function () {
       })
     })
 
-    describe('promises', () => {
-      it('should not retry on 404s', (done) => {
+    describe('promises', function () {
+      it('should not retry on 404s', function (done) {
         const k = init()
 
         k.Summoner

@@ -10,31 +10,85 @@ require('dotenv').config()
 
 var init = require('../../../utils/init')
 
+const name = 'Chaser Cat'
+const id = 32932398
+const accId = 32932398
+
 describe('Summoner', function () {
-  describe('get', () => {
-    describe('object param', () => {
-      it('should throw on empty', () => {
+  this.timeout(0)
+
+  describe('get', function () {
+    describe('object param', function () {
+      it('should throw on empty', function () {
         assert.throws(() => init().Summoner.get(), Error)
+      })
+
+      it('should not throw on empty', function () {
+        assert.doesNotThrow(() => init().Summoner.get({ name }), Error)
+      })
+
+      it('should not throw on empty', function () {
+        assert.doesNotThrow(() => init().Summoner.get({ id }), Error)
+      })
+
+      it('should not throw on empty', function () {
+        assert.doesNotThrow(() => init().Summoner.get({ accId }), Error)
+      })
+
+      it('should be a successful call through name', function (done) {
+        init().Summoner.get({ name })
+          .then(data => done())
+          .catch(error => done())
+      })
+
+      it('should be a successful call through id', function (done) {
+        init().Summoner.get({ id })
+          .then(data => done())
+          .catch(error => done())
+      })
+
+      it('should be a successful call through accId', function (done) {
+        init().Summoner.get({ accId })
+          .then(data => done())
+          .catch(error => done())
       })
     })
 
-    describe('standard params', () => {
-      describe('by', () => {
-        describe('id', () => {
-          it('should throw on empty', () => {
+    describe('standard params', function () {
+      describe('by', function () {
+        describe('id', function () {
+          it('should throw on empty', function () {
             assert.throws(() => init().Summoner.by.id(), Error)
           })
-        })
 
-        describe('name', () => {
-          it('should throw on empty', () => {
-            assert.throws(() => init().Summoner.by.name(), Error)
+          it('should be a successful call', function (done) {
+            init().Summoner.by.id(id)
+              .then(data => done())
+              .catch(error => done())
           })
         })
 
-        describe('account', () => {
-          it('should throw on empty', () => {
+        describe('name', function () {
+          it('should throw on empty', function () {
+            assert.throws(() => init().Summoner.by.name(), Error)
+          })
+
+          it('should be a successful call', function (done) {
+            init().Summoner.by.name(name)
+              .then(data => done())
+              .catch(error => done())
+          })
+        })
+
+        describe('account', function () {
+          it('should throw on empty', function () {
             assert.throws(() => init().Summoner.by.account(), Error)
+          })
+
+          it('should be a successful call', function (done) {
+            init().Summoner.by.account(accId)
+              .then(data => done())
+              .catch(error => done())
           })
         })
       })
