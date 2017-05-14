@@ -554,12 +554,17 @@ class Kindred {
                         } else {
                           if (statusCode >= 500) {
                             if (self.debug) console.log('!!! resending promise request !!!')
+                            setTimeout(() => {
+                              () => resolve(tryRequest())
+                            }, 1000)
                             setTimeout(() => { return reject('retry') }, 1000)
                           } else if (statusCode === 429) {
                             if (self.debug) console.log('!!! resending promise request !!!')
-                            setTimeout(() => { return reject('retry') }, (response.headers['retry-after'] * 1000) + 50)
+                            setTimeout(() => {
+                              return resolve(tryRequest())
+                            }, (response.headers['retry-after'] * 1000) + 50)
                           } else if (error || statusCode >= 400) {
-                            return reject('err:', error, statusCode)
+                            return reject(statusMessage + ' : ' + chalk.yellow(reqUrl))
                           } else {
                             if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0)
                               self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body)
@@ -604,10 +609,6 @@ class Kindred {
         })
       })
     }
-
-    if (!cb) return tryRequest()
-      .catch(tryRequest).catch(tryRequest).catch(tryRequest)
-      .then(data => data)
 
     return tryRequest()
   }
