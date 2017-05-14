@@ -3,17 +3,12 @@ language: node_js
 node_js:
    - 7
    - 6
-   - 5
-   - 4
 
 branches:
   only:
     - master
 
-after_success:
-    - ./make saucelabs
-
 notifications:
-    email: false
+    email: true
 
 sudo: true
