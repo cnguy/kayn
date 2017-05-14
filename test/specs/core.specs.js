@@ -105,8 +105,38 @@ describe('Core', function () {
       assert.equal(k.spread, true)
       expect(k.limits).is.not.undefined
     })
+  })
 
-    describe('callbacks', () => {
+  describe('QuickStart Initialization', () => {
+    it('should init with key & region & debug (3 args)', () => {
+      expect(init()).is.not.undefined
+    })
+
+    it('should init with key & region (2 args)', () => {
+      const api = require('../../dist/kindred-api')
+      const { REGIONS } = api
+
+      const k = api.QuickStart(process.env.KEY, REGIONS.NORTH_AMERICA)
+
+      expect(k).is.not.undefined
+    })
+
+    it('should init with key & debug (2 args)', () => {
+      const api = require('../../dist/kindred-api')
+      const { REGIONS } = api
+
+      const k = api.QuickStart(process.env.KEY, true)
+
+      expect(k).is.not.undefined
+    })
+  })
+
+  describe('Requests', () => {
+    it('should return a promise', () => {
+      assert.instanceOf(init().Summoner.get({ id: 32932398 }), Promise, 'this is a promise')
+    })
+
+    describe('returning callbacks', () => {
       it('should not retry on 404s', (done) => {
         const k = init()
 
@@ -119,7 +149,7 @@ describe('Core', function () {
           })
       })
 
-      it('should retry on 429s until all calls are successful and returned', function (done) {
+      it('returning should retry on 429s until all calls are successful and returned', function (done) {
         // Mock call to rate limit
         init().Summoner.by.name('Contractz')
 
@@ -127,7 +157,7 @@ describe('Core', function () {
         const k = init()
 
         function count(err, data) {
-          if (data) --num
+          if (data)--num
           if (num == 0) done()
         }
 
@@ -169,36 +199,6 @@ describe('Core', function () {
             .catch(err => console.error(err))
         }
       })
-    })
-  })
-
-  describe('QuickStart Initialization', () => {
-    it('should init with key & region & debug (3 args)', () => {
-      expect(init()).is.not.undefined
-    })
-
-    it('should init with key & region (2 args)', () => {
-      const api = require('../../dist/kindred-api')
-      const { REGIONS } = api
-
-      const k = api.QuickStart(process.env.KEY, REGIONS.NORTH_AMERICA)
-
-      expect(k).is.not.undefined
-    })
-
-    it('should init with key & debug (2 args)', () => {
-      const api = require('../../dist/kindred-api')
-      const { REGIONS } = api
-
-      const k = api.QuickStart(process.env.KEY, true)
-
-      expect(k).is.not.undefined
-    })
-  })
-
-  describe('Requests', () => {
-    it('should return a promise', () => {
-      assert.instanceOf(init().Summoner.get({ id: 32932398 }), Promise, 'this is a promise')
     })
   })
 
