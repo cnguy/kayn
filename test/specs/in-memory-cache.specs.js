@@ -3,14 +3,14 @@ require('./core-utils.specs.js')
 var chai = require('chai')
 
 var expect = chai.expect,
-    should = chai.should,
-    assert = chai.assert
+  should = chai.should,
+  assert = chai.assert
 
 require('dotenv').config()
 
 var init = require('../../utils/init')
 
-describe('In-memory (JS) Cache', function() {
+describe('In-memory (JS) Cache', function () {
   describe('set/get', () => {
     it('should yield cached data', () => {
       const k = init()

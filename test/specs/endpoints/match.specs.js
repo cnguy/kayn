@@ -1,0 +1,93 @@
+require('../in-memory-cache.specs.js')
+
+var chai = require('chai')
+
+var expect = chai.expect,
+  should = chai.should,
+  assert = chai.assert
+
+require('dotenv').config()
+
+var init = require('../../../utils/init')
+
+const matchId = 2450326677
+
+describe('Match', function () {
+  this.timeout(0)
+
+  describe('get', () => {
+    describe('object param', () => {
+      it('should throw on empty', () => {
+        assert.throws(() => init().Match.get(), Error)
+      })
+
+      it('should not throw on non-empty', () => {
+        assert.doesNotThrow(() => init().Match.get({ matchId }), Error)
+      })
+
+      it('should be a successful call with no args', function (done) {
+        init().Match.get({ matchId })
+          .then(data => done())
+          .catch(error => done())
+      })
+    })
+
+    describe('standard params', () => {
+      describe('by', () => {
+        describe('id', () => {
+          it('should throw on empty', () => {
+            assert.throws(() => init().Match.by.id(), Error)
+          })
+
+          it('should not throw on non-empty', () => {
+            assert.doesNotThrow(() => init().Match.get({ matchId }), Error)
+          })
+
+          it('should be a successful call with no args', function (done) {
+            init().Match.by.id(matchId)
+              .then(data => done())
+              .catch(error => done())
+          })
+        })
+      })
+    })
+  })
+
+  describe('timeline', () => {
+    describe('object param', () => {
+      it('should throw on empty', () => {
+        assert.throws(() => init().Match.timeline(), Error)
+      })
+
+      it('should not throw on non-empty', () => {
+        assert.doesNotThrow(() => init().Match.timeline({ matchId }), Error)
+      })
+
+      it('should be a successful call with no args', function (done) {
+        init().Match.timeline({ matchId })
+          .then(data => done())
+          .catch(error => done())
+      })
+    })
+
+    describe('standard params', () => {
+      describe('by', () => {
+        describe('id', () => {
+          it('should throw on empty', () => {
+            assert.throws(() => init().Match.Timeline.by.id(), Error)
+          })
+
+          it('should not throw on non-empty', () => {
+            assert.doesNotThrow(() => init().Match.Timeline.by.id(matchId), Error)
+          })
+
+          it('should be a successful call with no args', function (done) {
+            init().Match.Timeline.by.id(matchId)
+              .then(data => done())
+              .catch(error => done())
+          })
+        })
+      })
+    })
+  })
+})

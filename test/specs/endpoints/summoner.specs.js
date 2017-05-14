@@ -3,14 +3,14 @@ require('../in-memory-cache.specs.js')
 var chai = require('chai')
 
 var expect = chai.expect,
-    should = chai.should,
-    assert = chai.assert
+  should = chai.should,
+  assert = chai.assert
 
 require('dotenv').config()
 
 var init = require('../../../utils/init')
 
-describe('Summoner', function() {
+describe('Summoner', function () {
   describe('get', () => {
     describe('object param', () => {
       it('should throw on empty', () => {

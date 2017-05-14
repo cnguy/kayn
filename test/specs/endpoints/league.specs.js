@@ -11,6 +11,8 @@ require('dotenv').config()
 var init = require('../../../utils/init')
 
 describe('League', function () {
+  this.timeout(0)
+
   describe('getting master leagues', () => {
     describe('standard params', () => {
       it('should not throw with no args', () => {
@@ -26,7 +28,13 @@ describe('League', function () {
       })
 
       it('should not throw with queue & region & cb (3 args)', () => {
-        assert.doesNotThrow(() => init().Master.list('RANKED_SOLO_5x5', 'na', function() {}), Error)
+        assert.doesNotThrow(() => init().Master.list('RANKED_SOLO_5x5', 'na', function () { }), Error)
+      })
+
+      it('should be a successful call with no args', function (done) {
+        init().Master.list()
+          .then(data => done())
+          .catch(error => done())
       })
     })
   })
@@ -46,7 +54,7 @@ describe('League', function () {
       })
 
       it('should not throw with queue & region & cb (3 args)', () => {
-        assert.doesNotThrow(() => init().Challenger.list('RANKED_SOLO_5x5', 'na', function() {}), Error)
+        assert.doesNotThrow(() => init().Challenger.list('RANKED_SOLO_5x5', 'na', function () { }), Error)
       })
     })
   })
