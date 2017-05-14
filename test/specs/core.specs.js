@@ -151,6 +151,7 @@ describe('Core', function () {
 
       it('returning should retry on 429s until all calls are successful and returned', function (done) {
         // Mock call to rate limit
+        // Make sure to use dev key
         init().Summoner.by.name('Contractz')
 
         // Begin
@@ -184,6 +185,7 @@ describe('Core', function () {
 
       it('should retry on 429s until all calls are successful and returned', function (done) {
         // Mock call to rate limit
+        // Make sure to use dev key
         init().Summoner.by.name('Contractz')
 
         const k = init()
@@ -201,5 +203,4 @@ describe('Core', function () {
       })
     })
   })
-
 })
