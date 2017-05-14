@@ -14,7 +14,7 @@ describe('Core Utils', function() {
   describe('setRegion ', () => {
     describe('through init', () => {
       it('should throw on invalid region', () => {
-        const api = require('../../dist/kindred-api.min')
+        const api = require('../../dist/kindred-api')
         const debug = true
         const garbageRegion = 'foo'
 
@@ -34,7 +34,7 @@ describe('Core Utils', function() {
 
       it('should not throw on valid region', () => {
         const k = init()
-        const nonGarbageRegion = require('../../dist/kindred-api.min').REGIONS.KOREA
+        const nonGarbageRegion = require('../../dist/kindred-api').REGIONS.KOREA
 
         assert.doesNotThrow(() => k.setRegion(nonGarbageRegion), Error)
       })
@@ -42,6 +42,11 @@ describe('Core Utils', function() {
   })
 
   describe('validName', () => {
+    it('should return false', () => {
+      const valid = init()._validName('foo%')
+      assert.equal(valid, false)
+    })
+
     it('should throw on invalid name', () => {
       // name parameters -> valid name -> sanitize name -> throw
       const garbageName = 'foo%'
@@ -56,6 +61,17 @@ describe('Core Utils', function() {
     it('should not throw on valid name 2', () => {
       // name parameters -> valid name -> sanitize name -> no throw
       assert.throws(() => init().Summoner.get('chau.isthebest'), Error)
+    })
+  })
+
+  describe('sanitizeName', () => {
+    it('should sanitize with valid name', () => {
+      const name = init()._sanitizeName('foo Bar')
+      assert.equal(name, 'foobar')
+    })
+
+    it('should throw with invalid name', () => {
+      assert.throws(() => init()._sanitizeName('foo%'), Error)
     })
   })
 })

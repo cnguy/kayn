@@ -60,6 +60,50 @@ describe('Core', function() {
 
       expect(k).is.not.undefined
     })
+
+    it('should not have any limits', () => {
+      const api = require('../../dist/kindred-api')
+
+      const debug = true
+
+      const k = new api.Kindred({
+        key: process.env.KEY, debug
+      })
+
+      expect(k.limits).is.undefined
+    })
+
+    it('should not init with spread rate limiter', () => {
+      const api = require('../../dist/kindred-api')
+
+      const debug = true
+      const LIMITS = api.LIMITS
+
+      const k = new api.Kindred({
+        key: process.env.KEY,
+        debug,
+        limits: LIMITS.DEV
+      })
+
+      expect(k.limits).is.not.undefined
+    })
+
+    it('should init with spread rate limiter', () => {
+      const api = require('../../dist/kindred-api')
+
+      const debug = true
+      const LIMITS = api.LIMITS
+
+      const k = new api.Kindred({
+        key: process.env.KEY,
+        debug,
+        limits: LIMITS.DEV,
+        spread: true
+      })
+
+      assert(k.spread, true)
+      expect(k.limits).is.not.undefined
+    })
   })
 
   describe('QuickStart Initialization', () => {
