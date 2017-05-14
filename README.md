@@ -1,5 +1,5 @@
 # Kindred
-Kindred is a Node.js wrapper with built-in rate-limiting (enforced per region, burst/spread), caching (in-memory and Redis), and parameter checking on top of [Riot's League of Legends API](http://www.developer.riotgames.com).
+Node.js League of Legends v3 API wrapper with built-in rate-limiting (enforced per region, burst/spread, follows retry headers), caching (in-memory, Redis), automatic retries, and parameter checking on top of [Riot's League of Legends API](http://www.developer.riotgames.com).
 
 To get started, run one of the following!
 ```
@@ -255,7 +255,7 @@ k.Static.Champion
 
 # Known Issues
 
-## [~~Burst rate limiter would not work well for production.~~](https://github.com/ChauTNguyen/kindred-api/wiki/Rate-Limiter#spread)
+## [~~Burst rate limiter would not work well for production.~~ (FIXED 2.0.39)](https://github.com/ChauTNguyen/kindred-api/commit/8089717995d42ae2b222b18c57f79c0fb8e11a27)
 
 Good explanation by Matviy##4429 in #RiotAPIDevCommunity
 
@@ -278,7 +278,7 @@ The difference between my site and other applications people seem to be working 
 
 ## ~~Rate Limiter is not as optimized as it should be.~~ (FIXED 2.0.33)
 
-## ~~Promises retry on 404.~~ (FIXED 2.0.43)
+## [~~Promises retry on 404.~~ (FIXED 2.0.43)](https://github.com/ChauTNguyen/kindred-api/commit/3fd4ac7ac04aa3a992098b22e987807f170efcc6)
 
 This is problematic because certain calls such as getCurrentGame, which will hit 404's often, will always retry up to 3 times.
 
