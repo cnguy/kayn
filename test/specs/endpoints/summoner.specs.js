@@ -13,7 +13,7 @@ var init = require('../../../utils/init')
 describe('Summoner', function() {
   describe('get', () => {
     describe('object param', () => {
-      it('should fail on empty', () => {
+      it('should throw on empty', () => {
         assert.throws(() => init().Summoner.get(), Error)
       })
     })
@@ -21,19 +21,19 @@ describe('Summoner', function() {
     describe('standard params', () => {
       describe('by', () => {
         describe('id', () => {
-          it('should fail on empty', () => {
+          it('should throw on empty', () => {
             assert.throws(() => init().Summoner.by.id(), Error)
           })
         })
 
         describe('name', () => {
-          it('should fail on empty', () => {
+          it('should throw on empty', () => {
             assert.throws(() => init().Summoner.by.name(), Error)
           })
         })
 
         describe('account', () => {
-          it('should fail on empty', () => {
+          it('should throw on empty', () => {
             assert.throws(() => init().Summoner.by.account(), Error)
           })
         })

@@ -23,7 +23,7 @@ describe('Status', function () {
     })
 
     describe('standard params', () => {
-      it('should not fail on empty', () => {
+      it('should not throw on empty', () => {
         assert.doesNotThrow(() => init().Status.get(), Error)
       })
     })
