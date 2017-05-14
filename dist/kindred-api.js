@@ -164,7 +164,7 @@
     'STATUS': 'status',
     'MASTERIES': 'platform',
     'MATCH': 'match',
-    'MATCH_LIST': null,
+    'MATCHLIST': null,
     'RUNES': 'platform',
     'RUNES_MASTERIES': 'platform',
     'SPECTATOR': 'spectator',
@@ -198,7 +198,7 @@
     STATIC: cacheTimers.MONTH,
     STATUS: cacheTimers.NONE,
     MATCH: cacheTimers.MONTH,
-    MATCH_LIST: cacheTimers.ONE_HOUR,
+    MATCHLIST: cacheTimers.ONE_HOUR,
     RUNES_MASTERIES: cacheTimers.WEEK,
     SPECTATOR: cacheTimers.NONE,
     STATS: cacheTimers.HOUR,
@@ -319,7 +319,7 @@
     'STATIC_DATA': 3,
     'STATUS': 3,
     'MATCH': 3,
-    'MATCH_LIST': 2.2,
+    'MATCHLIST': 2.2,
     'RUNES_MASTERIES': 3,
     'SPECTATOR': 3,
     'STATS': 1.3,
@@ -472,7 +472,7 @@
         STATIC: 0,
         STATUS: 0,
         MATCH: 0,
-        MATCH_LIST: 0,
+        MATCHLIST: 0,
         RUNES_MASTERIES: 0,
         STATS: 0,
         SUMMONER: 0
@@ -1196,9 +1196,9 @@
             options = _ref11.options;
 
         return this._baseRequest({
-          endUrl: 'v' + versions.MATCH_LIST + '/matchlist/by-summoner/' + endUrl, region: region, options: options,
+          endUrl: 'v' + versions.MATCHLIST + '/matchlist/by-summoner/' + endUrl, region: region, options: options,
           cacheParams: {
-            ttl: this.CACHE_TIMERS.MATCH_LIST
+            ttl: this.CACHE_TIMERS.MATCHLIST
           }
         }, cb);
       }

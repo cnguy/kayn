@@ -101,7 +101,7 @@ describe('Core', function() {
         spread: true
       })
 
-      assert(k.spread, true)
+      assert.equal(k.spread, true)
       expect(k.limits).is.not.undefined
     })
   })

@@ -78,7 +78,7 @@ class Kindred {
       STATIC: 0,
       STATUS: 0,
       MATCH: 0,
-      MATCH_LIST: 0,
+      MATCHLIST: 0,
       RUNES_MASTERIES: 0,
       STATS: 0,
       SUMMONER: 0
@@ -696,9 +696,9 @@ class Kindred {
 
   _matchlistRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
-      endUrl: `v${VERSIONS.MATCH_LIST}/matchlist/by-summoner/${endUrl}`, region, options,
+      endUrl: `v${VERSIONS.MATCHLIST}/matchlist/by-summoner/${endUrl}`, region, options,
       cacheParams: {
-        ttl: this.CACHE_TIMERS.MATCH_LIST
+        ttl: this.CACHE_TIMERS.MATCHLIST
       }
     }, cb)
   }
@@ -879,7 +879,7 @@ class Kindred {
   }
 
   /* SPECTATOR-V3 */
-  getCurrentGame({ // TODO: Rework promise requests for 404's.
+  getCurrentGame({
     region,
     accountId, accId,
     id, summonerId, playerId,

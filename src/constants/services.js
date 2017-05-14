@@ -6,7 +6,7 @@ const services = {
   'STATUS': 'status',
   'MASTERIES': 'platform',
   'MATCH': 'match',
-  'MATCH_LIST': null,
+  'MATCHLIST': null,
   'RUNES': 'platform',
   'RUNES_MASTERIES': 'platform',
   'SPECTATOR': 'spectator',
