@@ -11,7 +11,23 @@ require('dotenv').config()
 var init = require('../../utils/init')
 
 describe('Core Utils', function () {
-  describe('setRegion ', function () {
+  describe('makeUrl', function () {
+    it('should make the correct url for v3', function () {
+      const endUrl = 'summoner/v3/summoners/by-name/contractz'
+      const testUrl = 'https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/contractz'
+      const url = init()._makeUrl(endUrl, 'na')
+      assert.equal(url, testUrl)
+    })
+
+    it('should make the correct url for v1-2', function () {
+      const endUrl = 'v1.3/game/by-summoner/32932398/recent'
+      const testUrl = 'https://na.api.riotgames.com/api/lol/na/v1.3/game/by-summoner/32932398/recent'
+      const url = init()._makeUrl(endUrl, 'na')
+      assert.equal(url, testUrl)
+    })
+  })
+
+  describe('setRegion', function () {
     describe('through init', function () {
       it('should throw on invalid region', function () {
         const api = require('../../dist/kindred-api')

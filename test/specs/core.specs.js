@@ -10,6 +10,7 @@ var init = require('../../utils/init')
 
 describe('Core', function () {
   this.timeout(0)
+
   it('Kindred exists', function () {
     expect(
       require('../../dist/kindred-api')
@@ -76,7 +77,7 @@ describe('Core', function () {
       expect(k.limits).is.undefined
     })
 
-    it('should not init with spread rate limiter', () => {
+    it('should not init with spread rate limiter', function () {
       const api = require('../../dist/kindred-api')
 
       const debug = true
@@ -178,8 +179,8 @@ describe('Core', function () {
 
         k.Summoner
           .by.name('abcdefghichau')
-          .then(data => data)
-          .catch(error => {
+          .then(function (data) { return data })
+          .catch(function (error) {
             expect(error).is.not.undefined
             done()
           })
