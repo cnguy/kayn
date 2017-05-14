@@ -105,10 +105,23 @@ describe('Core', function() {
       expect(k.limits).is.not.undefined
     })
 
-    describe('promises', () => {
+    describe('callbacks', () => {
       it('should not retry on 404s', (done) => {
         const k = init()
 
+        k.Summoner
+         .by.name('abcdefghichau', (err, data) => {
+           if (err) {
+             expect(err).is.not.undefined
+             done()
+           }
+         })
+      })
+    })
+
+    describe('promises', () => {
+      it('should not retry on 404s', (done) => {
+        const k = init()
 
         k.Summoner
          .by.name('abcdefghichau')

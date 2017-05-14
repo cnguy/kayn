@@ -3,9 +3,9 @@ const init = function() {
 
   const api = require('../dist/kindred-api')
   const { REGIONS } = api
-  const debug = true
+  const debug = false
 
-  const k = api.QuickStart(process.env.KEY, REGIONS.NORTH_AMERICA, true)
+  const k = api.QuickStart(process.env.KEY, REGIONS.NORTH_AMERICA, debug)
 
   return k
 }
