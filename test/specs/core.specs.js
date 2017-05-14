@@ -1,16 +1,17 @@
 var chai = require('chai')
 
 var expect = chai.expect,
-    should = chai.should,
-    assert = chai.assert
+  should = chai.should,
+  assert = chai.assert
 
 require('dotenv').config()
 
 var init = require('../../utils/init')
 
-describe('Core', function() {
+describe('Core', function () {
+  this.timeout(0)
   it('Kindred exists', () => expect(
-      require('../../dist/kindred-api')
+    require('../../dist/kindred-api')
   ).is.not.undefined)
 
   describe('Standard Initialization', () => {
@@ -110,12 +111,31 @@ describe('Core', function() {
         const k = init()
 
         k.Summoner
-         .by.name('abcdefghichau', (err, data) => {
-           if (err) {
-             expect(err).is.not.undefined
-             done()
-           }
-         })
+          .by.name('abcdefghichau', (err, data) => {
+            if (err) {
+              expect(err).is.not.undefined
+              done()
+            }
+          })
+      })
+
+      it('should retry on 429s until all calls are successful and returned', function (done) {
+        // Mock call to rate limit
+        init().Summoner.by.name('Contractz')
+
+        // Begin
+        const k = init()
+
+        function count(err, data) {
+          if (data) console.log(--num)
+          if (num == 0) done()
+        }
+
+        let num = 10
+        let finalData = []
+        for (var i = 0; i < 10; ++i) {
+          k.Champion.list('na', count)
+        }
       })
     })
 
@@ -124,12 +144,34 @@ describe('Core', function() {
         const k = init()
 
         k.Summoner
-         .by.name('abcdefghichau')
-         .then(data => data)
-         .catch(error => {
-           expect(error).is.not.undefined
-           done()
-         })
+          .by.name('abcdefghichau')
+          .then(data => data)
+          .catch(error => {
+            expect(error).is.not.undefined
+            done()
+          })
+      })
+
+      it('should retry on 429s until all calls are successful and returned', function (done) {
+        // Mock call to rate limit
+        init().Summoner.by.name('Contractz')
+
+        const k = init()
+
+        let num = 10
+        let finalData = []
+
+        for (var i = 0; i < 10; ++i) {
+          k.Champion.list('na')
+            .then(data => {
+              console.log(--num)
+              finalData.push(data)
+              if (num == 0) {
+                done()
+              }
+            })
+            .catch(err => console.error(err))
+        }
       })
     })
   })
