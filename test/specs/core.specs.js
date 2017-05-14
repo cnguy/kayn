@@ -127,12 +127,12 @@ describe('Core', function () {
         const k = init()
 
         function count(err, data) {
-          if (data) console.log(--num)
+          if (data) --num
           if (num == 0) done()
         }
 
         let num = 10
-        let finalData = []
+
         for (var i = 0; i < 10; ++i) {
           k.Champion.list('na', count)
         }
@@ -159,16 +159,12 @@ describe('Core', function () {
         const k = init()
 
         let num = 10
-        let finalData = []
 
         for (var i = 0; i < 10; ++i) {
           k.Champion.list('na')
             .then(data => {
-              console.log(--num)
-              finalData.push(data)
-              if (num == 0) {
-                done()
-              }
+              --num
+              if (num == 0) done()
             })
             .catch(err => console.error(err))
         }
