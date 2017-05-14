@@ -13,7 +13,7 @@ var init = require('../../../utils/init')
 describe('Runes', function () {
   describe('get', function () {
     describe('object param', function () {
-      it('should fail on empty', function () {
+      it('should throw on empty', function () {
         assert.throws(() => init().Runes.get(), Error)
       })
     })
@@ -21,19 +21,19 @@ describe('Runes', function () {
     describe('standard params', function () {
       describe('by', function () {
         describe('id', function () {
-          it('should fail on empty', function () {
+          it('should throw on empty', function () {
             assert.throws(() => init().Runes.by.id(), Error)
           })
         })
 
         describe('name', function () {
-          it('should fail on empty', function () {
+          it('should throw on empty', function () {
             assert.throws(() => init().Runes.by.name(), Error)
           })
         })
 
         describe('account', function () {
-          it('should fail on empty', function () {
+          it('should throw on empty', function () {
             assert.throws(() => init().Runes.by.account(), Error)
           })
         })

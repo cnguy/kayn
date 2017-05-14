@@ -146,8 +146,10 @@ describe('Core', function () {
         k.Summoner
           .by.name('abcdefghichau', function (err, data) {
             if (err) {
-              expect(err).is.not.undefined
-              done()
+              if (err.lastIndexOf("404") !== -1) {
+                expect(err).is.not.undefined
+                done()
+              }
             }
           })
       })
@@ -180,9 +182,11 @@ describe('Core', function () {
         k.Summoner
           .by.name('abcdefghichau')
           .then(function (data) { return data })
-          .catch(function (error) {
-            expect(error).is.not.undefined
-            done()
+          .catch(function (err) {
+            if (err.lastIndexOf("404") !== -1) {
+              expect(err).is.not.undefined
+              done()
+            }
           })
       })
 
