@@ -1012,15 +1012,20 @@
                             if (statusCode >= 500) {
                               if (self.debug) console.log('!!! resending promise request !!!');
                               setTimeout(function () {
+                                (function () {
+                                  return resolve(tryRequest());
+                                });
+                              }, 1000);
+                              setTimeout(function () {
                                 return reject('retry');
                               }, 1000);
                             } else if (statusCode === 429) {
                               if (self.debug) console.log('!!! resending promise request !!!');
                               setTimeout(function () {
-                                return reject('retry');
+                                return resolve(tryRequest());
                               }, response.headers['retry-after'] * 1000 + 50);
                             } else if (error || statusCode >= 400) {
-                              return reject('err:', error, statusCode);
+                              return reject(statusMessage + ' : ' + chalk.yellow(reqUrl));
                             } else {
                               if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0) self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body);
                               return resolve(JSON.parse(body));
@@ -1061,10 +1066,6 @@
             });
           });
         };
-
-        if (!cb) return tryRequest().catch(tryRequest).catch(tryRequest).catch(tryRequest).then(function (data) {
-          return data;
-        });
 
         return tryRequest();
       }

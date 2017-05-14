@@ -30,7 +30,7 @@ Check out [SUMMONER-V3](https://github.com/ChauTNguyen/kindred-api/wiki/SUMMONER
 * All standard endpoints covered but tournament endpoints.
 * Supports both **callbacks** and **promises**.
 * **Burst/Spread** rate limiter that is **enforced per region** and **follows retry headers**.
-    * Retries on 429 and >= 500. (Doesn't retry on 404)
+    * **Retries** on 429 and >= 500 **until all calls are successful**. (Doesn't retry on 404)
 * Built-in **parameter checks** so you can hopefully refer to documentation less! :)
 * Built-in **caching** (in-memory and Redis).
     * **Customized expiration timers**. You can set a timer for each endpoint type. Refer to [Caching](https://github.com/ChauTNguyen/kindred-api/wiki/Caching) for more info.
@@ -278,7 +278,7 @@ The difference between my site and other applications people seem to be working 
 
 ## ~~Rate Limiter is not as optimized as it should be.~~ (FIXED 2.0.33)
 
-## Promises retry on 404.
+## ~~Promises retry on 404.~~ (FIXED 2.0.43)
 
 This is problematic because certain calls such as getCurrentGame, which will hit 404's often, will always retry up to 3 times.
 
