@@ -989,20 +989,19 @@
 
                           if (typeof callback === 'function') {
                             if (statusCode >= 500) {
-                              if (self.debug) console.log('!!! resending request !!!');
+                              if (self.debug) console.log('Resending callback request.\n');
                               setTimeout(function () {
-                                sendRequest.bind(self)(callback);
+                                return sendRequest.bind(self)(callback);
                               }, 1000);
-                            }
-
-                            if (statusCode === 429) {
-                              if (self.debug) console.log('!!! resending request !!!');
+                              return;
+                            } else if (statusCode === 429) {
+                              if (self.debug) console.log('Resending callback request.\n');
+                              var retry = response.headers['retry-after'] * 1000 + 50;
                               setTimeout(function () {
-                                sendRequest.bind(self)(callback);
-                              }, response.headers['retry-after'] * 1000 + 50);
-                            }
-
-                            if (statusCode >= 400) {
+                                return sendRequest.bind(self)(callback);
+                              }, retry);
+                              return;
+                            } else if (statusCode >= 400) {
                               return callback(statusMessage + ' : ' + chalk.yellow(reqUrl));
                             } else {
                               if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0) self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body);
@@ -1010,21 +1009,19 @@
                             }
                           } else {
                             if (statusCode >= 500) {
-                              if (self.debug) console.log('!!! resending promise request !!!');
-                              setTimeout(function () {
-                                (function () {
-                                  return resolve(tryRequest());
-                                });
-                              }, 1000);
-                              setTimeout(function () {
-                                return reject('retry');
-                              }, 1000);
-                            } else if (statusCode === 429) {
-                              if (self.debug) console.log('!!! resending promise request !!!');
+                              if (self.debug) console.log('Resending promise request.\n');
                               setTimeout(function () {
                                 return resolve(tryRequest());
-                              }, response.headers['retry-after'] * 1000 + 50);
-                            } else if (error || statusCode >= 400) {
+                              }, 1000);
+                              return;
+                            } else if (statusCode === 429) {
+                              if (self.debug) console.log('Resending promise request.\n');
+                              var _retry = response.headers['retry-after'] * 1000 + 50;
+                              setTimeout(function () {
+                                return resolve(tryRequest());
+                              }, _retry);
+                              return;
+                            } else if (statusCode >= 400) {
                               return reject(statusMessage + ' : ' + chalk.yellow(reqUrl));
                             } else {
                               if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0) self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body);

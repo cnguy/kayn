@@ -533,18 +533,15 @@ class Kindred {
 
                         if (typeof callback === 'function') {
                           if (statusCode >= 500) {
-                            if (self.debug) console.log('!!! resending request !!!')
-                            setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
-                          }
-
-                          if (statusCode === 429) {
-                            if (self.debug) console.log('!!! resending request !!!')
-                            setTimeout(() => {
-                              sendRequest.bind(self)(callback)
-                            }, (response.headers['retry-after'] * 1000) + 50)
-                          }
-
-                          if (statusCode >= 400) {
+                            if (self.debug) console.log('Resending callback request.\n')
+                            setTimeout(() => sendRequest.bind(self)(callback), 1000)
+                            return
+                          } else if (statusCode === 429) {
+                            if (self.debug) console.log('Resending callback request.\n')
+                            const retry = response.headers['retry-after'] * 1000 + 50
+                            setTimeout(() => sendRequest.bind(self)(callback), retry)
+                            return
+                          } else if (statusCode >= 400) {
                             return callback(statusMessage + ' : ' + chalk.yellow(reqUrl))
                           } else {
                             if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0)
@@ -553,17 +550,15 @@ class Kindred {
                           }
                         } else {
                           if (statusCode >= 500) {
-                            if (self.debug) console.log('!!! resending promise request !!!')
-                            setTimeout(() => {
-                              () => resolve(tryRequest())
-                            }, 1000)
-                            setTimeout(() => { return reject('retry') }, 1000)
+                            if (self.debug) console.log('Resending promise request.\n')
+                            setTimeout(() => resolve(tryRequest()), 1000)
+                            return
                           } else if (statusCode === 429) {
-                            if (self.debug) console.log('!!! resending promise request !!!')
-                            setTimeout(() => {
-                              return resolve(tryRequest())
-                            }, (response.headers['retry-after'] * 1000) + 50)
-                          } else if (error || statusCode >= 400) {
+                            if (self.debug) console.log('Resending promise request.\n')
+                            const retry = response.headers['retry-after'] * 1000 + 50
+                            setTimeout(() => resolve(tryRequest()), retry)
+                            return
+                          } else if (statusCode >= 400) {
                             return reject(statusMessage + ' : ' + chalk.yellow(reqUrl))
                           } else {
                             if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0)
