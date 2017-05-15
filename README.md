@@ -41,6 +41,9 @@ and pass in things really cleanly instead of worrying about the order of paramet
 
 These functions take in an optional `region` and an optional `options` parameter (whenever possible) WITHIN the same first parameter. Most of the time, when they're called, they look like this:
 
+* [Object + Callback Functions](#object-callback-functions)
+* [Standard Functions](#standard-functions)
+
 ## Object + Callback Functions
 ```javascript
 const config = {
@@ -118,6 +121,8 @@ k.Summoner.get(summonerConfig, KindredAPI.print)
 ## Standard Functions
 ```javascript
 // I included normal methods too though.
+const QUEUES = KindredAPI.QUEUE_TYPES
+
 k.Summoner.by.name('Contractz', KindredAPI.print)
 
 const opts = {
@@ -126,6 +131,25 @@ const opts = {
 }
 
 k.Matchlist.by.name('Contractz', opts, KindredAPI.print)
+
+k.Matchlist.by.name('Contractz', KindredAPI.print)
+
+k.Matchlist
+ .by.name('Contractz')
+ .then(data => console.log(data))
+ .catch(error => console.error(error))
+
+k.Matchlist
+ .by.name('sktt1peanut', REGIONS.KOREA)
+ .then(data => console.log(data))
+ .catch(error => console.error(error))
+
+k.Matchlist
+ .by.name('sktt1peanut', opts, REGIONS.KOREA)
+ .then(data => console.log(data))
+ .catch(error => console.error(error))
+
+// Notice how parameters are somewhat flexible! This is the case for all functions.
 ```
 
 Make sure to check out the [Wiki](https://github.com/ChauTNguyen/kindred-api/wiki)
