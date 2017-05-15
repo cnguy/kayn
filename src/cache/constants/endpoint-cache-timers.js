@@ -11,7 +11,7 @@ const endpointCacheTimers = {
   STATIC: cacheTimers.MONTH,
   STATUS: cacheTimers.NONE,
   MATCH: cacheTimers.MONTH,
-  MATCH_LIST: cacheTimers.ONE_HOUR,
+  MATCHLIST: cacheTimers.ONE_HOUR,
   RUNES_MASTERIES: cacheTimers.WEEK,
   SPECTATOR: cacheTimers.NONE,
   STATS: cacheTimers.HOUR,

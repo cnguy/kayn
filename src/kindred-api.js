@@ -46,7 +46,7 @@ class Kindred {
     if (!this.defaultRegion) {
       throw new Error(
         `${chalk.red(`setRegion() by Kindred failed: ${chalk.yellow(defaultRegion)} is an invalid region.`)}\n`
-        + `${(chalk.red(`Try importing ${chalk.yellow("require('./dist/kindred-api').REGIONS")} and using one of those values instead.`))}`
+        + `${(chalk.red(`Try importing ${chalk.yellow('require(\'./dist/kindred-api\').REGIONS')} and using one of those values instead.`))}`
       )
     }
 
@@ -78,7 +78,7 @@ class Kindred {
       STATIC: 0,
       STATUS: 0,
       MATCH: 0,
-      MATCH_LIST: 0,
+      MATCHLIST: 0,
       RUNES_MASTERIES: 0,
       STATS: 0,
       SUMMONER: 0
@@ -134,7 +134,7 @@ class Kindred {
       getTotalScore: this.getTotalChampMasteryScore.bind(this),
       totalScore: this.getTotalChampMasteryScore.bind(this),
       total: this.getTotalChampMasteryScore.bind(this),
-      score: this.getTotalChampMasteryScore.bind(this),
+      score: this.getTotalChampMasteryScore.bind(this)
     }
 
     this.CurrentGame = {
@@ -454,8 +454,8 @@ class Kindred {
   _makeUrl(query, region, staticReq, status, observerMode, championMastery) {
     const mid = staticReq ? '' : `${region}/`
     const oldPrefix = !status && !observerMode && !championMastery ? `api/lol/${mid}` : ''
-    const prefix = `lol/`// `api/lol/${mid}`
-    const base = 'api.riotgames.com' // future: api.pvp.net
+    const prefix = 'lol/'
+    const base = 'api.riotgames.com'
 
     const oldUrl = `https://${region}.api.riotgames.com/${oldPrefix}${encodeURI(query)}`
     const newUrl = `https://${PLATFORM_IDS[REGIONS_BACK[region]].toLowerCase()}.${base}/${prefix}${encodeURI(query)}`
@@ -533,18 +533,15 @@ class Kindred {
 
                         if (typeof callback === 'function') {
                           if (statusCode >= 500) {
-                            if (self.debug) console.log('!!! resending request !!!')
-                            setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
-                          }
-
-                          if (statusCode === 429) {
-                            if (self.debug) console.log('!!! resending request !!!')
-                            setTimeout(() => {
-                              sendRequest.bind(self)(callback)
-                            }, (response.headers['retry-after'] * 1000) + 50)
-                          }
-
-                          if (statusCode >= 400) {
+                            if (self.debug) console.log('Resending callback request.\n')
+                            setTimeout(() => sendRequest.bind(self)(callback), 1000)
+                            return
+                          } else if (statusCode === 429) {
+                            if (self.debug) console.log('Resending callback request.\n')
+                            const retry = response.headers['retry-after'] * 1000 + 50
+                            setTimeout(() => sendRequest.bind(self)(callback), retry)
+                            return
+                          } else if (statusCode >= 400) {
                             return callback(statusMessage + ' : ' + chalk.yellow(reqUrl))
                           } else {
                             if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0)
@@ -553,17 +550,15 @@ class Kindred {
                           }
                         } else {
                           if (statusCode >= 500) {
-                            if (self.debug) console.log('!!! resending promise request !!!')
-                            setTimeout(() => {
-                              () => resolve(tryRequest())
-                            }, 1000)
-                            setTimeout(() => { return reject('retry') }, 1000)
+                            if (self.debug) console.log('Resending promise request.\n')
+                            setTimeout(() => resolve(tryRequest()), 1000)
+                            return
                           } else if (statusCode === 429) {
-                            if (self.debug) console.log('!!! resending promise request !!!')
-                            setTimeout(() => {
-                              return resolve(tryRequest())
-                            }, (response.headers['retry-after'] * 1000) + 50)
-                          } else if (error || statusCode >= 400) {
+                            if (self.debug) console.log('Resending promise request.\n')
+                            const retry = response.headers['retry-after'] * 1000 + 50
+                            setTimeout(() => resolve(tryRequest()), retry)
+                            return
+                          } else if (statusCode >= 400) {
                             return reject(statusMessage + ' : ' + chalk.yellow(reqUrl))
                           } else {
                             if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0)
@@ -696,9 +691,9 @@ class Kindred {
 
   _matchlistRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
-      endUrl: `v${VERSIONS.MATCH_LIST}/matchlist/by-summoner/${endUrl}`, region, options,
+      endUrl: `v${VERSIONS.MATCHLIST}/matchlist/by-summoner/${endUrl}`, region, options,
       cacheParams: {
-        ttl: this.CACHE_TIMERS.MATCH_LIST
+        ttl: this.CACHE_TIMERS.MATCHLIST
       }
     }, cb)
   }
@@ -741,7 +736,7 @@ class Kindred {
 
   _logError(message, expected) {
     throw new Error(
-      chalk.bold.yellow(message) + " " + chalk.red('request') + " " + chalk.bold.red('FAILED') + chalk.red(`; ${expected}`)
+      chalk.bold.yellow(message) + ' ' + chalk.red('request') + ' ' + chalk.bold.red('FAILED') + chalk.red(`; ${expected}`)
     )
   }
 
@@ -751,7 +746,7 @@ class Kindred {
     if (!this.defaultRegion)
       throw new Error(
         `${chalk.red(`setRegion() by Kindred failed: ${chalk.yellow(region)} is an invalid region.`)}\n`
-        + `${(chalk.red(`Try importing ${chalk.yellow("require('./dist/kindred-api').REGIONS")} and using one of those values instead.`))}`
+        + `${(chalk.red(`Try importing ${chalk.yellow('require(\'./dist/kindred-api\').REGIONS')} and using one of those values instead.`))}`
       )
   }
 
@@ -879,7 +874,7 @@ class Kindred {
   }
 
   /* SPECTATOR-V3 */
-  getCurrentGame({ // TODO: Rework promise requests for 404's.
+  getCurrentGame({
     region,
     accountId, accId,
     id, summonerId, playerId,
@@ -1278,7 +1273,7 @@ class Kindred {
       } else {
         return this._logError(
           this.getShardStatus.name,
-          `invalid region!`
+          'invalid region!'
         )
       }
     }
@@ -2247,7 +2242,7 @@ function QuickStart(apiKey, region, debug) {
     defaultRegion: region,
     debug,
     limits: LIMITS.DEV,
-    cacheOptions: CACHE_TYPES[0],
+    cacheOptions: CACHE_TYPES[0]
   })
 }
 

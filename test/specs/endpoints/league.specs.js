@@ -1,3 +1,4 @@
+/* eslint-disable max-nested-callbacks */
 require('../in-memory-cache.specs.js')
 
 var chai = require('chai')
@@ -11,42 +12,62 @@ require('dotenv').config()
 var init = require('../../../utils/init')
 
 describe('League', function () {
-  describe('getting master leagues', () => {
-    describe('standard params', () => {
-      it('should work with no args', () => {
+  this.timeout(0)
+
+  describe('getting master leagues', function () {
+    describe('standard params', function () {
+      it('should not throw with no args', function () {
         assert.doesNotThrow(() => init().Master.list(), Error)
       })
 
-      it('should work with queue', () => {
+      it('should throw with invalid queue type', function () {
+        assert.throws(() => init().Master.list(420), Error)
+      })
+
+      it('should not throw with queue', function () {
         assert.doesNotThrow(() => init().Master.list('RANKED_SOLO_5x5'), Error)
       })
 
-      it('should work with queue & region (2 args)', () => {
+      it('should not throw with queue & region (2 args)', function () {
         assert.doesNotThrow(() => init().Master.list('RANKED_SOLO_5x5', 'na'), Error)
       })
 
-      it('should work with queue & region & cb (3 args)', () => {
-        assert.doesNotThrow(() => init().Master.list('RANKED_SOLO_5x5', 'na', function() {}), Error)
+      it('should not throw with queue & region & cb (3 args)', function () {
+        assert.doesNotThrow(() => init().Master.list('RANKED_SOLO_5x5', 'na', function () { }), Error)
+      })
+
+      it('should be a successful call with no args', function (done) {
+        init().Master.list()
+          .then(data => done())
+          .catch(error => done())
       })
     })
   })
 
-  describe('getting challenger leagues', () => {
-    describe('standard params', () => {
-      it('should work with no args', () => {
+  describe('getting challenger leagues', function () {
+    describe('standard params', function () {
+      it('should not throw with no args', function () {
         assert.doesNotThrow(() => init().Challenger.list(), Error)
       })
 
-      it('should work with queue', () => {
+      it('should throw with invalid queue type', function () {
+        assert.throws(() => init().Challenger.list(420), Error)
+        /*
+          This is not a 420 joke, 420 is TEAM_BUILDER_RANKED_SOLO_5x5's
+          numeric constant.
+        */
+      })
+
+      it('should not throw with queue', function () {
         assert.doesNotThrow(() => init().Challenger.list('RANKED_SOLO_5x5'), Error)
       })
 
-      it('should work with queue & region (2 args)', () => {
+      it('should not throw with queue & region (2 args)', function () {
         assert.doesNotThrow(() => init().Challenger.list('RANKED_SOLO_5x5', 'na'), Error)
       })
 
-      it('should work with queue & region & cb (3 args)', () => {
-        assert.doesNotThrow(() => init().Challenger.list('RANKED_SOLO_5x5', 'na', function() {}), Error)
+      it('should not throw with queue & region & cb (3 args)', function () {
+        assert.doesNotThrow(() => init().Challenger.list('RANKED_SOLO_5x5', 'na', function () { }), Error)
       })
     })
   })

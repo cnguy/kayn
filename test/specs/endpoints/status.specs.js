@@ -1,3 +1,4 @@
+/* eslint-disable max-nested-callbacks */
 require('../in-memory-cache.specs.js')
 
 var chai = require('chai')
@@ -11,19 +12,19 @@ require('dotenv').config()
 var init = require('../../../utils/init')
 
 describe('Status', function () {
-  describe('get', () => {
-    describe('object param', () => {
-      it('should not throw on empty', () => {
+  describe('get', function () {
+    describe('object param', function () {
+      it('should not throw on empty', function () {
         assert.doesNotThrow(() => init().Status.get(), Error)
       })
 
-      it('should throw on invalid region', () => {
+      it('should throw on invalid region', function () {
         assert.throw(() => init().Status.get('garbage'), Error)
       })
     })
 
-    describe('standard params', () => {
-      it('should not fail on empty', () => {
+    describe('standard params', function () {
+      it('should not throw on empty', function () {
         assert.doesNotThrow(() => init().Status.get(), Error)
       })
     })

@@ -164,7 +164,7 @@
     'STATUS': 'status',
     'MASTERIES': 'platform',
     'MATCH': 'match',
-    'MATCH_LIST': null,
+    'MATCHLIST': null,
     'RUNES': 'platform',
     'RUNES_MASTERIES': 'platform',
     'SPECTATOR': 'spectator',
@@ -198,7 +198,7 @@
     STATIC: cacheTimers.MONTH,
     STATUS: cacheTimers.NONE,
     MATCH: cacheTimers.MONTH,
-    MATCH_LIST: cacheTimers.ONE_HOUR,
+    MATCHLIST: cacheTimers.ONE_HOUR,
     RUNES_MASTERIES: cacheTimers.WEEK,
     SPECTATOR: cacheTimers.NONE,
     STATS: cacheTimers.HOUR,
@@ -319,7 +319,7 @@
     'STATIC_DATA': 3,
     'STATUS': 3,
     'MATCH': 3,
-    'MATCH_LIST': 2.2,
+    'MATCHLIST': 2.2,
     'RUNES_MASTERIES': 3,
     'SPECTATOR': 3,
     'STATS': 1.3,
@@ -444,7 +444,7 @@
       this.defaultRegion = check(defaultRegion) ? defaultRegion : undefined;
 
       if (!this.defaultRegion) {
-        throw new Error(chalk.red('setRegion() by Kindred failed: ' + chalk.yellow(defaultRegion) + ' is an invalid region.') + '\n' + ('' + chalk.red('Try importing ' + chalk.yellow("require('./dist/kindred-api').REGIONS") + ' and using one of those values instead.')));
+        throw new Error(chalk.red('setRegion() by Kindred failed: ' + chalk.yellow(defaultRegion) + ' is an invalid region.') + '\n' + ('' + chalk.red('Try importing ' + chalk.yellow('require(\'./dist/kindred-api\').REGIONS') + ' and using one of those values instead.')));
       }
 
       this.debug = debug;
@@ -472,7 +472,7 @@
         STATIC: 0,
         STATUS: 0,
         MATCH: 0,
-        MATCH_LIST: 0,
+        MATCHLIST: 0,
         RUNES_MASTERIES: 0,
         STATS: 0,
         SUMMONER: 0
@@ -989,20 +989,19 @@
 
                           if (typeof callback === 'function') {
                             if (statusCode >= 500) {
-                              if (self.debug) console.log('!!! resending request !!!');
+                              if (self.debug) console.log('Resending callback request.\n');
                               setTimeout(function () {
-                                sendRequest.bind(self)(callback);
+                                return sendRequest.bind(self)(callback);
                               }, 1000);
-                            }
-
-                            if (statusCode === 429) {
-                              if (self.debug) console.log('!!! resending request !!!');
+                              return;
+                            } else if (statusCode === 429) {
+                              if (self.debug) console.log('Resending callback request.\n');
+                              var retry = response.headers['retry-after'] * 1000 + 50;
                               setTimeout(function () {
-                                sendRequest.bind(self)(callback);
-                              }, response.headers['retry-after'] * 1000 + 50);
-                            }
-
-                            if (statusCode >= 400) {
+                                return sendRequest.bind(self)(callback);
+                              }, retry);
+                              return;
+                            } else if (statusCode >= 400) {
                               return callback(statusMessage + ' : ' + chalk.yellow(reqUrl));
                             } else {
                               if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0) self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body);
@@ -1010,21 +1009,19 @@
                             }
                           } else {
                             if (statusCode >= 500) {
-                              if (self.debug) console.log('!!! resending promise request !!!');
-                              setTimeout(function () {
-                                (function () {
-                                  return resolve(tryRequest());
-                                });
-                              }, 1000);
-                              setTimeout(function () {
-                                return reject('retry');
-                              }, 1000);
-                            } else if (statusCode === 429) {
-                              if (self.debug) console.log('!!! resending promise request !!!');
+                              if (self.debug) console.log('Resending promise request.\n');
                               setTimeout(function () {
                                 return resolve(tryRequest());
-                              }, response.headers['retry-after'] * 1000 + 50);
-                            } else if (error || statusCode >= 400) {
+                              }, 1000);
+                              return;
+                            } else if (statusCode === 429) {
+                              if (self.debug) console.log('Resending promise request.\n');
+                              var _retry = response.headers['retry-after'] * 1000 + 50;
+                              setTimeout(function () {
+                                return resolve(tryRequest());
+                              }, _retry);
+                              return;
+                            } else if (statusCode >= 400) {
                               return reject(statusMessage + ' : ' + chalk.yellow(reqUrl));
                             } else {
                               if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0) self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body);
@@ -1196,9 +1193,9 @@
             options = _ref11.options;
 
         return this._baseRequest({
-          endUrl: 'v' + versions.MATCH_LIST + '/matchlist/by-summoner/' + endUrl, region: region, options: options,
+          endUrl: 'v' + versions.MATCHLIST + '/matchlist/by-summoner/' + endUrl, region: region, options: options,
           cacheParams: {
-            ttl: this.CACHE_TIMERS.MATCH_LIST
+            ttl: this.CACHE_TIMERS.MATCHLIST
           }
         }, cb);
       }
@@ -1258,14 +1255,14 @@
     }, {
       key: '_logError',
       value: function _logError(message, expected) {
-        throw new Error(chalk.bold.yellow(message) + " " + chalk.red('request') + " " + chalk.bold.red('FAILED') + chalk.red('; ' + expected));
+        throw new Error(chalk.bold.yellow(message) + ' ' + chalk.red('request') + ' ' + chalk.bold.red('FAILED') + chalk.red('; ' + expected));
       }
     }, {
       key: 'setRegion',
       value: function setRegion(region) {
         this.defaultRegion = check(region) ? region : undefined;
 
-        if (!this.defaultRegion) throw new Error(chalk.red('setRegion() by Kindred failed: ' + chalk.yellow(region) + ' is an invalid region.') + '\n' + ('' + chalk.red('Try importing ' + chalk.yellow("require('./dist/kindred-api').REGIONS") + ' and using one of those values instead.')));
+        if (!this.defaultRegion) throw new Error(chalk.red('setRegion() by Kindred failed: ' + chalk.yellow(region) + ' is an invalid region.') + '\n' + ('' + chalk.red('Try importing ' + chalk.yellow('require(\'./dist/kindred-api\').REGIONS') + ' and using one of those values instead.')));
       }
     }, {
       key: 'getChamps',
