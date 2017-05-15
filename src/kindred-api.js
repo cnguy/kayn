@@ -46,7 +46,7 @@ class Kindred {
     if (!this.defaultRegion) {
       throw new Error(
         `${chalk.red(`setRegion() by Kindred failed: ${chalk.yellow(defaultRegion)} is an invalid region.`)}\n`
-        + `${(chalk.red(`Try importing ${chalk.yellow("require('./dist/kindred-api').REGIONS")} and using one of those values instead.`))}`
+        + `${(chalk.red(`Try importing ${chalk.yellow('require(\'./dist/kindred-api\').REGIONS')} and using one of those values instead.`))}`
       )
     }
 
@@ -134,7 +134,7 @@ class Kindred {
       getTotalScore: this.getTotalChampMasteryScore.bind(this),
       totalScore: this.getTotalChampMasteryScore.bind(this),
       total: this.getTotalChampMasteryScore.bind(this),
-      score: this.getTotalChampMasteryScore.bind(this),
+      score: this.getTotalChampMasteryScore.bind(this)
     }
 
     this.CurrentGame = {
@@ -454,8 +454,8 @@ class Kindred {
   _makeUrl(query, region, staticReq, status, observerMode, championMastery) {
     const mid = staticReq ? '' : `${region}/`
     const oldPrefix = !status && !observerMode && !championMastery ? `api/lol/${mid}` : ''
-    const prefix = `lol/`// `api/lol/${mid}`
-    const base = 'api.riotgames.com' // future: api.pvp.net
+    const prefix = 'lol/'
+    const base = 'api.riotgames.com'
 
     const oldUrl = `https://${region}.api.riotgames.com/${oldPrefix}${encodeURI(query)}`
     const newUrl = `https://${PLATFORM_IDS[REGIONS_BACK[region]].toLowerCase()}.${base}/${prefix}${encodeURI(query)}`
@@ -741,7 +741,7 @@ class Kindred {
 
   _logError(message, expected) {
     throw new Error(
-      chalk.bold.yellow(message) + " " + chalk.red('request') + " " + chalk.bold.red('FAILED') + chalk.red(`; ${expected}`)
+      chalk.bold.yellow(message) + ' ' + chalk.red('request') + ' ' + chalk.bold.red('FAILED') + chalk.red(`; ${expected}`)
     )
   }
 
@@ -751,7 +751,7 @@ class Kindred {
     if (!this.defaultRegion)
       throw new Error(
         `${chalk.red(`setRegion() by Kindred failed: ${chalk.yellow(region)} is an invalid region.`)}\n`
-        + `${(chalk.red(`Try importing ${chalk.yellow("require('./dist/kindred-api').REGIONS")} and using one of those values instead.`))}`
+        + `${(chalk.red(`Try importing ${chalk.yellow('require(\'./dist/kindred-api\').REGIONS')} and using one of those values instead.`))}`
       )
   }
 
@@ -1278,7 +1278,7 @@ class Kindred {
       } else {
         return this._logError(
           this.getShardStatus.name,
-          `invalid region!`
+          'invalid region!'
         )
       }
     }
@@ -2247,7 +2247,7 @@ function QuickStart(apiKey, region, debug) {
     defaultRegion: region,
     debug,
     limits: LIMITS.DEV,
-    cacheOptions: CACHE_TYPES[0],
+    cacheOptions: CACHE_TYPES[0]
   })
 }
 

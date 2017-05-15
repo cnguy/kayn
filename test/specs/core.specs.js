@@ -1,7 +1,8 @@
+/* eslint-disable max-nested-callbacks */
 var chai = require('chai')
 
 var expect = chai.expect,
-  should = chai.should,
+
   assert = chai.assert
 
 require('dotenv').config()
@@ -146,7 +147,7 @@ describe('Core', function () {
         k.Summoner
           .by.name('abcdefghichau', function (err, data) {
             if (err) {
-              if (err.lastIndexOf("404") !== -1) {
+              if (err.lastIndexOf('404') !== -1) {
                 expect(err).is.not.undefined
                 done()
               }
@@ -175,7 +176,7 @@ describe('Core', function () {
       })
     })
 
-    describe('promises', function () {
+    describe('returning promises', function () {
       it('should not retry on 404s', function (done) {
         const k = init()
 
@@ -183,7 +184,7 @@ describe('Core', function () {
           .by.name('abcdefghichau')
           .then(function (data) { return data })
           .catch(function (err) {
-            if (err.lastIndexOf("404") !== -1) {
+            if (err.lastIndexOf('404') !== -1) {
               expect(err).is.not.undefined
               done()
             }

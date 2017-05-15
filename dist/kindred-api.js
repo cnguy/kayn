@@ -444,7 +444,7 @@
       this.defaultRegion = check(defaultRegion) ? defaultRegion : undefined;
 
       if (!this.defaultRegion) {
-        throw new Error(chalk.red('setRegion() by Kindred failed: ' + chalk.yellow(defaultRegion) + ' is an invalid region.') + '\n' + ('' + chalk.red('Try importing ' + chalk.yellow("require('./dist/kindred-api').REGIONS") + ' and using one of those values instead.')));
+        throw new Error(chalk.red('setRegion() by Kindred failed: ' + chalk.yellow(defaultRegion) + ' is an invalid region.') + '\n' + ('' + chalk.red('Try importing ' + chalk.yellow('require(\'./dist/kindred-api\').REGIONS') + ' and using one of those values instead.')));
       }
 
       this.debug = debug;
@@ -1258,14 +1258,14 @@
     }, {
       key: '_logError',
       value: function _logError(message, expected) {
-        throw new Error(chalk.bold.yellow(message) + " " + chalk.red('request') + " " + chalk.bold.red('FAILED') + chalk.red('; ' + expected));
+        throw new Error(chalk.bold.yellow(message) + ' ' + chalk.red('request') + ' ' + chalk.bold.red('FAILED') + chalk.red('; ' + expected));
       }
     }, {
       key: 'setRegion',
       value: function setRegion(region) {
         this.defaultRegion = check(region) ? region : undefined;
 
-        if (!this.defaultRegion) throw new Error(chalk.red('setRegion() by Kindred failed: ' + chalk.yellow(region) + ' is an invalid region.') + '\n' + ('' + chalk.red('Try importing ' + chalk.yellow("require('./dist/kindred-api').REGIONS") + ' and using one of those values instead.')));
+        if (!this.defaultRegion) throw new Error(chalk.red('setRegion() by Kindred failed: ' + chalk.yellow(region) + ' is an invalid region.') + '\n' + ('' + chalk.red('Try importing ' + chalk.yellow('require(\'./dist/kindred-api\').REGIONS') + ' and using one of those values instead.')));
       }
     }, {
       key: 'getChamps',

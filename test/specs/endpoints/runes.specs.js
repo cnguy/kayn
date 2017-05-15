@@ -1,3 +1,4 @@
+/* eslint-disable max-nested-callbacks */
 require('../in-memory-cache.specs.js')
 
 var chai = require('chai')

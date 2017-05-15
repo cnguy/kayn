@@ -1,3 +1,4 @@
+/* eslint-disable max-nested-callbacks */
 require('./core.specs.js')
 
 var chai = require('chai')
