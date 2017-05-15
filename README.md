@@ -9,14 +9,7 @@ To get started, run one of the following!
 
 ### Treat my [versioning](https://github.com/ChauTNguyen/kindred-api/blob/master/CHANGELOG.md) as 0.x.y!
 
-# Refer to [Wiki](https://github.com/ChauTNguyen/kindred-api/wiki) for Documentation and Working Examples!
-Currently, I'm changing the format of how methods are presented so that it's much easier
-to parse.
-
-Check out [SUMMONER-V3](https://github.com/ChauTNguyen/kindred-api/wiki/SUMMONER-V3) or
-[STATIC-DATA-V3](https://github.com/ChauTNguyen/kindred-api/wiki/STATIC-DATA-V3) to see what I mean.
-
-**Note that all standard endpoints covered but tournament endpoints! The documentation is still in the works, but you should be able to find everything you need in every section (just scroll down a lot lol).**
+# Refer to [Wiki](https://github.com/ChauTNguyen/kindred-api/wiki) for Complete Documentation and Working Examples!
 
 # Table of Contents:
 * [Core Features](#core-features)
@@ -142,6 +135,9 @@ for working, copy-pastable examples.
 * Debug on
 * Dev key rate limiting per region
 * In-memory (JS) cache with default settings on for quick scripts
+* Burst Rate Limiter
+
+[For Custom Initialization (caching, spread rate limiter), refer to wiki.](https://github.com/ChauTNguyen/kindred-api/wiki/Initialization)
 
 ```javascript
 var KindredAPI = require('kindred-api')
