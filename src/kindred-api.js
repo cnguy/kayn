@@ -534,13 +534,11 @@ class Kindred {
                         if (typeof callback === 'function') {
                           if (statusCode >= 500) {
                             if (self.debug) console.log('Resending callback request.\n')
-                            setTimeout(() => sendRequest.bind(self)(callback), 1000)
-                            return
+                            return setTimeout(() => sendRequest.bind(self)(callback), 1000)
                           } else if (statusCode === 429) {
                             if (self.debug) console.log('Resending callback request.\n')
                             const retry = response.headers['retry-after'] * 1000 + 50
-                            setTimeout(() => sendRequest.bind(self)(callback), retry)
-                            return
+                            return setTimeout(() => sendRequest.bind(self)(callback), retry)
                           } else if (statusCode >= 400) {
                             return callback(statusMessage + ' : ' + chalk.yellow(reqUrl))
                           } else {
@@ -551,13 +549,11 @@ class Kindred {
                         } else {
                           if (statusCode >= 500) {
                             if (self.debug) console.log('Resending promise request.\n')
-                            setTimeout(() => resolve(tryRequest()), 1000)
-                            return
+                            return setTimeout(() => resolve(tryRequest()), 1000)
                           } else if (statusCode === 429) {
                             if (self.debug) console.log('Resending promise request.\n')
                             const retry = response.headers['retry-after'] * 1000 + 50
-                            setTimeout(() => resolve(tryRequest()), retry)
-                            return
+                            return setTimeout(() => resolve(tryRequest()), retry)
                           } else if (statusCode >= 400) {
                             return reject(statusMessage + ' : ' + chalk.yellow(reqUrl))
                           } else {
@@ -571,7 +567,7 @@ class Kindred {
                       }
                     })
                   } else {
-                    setTimeout(() => { sendRequest.bind(self)(callback) }, 1000)
+                    return setTimeout(() => sendRequest.bind(self)(callback), 1000)
                   }
                 })(cb)
             } else {

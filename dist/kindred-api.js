@@ -990,17 +990,15 @@
                           if (typeof callback === 'function') {
                             if (statusCode >= 500) {
                               if (self.debug) console.log('Resending callback request.\n');
-                              setTimeout(function () {
+                              return setTimeout(function () {
                                 return sendRequest.bind(self)(callback);
                               }, 1000);
-                              return;
                             } else if (statusCode === 429) {
                               if (self.debug) console.log('Resending callback request.\n');
                               var retry = response.headers['retry-after'] * 1000 + 50;
-                              setTimeout(function () {
+                              return setTimeout(function () {
                                 return sendRequest.bind(self)(callback);
                               }, retry);
-                              return;
                             } else if (statusCode >= 400) {
                               return callback(statusMessage + ' : ' + chalk.yellow(reqUrl));
                             } else {
@@ -1010,17 +1008,15 @@
                           } else {
                             if (statusCode >= 500) {
                               if (self.debug) console.log('Resending promise request.\n');
-                              setTimeout(function () {
+                              return setTimeout(function () {
                                 return resolve(tryRequest());
                               }, 1000);
-                              return;
                             } else if (statusCode === 429) {
                               if (self.debug) console.log('Resending promise request.\n');
                               var _retry = response.headers['retry-after'] * 1000 + 50;
-                              setTimeout(function () {
+                              return setTimeout(function () {
                                 return resolve(tryRequest());
                               }, _retry);
-                              return;
                             } else if (statusCode >= 400) {
                               return reject(statusMessage + ' : ' + chalk.yellow(reqUrl));
                             } else {
@@ -1033,8 +1029,8 @@
                         }
                       });
                     } else {
-                      setTimeout(function () {
-                        sendRequest.bind(self)(callback);
+                      return setTimeout(function () {
+                        return sendRequest.bind(self)(callback);
                       }, 1000);
                     }
                   })(cb);
