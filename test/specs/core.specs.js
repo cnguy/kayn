@@ -144,11 +144,24 @@ describe('Core', function () {
       it('should not retry on 404s', function (done) {
         const k = init()
 
+        let errs = []
+
         k.Summoner
           .by.name('abcdefghichau', function (err, data) {
             if (err) {
+              errs.push(err)
+
               if (err.lastIndexOf('404') !== -1) {
                 expect(err).is.not.undefined
+
+                let countErrs = 0
+
+                for (let err of errs)
+                  if (err.lastIndexOf('404') !== -1)
+                    ++countErrs
+
+                assert.equal(countErrs, 1)
+
                 done()
               }
             }
@@ -180,12 +193,25 @@ describe('Core', function () {
       it('should not retry on 404s', function (done) {
         const k = init()
 
+        let errs = []
+
         k.Summoner
           .by.name('abcdefghichau')
           .then(function (data) { return data })
           .catch(function (err) {
+            errs.push(err)
+
             if (err.lastIndexOf('404') !== -1) {
               expect(err).is.not.undefined
+
+              let countErrs = 0
+
+              for (let err of errs)
+                if (err.lastIndexOf('404') !== -1)
+                  ++countErrs
+
+              assert.equal(countErrs, 1)
+
               done()
             }
           })

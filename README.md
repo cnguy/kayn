@@ -149,6 +149,11 @@ k.Matchlist
  .then(data => console.log(data))
  .catch(error => console.error(error))
 
+k.Static.Champion.list({ champListData: 'all' }, KindredAPI.print)
+k.Static.Champion.list(KindredAPI.print)
+k.Static.Champion.list(REGIONS.KOREA, KindredAPI.print)
+k.Static.Champion.list({ champListData: 'all' }, REGIONS.KOREA, KindredAPI.print)
+
 // Notice how parameters are somewhat flexible! This is the case for all functions.
 ```
 
