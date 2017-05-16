@@ -38,20 +38,26 @@ describe('Summoner', function () {
 
       it('should be a successful call through name', function (done) {
         init().Summoner.get({ name })
-          .then(data => done())
-          .catch(error => done())
+          .then(data => {
+            expect(data).to.not.be.undefined
+            done()
+          })
       })
 
       it('should be a successful call through id', function (done) {
         init().Summoner.get({ id })
-          .then(data => done())
-          .catch(error => done())
+          .then(data => {
+            expect(data).to.not.be.undefined
+            done()
+          })
       })
 
       it('should be a successful call through accId', function (done) {
         init().Summoner.get({ accId })
-          .then(data => done())
-          .catch(error => done())
+          .then(data => {
+            expect(data).to.not.be.undefined
+            done()
+          })
       })
     })
 
@@ -64,8 +70,10 @@ describe('Summoner', function () {
 
           it('should be a successful call', function (done) {
             init().Summoner.by.id(id)
-              .then(data => done())
-              .catch(error => done())
+              .then(data => {
+                expect(data).to.not.be.undefined
+                done()
+              })
           })
         })
 
@@ -76,8 +84,10 @@ describe('Summoner', function () {
 
           it('should be a successful call', function (done) {
             init().Summoner.by.name(name)
-              .then(data => done())
-              .catch(error => done())
+              .then(data => {
+                expect(data).to.not.be.undefined
+                done()
+              })
           })
         })
 
@@ -88,8 +98,10 @@ describe('Summoner', function () {
 
           it('should be a successful call', function (done) {
             init().Summoner.by.account(accId)
-              .then(data => done())
-              .catch(error => done())
+              .then(data => {
+                expect(data).to.not.be.undefined
+                done()
+              })
           })
         })
       })

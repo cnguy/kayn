@@ -50,8 +50,10 @@ describe('League', function () {
 
       it('should be a successful call with no args', function (done) {
         init().Master.list()
-          .then(data => done())
-          .catch(error => done())
+          .then(data => {
+            expect(data).to.not.be.undefined
+            done()
+          })
       })
     })
   })
@@ -92,8 +94,10 @@ describe('League', function () {
 
       it('should be a successful call with no args', function (done) {
         init().Challenger.list()
-          .then(data => done())
-          .catch(error => done())
+          .then(data => {
+            expect(data).to.not.be.undefined
+            done()
+          })
       })
     })
   })

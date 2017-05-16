@@ -28,8 +28,10 @@ describe('Match', function () {
 
       it('should be a successful call with no args', function (done) {
         init().Match.get({ matchId })
-          .then(data => done())
-          .catch(error => done())
+          .then(data => {
+            expect(data).to.not.be.undefined
+            done()
+          })
       })
     })
 
@@ -46,8 +48,10 @@ describe('Match', function () {
 
           it('should be a successful call with no args', function (done) {
             init().Match.by.id(matchId)
-              .then(data => done())
-              .catch(error => done())
+              .then(data => {
+                expect(data).to.not.be.undefined
+                done()
+              })
           })
         })
       })
@@ -66,8 +70,10 @@ describe('Match', function () {
 
       it('should be a successful call with no args', function (done) {
         init().Match.timeline({ matchId })
-          .then(data => done())
-          .catch(error => done())
+          .then(data => {
+            expect(data).to.not.be.undefined
+            done()
+          })
       })
     })
 
@@ -84,8 +90,10 @@ describe('Match', function () {
 
           it('should be a successful call with no args', function (done) {
             init().Match.Timeline.by.id(matchId)
-              .then(data => done())
-              .catch(error => done())
+              .then(data => {
+                expect(data).to.not.be.undefined
+                done()
+              })
           })
         })
       })
