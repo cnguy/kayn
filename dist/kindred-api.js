@@ -857,11 +857,9 @@
     _createClass(Kindred$1, [{
       key: 'canMakeRequest',
       value: function canMakeRequest(region) {
-        if (this.spread) {
-          return this.limits[region][0].requestAvailable() && this.limits[region][1].requestAvailable() && this.limits[region][2].requestAvailable();
-        } else {
-          return this.limits[region][0].requestAvailable() && this.limits[region][1].requestAvailable();
-        }
+        var spread = this.spread ? this.limits[region][2].requestAvailable() : true;
+
+        return this.limits[region][0].requestAvailable() && this.limits[region][1].requestAvailable() && spread;
       }
     }, {
       key: '_sanitizeName',
