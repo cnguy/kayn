@@ -14,6 +14,17 @@ Match and matchlist requests use the same endpoints now, but they should be cach
 
 Also, the cache timer for Matchlist is now fixed (I had ONE_HOUR instead of HOUR).
 
+**Match.get now is overloaded, and works with just an integer being passed in as well.**
+
+So you can now do stuffs like this:
+
+```javascript
+k.Match
+ .get(2501758619)
+ .then(data => console.log(data))
+ .catch(error => console.error(error))
+```
+
 ## [2.0.46](https://github.com/ChauTNguyen/kindred-api/commit/4e7bb5e7510761ca9e00f5963b16b299d14ff415) - API errors are now returned as status codes instead of strings.
 
 When catching errors, users now just get the raw status code instead of some colorized string.

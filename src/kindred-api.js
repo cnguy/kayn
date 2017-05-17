@@ -1274,7 +1274,9 @@ class Kindred {
     id, matchId,
     options
   } = {}, cb) {
-    if (Number.isInteger(id || matchId)) {
+    if (Number.isInteger(arguments[0])) {
+      return this._matchRequest({ endUrl: `matches/${arguments[0]}`, region, options }, cb)
+    } else if (Number.isInteger(id || matchId)) {
       return this._matchRequest({ endUrl: `matches/${id || matchId}`, region, options }, cb)
     } else {
       return this._logError(

@@ -1966,7 +1966,9 @@
 
         var cb = arguments[1];
 
-        if (Number.isInteger(id || matchId)) {
+        if (Number.isInteger(arguments[0])) {
+          return this._matchRequest({ endUrl: 'matches/' + arguments[0], region: region, options: options }, cb);
+        } else if (Number.isInteger(id || matchId)) {
           return this._matchRequest({ endUrl: 'matches/' + (id || matchId), region: region, options: options }, cb);
         } else {
           return this._logError(this.getMatch.name, 'required params ' + chalk.yellow('`id/matchId` (int)') + ' not passed in');

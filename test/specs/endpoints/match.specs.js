@@ -78,6 +78,16 @@ describe('Match', function () {
     })
 
     describe('standard params', function () {
+      describe('get', function () {
+        describe('should work with just id param', function (done) {
+          init().Match
+           .get(matchId)
+           .then(data => {
+             expect(data).to.not.be.undefined
+             done()
+           })
+        })
+      })
       describe('by', function () {
         describe('id', function () {
           it('should throw on empty', function () {
