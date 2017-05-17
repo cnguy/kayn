@@ -11,8 +11,57 @@ require('dotenv').config()
 
 var init = require('../../../utils/init')
 
+const id = 32932398
+
 describe('League', function () {
   this.timeout(0)
+
+  describe('getting leagues', function () {
+    describe('object params', function () {
+      describe('should be a successful call thru summoner id', function () {
+        it('through callback', function (done) {
+          init().League.get({ id }, function (err, data) {
+            expect(err).to.be.null
+            expect(data).to.not.be.undefined
+            done()
+          })
+        })
+
+        it('through promise', function (done) {
+          init().League
+            .get({ id })
+            .then(data => {
+              expect(data).to.not.be.undefined
+              done()
+            })
+        })
+      })
+    })
+  })
+
+  describe('getting league positions', function () {
+    describe('object params', function () {
+      describe('should be a successful call thru summoner id', function () {
+        it('through callback', function (done) {
+          init().League
+            .positions({ id }, function (err, data) {
+              expect(err).to.be.null
+              expect(data).to.not.be.undefined
+              done()
+            })
+        })
+
+        it('through promise', function (done) {
+          init().League
+            .positions({ id })
+            .then(data => {
+              expect(data).to.not.be.undefined
+              done()
+            })
+        })
+      })
+    })
+  })
 
   describe('getting master leagues', function () {
     describe('standard params', function () {
@@ -33,11 +82,11 @@ describe('League', function () {
       })
 
       it('should not throw with region & cb (2 args)', function () {
-        assert.doesNotThrow(() => init().Master.list('na', function () {}), Error)
+        assert.doesNotThrow(() => init().Master.list('na', function () { }), Error)
       })
 
       it('should not throw with queue & cb (2 args)', function () {
-        assert.doesNotThrow(() => init().Master.list('RANKED_SOLO_5x5', function () {}), Error)
+        assert.doesNotThrow(() => init().Master.list('RANKED_SOLO_5x5', function () { }), Error)
       })
 
       it('should not throw with queue & region & cb (3 args)', function () {
@@ -77,11 +126,11 @@ describe('League', function () {
       })
 
       it('should not throw with region & cb (2 args)', function () {
-        assert.doesNotThrow(() => init().Challenger.list('na', function () {}), Error)
+        assert.doesNotThrow(() => init().Challenger.list('na', function () { }), Error)
       })
 
       it('should not throw with queue & cb (2 args)', function () {
-        assert.doesNotThrow(() => init().Challenger.list('RANKED_SOLO_5x5', function () {}), Error)
+        assert.doesNotThrow(() => init().Challenger.list('RANKED_SOLO_5x5', function () { }), Error)
       })
 
       it('should not throw with queue & region & cb (3 args)', function () {

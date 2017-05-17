@@ -1,9 +1,5 @@
-import responseCodes from '../constants/response-codes'
+import responseCodes from '../constants/response-codes-to-messages'
 
-const getResponseMessage = code => {
-  const message = responseCodes[code]
-  if (!message) return
-  return message
-}
+const getResponseMessage = code => responseCodes[code] || ''
 
 export default getResponseMessage

@@ -332,28 +332,6 @@
 
   var re = XRegExp('^[0-9\\p{L} _\\.]+$');
 
-  var checkAllHelpers = {
-    int: function int(arr) {
-      return arr.every(function (i) {
-        return Number.isInteger(i);
-      });
-    },
-    string: function string(arr) {
-      return arr.every(function (i) {
-        return typeof i === 'string';
-      });
-    }
-  };
-
-  var checkAll = {
-    int: function int(arr) {
-      return arr && Array.isArray(arr) && checkAllHelpers.int(arr) && arr.length > 0;
-    },
-    string: function string(arr) {
-      return arr && Array.isArray(arr) && checkAllHelpers.string(arr) && arr.length > 0;
-    }
-  };
-
   var check = function check(region) {
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
@@ -383,7 +361,38 @@
     return false;
   };
 
-  var codes = {
+  var checkAllHelpers = {
+    int: function int(arr) {
+      return arr.every(function (i) {
+        return Number.isInteger(i);
+      });
+    },
+    string: function string(arr) {
+      return arr.every(function (i) {
+        return typeof i === 'string';
+      });
+    }
+  };
+
+  var checkAll = {
+    int: function int(arr) {
+      return arr && Array.isArray(arr) && checkAllHelpers.int(arr) && arr.length > 0;
+    },
+    string: function string(arr) {
+      return arr && Array.isArray(arr) && checkAllHelpers.string(arr) && arr.length > 0;
+    }
+  };
+
+  var check$1 = function check$1(l) {
+    return (Array.isArray(l) && l.length !== 2 || !checkAll.int(l[0]) || l[0].length !== 2 || !checkAll.int(l[1]) || l[1].length !== 2) && l !== 'dev' && l !== 'prod';
+  };
+
+  var isFunction = function isFunction(item) {
+    return typeof item === 'function';
+  };
+
+  var responseStrings = {
+    200: 'Success',
     400: 'Bad Request',
     403: 'Forbidden',
     404: 'Not Found',
@@ -394,23 +403,20 @@
   };
 
   var getResponseMessage = function getResponseMessage(code) {
-    var message = codes[code];
-    if (!message) return;
-    return message;
+    return responseStrings[code] || '';
   };
 
   var statusCodeBisector = [200, 400, 500];
 
-  var colorizeStatusMessage = function colorizeStatusMessage(statusCode) {
-    if (statusCode >= statusCodeBisector[0] && statusCode < statusCodeBisector[1]) return chalk$1.green(statusCode);else if (statusCode >= statusCodeBisector[1] && statusCode < statusCodeBisector[2]) return chalk$1.red(statusCode + ' ' + getResponseMessage(statusCode));else return chalk$1.bold.red(statusCode + ' ' + getResponseMessage(statusCode));
-  };
+  var prettifyStatusMessage = function prettifyStatusMessage(statusCode) {
+    var capsMessage = getResponseMessage(statusCode).toUpperCase();
+    var msg = statusCode + ' ' + capsMessage;
 
-  var check$1 = function check$1(l) {
-    return (Array.isArray(l) && l.length !== 2 || !checkAll.int(l[0]) || l[0].length !== 2 || !checkAll.int(l[1]) || l[1].length !== 2) && l !== 'dev' && l !== 'prod';
+    if (statusCode >= statusCodeBisector[0] && statusCode < statusCodeBisector[1]) return chalk$1.green(statusCode);else if (statusCode >= statusCodeBisector[1] && statusCode < statusCodeBisector[2]) return chalk$1.red(msg);else return chalk$1.bold.red(msg);
   };
 
   var printResponseDebug = function printResponseDebug(response, statusMessage, reqUrl) {
-    console.log(statusMessage, reqUrl);
+    console.log(statusMessage, '@', reqUrl);
     console.log({
       'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
       'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
@@ -418,6 +424,23 @@
       'retry-after': response.headers['retry-after']
     });
     console.log();
+  };
+
+  var codes = {
+    BAD_REQUEST: 400,
+    FORBIDDEN: 403,
+    NOT_FOUND: 404,
+    UNSUPPORTED_MEDIA_TYPE: 415,
+    RATE_LIMIT_EXCEEDED: 429,
+    INTERNAL_SERVICE_ERROR: 500,
+    SERVICE_UNAVAILABLE: 503
+  };
+
+  var ISE = codes.INTERNAL_SERVICE_ERROR;
+  var RLE = codes.RATE_LIMIT_EXCEEDED;
+
+  var shouldRetry = function shouldRetry(code) {
+    return code >= ISE || code === RLE;
   };
 
   var Kindred$1 = function () {
@@ -983,42 +1006,31 @@
                         if (response && body) {
                           var statusCode = response.statusCode;
 
-                          var statusMessage = colorizeStatusMessage(statusCode);
+                          var responseMessage = prettifyStatusMessage(statusCode);
+                          var retry = response.headers['retry-after'] * 1000 + 50 || 1000;
 
-                          if (self.debug) printResponseDebug(response, statusMessage, fullUrl);
+                          if (self.debug) printResponseDebug(response, responseMessage, chalk.yellow(fullUrl));
 
-                          if (typeof callback === 'function') {
-                            if (statusCode >= 500) {
+                          if (isFunction(callback)) {
+                            if (shouldRetry(statusCode)) {
                               if (self.debug) console.log('Resending callback request.\n');
-                              return setTimeout(function () {
-                                return sendRequest.bind(self)(callback);
-                              }, 1000);
-                            } else if (statusCode === 429) {
-                              if (self.debug) console.log('Resending callback request.\n');
-                              var retry = response.headers['retry-after'] * 1000 + 50;
                               return setTimeout(function () {
                                 return sendRequest.bind(self)(callback);
                               }, retry);
                             } else if (statusCode >= 400) {
-                              return callback(statusMessage + ' : ' + chalk.yellow(reqUrl));
+                              return callback(statusCode);
                             } else {
                               if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0) self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body);
                               return callback(error, JSON.parse(body));
                             }
                           } else {
-                            if (statusCode >= 500) {
+                            if (shouldRetry(statusCode)) {
                               if (self.debug) console.log('Resending promise request.\n');
                               return setTimeout(function () {
                                 return resolve(tryRequest());
-                              }, 1000);
-                            } else if (statusCode === 429) {
-                              if (self.debug) console.log('Resending promise request.\n');
-                              var _retry = response.headers['retry-after'] * 1000 + 50;
-                              return setTimeout(function () {
-                                return resolve(tryRequest());
-                              }, _retry);
+                              }, retry);
                             } else if (statusCode >= 400) {
-                              return reject(statusMessage + ' : ' + chalk.yellow(reqUrl));
+                              return reject(statusCode);
                             } else {
                               if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0) self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body);
                               return resolve(JSON.parse(body));
@@ -1041,12 +1053,12 @@
 
                       var statusCode = response.statusCode;
 
-                      var statusMessage = colorizeStatusMessage(statusCode);
+                      var statusMessage = prettifyStatusMessage(statusCode);
 
-                      if (self.debug) printResponseDebug(response, statusMessage, fullUrl);
+                      if (self.debug) printResponseDebug(response, statusMessage, chalk.yellow(fullUrl));
 
-                      if (typeof cb === 'function') {
-                        if (statusCode >= 400) return cb(statusMessage + ' : ' + chalk.yellow(reqUrl));else return cb(error, JSON.parse(body));
+                      if (isFunction(cb)) {
+                        if (statusCode >= 400) return cb(statusCode);else return cb(error, JSON.parse(body));
                       } else {
                         if (error) return reject('err:', error);else return resolve(JSON.parse(body));
                       }
@@ -1269,7 +1281,7 @@
 
         var cb = arguments[1];
 
-        if (typeof arguments[0] === 'function') {
+        if (isFunction(_typeof(arguments[0]))) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1348,7 +1360,7 @@
           return this._championMasteryRequest({
             endUrl: 'champion-masteries/by-summoner/' + (id || summonerId || playerId), region: region
           }, cb);
-        } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
+        } else if (typeof name === 'string') {
           return new Promise(function (resolve, reject) {
             return _this2.getSummoner({ name: name, region: region }, function (err, data) {
               if (err) {
@@ -1396,7 +1408,7 @@
           return this._championMasteryRequest({
             endUrl: 'scores/by-summoner/' + (id || summonerId || playerId), region: region
           }, cb);
-        } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
+        } else if (typeof name === 'string') {
           return new Promise(function (resolve, reject) {
             return _this3.getSummoner({ name: name, region: region }, function (err, data) {
               if (err) {
@@ -1445,7 +1457,7 @@
             endUrl: 'active-games/by-summoner/' + (id || summonerId || playerId),
             region: region
           }, cb);
-        } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
+        } else if (typeof name === 'string') {
           return new Promise(function (resolve, reject) {
             return _this4.getSummoner({ name: name, region: region }, function (err, data) {
               if (err) {
@@ -1469,7 +1481,7 @@
 
         var cb = arguments[1];
 
-        if (typeof arguments[0] === 'function') {
+        if (isFunction(arguments[0])) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1511,7 +1523,7 @@
             endUrl: 'by-summoner/' + (id || summonerId || playerId) + '/recent',
             region: region
           }, cb);
-        } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
+        } else if (typeof name === 'string') {
           return new Promise(function (resolve, reject) {
             return _this5.getSummoner({ name: name, region: region }, function (err, data) {
               if (err) {
@@ -1560,7 +1572,7 @@
             endUrl: 'leagues/by-summoner/' + (id || summonerId || playerId),
             region: region, options: options
           }, cb);
-        } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
+        } else if (typeof name === 'string') {
           return new Promise(function (resolve, reject) {
             return _this6.getSummoner({ name: name, region: region }, function (err, data) {
               if (err) {
@@ -1609,7 +1621,7 @@
             endUrl: 'positions/by-summoner/' + (id || summonerId || playerId),
             region: region
           }, cb);
-        } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
+        } else if (typeof name === 'string') {
           return new Promise(function (resolve, reject) {
             return _this7.getSummoner({ name: name, region: region }, function (err, data) {
               if (err) {
@@ -1635,7 +1647,7 @@
 
         var cb = arguments[1];
 
-        cb = typeof arguments[0] === 'function' ? arguments[0] : arguments[1];
+        cb = isFunction(_typeof(arguments[0])) ? arguments[0] : arguments[1];
 
         if (typeof queue === 'string') {
           return this._leagueRequest({
@@ -1655,7 +1667,7 @@
 
         var cb = arguments[1];
 
-        cb = typeof arguments[0] === 'function' ? arguments[0] : arguments[1];
+        cb = isFunction(_typeof(arguments[0])) ? arguments[0] : arguments[1];
 
         if (typeof queue === 'string') {
           return this._leagueRequest({
@@ -1674,7 +1686,7 @@
 
         var cb = arguments[1];
 
-        if (typeof arguments[0] === 'function') {
+        if (isFunction(_typeof(arguments[0]))) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1707,7 +1719,7 @@
 
         var cb = arguments[1];
 
-        if (typeof arguments[0] === 'function') {
+        if (isFunction(_typeof(arguments[0]))) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1740,7 +1752,7 @@
 
         var cb = arguments[1];
 
-        if (typeof arguments[0] === 'function') {
+        if (isFunction(_typeof(arguments[0]))) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1755,7 +1767,7 @@
 
         var cb = arguments[1];
 
-        if (typeof arguments[0] === 'function') {
+        if (isFunction(_typeof(arguments[0]))) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1771,7 +1783,7 @@
 
         var cb = arguments[1];
 
-        if (typeof arguments[0] === 'function') {
+        if (isFunction(_typeof(arguments[0]))) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1787,7 +1799,7 @@
 
         var cb = arguments[1];
 
-        if (typeof arguments[0] === 'function') {
+        if (isFunction(_typeof(arguments[0]))) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1820,7 +1832,7 @@
         var region = _ref37.region,
             options = _ref37.options;
 
-        if (typeof arguments[0] === 'function') {
+        if (isFunction(_typeof(arguments[0]))) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1835,7 +1847,7 @@
 
         var cb = arguments[1];
 
-        if (typeof arguments[0] === 'function') {
+        if (isFunction(_typeof(arguments[0]))) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1851,7 +1863,7 @@
 
         var cb = arguments[1];
 
-        if (typeof arguments[0] === 'function') {
+        if (isFunction(_typeof(arguments[0]))) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1884,7 +1896,7 @@
 
         var cb = arguments[1];
 
-        if (typeof arguments[0] === 'function') {
+        if (isFunction(_typeof(arguments[0]))) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1921,7 +1933,7 @@
 
         var cb = arguments[1];
 
-        if (typeof arguments[0] === 'function') {
+        if (isFunction(_typeof(arguments[0]))) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1936,7 +1948,7 @@
 
         var cb = arguments[1];
 
-        if (typeof arguments[0] === 'function') {
+        if (isFunction(_typeof(arguments[0]))) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -2003,7 +2015,7 @@
               }, cb));
             });
           });
-        } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
+        } else if (typeof name === 'string') {
           return new Promise(function (resolve, reject) {
             return _this8.getSummoner({ name: name, region: region }, function (err, data) {
               if (err) {
@@ -2052,7 +2064,7 @@
               }, cb));
             });
           });
-        } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
+        } else if (typeof name === 'string') {
           return new Promise(function (resolve, reject) {
             return _this9.getSummoner({ name: name, region: region }, function (err, data) {
               if (err) {
@@ -2120,7 +2132,7 @@
             endUrl: 'runes/by-summoner/' + (id || summonerId || playerId),
             region: region
           }, cb);
-        } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
+        } else if (typeof name === 'string') {
           return new Promise(function (resolve, reject) {
             return _this10.getSummoner({ name: name, region: region }, function (err, data) {
               if (err) {
@@ -2169,7 +2181,7 @@
             endUrl: 'masteries/by-summoner/' + (id || summonerId || playerId),
             region: region
           }, cb);
-        } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
+        } else if (typeof name === 'string') {
           return new Promise(function (resolve, reject) {
             return _this11.getSummoner({ name: name, region: region }, function (err, data) {
               if (err) {
@@ -2219,7 +2231,7 @@
             endUrl: (id || summonerId || playerId) + '/ranked',
             region: region, options: options
           }, cb);
-        } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
+        } else if (typeof name === 'string') {
           return new Promise(function (resolve, reject) {
             return _this12.getSummoner({ name: name, region: region }, function (err, data) {
               if (err) {
@@ -2269,7 +2281,7 @@
             endUrl: (id || summonerId || playerId) + '/summary',
             region: region, options: options
           }, cb);
-        } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
+        } else if (typeof name === 'string') {
           return new Promise(function (resolve, reject) {
             return _this13.getSummoner({ name: name, region: region }, function (err, data) {
               if (err) {
@@ -2304,7 +2316,7 @@
             endUrl: '' + (id || summonerId || playerId),
             region: region
           }, cb);
-        } else if (_typeof(arguments[0]) === 'object' && typeof name === 'string') {
+        } else if (typeof name === 'string') {
           return this._summonerRequest({
             endUrl: 'by-name/' + this._sanitizeName(name),
             region: region
