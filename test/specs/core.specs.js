@@ -2,7 +2,6 @@
 var chai = require('chai')
 
 var expect = chai.expect,
-
   assert = chai.assert
 
 require('dotenv').config()
@@ -16,6 +15,21 @@ describe('Core', function () {
     expect(
       require('../../dist/kindred-api')
     ).is.not.undefined
+  })
+
+  it('should have error if request is made with invalid key', function (done) {
+    const api = require('../../dist/kindred-api')
+
+    const k = new api.Kindred({
+      key: 'hi'
+    })
+
+    k.Summoner.get({ name: 'Contractz' }, function (err, data) {
+      expect(err).to.not.be.undefined
+      assert.equal(err, 403)
+      expect(data).to.be.undefined
+      done()
+    })
   })
 
   describe('Standard Initialization', function () {
@@ -147,7 +161,7 @@ describe('Core', function () {
         k.Summoner
           .by.name('abcdefghichau', function (err, data) {
             if (err) {
-              if (err.lastIndexOf('404') !== -1) {
+              if (err === 404) {
                 expect(err).is.not.undefined
                 done()
               }
@@ -184,7 +198,7 @@ describe('Core', function () {
           .by.name('abcdefghichau')
           .then(function (data) { return data })
           .catch(function (err) {
-            if (err.lastIndexOf('404') !== -1) {
+            if (err === 404) {
               expect(err).is.not.undefined
               done()
             }

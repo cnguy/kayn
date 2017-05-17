@@ -21,11 +21,12 @@ import CACHE_TYPES from './constants/caches'
 
 import re from './constants/valid-summoner-name-regex'
 
-import checkAll from './helpers/array-checkers'
 import checkValidRegion from './helpers/check-valid-region'
-import colorizeStatusMessage from './helpers/colorize-status-message'
 import invalidLimits from './helpers/limits-checker'
+import isFunction from './helpers/is-function'
+import prettifyStatusMessage from './helpers/prettify-status-message'
 import printResponseDebug from './helpers/print-response-debug'
+import shouldRetry from './helpers/should-retry'
 
 class Kindred {
   constructor({
@@ -397,7 +398,7 @@ class Kindred {
     this.Tournament = {
       getDTOByCode: this.getDTOByCode.bind(this),
 
-      DTO: { // hmm i like this
+      DTO: {
         by: {
           code: this.getDTOByCode.bind(this)
         }
@@ -422,18 +423,13 @@ class Kindred {
   }
 
   canMakeRequest(region) {
-    if (this.spread) {
-      return (
-        this.limits[region][0].requestAvailable() &&
-        this.limits[region][1].requestAvailable() &&
-        this.limits[region][2].requestAvailable()
-      )
-    } else {
-      return (
-        this.limits[region][0].requestAvailable() &&
-        this.limits[region][1].requestAvailable()
-      )
-    }
+    const spread = this.spread ? this.limits[region][2].requestAvailable() : true
+
+    return (
+      this.limits[region][0].requestAvailable() &&
+      this.limits[region][1].requestAvailable() &&
+      spread
+    )
   }
 
   _sanitizeName(name) {
@@ -451,9 +447,9 @@ class Kindred {
     return re.test(name)
   }
 
-  _makeUrl(query, region, staticReq, status, observerMode, championMastery) {
+  _makeUrl(query, region, staticReq) {
     const mid = staticReq ? '' : `${region}/`
-    const oldPrefix = !status && !observerMode && !championMastery ? `api/lol/${mid}` : ''
+    const oldPrefix = `api/lol/${mid}`
     const prefix = 'lol/'
     const base = 'api.riotgames.com'
 
@@ -470,7 +466,7 @@ class Kindred {
   _baseRequest({
     endUrl,
     region = this.defaultRegion,
-    status = false, observerMode = false, staticReq = false, championMastery = false,
+    staticReq = false,
     options = {},
     cacheParams = {}
   }, cb) {
@@ -501,7 +497,7 @@ class Kindred {
         }
 
         const postfix = stringifiedOpts ? '?' + stringifiedOpts : ''
-        const reqUrl = this._makeUrl(endUrl + postfix, region, staticReq, status, observerMode, championMastery)
+        const reqUrl = this._makeUrl(endUrl + postfix, region, staticReq)
         const fullUrl = reqUrl + (reqUrl.lastIndexOf('?') === -1 ? '?' : '&') + `api_key=${this.key}`
 
         this.cache.get({ key: reqUrl }, (err, data) => {
@@ -527,35 +523,29 @@ class Kindred {
                     request({ url: fullUrl }, (error, response, body) => {
                       if (response && body) {
                         const { statusCode } = response
-                        const statusMessage = colorizeStatusMessage(statusCode)
+                        const responseMessage = prettifyStatusMessage(statusCode)
+                        const retry = response.headers['retry-after'] * 1000 + 50 || 1000
 
-                        if (self.debug) printResponseDebug(response, statusMessage, fullUrl)
+                        if (self.debug)
+                          printResponseDebug(response, responseMessage, chalk.yellow(fullUrl))
 
-                        if (typeof callback === 'function') {
-                          if (statusCode >= 500) {
+                        if (isFunction(callback)) {
+                          if (shouldRetry(statusCode)) {
                             if (self.debug) console.log('Resending callback request.\n')
-                            return setTimeout(() => sendRequest.bind(self)(callback), 1000)
-                          } else if (statusCode === 429) {
-                            if (self.debug) console.log('Resending callback request.\n')
-                            const retry = response.headers['retry-after'] * 1000 + 50
                             return setTimeout(() => sendRequest.bind(self)(callback), retry)
                           } else if (statusCode >= 400) {
-                            return callback(statusMessage + ' : ' + chalk.yellow(reqUrl))
+                            return callback(statusCode)
                           } else {
                             if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0)
                               self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body)
                             return callback(error, JSON.parse(body))
                           }
                         } else {
-                          if (statusCode >= 500) {
+                          if (shouldRetry(statusCode)) {
                             if (self.debug) console.log('Resending promise request.\n')
-                            return setTimeout(() => resolve(tryRequest()), 1000)
-                          } else if (statusCode === 429) {
-                            if (self.debug) console.log('Resending promise request.\n')
-                            const retry = response.headers['retry-after'] * 1000 + 50
                             return setTimeout(() => resolve(tryRequest()), retry)
                           } else if (statusCode >= 400) {
-                            return reject(statusMessage + ' : ' + chalk.yellow(reqUrl))
+                            return reject(statusCode)
                           } else {
                             if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0)
                               self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body)
@@ -567,6 +557,7 @@ class Kindred {
                       }
                     })
                   } else {
+                    // Can't make request -> retry in a second.
                     return setTimeout(() => sendRequest.bind(self)(callback), 1000)
                   }
                 })(cb)
@@ -576,13 +567,13 @@ class Kindred {
                   var self = this
 
                   const { statusCode } = response
-                  const statusMessage = colorizeStatusMessage(statusCode)
+                  const statusMessage = prettifyStatusMessage(statusCode)
 
-                  if (self.debug) printResponseDebug(response, statusMessage, fullUrl)
+                  if (self.debug) printResponseDebug(response, statusMessage, chalk.yellow(fullUrl))
 
-                  if (typeof cb === 'function') {
+                  if (isFunction(cb)) {
                     if (statusCode >= 400)
-                      return cb(statusMessage + ' : ' + chalk.yellow(reqUrl))
+                      return cb(statusCode)
                     else
                       return cb(error, JSON.parse(body))
                   } else {
@@ -607,7 +598,6 @@ class Kindred {
   _championMasteryRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
       endUrl: `${SERVICES.CHAMPION_MASTERY}/v${VERSIONS.CHAMPION}/${endUrl}`, region, options,
-      championMastery: true,
       cacheParams: {
         ttl: this.CACHE_TIMERS.CHAMPION_MASTERY
       }
@@ -649,7 +639,6 @@ class Kindred {
   _statusRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
       endUrl: `${SERVICES.STATUS}/v${VERSIONS.STATUS}/${endUrl}`,
-      status: true,
       region,
       options,
       cacheParams: {
@@ -748,7 +737,7 @@ class Kindred {
 
   /* CHAMPION-V3 */
   getChamps({ region, options } = {}, cb) {
-    if (typeof arguments[0] === 'function') {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -813,7 +802,7 @@ class Kindred {
       return this._championMasteryRequest({
         endUrl: `champion-masteries/by-summoner/${id || summonerId || playerId}`, region
       }, cb)
-    } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
+    } else if (typeof name === 'string') {
       return new Promise((resolve, reject) => {
         return this.getSummoner({ name, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
@@ -851,7 +840,7 @@ class Kindred {
       return this._championMasteryRequest({
         endUrl: `scores/by-summoner/${id || summonerId || playerId}`, region
       }, cb)
-    } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
+    } else if (typeof name === 'string') {
       return new Promise((resolve, reject) => {
         return this.getSummoner({ name, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
@@ -891,7 +880,7 @@ class Kindred {
         endUrl: `active-games/by-summoner/${id || summonerId || playerId}`,
         region
       }, cb)
-    } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
+    } else if (typeof name === 'string') {
       return new Promise((resolve, reject) => {
         return this.getSummoner({ name, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
@@ -910,7 +899,7 @@ class Kindred {
   }
 
   getFeaturedGames({ region } = {}, cb) {
-    if (typeof arguments[0] === 'function') {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -942,7 +931,7 @@ class Kindred {
         endUrl: `by-summoner/${id || summonerId || playerId}/recent`,
         region
       }, cb)
-    } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
+    } else if (typeof name === 'string') {
       return new Promise((resolve, reject) => {
         return this.getSummoner({ name, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
@@ -982,7 +971,7 @@ class Kindred {
         endUrl: `leagues/by-summoner/${id || summonerId || playerId}`,
         region, options
       }, cb)
-    } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
+    } else if (typeof name === 'string') {
       return new Promise((resolve, reject) => {
         return this.getSummoner({ name, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
@@ -1021,7 +1010,7 @@ class Kindred {
         endUrl: `positions/by-summoner/${id || summonerId || playerId}`,
         region
       }, cb)
-    } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
+    } else if (typeof name === 'string') {
       return new Promise((resolve, reject) => {
         return this.getSummoner({ name, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
@@ -1043,7 +1032,7 @@ class Kindred {
     region,
     queue = 'RANKED_SOLO_5x5'
   } = {}, cb) {
-    cb = typeof arguments[0] === 'function' ? arguments[0] : arguments[1]
+    cb = isFunction(arguments[0]) ? arguments[0] : arguments[1]
 
     if (typeof queue === 'string') {
       return this._leagueRequest({
@@ -1061,7 +1050,7 @@ class Kindred {
     region,
     queue = 'RANKED_SOLO_5x5'
   } = {}, cb) {
-    cb = typeof arguments[0] === 'function' ? arguments[0] : arguments[1]
+    cb = isFunction(arguments[0]) ? arguments[0] : arguments[1]
 
     if (typeof queue === 'string') {
       return this._leagueRequest({
@@ -1077,7 +1066,7 @@ class Kindred {
 
   /* STATIC-DATA-V3 */
   getChampionList({ region, options } = {}, cb) {
-    if (typeof arguments[0] === 'function') {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -1101,7 +1090,7 @@ class Kindred {
   }
 
   getItems({ region, options } = {}, cb) {
-    if (typeof arguments[0] === 'function') {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -1125,7 +1114,7 @@ class Kindred {
   }
 
   getLanguageStrings({ region, options } = {}, cb) {
-    if (typeof arguments[0] === 'function') {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -1134,7 +1123,7 @@ class Kindred {
   }
 
   getLanguages({ region } = {}, cb) {
-    if (typeof arguments[0] === 'function') {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -1143,7 +1132,7 @@ class Kindred {
   }
 
   getMapData({ region, options } = {}, cb) {
-    if (typeof arguments[0] === 'function') {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -1152,7 +1141,7 @@ class Kindred {
   }
 
   getMasteryList({ region, options } = {}, cb) {
-    if (typeof arguments[0] === 'function') {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -1179,7 +1168,7 @@ class Kindred {
   }
 
   getProfileIcons({ region, options }, cb) {
-    if (typeof arguments[0] === 'function') {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -1188,7 +1177,7 @@ class Kindred {
   }
 
   getRealmData({ region } = {}, cb) {
-    if (typeof arguments[0] === 'function') {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -1197,7 +1186,7 @@ class Kindred {
   }
 
   getRuneList({ region, options } = {}, cb) {
-    if (typeof arguments[0] === 'function') {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -1221,7 +1210,7 @@ class Kindred {
   }
 
   getSummonerSpells({ region, options } = {}, cb) {
-    if (typeof arguments[0] === 'function') {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -1248,7 +1237,7 @@ class Kindred {
   }
 
   getVersionData({ region, options } = {}, cb) {
-    if (typeof arguments[0] === 'function') {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -1258,7 +1247,7 @@ class Kindred {
 
   /* STATUS-V3 */
   getShardStatus({ region } = {}, cb) {
-    if (typeof arguments[0] === 'function') {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -1315,7 +1304,7 @@ class Kindred {
           }, cb))
         })
       })
-    } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
+    } else if (typeof name === 'string') {
       return new Promise((resolve, reject) => {
         return this.getSummoner({ name, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
@@ -1354,7 +1343,7 @@ class Kindred {
           }, cb))
         })
       })
-    } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
+    } else if (typeof name === 'string') {
       return new Promise((resolve, reject) => {
         return this.getSummoner({ name, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
@@ -1411,7 +1400,7 @@ class Kindred {
         endUrl: `runes/by-summoner/${id || summonerId || playerId}`,
         region
       }, cb)
-    } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
+    } else if (typeof name === 'string') {
       return new Promise((resolve, reject) => {
         return this.getSummoner({ name, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
@@ -1451,7 +1440,7 @@ class Kindred {
         endUrl: `masteries/by-summoner/${id || summonerId || playerId}`,
         region
       }, cb)
-    } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
+    } else if (typeof name === 'string') {
       return new Promise((resolve, reject) => {
         return this.getSummoner({ name, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
@@ -1492,7 +1481,7 @@ class Kindred {
         endUrl: `${id || summonerId || playerId}/ranked`,
         region, options
       }, cb)
-    } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
+    } else if (typeof name === 'string') {
       return new Promise((resolve, reject) => {
         return this.getSummoner({ name, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
@@ -1532,7 +1521,7 @@ class Kindred {
         endUrl: `${id || summonerId || playerId}/summary`,
         region, options
       }, cb)
-    } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
+    } else if (typeof name === 'string') {
       return new Promise((resolve, reject) => {
         return this.getSummoner({ name, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
@@ -1562,7 +1551,7 @@ class Kindred {
         endUrl: `${id || summonerId || playerId}`,
         region
       }, cb)
-    } else if (typeof arguments[0] === 'object' && typeof name === 'string') {
+    } else if (typeof name === 'string') {
       return this._summonerRequest({
         endUrl: `by-name/${this._sanitizeName(name)}`,
         region

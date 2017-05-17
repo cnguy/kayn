@@ -1,11 +1,11 @@
 const codes = {
-  400: 'Bad Request',
-  403: 'Forbidden',
-  404: 'Not Found',
-  415: 'Unsupported Media Type',
-  429: 'Rate Limit Exceeded',
-  500: 'Internal Service Error',
-  503: 'Service Unavailable'
+  BAD_REQUEST: 400,
+  FORBIDDEN: 403,
+  NOT_FOUND: 404,
+  UNSUPPORTED_MEDIA_TYPE: 415,
+  RATE_LIMIT_EXCEEDED: 429,
+  INTERNAL_SERVICE_ERROR: 500,
+  SERVICE_UNAVAILABLE: 503
 }
 
 export default codes

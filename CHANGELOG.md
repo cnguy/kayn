@@ -2,8 +2,17 @@ From here onwards I'll try to adhere to [Semantic Versioning](http://semver.org)
 
 Treat my versioning as if it is 0.x.y.
 
+**Upgrading versions should NEVER break your project, so update to the latest every now and then. :P**
+
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
+## [2.0.46]() - API errors are now returned as status codes instead of strings.
+
+When catching errors, users now just get the raw status code instead of some colorized string.
+
+This was mostly a patch to do a lot of code refactoring. :P
+
+## [2.0.45](https://github.com/ChauTNguyen/kindred-api/commit/25dba4e5870e2e8df808c9dd761b2b0939e3b074) - Fixed a few bugs and things that could cause bugs in rare situations.
 ## [2.0.44](https://github.com/ChauTNguyen/kindred-api/commit/3fd4ac7ac04aa3a992098b22e987807f170efcc6) - Promises no longer retry on 404's.
 ## [2.0.43](https://github.com/ChauTNguyen/kindred-api/commit/e58830b1b64fa967d45c2a0bbc62118b82da69af) - Production rate limits are now correct.
 ## [2.0.42](https://github.com/ChauTNguyen/kindred-api/commit/a65adc4bd609b0f7860a5ee55a2fb701c1e73f8f) - (non-bugfix) Added MatchTimelineById function.
