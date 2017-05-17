@@ -6,7 +6,15 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
-## [2.0.46]() - API errors are now returned as status codes instead of strings.
+## [2.0.47]() - Matchlist is now cachable.
+
+When I updated my methods to use the v3 endpoints, I forgot to update and include Matchlist methods for Matchlist requests and so the CACHE_TIMER for MATCHLIST would not be used.
+
+Match and matchlist requests use the same endpoints now, but they should be cached for different times as matches are nonchanging while matchlists are updating every 30 minutes to an hour or so.
+
+Also, the cache timer for Matchlist is now fixed (I had ONE_HOUR instead of HOUR).
+
+## [2.0.46](https://github.com/ChauTNguyen/kindred-api/commit/4e7bb5e7510761ca9e00f5963b16b299d14ff415) - API errors are now returned as status codes instead of strings.
 
 When catching errors, users now just get the raw status code instead of some colorized string.
 

@@ -669,18 +669,16 @@ class Kindred {
     }, cb)
   }
 
-  _matchRequest({ endUrl, region, options }, cb) {
+  _matchRequest({ endUrl, region, options, cacheParams = { ttl: this.CACHE_TIMERS.MATCH } }, cb) {
     return this._baseRequest({
       endUrl: `${SERVICES.MATCH}/v${VERSIONS.MATCH}/${endUrl}`, region, options,
-      cacheParams: {
-        ttl: this.CACHE_TIMERS.MATCH
-      }
+      cacheParams
     }, cb)
   }
 
   _matchlistRequest({ endUrl, region, options }, cb) {
-    return this._baseRequest({
-      endUrl: `v${VERSIONS.MATCHLIST}/matchlist/by-summoner/${endUrl}`, region, options,
+    return this._matchRequest({
+      endUrl: `matchlists/${endUrl}`, region, options,
       cacheParams: {
         ttl: this.CACHE_TIMERS.MATCHLIST
       }
@@ -1294,16 +1292,16 @@ class Kindred {
     options = { queue: QUEUE_TYPES.TEAM_BUILDER_RANKED_SOLO }
   } = {}, cb) {
     if (Number.isInteger(accountId || accId)) {
-      return this._matchRequest({
-        endUrl: `matchlists/by-account/${accountId || accId}`,
+      return this._matchlistRequest({
+        endUrl: `by-account/${accountId || accId}`,
         region, options
       }, cb)
     } else if (Number.isInteger(id || summonerId || playerId)) {
       return new Promise((resolve, reject) => {
         return this.getSummoner({ id, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
-          return resolve(this._matchRequest({
-            endUrl: `matchlists/by-account/${data.accountId}`,
+          return resolve(this._matchlistRequest({
+            endUrl: `by-account/${data.accountId}`,
             region, options
           }, cb))
         })
@@ -1312,8 +1310,8 @@ class Kindred {
       return new Promise((resolve, reject) => {
         return this.getSummoner({ name, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
-          return resolve(this._matchRequest({
-            endUrl: `matchlists/by-account/${data.accountId}`,
+          return resolve(this._matchlistRequest({
+            endUrl: `by-account/${data.accountId}`,
             region, options
           }, cb))
         })
@@ -1333,16 +1331,16 @@ class Kindred {
     name
   } = {}, cb) {
     if (Number.isInteger(accountId || accId)) {
-      return this._matchRequest({
-        endUrl: `matchlists/by-account/${accountId || accId}/recent`,
+      return this._matchlistRequest({
+        endUrl: `by-account/${accountId || accId}/recent`,
         region
       }, cb)
     } else if (Number.isInteger(id || summonerId || playerId)) {
       return new Promise((resolve, reject) => {
         return this.getSummoner({ id, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
-          return resolve(this._matchRequest({
-            endUrl: `matchlists/by-account/${data.accountId}/recent`,
+          return resolve(this._matchlistRequest({
+            endUrl: `by-account/${data.accountId}/recent`,
             region
           }, cb))
         })
@@ -1351,8 +1349,8 @@ class Kindred {
       return new Promise((resolve, reject) => {
         return this.getSummoner({ name, region }, (err, data) => {
           if (err) { cb ? cb(err) : reject(err); return }
-          return resolve(this._matchRequest({
-            endUrl: `matchlists/by-account/${data.accountId}/recent`,
+          return resolve(this._matchlistRequest({
+            endUrl: `by-account/${data.accountId}/recent`,
             region
           }, cb))
         })
@@ -1602,17 +1600,17 @@ class Kindred {
 
   /* Non-parameter-destructuring-thingy functions */
   listChampions(options, region, cb) {
-    if (typeof options == 'function') {
+    if (isFunction(options)) {
       cb = options
       options = undefined
     }
 
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
 
-    if (typeof options == 'string') {
+    if (isFunction(options)) {
       region = options
       options = undefined
     }
@@ -1623,7 +1621,7 @@ class Kindred {
   }
 
   getChampionById(id, region, cb) {
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
@@ -1634,7 +1632,7 @@ class Kindred {
   }
 
   listFeaturedGames(region, cb) {
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
@@ -1646,7 +1644,7 @@ class Kindred {
 
   listChallengers(queue, region, cb) {
     if (checkValidRegion(queue)) {
-      if (typeof region == 'function') {
+      if (isFunction(region)) {
         cb = region
         region = undefined
       }
@@ -1655,12 +1653,12 @@ class Kindred {
       queue = undefined
     }
 
-    if (typeof queue == 'function') {
+    if (isFunction(queue)) {
       cb = queue
       queue = undefined
     }
 
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
@@ -1672,7 +1670,7 @@ class Kindred {
 
   listMasters(queue, region, cb) {
     if (checkValidRegion(queue)) {
-      if (typeof region == 'function') {
+      if (isFunction(region)) {
         cb = region
         region = undefined
       }
@@ -1681,12 +1679,12 @@ class Kindred {
       queue = undefined
     }
 
-    if (typeof queue == 'function') {
+    if (isFunction(queue)) {
       cb = queue
       queue = undefined
     }
 
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
@@ -1697,7 +1695,7 @@ class Kindred {
   }
 
   getSummonerByAccountId(accId, region, cb) {
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
@@ -1709,7 +1707,7 @@ class Kindred {
   }
 
   getSummonerById(id, region, cb) {
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
@@ -1721,7 +1719,7 @@ class Kindred {
   }
 
   getSummonerByName(name, region, cb) {
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
@@ -1733,7 +1731,7 @@ class Kindred {
   }
 
   getMasteriesByAccountId(accId, region, cb) {
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
@@ -1745,7 +1743,7 @@ class Kindred {
   }
 
   getMasteriesById(id, region, cb) {
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
@@ -1757,7 +1755,7 @@ class Kindred {
   }
 
   getMasteriesByName(name, region, cb) {
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
@@ -1769,7 +1767,7 @@ class Kindred {
   }
 
   getMatchById(id, region, cb) {
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
@@ -1781,17 +1779,17 @@ class Kindred {
   }
 
   getMatchlistByAccountId(accId, options, region, cb) {
-    if (typeof options == 'function') {
+    if (isFunction(options)) {
       cb = options
       options = undefined
     }
 
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
 
-    if (typeof options == 'string') {
+    if (typeof options === 'string') {
       region = options
       options = undefined
     }
@@ -1803,17 +1801,17 @@ class Kindred {
   }
 
   getMatchlistById(id, options, region, cb) {
-    if (typeof options == 'function') {
+    if (isFunction(options)) {
       cb = options
       options = undefined
     }
 
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
 
-    if (typeof options == 'string') {
+    if (typeof options === 'string') {
       region = options
       options = undefined
     }
@@ -1825,17 +1823,17 @@ class Kindred {
   }
 
   getMatchlistByName(name, options, region, cb) {
-    if (typeof options == 'function') {
+    if (isFunction(options)) {
       cb = options
       options = undefined
     }
 
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
 
-    if (typeof options == 'string') {
+    if (typeof options === 'string') {
       region = options
       options = undefined
     }
@@ -1846,7 +1844,7 @@ class Kindred {
   }
 
   getMatchTimelineById(id, region, cb) {
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
@@ -1857,7 +1855,7 @@ class Kindred {
   }
 
   getRunesByAccountId(accId, region, cb) {
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
@@ -1869,7 +1867,7 @@ class Kindred {
   }
 
   getRunesById(id, region, cb) {
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
@@ -1881,7 +1879,7 @@ class Kindred {
   }
 
   getRunesByName(name, region, cb) {
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
@@ -1893,17 +1891,17 @@ class Kindred {
   }
 
   getStaticChampionList(options, region, cb) {
-    if (typeof options == 'function') {
+    if (isFunction(options)) {
       cb = options
       options = undefined
     }
 
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
 
-    if (typeof options == 'string') {
+    if (typeof options === 'string') {
       region = options
       options = undefined
     }
@@ -1914,17 +1912,17 @@ class Kindred {
   }
 
   getStaticChampionById(id, options, region, cb) {
-    if (typeof options == 'function') {
+    if (isFunction(options)) {
       cb = options
       options = undefined
     }
 
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
 
-    if (typeof options == 'string') {
+    if (typeof options === 'string') {
       region = options
       options = undefined
     }
@@ -1935,17 +1933,17 @@ class Kindred {
   }
 
   getStaticItemList(options, region, cb) {
-    if (typeof options == 'function') {
+    if (isFunction(options)) {
       cb = options
       options = undefined
     }
 
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
 
-    if (typeof options == 'string') {
+    if (typeof options === 'string') {
       region = options
       options = undefined
     }
@@ -1956,17 +1954,17 @@ class Kindred {
   }
 
   getStaticItemById(id, options, region, cb) {
-    if (typeof options == 'function') {
+    if (isFunction(options)) {
       cb = options
       options = undefined
     }
 
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
 
-    if (typeof options == 'string') {
+    if (typeof options === 'string') {
       region = options
       options = undefined
     }
@@ -1977,17 +1975,17 @@ class Kindred {
   }
 
   getStaticLanguageStringList(options, region, cb) {
-    if (typeof options == 'function') {
+    if (isFunction(options)) {
       cb = options
       options = undefined
     }
 
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
 
-    if (typeof options == 'string') {
+    if (typeof options === 'string') {
       region = options
       options = undefined
     }
@@ -1998,7 +1996,7 @@ class Kindred {
   }
 
   getStaticLanguageList(region, cb) {
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
@@ -2009,17 +2007,17 @@ class Kindred {
   }
 
   getStaticMapList(options, region, cb) {
-    if (typeof options == 'function') {
+    if (isFunction(options)) {
       cb = options
       options = undefined
     }
 
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
 
-    if (typeof options == 'string') {
+    if (typeof options === 'string') {
       region = options
       options = undefined
     }
@@ -2030,17 +2028,17 @@ class Kindred {
   }
 
   getStaticMasteryList(options, region, cb) {
-    if (typeof options == 'function') {
+    if (isFunction(options)) {
       cb = options
       options = undefined
     }
 
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
 
-    if (typeof options == 'string') {
+    if (typeof options === 'string') {
       region = options
       options = undefined
     }
@@ -2051,17 +2049,17 @@ class Kindred {
   }
 
   getStaticMasteryById(id, options, region, cb) {
-    if (typeof options == 'function') {
+    if (isFunction(options)) {
       cb = options
       options = undefined
     }
 
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
 
-    if (typeof options == 'string') {
+    if (typeof options === 'string') {
       region = options
       options = undefined
     }
@@ -2072,17 +2070,17 @@ class Kindred {
   }
 
   getStaticProfileIconList(options, region, cb) {
-    if (typeof options == 'function') {
+    if (isFunction(options)) {
       cb = options
       options = undefined
     }
 
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
 
-    if (typeof options == 'string') {
+    if (typeof options === 'string') {
       region = options
       options = undefined
     }
@@ -2093,7 +2091,7 @@ class Kindred {
   }
 
   getStaticRealmList(region, cb) {
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
@@ -2104,17 +2102,17 @@ class Kindred {
   }
 
   getStaticRuneList(options, region, cb) {
-    if (typeof options == 'function') {
+    if (isFunction(options)) {
       cb = options
       options = undefined
     }
 
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
 
-    if (typeof options == 'string') {
+    if (typeof options === 'string') {
       region = options
       options = undefined
     }
@@ -2125,17 +2123,17 @@ class Kindred {
   }
 
   getStaticRuneById(id, options, region, cb) {
-    if (typeof options == 'function') {
+    if (isFunction(options)) {
       cb = options
       options = undefined
     }
 
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
 
-    if (typeof options == 'string') {
+    if (typeof options === 'string') {
       region = options
       options = undefined
     }
@@ -2146,17 +2144,17 @@ class Kindred {
   }
 
   getStaticSummonerSpellList(options, region, cb) {
-    if (typeof options == 'function') {
+    if (isFunction(options)) {
       cb = options
       options = undefined
     }
 
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
 
-    if (typeof options == 'string') {
+    if (typeof options === 'string') {
       region = options
       options = undefined
     }
@@ -2167,17 +2165,17 @@ class Kindred {
   }
 
   getStaticSummonerSpellById(id, options, region, cb) {
-    if (typeof options == 'function') {
+    if (isFunction(options)) {
       cb = options
       options = undefined
     }
 
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
 
-    if (typeof options == 'string') {
+    if (typeof options === 'string') {
       region = options
       options = undefined
     }
@@ -2188,7 +2186,7 @@ class Kindred {
   }
 
   getStaticVersionList(region, cb) {
-    if (typeof region == 'function') {
+    if (isFunction(region)) {
       cb = region
       region = undefined
     }
