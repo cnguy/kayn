@@ -877,9 +877,9 @@
       }
     }, {
       key: '_makeUrl',
-      value: function _makeUrl(query, region, staticReq, status, observerMode, championMastery) {
+      value: function _makeUrl(query, region, staticReq) {
         var mid = staticReq ? '' : region + '/';
-        var oldPrefix = !status && !observerMode && !championMastery ? 'api/lol/' + mid : '';
+        var oldPrefix = 'api/lol/' + mid;
         var prefix = 'lol/';
         var base = 'api.riotgames.com';
 
@@ -898,14 +898,8 @@
         var endUrl = _ref2.endUrl,
             _ref2$region = _ref2.region,
             region = _ref2$region === undefined ? this.defaultRegion : _ref2$region,
-            _ref2$status = _ref2.status,
-            status = _ref2$status === undefined ? false : _ref2$status,
-            _ref2$observerMode = _ref2.observerMode,
-            observerMode = _ref2$observerMode === undefined ? false : _ref2$observerMode,
             _ref2$staticReq = _ref2.staticReq,
             staticReq = _ref2$staticReq === undefined ? false : _ref2$staticReq,
-            _ref2$championMastery = _ref2.championMastery,
-            championMastery = _ref2$championMastery === undefined ? false : _ref2$championMastery,
             _ref2$options = _ref2.options,
             options = _ref2$options === undefined ? {} : _ref2$options,
             _ref2$cacheParams = _ref2.cacheParams,
@@ -980,7 +974,7 @@
             }
 
             var postfix = stringifiedOpts ? '?' + stringifiedOpts : '';
-            var reqUrl = _this._makeUrl(endUrl + postfix, region, staticReq, status, observerMode, championMastery);
+            var reqUrl = _this._makeUrl(endUrl + postfix, region, staticReq);
             var fullUrl = reqUrl + (reqUrl.lastIndexOf('?') === -1 ? '?' : '&') + ('api_key=' + _this.key);
 
             _this.cache.get({ key: reqUrl }, function (err, data) {
@@ -1081,7 +1075,6 @@
 
         return this._baseRequest({
           endUrl: services.CHAMPION_MASTERY + '/v' + versions.CHAMPION + '/' + endUrl, region: region, options: options,
-          championMastery: true,
           cacheParams: {
             ttl: this.CACHE_TIMERS.CHAMPION_MASTERY
           }
@@ -1142,7 +1135,6 @@
 
         return this._baseRequest({
           endUrl: services.STATUS + '/v' + versions.STATUS + '/' + endUrl,
-          status: true,
           region: region,
           options: options,
           cacheParams: {
@@ -1279,7 +1271,7 @@
 
         var cb = arguments[1];
 
-        if (isFunction(_typeof(arguments[0]))) {
+        if (isFunction(arguments[0])) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1645,7 +1637,7 @@
 
         var cb = arguments[1];
 
-        cb = isFunction(_typeof(arguments[0])) ? arguments[0] : arguments[1];
+        cb = isFunction(arguments[0]) ? arguments[0] : arguments[1];
 
         if (typeof queue === 'string') {
           return this._leagueRequest({
@@ -1665,7 +1657,7 @@
 
         var cb = arguments[1];
 
-        cb = isFunction(_typeof(arguments[0])) ? arguments[0] : arguments[1];
+        cb = isFunction(arguments[0]) ? arguments[0] : arguments[1];
 
         if (typeof queue === 'string') {
           return this._leagueRequest({
@@ -1684,7 +1676,7 @@
 
         var cb = arguments[1];
 
-        if (isFunction(_typeof(arguments[0]))) {
+        if (isFunction(arguments[0])) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1717,7 +1709,7 @@
 
         var cb = arguments[1];
 
-        if (isFunction(_typeof(arguments[0]))) {
+        if (isFunction(arguments[0])) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1750,7 +1742,7 @@
 
         var cb = arguments[1];
 
-        if (isFunction(_typeof(arguments[0]))) {
+        if (isFunction(arguments[0])) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1765,7 +1757,7 @@
 
         var cb = arguments[1];
 
-        if (isFunction(_typeof(arguments[0]))) {
+        if (isFunction(arguments[0])) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1781,7 +1773,7 @@
 
         var cb = arguments[1];
 
-        if (isFunction(_typeof(arguments[0]))) {
+        if (isFunction(arguments[0])) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1797,7 +1789,7 @@
 
         var cb = arguments[1];
 
-        if (isFunction(_typeof(arguments[0]))) {
+        if (isFunction(arguments[0])) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1830,7 +1822,7 @@
         var region = _ref37.region,
             options = _ref37.options;
 
-        if (isFunction(_typeof(arguments[0]))) {
+        if (isFunction(arguments[0])) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1845,7 +1837,7 @@
 
         var cb = arguments[1];
 
-        if (isFunction(_typeof(arguments[0]))) {
+        if (isFunction(arguments[0])) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1861,7 +1853,7 @@
 
         var cb = arguments[1];
 
-        if (isFunction(_typeof(arguments[0]))) {
+        if (isFunction(arguments[0])) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1894,7 +1886,7 @@
 
         var cb = arguments[1];
 
-        if (isFunction(_typeof(arguments[0]))) {
+        if (isFunction(arguments[0])) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1931,7 +1923,7 @@
 
         var cb = arguments[1];
 
-        if (isFunction(_typeof(arguments[0]))) {
+        if (isFunction(arguments[0])) {
           cb = arguments[0];
           arguments[0] = undefined;
         }
@@ -1946,7 +1938,7 @@
 
         var cb = arguments[1];
 
-        if (isFunction(_typeof(arguments[0]))) {
+        if (isFunction(arguments[0])) {
           cb = arguments[0];
           arguments[0] = undefined;
         }

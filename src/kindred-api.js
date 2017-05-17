@@ -447,9 +447,9 @@ class Kindred {
     return re.test(name)
   }
 
-  _makeUrl(query, region, staticReq, status, observerMode, championMastery) {
+  _makeUrl(query, region, staticReq) {
     const mid = staticReq ? '' : `${region}/`
-    const oldPrefix = !status && !observerMode && !championMastery ? `api/lol/${mid}` : ''
+    const oldPrefix = `api/lol/${mid}`
     const prefix = 'lol/'
     const base = 'api.riotgames.com'
 
@@ -466,7 +466,7 @@ class Kindred {
   _baseRequest({
     endUrl,
     region = this.defaultRegion,
-    status = false, observerMode = false, staticReq = false, championMastery = false,
+    staticReq = false,
     options = {},
     cacheParams = {}
   }, cb) {
@@ -497,7 +497,7 @@ class Kindred {
         }
 
         const postfix = stringifiedOpts ? '?' + stringifiedOpts : ''
-        const reqUrl = this._makeUrl(endUrl + postfix, region, staticReq, status, observerMode, championMastery)
+        const reqUrl = this._makeUrl(endUrl + postfix, region, staticReq)
         const fullUrl = reqUrl + (reqUrl.lastIndexOf('?') === -1 ? '?' : '&') + `api_key=${this.key}`
 
         this.cache.get({ key: reqUrl }, (err, data) => {
@@ -598,7 +598,6 @@ class Kindred {
   _championMasteryRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
       endUrl: `${SERVICES.CHAMPION_MASTERY}/v${VERSIONS.CHAMPION}/${endUrl}`, region, options,
-      championMastery: true,
       cacheParams: {
         ttl: this.CACHE_TIMERS.CHAMPION_MASTERY
       }
@@ -640,7 +639,6 @@ class Kindred {
   _statusRequest({ endUrl, region, options }, cb) {
     return this._baseRequest({
       endUrl: `${SERVICES.STATUS}/v${VERSIONS.STATUS}/${endUrl}`,
-      status: true,
       region,
       options,
       cacheParams: {
@@ -739,7 +737,7 @@ class Kindred {
 
   /* CHAMPION-V3 */
   getChamps({ region, options } = {}, cb) {
-    if (isFunction(typeof arguments[0])) {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -1034,7 +1032,7 @@ class Kindred {
     region,
     queue = 'RANKED_SOLO_5x5'
   } = {}, cb) {
-    cb = isFunction(typeof arguments[0]) ? arguments[0] : arguments[1]
+    cb = isFunction(arguments[0]) ? arguments[0] : arguments[1]
 
     if (typeof queue === 'string') {
       return this._leagueRequest({
@@ -1052,7 +1050,7 @@ class Kindred {
     region,
     queue = 'RANKED_SOLO_5x5'
   } = {}, cb) {
-    cb = isFunction(typeof arguments[0]) ? arguments[0] : arguments[1]
+    cb = isFunction(arguments[0]) ? arguments[0] : arguments[1]
 
     if (typeof queue === 'string') {
       return this._leagueRequest({
@@ -1068,7 +1066,7 @@ class Kindred {
 
   /* STATIC-DATA-V3 */
   getChampionList({ region, options } = {}, cb) {
-    if (isFunction(typeof arguments[0])) {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -1092,7 +1090,7 @@ class Kindred {
   }
 
   getItems({ region, options } = {}, cb) {
-    if (isFunction(typeof arguments[0])) {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -1116,7 +1114,7 @@ class Kindred {
   }
 
   getLanguageStrings({ region, options } = {}, cb) {
-    if (isFunction(typeof arguments[0])) {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -1125,7 +1123,7 @@ class Kindred {
   }
 
   getLanguages({ region } = {}, cb) {
-    if (isFunction(typeof arguments[0])) {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -1134,7 +1132,7 @@ class Kindred {
   }
 
   getMapData({ region, options } = {}, cb) {
-    if (isFunction(typeof arguments[0])) {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -1143,7 +1141,7 @@ class Kindred {
   }
 
   getMasteryList({ region, options } = {}, cb) {
-    if (isFunction(typeof arguments[0])) {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -1170,7 +1168,7 @@ class Kindred {
   }
 
   getProfileIcons({ region, options }, cb) {
-    if (isFunction(typeof arguments[0])) {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -1179,7 +1177,7 @@ class Kindred {
   }
 
   getRealmData({ region } = {}, cb) {
-    if (isFunction(typeof arguments[0])) {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -1188,7 +1186,7 @@ class Kindred {
   }
 
   getRuneList({ region, options } = {}, cb) {
-    if (isFunction(typeof arguments[0])) {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -1212,7 +1210,7 @@ class Kindred {
   }
 
   getSummonerSpells({ region, options } = {}, cb) {
-    if (isFunction(typeof arguments[0])) {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -1239,7 +1237,7 @@ class Kindred {
   }
 
   getVersionData({ region, options } = {}, cb) {
-    if (isFunction(typeof arguments[0])) {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
@@ -1249,7 +1247,7 @@ class Kindred {
 
   /* STATUS-V3 */
   getShardStatus({ region } = {}, cb) {
-    if (isFunction(typeof arguments[0])) {
+    if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
     }
