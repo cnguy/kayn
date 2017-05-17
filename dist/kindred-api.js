@@ -443,6 +443,9 @@
     return code >= ISE || code === RLE;
   };
 
+  var ERROR_THRESHOLD = 400;
+  var SECOND = 1000;
+
   var Kindred$1 = function () {
     function Kindred$1() {
       var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
@@ -467,7 +470,7 @@
       this.defaultRegion = check(defaultRegion) ? defaultRegion : undefined;
 
       if (!this.defaultRegion) {
-        throw new Error(chalk.red('setRegion() by Kindred failed: ' + chalk.yellow(defaultRegion) + ' is an invalid region.') + '\n' + ('' + chalk.red('Try importing ' + chalk.yellow('require(\'./dist/kindred-api\').REGIONS') + ' and using one of those values instead.')));
+        throw new Error(chalk.red('setRegion() by Kindred failed: ' + chalk.yellow(defaultRegion) + ' is an invalid region.') + '\n' + ('' + chalk.red('Try importing ' + chalk.yellow('require(\'kindred-api\').REGIONS') + ' and using one of those values instead.')));
       }
 
       this.debug = debug;
@@ -999,7 +1002,7 @@
                           var statusCode = response.statusCode;
 
                           var responseMessage = prettifyStatusMessage(statusCode);
-                          var retry = response.headers['retry-after'] * 1000 + 50 || 1000;
+                          var retry = response.headers['retry-after'] * SECOND + 50 || SECOND;
 
                           if (self.debug) printResponseDebug(response, responseMessage, chalk.yellow(fullUrl));
 
@@ -1009,7 +1012,7 @@
                               return setTimeout(function () {
                                 return sendRequest.bind(self)(callback);
                               }, retry);
-                            } else if (statusCode >= 400) {
+                            } else if (statusCode >= ERROR_THRESHOLD) {
                               return callback(statusCode);
                             } else {
                               if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0) self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body);
@@ -1021,7 +1024,7 @@
                               return setTimeout(function () {
                                 return resolve(tryRequest());
                               }, retry);
-                            } else if (statusCode >= 400) {
+                            } else if (statusCode >= ERROR_THRESHOLD) {
                               return reject(statusCode);
                             } else {
                               if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0) self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body);
@@ -1029,13 +1032,13 @@
                             }
                           }
                         } else {
-                          console.log(error, fullUrl);
+                          console.log(error, reqUrl);
                         }
                       });
                     } else {
                       return setTimeout(function () {
                         return sendRequest.bind(self)(callback);
-                      }, 1000);
+                      }, SECOND);
                     }
                   })(cb);
                 } else {
@@ -1050,9 +1053,9 @@
                       if (self.debug) printResponseDebug(response, statusMessage, chalk.yellow(fullUrl));
 
                       if (isFunction(cb)) {
-                        if (statusCode >= 400) return cb(statusCode);else return cb(error, JSON.parse(body));
+                        if (statusCode >= ERROR_THRESHOLD) return cb(statusCode);else return cb(error, JSON.parse(body));
                       } else {
-                        if (error) return reject('err:', error);else return resolve(JSON.parse(body));
+                        if (statusCode >= ERROR_THRESHOLD) return reject(statusCode);else return resolve(JSON.parse(body));
                       }
                     } else {
                       console.log(error, reqUrl);
@@ -1260,7 +1263,7 @@
       value: function setRegion(region) {
         this.defaultRegion = check(region) ? region : undefined;
 
-        if (!this.defaultRegion) throw new Error(chalk.red('setRegion() by Kindred failed: ' + chalk.yellow(region) + ' is an invalid region.') + '\n' + ('' + chalk.red('Try importing ' + chalk.yellow('require(\'./dist/kindred-api\').REGIONS') + ' and using one of those values instead.')));
+        if (!this.defaultRegion) throw new Error(chalk.red('setRegion() by Kindred failed: ' + chalk.yellow(region) + ' is an invalid region.') + '\n' + ('' + chalk.red('Try importing ' + chalk.yellow('require(\'kindred-api\').REGIONS') + ' and using one of those values instead.')));
       }
     }, {
       key: 'getChamps',

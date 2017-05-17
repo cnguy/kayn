@@ -28,6 +28,9 @@ import prettifyStatusMessage from './helpers/prettify-status-message'
 import printResponseDebug from './helpers/print-response-debug'
 import shouldRetry from './helpers/should-retry'
 
+const ERROR_THRESHOLD = 400
+const SECOND = 1000
+
 class Kindred {
   constructor({
     key, defaultRegion = REGIONS.NORTH_AMERICA, debug = false,
@@ -47,7 +50,7 @@ class Kindred {
     if (!this.defaultRegion) {
       throw new Error(
         `${chalk.red(`setRegion() by Kindred failed: ${chalk.yellow(defaultRegion)} is an invalid region.`)}\n`
-        + `${(chalk.red(`Try importing ${chalk.yellow('require(\'./dist/kindred-api\').REGIONS')} and using one of those values instead.`))}`
+        + `${(chalk.red(`Try importing ${chalk.yellow('require(\'kindred-api\').REGIONS')} and using one of those values instead.`))}`
       )
     }
 
@@ -524,7 +527,7 @@ class Kindred {
                       if (response && body) {
                         const { statusCode } = response
                         const responseMessage = prettifyStatusMessage(statusCode)
-                        const retry = response.headers['retry-after'] * 1000 + 50 || 1000
+                        const retry = response.headers['retry-after'] * SECOND + 50 || SECOND
 
                         if (self.debug)
                           printResponseDebug(response, responseMessage, chalk.yellow(fullUrl))
@@ -533,7 +536,7 @@ class Kindred {
                           if (shouldRetry(statusCode)) {
                             if (self.debug) console.log('Resending callback request.\n')
                             return setTimeout(() => sendRequest.bind(self)(callback), retry)
-                          } else if (statusCode >= 400) {
+                          } else if (statusCode >= ERROR_THRESHOLD) {
                             return callback(statusCode)
                           } else {
                             if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0)
@@ -544,7 +547,7 @@ class Kindred {
                           if (shouldRetry(statusCode)) {
                             if (self.debug) console.log('Resending promise request.\n')
                             return setTimeout(() => resolve(tryRequest()), retry)
-                          } else if (statusCode >= 400) {
+                          } else if (statusCode >= ERROR_THRESHOLD) {
                             return reject(statusCode)
                           } else {
                             if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0)
@@ -553,12 +556,12 @@ class Kindred {
                           }
                         }
                       } else {
-                        console.log(error, fullUrl)
+                        console.log(error, reqUrl)
                       }
                     })
                   } else {
                     // Can't make request -> retry in a second.
-                    return setTimeout(() => sendRequest.bind(self)(callback), 1000)
+                    return setTimeout(() => sendRequest.bind(self)(callback), SECOND)
                   }
                 })(cb)
             } else {
@@ -569,16 +572,17 @@ class Kindred {
                   const { statusCode } = response
                   const statusMessage = prettifyStatusMessage(statusCode)
 
-                  if (self.debug) printResponseDebug(response, statusMessage, chalk.yellow(fullUrl))
+                  if (self.debug)
+                    printResponseDebug(response, statusMessage, chalk.yellow(fullUrl))
 
                   if (isFunction(cb)) {
-                    if (statusCode >= 400)
+                    if (statusCode >= ERROR_THRESHOLD)
                       return cb(statusCode)
                     else
                       return cb(error, JSON.parse(body))
                   } else {
-                    if (error)
-                      return reject('err:', error)
+                    if (statusCode >= ERROR_THRESHOLD)
+                      return reject(statusCode)
                     else
                       return resolve(JSON.parse(body))
                   }
@@ -731,7 +735,7 @@ class Kindred {
     if (!this.defaultRegion)
       throw new Error(
         `${chalk.red(`setRegion() by Kindred failed: ${chalk.yellow(region)} is an invalid region.`)}\n`
-        + `${(chalk.red(`Try importing ${chalk.yellow('require(\'./dist/kindred-api\').REGIONS')} and using one of those values instead.`))}`
+        + `${(chalk.red(`Try importing ${chalk.yellow('require(\'kindred-api\').REGIONS')} and using one of those values instead.`))}`
       )
   }
 
