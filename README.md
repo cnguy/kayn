@@ -30,6 +30,9 @@ To get started, run one of the following!
 * Designed to be simple but convenient. For example, you can call an exclusively by-id endpoint (such as grabbing the runes of a player) **with just the summoner name**.
 
 # How the Methods Work
+* [Object + Callback Functions](#object-callback-functions)
+* [Standard Functions](#standard-functions)
+
 All `list` and `by.xxx` functions will have standard parameters.
 
 **Any other method** will always take in an object as the first parameter, and an optional callback as the second.
@@ -44,9 +47,6 @@ What I specifically like about the functions that take object parameters is that
 and pass in things really cleanly instead of worrying about the order of parameters in standard function.
 
 These functions take in an optional `region` and an optional `options` parameter (whenever possible) WITHIN the same first parameter. Most of the time, when they're called, they look like this:
-
-* [Object + Callback Functions](#object-callback-functions)
-* [Standard Functions](#standard-functions)
 
 ## Object + Callback Functions
 ```javascript

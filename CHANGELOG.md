@@ -6,6 +6,8 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
+## [2.0.49]() - Rate limit logs now prints out `x-rate-limit-type` header as well.
+
 ## [2.0.48](https://github.com/ChauTNguyen/kindred-api/commit/f721f0790889ca4f4714066525cf1b4819b10b4b) - Matchlist is now cachable.
 
 When I updated my methods to use the v3 endpoints, I forgot to update and include Matchlist methods for Matchlist requests and so the CACHE_TIMER for MATCHLIST would not be used.
