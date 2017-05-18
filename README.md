@@ -50,6 +50,18 @@ These functions take in an optional `region` and an optional `options` parameter
 
 ## Object + Callback Functions
 ```javascript
+const id = 32932398 // summonerId
+const name = 'Contractz'
+const accId = 47776491
+
+k.Matchlist.get({ id }, KindredAPI.print)
+k.Matchlist.get({ name }, KindredAPI.print)
+k.Matchlist.get({ accId }, KindredAPI.print)
+
+k.Summoner.get({ id }, KindredAPI.print)
+k.Summoner.get({ name }, KindredAPI.print)
+k.Summoner.get({ accId }, KindredAPI.print)
+
 const config = {
     id: 6323,
     region: REGIONS.NORTH_AMERICA,
@@ -112,12 +124,6 @@ k.Static.champion(rakanConfig)
         .then(data => console.log(data))
         .catch(err => console.error(err))
 
-const summonerConfig = {
-  name: 'Contractz'
-}
-
-k.Summoner.get(summonerConfig, KindredAPI.print)
-
 // As you can see in the above, all functions that aren't named `list` or `by-id`
 // will take in an object parameter as the first parameter ALWAYS.
 ```
@@ -128,6 +134,12 @@ k.Summoner.get(summonerConfig, KindredAPI.print)
 const QUEUES = KindredAPI.QUEUE_TYPES
 
 k.Summoner.by.name('Contractz', KindredAPI.print)
+k.Summoner.by.id(32932398, KindredAPI.print)
+
+k.Summoner
+ .by.account(47776491)
+ .then(data => console.log(data))
+ .catch(error => console.error(error))
 
 const opts = {
   queue: [QUEUES.TEAM_BUILDER_RANKED_SOLO, QUEUES.RANKED_FLEX_SR],

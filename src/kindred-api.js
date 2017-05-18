@@ -1612,7 +1612,7 @@ class Kindred {
       region = undefined
     }
 
-    if (isFunction(options)) {
+    if (typeof options === 'string') {
       region = options
       options = undefined
     }

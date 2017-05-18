@@ -6,7 +6,9 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
-## [2.0.49]() - Rate limit logs now prints out `x-rate-limit-type` header as well.
+## [2.0.50]() - Champion.list() bug is now fixed.
+
+## [2.0.49](https://github.com/ChauTNguyen/kindred-api/commit/bf1ea95828ccfcd615e71671de6f8726ea85ad8a) - Rate limit logs now prints out `x-rate-limit-type` header as well.
 
 ## [2.0.48](https://github.com/ChauTNguyen/kindred-api/commit/f721f0790889ca4f4714066525cf1b4819b10b4b) - Matchlist is now cachable.
 
