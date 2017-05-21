@@ -178,7 +178,7 @@ describe('Core', function () {
         const k = init()
 
         function count(err, data) {
-          if (data)--num
+          if (data) --num
           if (num == 0) done()
         }
 

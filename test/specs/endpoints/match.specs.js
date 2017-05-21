@@ -79,7 +79,7 @@ describe('Match', function () {
 
     describe('standard params', function () {
       describe('get', function () {
-        describe('should work with just id param', function (done) {
+        it('should work with just id param', function (done) {
           init().Match
            .get(matchId)
            .then(data => {
