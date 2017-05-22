@@ -3030,12 +3030,12 @@
 
   var Kindred$2 = {
     Kindred: Kindred$1,
-    REGIONS: regions,
-    LIMITS: limits,
-    TIME_CONSTANTS: cacheTimers,
     CACHE_TYPES: caches,
-    QUEUE_TYPES: queueTypes,
+    LIMITS: limits,
     QUEUE_STRINGS: queueStrings,
+    QUEUE_TYPES: queueTypes,
+    REGIONS: regions,
+    TIME_CONSTANTS: cacheTimers,
     QuickStart: QuickStart,
     print: print
   };

@@ -1202,7 +1202,7 @@ class Kindred {
     options
   } = {}, cb) {
     if (Number.isInteger(id || runeId)) {
-      return this._staticRequest({ endUrl: `runes/${id || runeId}`, region, options }, cb)
+      return this._staticRequest({ endUrl: `runes/${id || runeId }`, region, options }, cb)
     } else {
       return this._logError(
         this.getRune.name,
@@ -2242,12 +2242,12 @@ function print(err, data) {
 
 export default {
   Kindred,
-  REGIONS,
-  LIMITS,
-  TIME_CONSTANTS,
   CACHE_TYPES,
-  QUEUE_TYPES,
+  LIMITS,
   QUEUE_STRINGS,
+  QUEUE_TYPES,
+  REGIONS,
+  TIME_CONSTANTS,
   QuickStart,
   print
 }
