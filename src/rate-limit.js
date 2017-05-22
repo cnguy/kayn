@@ -5,22 +5,22 @@ class RateLimit {
     this.allowedRequests = allowedRequests
     this.seconds = seconds
     this.madeRequests = new Deque()
+    this.buffer = this.seconds * 50
   }
 
-  __reload() {
+  _reload() {
     const t = (new Date()).getTime()
 
-    while (this.madeRequests.length > 0 && (t - this.madeRequests.peekFront() >= (this.seconds*50))) {
+    while (this.madeRequests.length > 0 && t - this.madeRequests.peekFront() >= this.buffer)
       this.madeRequests.shift()
-    }
   }
 
   addRequest() {
-    this.madeRequests.push((new Date()).getTime() + (this.seconds*1000))
+    this.madeRequests.push((new Date()).getTime() + this.seconds*1000)
   }
 
   requestAvailable() {
-    this.__reload()
+    this._reload()
     return this.madeRequests.length < this.allowedRequests
   }
 }

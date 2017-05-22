@@ -30,7 +30,7 @@ To get started, run one of the following!
 * Designed to be simple but convenient. For example, you can call an exclusively by-id endpoint (such as grabbing the runes of a player) **with just the summoner name**.
 
 # How the Methods Work
-* [Object + Callback Functions](#object-callback-functions)
+* [Object + Callback Functions](#object-and-callback-functions)
 * [Standard Functions](#standard-functions)
 
 All `list` and `by.xxx` functions will have standard parameters.
@@ -48,7 +48,7 @@ and pass in things really cleanly instead of worrying about the order of paramet
 
 These functions take in an optional `region` and an optional `options` parameter (whenever possible) WITHIN the same first parameter. Most of the time, when they're called, they look like this:
 
-## Object + Callback Functions
+## Object and Callback Functions
 ```javascript
 const id = 32932398 // summonerId
 const name = 'Contractz'
@@ -61,6 +61,8 @@ k.Matchlist.get({ accId }, KindredAPI.print)
 k.Summoner.get({ id }, KindredAPI.print)
 k.Summoner.get({ name }, KindredAPI.print)
 k.Summoner.get({ accId }, KindredAPI.print)
+
+// Want to use more regular-looking functions? Scroll to the `Standard Functions` section!
 
 const config = {
     id: 6323,

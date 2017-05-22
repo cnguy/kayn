@@ -6,10 +6,9 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
-## [2.0.50]() - Champion.list() bug is now fixed.
-
+## [2.0.51]() - More tinkering with buffers to increase Rate Limiter efficiency!
+## [2.0.50](https://github.com/ChauTNguyen/kindred-api/commit/655ba1497352c83edd62c5178725e146d6925fd2) - Champion.list() bug is now fixed.
 ## [2.0.49](https://github.com/ChauTNguyen/kindred-api/commit/bf1ea95828ccfcd615e71671de6f8726ea85ad8a) - Rate limit logs now prints out `x-rate-limit-type` header as well.
-
 ## [2.0.48](https://github.com/ChauTNguyen/kindred-api/commit/f721f0790889ca4f4714066525cf1b4819b10b4b) - Matchlist is now cachable.
 
 When I updated my methods to use the v3 endpoints, I forgot to update and include Matchlist methods for Matchlist requests and so the CACHE_TIMER for MATCHLIST would not be used.
@@ -48,7 +47,6 @@ This was mostly a patch to do a lot of code refactoring. :P
 * Fixed Challenger/Master parameters. ```.list()``` should be callable with region + callback now.
 
 ## [2.0.38](https://github.com/ChauTNguyen/kindred-api/commit/d2f63a58a73e5b8c2c8d811f7ca40da9394afdc1) - Simplified [.env](https://github.com/ChauTNguyen/kindred-api/wiki/Tests) setup.
-
 ## [2.0.37](https://github.com/ChauTNguyen/kindred-api/commit/f624869c9549a3ec59b468ceba3cb83555d82124) - Set of core, core-utils, in-memory-cache, summoner, runes, masteries tests complete.
 
 ## [2.0.36](https://github.com/ChauTNguyen/kindred-api/commit/f5a530bdeaa7d4329e033f1ff36bcbbbdd2f3d79) - Constructor needs API key.

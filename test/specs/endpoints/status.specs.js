@@ -12,6 +12,8 @@ require('dotenv').config()
 var init = require('../../../utils/init')
 
 describe('Status', function () {
+  this.timeout(0)
+
   describe('get', function () {
     describe('object param', function () {
       it('should not throw on empty', function () {
@@ -20,6 +22,14 @@ describe('Status', function () {
 
       it('should throw on invalid region', function () {
         assert.throw(() => init().Status.get('garbage'), Error)
+      })
+
+      it('should be a successful call', function (done) {
+        init().Status.get()
+          .then(data => {
+            expect(data).to.not.be.undefined
+            done()
+          })
       })
     })
 

@@ -129,14 +129,15 @@
       this.allowedRequests = allowedRequests;
       this.seconds = seconds;
       this.madeRequests = new Deque();
+      this.buffer = this.seconds * 50;
     }
 
     _createClass(RateLimit, [{
-      key: '__reload',
-      value: function __reload() {
+      key: '_reload',
+      value: function _reload() {
         var t = new Date().getTime();
 
-        while (this.madeRequests.length > 0 && t - this.madeRequests.peekFront() >= this.seconds * 50) {
+        while (this.madeRequests.length > 0 && t - this.madeRequests.peekFront() >= this.buffer) {
           this.madeRequests.shift();
         }
       }
@@ -148,7 +149,7 @@
     }, {
       key: 'requestAvailable',
       value: function requestAvailable() {
-        this.__reload();
+        this._reload();
         return this.madeRequests.length < this.allowedRequests;
       }
     }]);
@@ -1002,7 +1003,7 @@
                           var statusCode = response.statusCode;
 
                           var responseMessage = prettifyStatusMessage(statusCode);
-                          var retry = response.headers['retry-after'] * SECOND + 50 || SECOND;
+                          var retry = response.headers['retry-after'] * SECOND || SECOND;
 
                           if (self.debug) printResponseDebug(response, responseMessage, chalk.yellow(fullUrl));
 
@@ -1036,9 +1037,10 @@
                         }
                       });
                     } else {
+                      var buffer = SECOND / 4.5;
                       return setTimeout(function () {
                         return sendRequest.bind(self)(callback);
-                      }, SECOND);
+                      }, buffer);
                     }
                   })(cb);
                 } else {

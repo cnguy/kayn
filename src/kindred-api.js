@@ -527,7 +527,7 @@ class Kindred {
                       if (response && body) {
                         const { statusCode } = response
                         const responseMessage = prettifyStatusMessage(statusCode)
-                        const retry = response.headers['retry-after'] * SECOND + 50 || SECOND
+                        const retry = response.headers['retry-after'] * SECOND || SECOND
 
                         if (self.debug)
                           printResponseDebug(response, responseMessage, chalk.yellow(fullUrl))
@@ -560,8 +560,8 @@ class Kindred {
                       }
                     })
                   } else {
-                    // Can't make request -> retry in a second.
-                    return setTimeout(() => sendRequest.bind(self)(callback), SECOND)
+                    const buffer = SECOND / 4.5
+                    return setTimeout(() => sendRequest.bind(self)(callback), buffer)
                   }
                 })(cb)
             } else {
