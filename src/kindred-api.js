@@ -27,6 +27,7 @@ import isFunction from './helpers/is-function'
 import prettifyStatusMessage from './helpers/prettify-status-message'
 import printResponseDebug from './helpers/print-response-debug'
 import shouldRetry from './helpers/should-retry'
+import validTTL from './helpers/valid-ttl'
 
 const ERROR_THRESHOLD = 400
 const SECOND = 1000
@@ -450,6 +451,11 @@ class Kindred {
     return re.test(name)
   }
 
+  _cacheData(key, ttl, body) {
+    if (validTTL)
+      this.cache.set({ key, ttl }, body)
+  }
+
   _makeUrl(query, region, staticReq) {
     const mid = staticReq ? '' : `${region}/`
     const oldPrefix = `api/lol/${mid}`
@@ -529,6 +535,10 @@ class Kindred {
                         const responseMessage = prettifyStatusMessage(statusCode)
                         const retry = response.headers['retry-after'] * SECOND || SECOND
 
+                        // For caching
+                        const key = reqUrl
+                        const { ttl } = cacheParams
+
                         if (self.debug)
                           printResponseDebug(response, responseMessage, chalk.yellow(fullUrl))
 
@@ -539,8 +549,7 @@ class Kindred {
                           } else if (statusCode >= ERROR_THRESHOLD) {
                             return callback(statusCode)
                           } else {
-                            if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0)
-                              self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body)
+                            self._cacheData(key, ttl, body)
                             return callback(error, JSON.parse(body))
                           }
                         } else {
@@ -550,8 +559,7 @@ class Kindred {
                           } else if (statusCode >= ERROR_THRESHOLD) {
                             return reject(statusCode)
                           } else {
-                            if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0)
-                              self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body)
+                            self._cacheData(key, ttl, body)
                             return resolve(JSON.parse(body))
                           }
                         }

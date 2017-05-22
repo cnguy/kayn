@@ -444,6 +444,10 @@
     return code >= ISE || code === RLE;
   };
 
+  var validTTL = function validTTL(ttl) {
+    return Number.isInteger(ttl) && ttl > 0;
+  };
+
   var ERROR_THRESHOLD = 400;
   var SECOND = 1000;
 
@@ -880,6 +884,11 @@
         return re.test(name);
       }
     }, {
+      key: '_cacheData',
+      value: function _cacheData(key, ttl, body) {
+        if (validTTL) this.cache.set({ key: key, ttl: ttl }, body);
+      }
+    }, {
       key: '_makeUrl',
       value: function _makeUrl(query, region, staticReq) {
         var mid = staticReq ? '' : region + '/';
@@ -1005,6 +1014,10 @@
                           var responseMessage = prettifyStatusMessage(statusCode);
                           var retry = response.headers['retry-after'] * SECOND || SECOND;
 
+                          var _key2 = reqUrl;
+                          var ttl = cacheParams.ttl;
+
+
                           if (self.debug) printResponseDebug(response, responseMessage, chalk.yellow(fullUrl));
 
                           if (isFunction(callback)) {
@@ -1016,7 +1029,7 @@
                             } else if (statusCode >= ERROR_THRESHOLD) {
                               return callback(statusCode);
                             } else {
-                              if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0) self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body);
+                              self._cacheData(_key2, ttl, body);
                               return callback(error, JSON.parse(body));
                             }
                           } else {
@@ -1028,7 +1041,7 @@
                             } else if (statusCode >= ERROR_THRESHOLD) {
                               return reject(statusCode);
                             } else {
-                              if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0) self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body);
+                              self._cacheData(_key2, ttl, body);
                               return resolve(JSON.parse(body));
                             }
                           }
