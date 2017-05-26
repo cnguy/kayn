@@ -11,59 +11,179 @@ require('dotenv').config()
 
 var init = require('../../../utils/init')
 
+const name = 'Chaser Cat'
 const id = 32932398
+const accId = 47776491
 
 describe('League', function () {
   this.timeout(0)
 
-  describe('getting leagues', function () {
-    describe('object params', function () {
-      describe('should be a successful call thru summoner id', function () {
-        it('through callback', function (done) {
-          init().League.get({ id }, function (err, data) {
-            expect(err).to.be.null
-            expect(data).to.not.be.undefined
-            done()
-          })
-        })
-
-        it('through promise', function (done) {
-          init().League
-            .get({ id })
-            .then(data => {
-              expect(data).to.not.be.undefined
-              done()
-            })
-        })
-      })
+  describe('get all leagues', function () {
+    it('should throw on empty', function () {
+      assert.throws(() => init().League.get(), Error)
     })
-  })
 
-  describe('getting league positions', function () {
     describe('object params', function () {
-      describe('should be a successful call thru summoner id', function () {
-        it('through callback', function (done) {
-          init().League
-            .positions({ id }, function (err, data) {
+      describe('by id', function () {
+        describe('through callback', function () {
+          it('should be a successful call', function (done) {
+            init().League.get({ id }, function (err, data) {
               expect(err).to.be.null
               expect(data).to.not.be.undefined
               done()
             })
+          })
         })
 
-        it('through promise', function (done) {
-          init().League
-            .positions({ id })
-            .then(data => {
+        describe('by promise', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .League
+              .get({ id })
+              .then(data => {
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+      })
+
+      describe('by name', function () {
+        describe('through callback', function () {
+          it('should be a successful call', function (done) {
+            init().League.get({ name }, function (err, data) {
+              expect(err).to.be.null
               expect(data).to.not.be.undefined
               done()
             })
+          })
+        })
+
+        describe('through promise', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .League
+              .get({ name })
+              .then(data => {
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+      })
+
+      describe('through account id', function () {
+        describe('through callback', function () {
+          it('should be a successful call', function (done) {
+            init().League.get({ accId }, function (err, data) {
+              expect(err).to.be.null
+              expect(data).to.not.be.undefined
+              done()
+            })
+          })
+        })
+
+        describe('through promise', function () {
+          it('should be a successful call', function (done) {
+            init().League
+              .get({ accId })
+              .then(data => {
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
         })
       })
     })
   })
 
-  describe('getting master leagues', function () {
+  describe('get league positions', function () {
+    describe('object params', function () {
+      it('should throw on empty', function () {
+        assert.throws(() => init().League.positions(), Error)
+      })
+
+      describe('by id', function () {
+        describe('through callback', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .League
+              .positions({ id }, function (err, data) {
+                expect(err).to.be.null
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+
+        describe('through promise', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .League
+              .positions({ id })
+              .then(data => {
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+      })
+
+      describe('by name', function () {
+        describe('through callback', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .League
+              .positions({ name }, function (err, data) {
+                expect(err).to.be.null
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+
+        describe('through promise', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .League
+              .positions({ name })
+              .then(data => {
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+      })
+
+      describe('by account id', function () {
+        describe('through callback', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .League
+              .positions({ accId }, function (err, data) {
+                expect(err).to.be.null
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+
+        describe('through promise', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .League
+              .positions({ accId })
+              .then(data => {
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+      })
+    })
+  })
+
+  describe('get master leagues', function () {
     describe('standard params', function () {
       it('should not throw with no args', function () {
         assert.doesNotThrow(() => init().Master.list(), Error)
@@ -107,7 +227,7 @@ describe('League', function () {
     })
   })
 
-  describe('getting challenger leagues', function () {
+  describe('get challenger leagues', function () {
     describe('standard params', function () {
       it('should not throw with no args', function () {
         assert.doesNotThrow(() => init().Challenger.list(), Error)

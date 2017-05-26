@@ -30,7 +30,7 @@ describe('Champion Mastery', function () {
         assert.throws(() => init().ChampionMastery.all(), Error)
       })
 
-      describe('through id', function () {
+      describe('by id', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
             init().ChampionMastery.all({ id }, function testCB(err, data) {
@@ -53,7 +53,7 @@ describe('Champion Mastery', function () {
         })
       })
 
-      describe('through name', function () {
+      describe('by name', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
             init().ChampionMastery.all({ name }, function testCB(err, data) {
@@ -76,7 +76,7 @@ describe('Champion Mastery', function () {
         })
       })
 
-      describe('through account ID', function () {
+      describe('by account ID', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
             init().ChampionMastery.all({ accId }, function testCB(err, data) {
