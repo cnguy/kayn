@@ -1961,13 +1961,7 @@
           arguments[0] = undefined;
         }
 
-        if (typeof arguments[0] === 'string') {
-          if (check(arguments[0])) {
-            return this._statusRequest({ endUrl: 'shard-data', region: arguments[0] }, cb);
-          } else {
-            return this._logError(this.getShardStatus.name, 'invalid region!');
-          }
-        }
+        if (typeof region === 'string' && !check(region)) return this._logError(this.getShardStatus.name, 'invalid region!');
 
         return this._statusRequest({ endUrl: 'shard-data', region: region }, cb);
       }
@@ -1982,9 +1976,7 @@
 
         var cb = arguments[1];
 
-        if (Number.isInteger(arguments[0])) {
-          return this._matchRequest({ endUrl: 'matches/' + arguments[0], region: region, options: options }, cb);
-        } else if (Number.isInteger(id || matchId)) {
+        if (Number.isInteger(id || matchId)) {
           return this._matchRequest({ endUrl: 'matches/' + (id || matchId), region: region, options: options }, cb);
         } else {
           return this._logError(this.getMatch.name, 'required params ' + chalk.yellow('`id/matchId` (int)') + ' not passed in');

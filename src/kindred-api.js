@@ -427,7 +427,9 @@ class Kindred {
   }
 
   canMakeRequest(region) {
-    const spread = this.spread ? this.limits[region][2].requestAvailable() : true
+    const spread = this.spread
+      ? this.limits[region][2].requestAvailable()
+      : true
 
     return (
       this.limits[region][0].requestAvailable() &&
@@ -1210,7 +1212,7 @@ class Kindred {
     options
   } = {}, cb) {
     if (Number.isInteger(id || runeId)) {
-      return this._staticRequest({ endUrl: `runes/${id || runeId }`, region, options }, cb)
+      return this._staticRequest({ endUrl: `runes/${id || runeId}`, region, options }, cb)
     } else {
       return this._logError(
         this.getRune.name,
@@ -1262,16 +1264,11 @@ class Kindred {
       arguments[0] = undefined
     }
 
-    if (typeof arguments[0] === 'string') {
-      if (checkValidRegion(arguments[0])) {
-        return this._statusRequest({ endUrl: 'shard-data', region: arguments[0] }, cb)
-      } else {
-        return this._logError(
-          this.getShardStatus.name,
-          'invalid region!'
-        )
-      }
-    }
+    if (typeof region === 'string' && !checkValidRegion(region))
+      return this._logError(
+        this.getShardStatus.name,
+        'invalid region!'
+      )
 
     return this._statusRequest({ endUrl: 'shard-data', region }, cb)
   }
@@ -1282,9 +1279,7 @@ class Kindred {
     id, matchId,
     options
   } = {}, cb) {
-    if (Number.isInteger(arguments[0])) {
-      return this._matchRequest({ endUrl: `matches/${arguments[0]}`, region, options }, cb)
-    } else if (Number.isInteger(id || matchId)) {
+    if (Number.isInteger(id || matchId)) {
       return this._matchRequest({ endUrl: `matches/${id || matchId}`, region, options }, cb)
     } else {
       return this._logError(

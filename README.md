@@ -37,9 +37,7 @@ All `list` and `by.xxx` functions will have standard parameters.
 
 **Any other method** will always take in an object as the first parameter, and an optional callback as the second.
 
-These methods can work with different type of parameters (id (summoner!!!), name, accountId) when applicable.
-
-However, if these methods only take one type of parameter such as getMatch or they don't really need any parameters at all (besides optional region), then the ```get``` method will be overloaded to accept parameters like the standard functions.
+These methods can work with different type of parameters (id, name, accountId) when applicable.
 
 For example, Match.get, and Status.get.
 
@@ -171,14 +169,6 @@ k.Static.Champion.list({ champListData: 'all' }, KindredAPI.print)
 k.Static.Champion.list(KindredAPI.print)
 k.Static.Champion.list(REGIONS.KOREA, KindredAPI.print)
 k.Static.Champion.list({ champListData: 'all' }, REGIONS.KOREA, KindredAPI.print)
-
-// Exceptions
-k.Match
- .get(2501758619)
- .then(data => console.log(data))
- .catch(error => console.error(error))
-
-k.Status.get(KindredAPI.print)
 
 // Notice how parameters are somewhat flexible! This is the case for all functions.
 ```

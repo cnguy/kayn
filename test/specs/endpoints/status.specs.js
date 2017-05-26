@@ -21,7 +21,7 @@ describe('Status', function () {
       })
 
       it('should throw on invalid region', function () {
-        assert.throw(() => init().Status.get('garbage'), Error)
+        assert.throw(() => init().Status.get({ region: 'garbage' }), Error)
       })
 
       it('should be a successful call', function (done) {
@@ -30,12 +30,6 @@ describe('Status', function () {
             expect(data).to.not.be.undefined
             done()
           })
-      })
-    })
-
-    describe('standard params', function () {
-      it('should not throw on empty', function () {
-        assert.doesNotThrow(() => init().Status.get(), Error)
       })
     })
   })

@@ -110,17 +110,6 @@ describe('Champion', function () {
       })
 
       describe('standard params', function () {
-        describe('get', function () {
-          it('should be a successful call', function (done) {
-            init()
-              .Champion.get(50)
-              .then(data => {
-                expect(data).to.not.be.undefined
-                done()
-              })
-          })
-        })
-
         describe('by', function () {
           describe('id', function () {
             it('should throw with no args', function () {

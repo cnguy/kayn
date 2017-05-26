@@ -6,7 +6,10 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
-## [2.0.51]() - More tinkering with buffers to increase Rate Limiter efficiency!
+## [2.0.51]() - Removed Status.get() and Match.get() standard functions.
+I decided that this wasn't a good idea.
+
+## [2.0.51](https://github.com/ChauTNguyen/kindred-api/commit/a30e3644cdcb6c3cf3158b70a418ff18760d4e8e) - More tinkering with buffers to increase Rate Limiter efficiency!
 ## [2.0.50](https://github.com/ChauTNguyen/kindred-api/commit/655ba1497352c83edd62c5178725e146d6925fd2) - Champion.list() bug is now fixed.
 ## [2.0.49](https://github.com/ChauTNguyen/kindred-api/commit/bf1ea95828ccfcd615e71671de6f8726ea85ad8a) - Rate limit logs now prints out `x-rate-limit-type` header as well.
 ## [2.0.48](https://github.com/ChauTNguyen/kindred-api/commit/f721f0790889ca4f4714066525cf1b4819b10b4b) - Matchlist is now cachable.
