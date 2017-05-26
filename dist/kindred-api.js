@@ -444,6 +444,10 @@
     return code >= ISE || code === RLE;
   };
 
+  var validTTL = function validTTL(ttl) {
+    return Number.isInteger(ttl) && ttl > 0;
+  };
+
   var ERROR_THRESHOLD = 400;
   var SECOND = 1000;
 
@@ -880,6 +884,11 @@
         return re.test(name);
       }
     }, {
+      key: '_cacheData',
+      value: function _cacheData(key, ttl, body) {
+        if (validTTL) this.cache.set({ key: key, ttl: ttl }, body);
+      }
+    }, {
       key: '_makeUrl',
       value: function _makeUrl(query, region, staticReq) {
         var mid = staticReq ? '' : region + '/';
@@ -1005,6 +1014,10 @@
                           var responseMessage = prettifyStatusMessage(statusCode);
                           var retry = response.headers['retry-after'] * SECOND || SECOND;
 
+                          var _key2 = reqUrl;
+                          var ttl = cacheParams.ttl;
+
+
                           if (self.debug) printResponseDebug(response, responseMessage, chalk.yellow(fullUrl));
 
                           if (isFunction(callback)) {
@@ -1016,7 +1029,7 @@
                             } else if (statusCode >= ERROR_THRESHOLD) {
                               return callback(statusCode);
                             } else {
-                              if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0) self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body);
+                              self._cacheData(_key2, ttl, body);
                               return callback(error, JSON.parse(body));
                             }
                           } else {
@@ -1028,7 +1041,7 @@
                             } else if (statusCode >= ERROR_THRESHOLD) {
                               return reject(statusCode);
                             } else {
-                              if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0) self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body);
+                              self._cacheData(_key2, ttl, body);
                               return resolve(JSON.parse(body));
                             }
                           }
@@ -1948,13 +1961,7 @@
           arguments[0] = undefined;
         }
 
-        if (typeof arguments[0] === 'string') {
-          if (check(arguments[0])) {
-            return this._statusRequest({ endUrl: 'shard-data', region: arguments[0] }, cb);
-          } else {
-            return this._logError(this.getShardStatus.name, 'invalid region!');
-          }
-        }
+        if (typeof region === 'string' && !check(region)) return this._logError(this.getShardStatus.name, 'invalid region!');
 
         return this._statusRequest({ endUrl: 'shard-data', region: region }, cb);
       }
@@ -1969,9 +1976,7 @@
 
         var cb = arguments[1];
 
-        if (Number.isInteger(arguments[0])) {
-          return this._matchRequest({ endUrl: 'matches/' + arguments[0], region: region, options: options }, cb);
-        } else if (Number.isInteger(id || matchId)) {
+        if (Number.isInteger(id || matchId)) {
           return this._matchRequest({ endUrl: 'matches/' + (id || matchId), region: region, options: options }, cb);
         } else {
           return this._logError(this.getMatch.name, 'required params ' + chalk.yellow('`id/matchId` (int)') + ' not passed in');
@@ -3030,12 +3035,12 @@
 
   var Kindred$2 = {
     Kindred: Kindred$1,
-    REGIONS: regions,
-    LIMITS: limits,
-    TIME_CONSTANTS: cacheTimers,
     CACHE_TYPES: caches,
-    QUEUE_TYPES: queueTypes,
+    LIMITS: limits,
     QUEUE_STRINGS: queueStrings,
+    QUEUE_TYPES: queueTypes,
+    REGIONS: regions,
+    TIME_CONSTANTS: cacheTimers,
     QuickStart: QuickStart,
     print: print
   };

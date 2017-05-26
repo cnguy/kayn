@@ -1,6 +1,4 @@
 /* eslint-disable max-nested-callbacks */
-require('../in-memory-cache.specs.js')
-
 var chai = require('chai')
 
 var expect = chai.expect,
@@ -43,7 +41,7 @@ describe('Match', function () {
           })
 
           it('should not throw on non-empty', function () {
-            assert.doesNotThrow(() => init().Match.get({ matchId }), Error)
+            assert.doesNotThrow(() => init().Match.by.id(matchId), Error)
           })
 
           it('should be a successful call with no args', function (done) {
@@ -78,16 +76,6 @@ describe('Match', function () {
     })
 
     describe('standard params', function () {
-      describe('get', function () {
-        it('should work with just id param', function (done) {
-          init().Match
-           .get(matchId)
-           .then(data => {
-             expect(data).to.not.be.undefined
-             done()
-           })
-        })
-      })
       describe('by', function () {
         describe('id', function () {
           it('should throw on empty', function () {

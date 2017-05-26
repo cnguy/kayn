@@ -169,7 +169,7 @@ describe('Core', function () {
           })
       })
 
-      it('returning should retry on 429s until all calls are successful and returned', function (done) {
+      it('should retry on 429s until all calls are successful and returned', function (done) {
         // Mock call to rate limit
         // Make sure to use dev key
         init().Summoner.by.name('Contractz')
@@ -179,7 +179,7 @@ describe('Core', function () {
 
         function count(err, data) {
           if (data) --num
-          if (num == 0) done()
+          if (num === 0) done()
         }
 
         let num = 10
@@ -218,7 +218,7 @@ describe('Core', function () {
           k.Champion.list('na')
             .then(data => {
               --num
-              if (num == 0) done()
+              if (num === 0) done()
             })
             .catch(err => console.error(err))
         }

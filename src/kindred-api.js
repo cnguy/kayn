@@ -27,6 +27,7 @@ import isFunction from './helpers/is-function'
 import prettifyStatusMessage from './helpers/prettify-status-message'
 import printResponseDebug from './helpers/print-response-debug'
 import shouldRetry from './helpers/should-retry'
+import validTTL from './helpers/valid-ttl'
 
 const ERROR_THRESHOLD = 400
 const SECOND = 1000
@@ -426,7 +427,9 @@ class Kindred {
   }
 
   canMakeRequest(region) {
-    const spread = this.spread ? this.limits[region][2].requestAvailable() : true
+    const spread = this.spread
+      ? this.limits[region][2].requestAvailable()
+      : true
 
     return (
       this.limits[region][0].requestAvailable() &&
@@ -448,6 +451,11 @@ class Kindred {
 
   _validName(name) {
     return re.test(name)
+  }
+
+  _cacheData(key, ttl, body) {
+    if (validTTL)
+      this.cache.set({ key, ttl }, body)
   }
 
   _makeUrl(query, region, staticReq) {
@@ -529,6 +537,10 @@ class Kindred {
                         const responseMessage = prettifyStatusMessage(statusCode)
                         const retry = response.headers['retry-after'] * SECOND || SECOND
 
+                        // For caching
+                        const key = reqUrl
+                        const { ttl } = cacheParams
+
                         if (self.debug)
                           printResponseDebug(response, responseMessage, chalk.yellow(fullUrl))
 
@@ -539,8 +551,7 @@ class Kindred {
                           } else if (statusCode >= ERROR_THRESHOLD) {
                             return callback(statusCode)
                           } else {
-                            if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0)
-                              self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body)
+                            self._cacheData(key, ttl, body)
                             return callback(error, JSON.parse(body))
                           }
                         } else {
@@ -550,8 +561,7 @@ class Kindred {
                           } else if (statusCode >= ERROR_THRESHOLD) {
                             return reject(statusCode)
                           } else {
-                            if (Number.isInteger(cacheParams.ttl) && cacheParams.ttl > 0)
-                              self.cache.set({ key: reqUrl, ttl: cacheParams.ttl }, body)
+                            self._cacheData(key, ttl, body)
                             return resolve(JSON.parse(body))
                           }
                         }
@@ -1254,16 +1264,11 @@ class Kindred {
       arguments[0] = undefined
     }
 
-    if (typeof arguments[0] === 'string') {
-      if (checkValidRegion(arguments[0])) {
-        return this._statusRequest({ endUrl: 'shard-data', region: arguments[0] }, cb)
-      } else {
-        return this._logError(
-          this.getShardStatus.name,
-          'invalid region!'
-        )
-      }
-    }
+    if (typeof region === 'string' && !checkValidRegion(region))
+      return this._logError(
+        this.getShardStatus.name,
+        'invalid region!'
+      )
 
     return this._statusRequest({ endUrl: 'shard-data', region }, cb)
   }
@@ -1274,9 +1279,7 @@ class Kindred {
     id, matchId,
     options
   } = {}, cb) {
-    if (Number.isInteger(arguments[0])) {
-      return this._matchRequest({ endUrl: `matches/${arguments[0]}`, region, options }, cb)
-    } else if (Number.isInteger(id || matchId)) {
+    if (Number.isInteger(id || matchId)) {
       return this._matchRequest({ endUrl: `matches/${id || matchId}`, region, options }, cb)
     } else {
       return this._logError(
@@ -2242,12 +2245,12 @@ function print(err, data) {
 
 export default {
   Kindred,
-  REGIONS,
-  LIMITS,
-  TIME_CONSTANTS,
   CACHE_TYPES,
-  QUEUE_TYPES,
+  LIMITS,
   QUEUE_STRINGS,
+  QUEUE_TYPES,
+  REGIONS,
+  TIME_CONSTANTS,
   QuickStart,
   print
 }
