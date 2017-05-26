@@ -126,20 +126,101 @@ describe('Champion Mastery', function () {
       it('should throw with just playerID', function () {
         assert.throws(() => init()
           .ChampionMastery
-          .get({ playerID: config.playerId }, Error))
+          .get({ playerID: config.playerId }), Error)
       })
 
       it('should throw with just championID', function () {
         assert.throws(() => init()
           .ChampionMastery
-          .get({ championId: config.championId }, Error))
+          .get({ championId: config.championId }), Error)
       })
     })
   })
 
   describe('get total champion mastery score', function () {
     describe('object param', function () {
+      it('should throw on empty args', function () {
+        assert.throws(() => init()
+          .ChampionMastery
+          .score(), Error)
+      })
 
+      describe('through id', function () {
+        describe('through callback', function () {
+          it('should be a successful call', function (done) {
+            init().ChampionMastery
+              .score({ id }, function testCB(err, data) {
+                expect(err).to.be.null
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+
+        describe('through promise', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .ChampionMastery
+              .score({ id })
+              .then(data => {
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+      })
+
+      describe('through name', function () {
+        describe('through callback', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .ChampionMastery
+              .score({ name }, function testCB(err, data) {
+                expect(err).to.be.null
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+
+        describe('through promise', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .ChampionMastery
+              .score({ name })
+              .then(data => {
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+      })
+
+      describe('through account ID', function () {
+        describe('through callback', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .ChampionMastery
+              .score({ accId }, function testCB(err, data) {
+                expect(err).to.be.null
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+
+        describe('through promise', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .ChampionMastery
+              .score({ accId })
+              .then(data => {
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+      })
     })
   })
 })
