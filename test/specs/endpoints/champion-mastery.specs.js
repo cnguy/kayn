@@ -13,7 +13,13 @@ var init = require('../../../utils/init')
 
 const name = 'Chaser Cat'
 const id = 32932398
-const accId = 32932398
+const accId = 47776491
+
+const config = {
+  playerId: id,
+  championId: 50,
+  region: 'na'
+}
 
 describe('Champion Mastery', function () {
   this.timeout(0)
@@ -21,7 +27,7 @@ describe('Champion Mastery', function () {
   describe('get all champion masteries', function () {
     describe('object param', function () {
       it('should throw on empty', function () {
-        assert.throw(() => init().ChampionMastery.all(), Error)
+        assert.throws(() => init().ChampionMastery.all(), Error)
       })
 
       describe('through id', function () {
@@ -97,7 +103,37 @@ describe('Champion Mastery', function () {
 
   describe('get champion mastery by player ID and champion ID', function () {
     describe('object param', function () {
+      describe('through playerID and championID', function () {
+        it('through callback', function (done) {
+          init()
+            .ChampionMastery.get(config, function (err, data) {
+              expect(err).to.be.null
+              expect(data).to.not.be.undefined
+              done()
+            })
+        })
 
+        it('through promise', function (done) {
+          init()
+            .ChampionMastery.get(config)
+            .then(data => {
+              expect(data).to.not.be.undefined
+              done()
+            })
+        })
+      })
+
+      it('should throw with just playerID', function () {
+        assert.throws(() => init()
+          .ChampionMastery
+          .get({ playerID: config.playerId }, Error))
+      })
+
+      it('should throw with just championID', function () {
+        assert.throws(() => init()
+          .ChampionMastery
+          .get({ championId: config.championId }, Error))
+      })
     })
   })
 
