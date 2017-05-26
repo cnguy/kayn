@@ -43,7 +43,7 @@ describe('Match', function () {
           })
 
           it('should not throw on non-empty', function () {
-            assert.doesNotThrow(() => init().Match.get({ matchId }), Error)
+            assert.doesNotThrow(() => init().Match.by.id(matchId), Error)
           })
 
           it('should be a successful call with no args', function (done) {
@@ -53,6 +53,17 @@ describe('Match', function () {
                 done()
               })
           })
+        })
+      })
+
+      describe('get', function () {
+        it('should be a successful call', function (done) {
+          init()
+            .Match.get(matchId)
+            .then(data => {
+              expect(data).to.not.be.undefined
+              done()
+            })
         })
       })
     })
