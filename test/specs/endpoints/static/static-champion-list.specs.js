@@ -9,8 +9,6 @@ require('dotenv').config()
 
 var init = require('../../../../utils/init')
 
-var id = 50
-
 const config = {
   options: {
     champListData: 'all',
@@ -68,12 +66,52 @@ describe('Static Champions', function () {
           assert.doesNotThrow(() => init().Static.Champion.list(), Error)
         })
 
+        describe('by callback', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .Static
+              .Champion
+              .list(function testCB(err, data) {
+                expect(err).to.be.bull
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+
+        describe('by region', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .Static
+              .Champion
+              .list('na')
+              .then(data => {
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+
+        describe('by options and region', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .Static
+              .Champion
+              .list(config.options, config.region, function testCB(err, data) {
+                expect(err).to.be.bull
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+
         describe('by options', function () {
           describe('through callback', function () {
             it('should be a successful call', function (done) {
               init()
                 .Static
-                .Champion.list(config, function testCB(err, data) {
+                .Champion
+                .list(config.options, function testCB(err, data) {
                   expect(err).to.be.bull
                   expect(data).to.not.be.undefined
                   done()
@@ -85,7 +123,7 @@ describe('Static Champions', function () {
             it('should be a successful call', function (done) {
               init()
                 .Static
-                .Champion.list(config)
+                .Champion.list(config.options, config.region)
                 .then(data => {
                   expect(data).to.not.be.undefined
                   done()

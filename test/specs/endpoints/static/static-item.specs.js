@@ -9,30 +9,30 @@ require('dotenv').config()
 
 var init = require('../../../../utils/init')
 
-var id = 497
+var id = 3903
 
 const config = {
   id,
   options: {
-    champData: 'all',
+    itemData: 'all',
   },
-  region: 'kr'
+  region: 'ru'
 }
 
-describe('Static Champion', function () {
+describe('Static Item', function () {
   this.timeout(0)
 
-  describe('get static champion', function () {
+  describe('get static item', function () {
     describe('object param', function () {
       it('should throw on empty', function () {
-        assert.throws(() => init().Static.champion(), Error)
+        assert.throws(() => init().Static.item(), Error)
       })
 
       describe('by id and options and region', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
             init()
-              .Static.champion(config, function testCB(err, data) {
+              .Static.item(config, function testCB(err, data) {
                 expect(err).to.be.null
                 expect(data).to.not.be.undefined
                 done()
@@ -44,7 +44,7 @@ describe('Static Champion', function () {
           it('should be a successful call', function (done) {
             init()
               .Static
-              .champion(config)
+              .item(config)
               .then(data => {
                 expect(data).to.not.be.undefined
                 done()
@@ -57,7 +57,7 @@ describe('Static Champion', function () {
         it('should throw', function () {
           assert.throws(() =>
             init()
-              .Static.champion(function testCB(err, data) {
+              .Static.item(function testCB(err, data) {
                 expect(err).to.be.null
                 expect(data).to.not.be.undefined
                 done()
@@ -67,7 +67,7 @@ describe('Static Champion', function () {
 
       describe('standard params', function () {
         it('should throw on empty', function () {
-          assert.throws(() => init().Static.Champion.by.id(), Error)
+          assert.throws(() => init().Static.Item.by.id(), Error)
         })
 
         describe('by id', function () {
@@ -75,7 +75,7 @@ describe('Static Champion', function () {
             it('should be a successful call', function (done) {
               init()
                 .Static
-                .Champion.by.id(id, function testCB(err, data) {
+                .Item.by.id(id, function testCB(err, data) {
                   expect(err).to.be.null
                   expect(data).to.not.be.undefined
                   done()
@@ -87,7 +87,7 @@ describe('Static Champion', function () {
             it('should be a successful call', function (done) {
               init()
                 .Static
-                .Champion.by.id(id)
+                .Item.by.id(id)
                 .then(data => {
                   expect(data).to.not.be.undefined
                   done()
@@ -100,7 +100,7 @@ describe('Static Champion', function () {
           it('should be a successful call', function (done) {
             init()
               .Static
-              .Champion.by.id(id, config.options, function testCB(err, data) {
+              .Item.by.id(id, config.options, function testCB(err, data) {
                 expect(data).to.not.be.undefined
                 done()
               })
@@ -112,7 +112,7 @@ describe('Static Champion', function () {
             it('should be a successful call', function (done) {
               init()
                 .Static
-                .Champion.by.id(id, 'na', function testCB(err, data) {
+                .Item.by.id(id, 'na', function testCB(err, data) {
                   expect(data).to.not.be.undefined
                   done()
                 })
@@ -123,7 +123,7 @@ describe('Static Champion', function () {
             it('should be a successful call', function (done) {
               init()
                 .Static
-                .Champion.by.id(id, 'na')
+                .Item.by.id(id, 'na')
                 .then(data => {
                   expect(data).to.not.be.undefined
                   done()

@@ -9,30 +9,27 @@ require('dotenv').config()
 
 var init = require('../../../../utils/init')
 
-var id = 497
-
 const config = {
-  id,
   options: {
-    champData: 'all',
+    itemListData: 'all'
   },
-  region: 'kr'
+  region: 'na'
 }
 
-describe('Static Champion', function () {
+describe('Static Items', function () {
   this.timeout(0)
 
-  describe('get static champion', function () {
+  describe('get static items list', function () {
     describe('object param', function () {
-      it('should throw on empty', function () {
-        assert.throws(() => init().Static.champion(), Error)
+      it('should not throw on empty', function () {
+        assert.doesNotThrow(() => init().Static.items(), Error)
       })
 
-      describe('by id and options and region', function () {
+      describe('by options and region', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
             init()
-              .Static.champion(config, function testCB(err, data) {
+              .Static.items(config, function testCB(err, data) {
                 expect(err).to.be.null
                 expect(data).to.not.be.undefined
                 done()
@@ -44,7 +41,7 @@ describe('Static Champion', function () {
           it('should be a successful call', function (done) {
             init()
               .Static
-              .champion(config)
+              .items(config)
               .then(data => {
                 expect(data).to.not.be.undefined
                 done()
@@ -54,28 +51,67 @@ describe('Static Champion', function () {
       })
 
       describe('through callback', function () {
-        it('should throw', function () {
-          assert.throws(() =>
-            init()
-              .Static.champion(function testCB(err, data) {
-                expect(err).to.be.null
-                expect(data).to.not.be.undefined
-                done()
-              }), Error)
+        it('should be a successful call', function (done) {
+          init()
+            .Static.items(function testCB(err, data) {
+              expect(err).to.be.null
+              expect(data).to.not.be.undefined
+              done()
+            })
         })
       })
 
       describe('standard params', function () {
-        it('should throw on empty', function () {
-          assert.throws(() => init().Static.Champion.by.id(), Error)
+        it('should not throw on empty', function () {
+          assert.doesNotThrow(() => init().Static.Item.list(), Error)
         })
 
-        describe('by id', function () {
+        describe('by callback', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .Static
+              .Item
+              .list(function testCB(err, data) {
+                expect(err).to.be.null
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+
+        describe('by region', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .Static
+              .Item
+              .list('na')
+              .then(data => {
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+
+        describe('by options and region', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .Static
+              .Item
+              .list(config.options, config.region, function testCB(err, data) {
+                expect(err).to.be.null
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+
+        describe('by options', function () {
           describe('through callback', function () {
             it('should be a successful call', function (done) {
               init()
                 .Static
-                .Champion.by.id(id, function testCB(err, data) {
+                .Item
+                .list(config.options, function testCB(err, data) {
                   expect(err).to.be.null
                   expect(data).to.not.be.undefined
                   done()
@@ -87,43 +123,7 @@ describe('Static Champion', function () {
             it('should be a successful call', function (done) {
               init()
                 .Static
-                .Champion.by.id(id)
-                .then(data => {
-                  expect(data).to.not.be.undefined
-                  done()
-                })
-            })
-          })
-        })
-
-        describe('by id and options and callback', function () {
-          it('should be a successful call', function (done) {
-            init()
-              .Static
-              .Champion.by.id(id, config.options, function testCB(err, data) {
-                expect(data).to.not.be.undefined
-                done()
-              })
-          })
-        })
-
-        describe('by id and region', function () {
-          describe('through callback', function () {
-            it('should be a successful call', function (done) {
-              init()
-                .Static
-                .Champion.by.id(id, 'na', function testCB(err, data) {
-                  expect(data).to.not.be.undefined
-                  done()
-                })
-            })
-          })
-
-          describe('through promise', function () {
-            it('should be a successful call', function (done) {
-              init()
-                .Static
-                .Champion.by.id(id, 'na')
+                .Item.list(config.options, config.region)
                 .then(data => {
                   expect(data).to.not.be.undefined
                   done()
