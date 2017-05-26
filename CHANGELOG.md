@@ -6,7 +6,7 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
-## [2.0.51]() - Removed Status.get() and Match.get() standard functions.
+## [2.0.52]() - Removed Status.get() and Match.get() standard functions.
 I decided that this wasn't a good idea.
 
 ## [2.0.51](https://github.com/ChauTNguyen/kindred-api/commit/a30e3644cdcb6c3cf3158b70a418ff18760d4e8e) - More tinkering with buffers to increase Rate Limiter efficiency!
