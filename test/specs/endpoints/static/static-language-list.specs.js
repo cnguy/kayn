@@ -10,27 +10,24 @@ require('dotenv').config()
 var init = require('../../../../utils/init')
 
 const config = {
-  options: {
-    version: '7.9.1'
-  },
   region: 'kr'
 }
 
-describe('Static Language Strings', function () {
+describe('Static Language', function () {
   this.timeout(0)
 
-  describe('get static language strings list', function () {
+  describe('get static language list', function () {
     describe('object param', function () {
       it('should not throw on empty', function () {
-        assert.doesNotThrow(() => init().Static.languageStrings(), Error)
+        assert.doesNotThrow(() => init().Static.languages(), Error)
       })
 
-      describe('by options and region', function () {
+      describe('by region', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
             init()
-              .Static.languageStrings(config, function testCB(err, data) {
-                expect(err).to.be.bull
+              .Static.languages(config, function testCB(err, data) {
+                expect(err).to.be.null
                 expect(data).to.not.be.undefined
                 done()
               })
@@ -41,7 +38,7 @@ describe('Static Language Strings', function () {
           it('should be a successful call', function (done) {
             init()
               .Static
-              .languageStrings(config)
+              .languages(config)
               .then(data => {
                 expect(data).to.not.be.undefined
                 done()
@@ -53,7 +50,7 @@ describe('Static Language Strings', function () {
       describe('through callback', function () {
         it('should be a successful call', function (done) {
           init()
-            .Static.languageStrings(function testCB(err, data) {
+            .Static.languages(function testCB(err, data) {
               expect(err).to.be.null
               expect(data).to.not.be.undefined
               done()
@@ -64,28 +61,28 @@ describe('Static Language Strings', function () {
 
     describe('standard params', function () {
       it('should not throw on empty', function () {
-        assert.doesNotThrow(() => init().Static.LanguageString.list(), Error)
+        assert.doesNotThrow(() => init().Static.Language.list(), Error)
       })
 
       describe('by callback', function () {
         it('should be a successful call', function (done) {
           init()
             .Static
-            .LanguageString
+            .Language
             .list(function testCB(err, data) {
-              expect(err).to.be.bull
+              expect(err).to.be.null
               expect(data).to.not.be.undefined
               done()
             })
         })
       })
 
-      describe('by region', function () {
+      describe('by promise', function () {
         it('should be a successful call', function (done) {
           init()
             .Static
-            .LanguageString
-            .list('na')
+            .Language
+            .list()
             .then(data => {
               expect(data).to.not.be.undefined
               done()
@@ -93,27 +90,14 @@ describe('Static Language Strings', function () {
         })
       })
 
-      describe('by options and region', function () {
-        it('should be a successful call', function (done) {
-          init()
-            .Static
-            .LanguageString
-            .list(config.options, config.region, function testCB(err, data) {
-              expect(err).to.be.bull
-              expect(data).to.not.be.undefined
-              done()
-            })
-        })
-      })
-
-      describe('by options', function () {
+      describe('by region', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
             init()
               .Static
-              .LanguageString
-              .list(config.options, function testCB(err, data) {
-                expect(err).to.be.bull
+              .Language
+              .list('na', function testCB(err, data) {
+                expect(err).to.be.null
                 expect(data).to.not.be.undefined
                 done()
               })
@@ -124,7 +108,8 @@ describe('Static Language Strings', function () {
           it('should be a successful call', function (done) {
             init()
               .Static
-              .LanguageString.list(config.options, config.region)
+              .Language
+              .list('na')
               .then(data => {
                 expect(data).to.not.be.undefined
                 done()

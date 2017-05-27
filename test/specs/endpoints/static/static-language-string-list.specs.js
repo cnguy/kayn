@@ -11,26 +11,26 @@ var init = require('../../../../utils/init')
 
 const config = {
   options: {
-    champListData: 'all'
+    version: '7.9.1'
   },
   region: 'kr'
 }
 
-describe('Static Champions', function () {
+describe('Static Language Strings', function () {
   this.timeout(0)
 
-  describe('get static champions list', function () {
+  describe('get static language strings list', function () {
     describe('object param', function () {
       it('should not throw on empty', function () {
-        assert.doesNotThrow(() => init().Static.champions(), Error)
+        assert.doesNotThrow(() => init().Static.languageStrings(), Error)
       })
 
       describe('by options and region', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
             init()
-              .Static.champions(config, function testCB(err, data) {
-                expect(err).to.be.bull
+              .Static.languageStrings(config, function testCB(err, data) {
+                expect(err).to.be.null
                 expect(data).to.not.be.undefined
                 done()
               })
@@ -41,7 +41,7 @@ describe('Static Champions', function () {
           it('should be a successful call', function (done) {
             init()
               .Static
-              .champions(config)
+              .languageStrings(config)
               .then(data => {
                 expect(data).to.not.be.undefined
                 done()
@@ -53,7 +53,7 @@ describe('Static Champions', function () {
       describe('through callback', function () {
         it('should be a successful call', function (done) {
           init()
-            .Static.champions(function testCB(err, data) {
+            .Static.languageStrings(function testCB(err, data) {
               expect(err).to.be.null
               expect(data).to.not.be.undefined
               done()
@@ -64,16 +64,16 @@ describe('Static Champions', function () {
 
     describe('standard params', function () {
       it('should not throw on empty', function () {
-        assert.doesNotThrow(() => init().Static.Champion.list(), Error)
+        assert.doesNotThrow(() => init().Static.LanguageString.list(), Error)
       })
 
       describe('by callback', function () {
         it('should be a successful call', function (done) {
           init()
             .Static
-            .Champion
+            .LanguageString
             .list(function testCB(err, data) {
-              expect(err).to.be.bull
+              expect(err).to.be.null
               expect(data).to.not.be.undefined
               done()
             })
@@ -84,7 +84,7 @@ describe('Static Champions', function () {
         it('should be a successful call', function (done) {
           init()
             .Static
-            .Champion
+            .LanguageString
             .list('na')
             .then(data => {
               expect(data).to.not.be.undefined
@@ -97,9 +97,9 @@ describe('Static Champions', function () {
         it('should be a successful call', function (done) {
           init()
             .Static
-            .Champion
+            .LanguageString
             .list(config.options, config.region, function testCB(err, data) {
-              expect(err).to.be.bull
+              expect(err).to.be.null
               expect(data).to.not.be.undefined
               done()
             })
@@ -111,9 +111,9 @@ describe('Static Champions', function () {
           it('should be a successful call', function (done) {
             init()
               .Static
-              .Champion
+              .LanguageString
               .list(config.options, function testCB(err, data) {
-                expect(err).to.be.bull
+                expect(err).to.be.null
                 expect(data).to.not.be.undefined
                 done()
               })
@@ -124,7 +124,7 @@ describe('Static Champions', function () {
           it('should be a successful call', function (done) {
             init()
               .Static
-              .Champion
+              .LanguageString
               .list(config.options, config.region)
               .then(data => {
                 expect(data).to.not.be.undefined

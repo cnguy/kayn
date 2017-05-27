@@ -124,7 +124,8 @@ describe('Static Items', function () {
           it('should be a successful call', function (done) {
             init()
               .Static
-              .Item.list(config.options, config.region)
+              .Item
+              .list(config.options, config.region)
               .then(data => {
                 expect(data).to.not.be.undefined
                 done()
