@@ -14,7 +14,7 @@ var id = 3903
 const config = {
   id,
   options: {
-    itemData: 'all',
+    itemData: 'all'
   },
   region: 'ru'
 }
@@ -64,71 +64,71 @@ describe('Static Item', function () {
               }), Error)
         })
       })
+    })
 
-      describe('standard params', function () {
-        it('should throw on empty', function () {
-          assert.throws(() => init().Static.Item.by.id(), Error)
-        })
+    describe('standard params', function () {
+      it('should throw on empty', function () {
+        assert.throws(() => init().Static.Item.by.id(), Error)
+      })
 
-        describe('by id', function () {
-          describe('through callback', function () {
-            it('should be a successful call', function (done) {
-              init()
-                .Static
-                .Item.by.id(id, function testCB(err, data) {
-                  expect(err).to.be.null
-                  expect(data).to.not.be.undefined
-                  done()
-                })
-            })
-          })
-
-          describe('through promise', function () {
-            it('should be a successful call', function (done) {
-              init()
-                .Static
-                .Item.by.id(id)
-                .then(data => {
-                  expect(data).to.not.be.undefined
-                  done()
-                })
-            })
-          })
-        })
-
-        describe('by id and options and callback', function () {
+      describe('by id', function () {
+        describe('through callback', function () {
           it('should be a successful call', function (done) {
             init()
               .Static
-              .Item.by.id(id, config.options, function testCB(err, data) {
+              .Item.by.id(id, function testCB(err, data) {
+                expect(err).to.be.null
                 expect(data).to.not.be.undefined
                 done()
               })
           })
         })
 
-        describe('by id and region', function () {
-          describe('through callback', function () {
-            it('should be a successful call', function (done) {
-              init()
-                .Static
-                .Item.by.id(id, 'na', function testCB(err, data) {
-                  expect(data).to.not.be.undefined
-                  done()
-                })
-            })
+        describe('through promise', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .Static
+              .Item.by.id(id)
+              .then(data => {
+                expect(data).to.not.be.undefined
+                done()
+              })
           })
+        })
+      })
 
-          describe('through promise', function () {
-            it('should be a successful call', function (done) {
-              init()
-                .Static
-                .Item.by.id(id, 'na')
-                .then(data => {
-                  expect(data).to.not.be.undefined
-                  done()
-                })
+      describe('by id and options and callback', function () {
+        it('should be a successful call', function (done) {
+          init()
+            .Static
+            .Item.by.id(id, config.options, function testCB(err, data) {
+              expect(data).to.not.be.undefined
+              done()
             })
+        })
+      })
+
+      describe('by id and region', function () {
+        describe('through callback', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .Static
+              .Item.by.id(id, 'na', function testCB(err, data) {
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+
+        describe('through promise', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .Static
+              .Item.by.id(id, 'na')
+              .then(data => {
+                expect(data).to.not.be.undefined
+                done()
+              })
           })
         })
       })

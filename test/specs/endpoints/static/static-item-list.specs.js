@@ -60,18 +60,59 @@ describe('Static Items', function () {
             })
         })
       })
+    })
 
-      describe('standard params', function () {
-        it('should not throw on empty', function () {
-          assert.doesNotThrow(() => init().Static.Item.list(), Error)
+    describe('standard params', function () {
+      it('should not throw on empty', function () {
+        assert.doesNotThrow(() => init().Static.Item.list(), Error)
+      })
+
+      describe('by callback', function () {
+        it('should be a successful call', function (done) {
+          init()
+            .Static
+            .Item
+            .list(function testCB(err, data) {
+              expect(err).to.be.null
+              expect(data).to.not.be.undefined
+              done()
+            })
         })
+      })
 
-        describe('by callback', function () {
+      describe('by region', function () {
+        it('should be a successful call', function (done) {
+          init()
+            .Static
+            .Item
+            .list('na')
+            .then(data => {
+              expect(data).to.not.be.undefined
+              done()
+            })
+        })
+      })
+
+      describe('by options and region', function () {
+        it('should be a successful call', function (done) {
+          init()
+            .Static
+            .Item
+            .list(config.options, config.region, function testCB(err, data) {
+              expect(err).to.be.null
+              expect(data).to.not.be.undefined
+              done()
+            })
+        })
+      })
+
+      describe('by options', function () {
+        describe('through callback', function () {
           it('should be a successful call', function (done) {
             init()
               .Static
               .Item
-              .list(function testCB(err, data) {
+              .list(config.options, function testCB(err, data) {
                 expect(err).to.be.null
                 expect(data).to.not.be.undefined
                 done()
@@ -79,56 +120,15 @@ describe('Static Items', function () {
           })
         })
 
-        describe('by region', function () {
+        describe('through promise', function () {
           it('should be a successful call', function (done) {
             init()
               .Static
-              .Item
-              .list('na')
+              .Item.list(config.options, config.region)
               .then(data => {
                 expect(data).to.not.be.undefined
                 done()
               })
-          })
-        })
-
-        describe('by options and region', function () {
-          it('should be a successful call', function (done) {
-            init()
-              .Static
-              .Item
-              .list(config.options, config.region, function testCB(err, data) {
-                expect(err).to.be.null
-                expect(data).to.not.be.undefined
-                done()
-              })
-          })
-        })
-
-        describe('by options', function () {
-          describe('through callback', function () {
-            it('should be a successful call', function (done) {
-              init()
-                .Static
-                .Item
-                .list(config.options, function testCB(err, data) {
-                  expect(err).to.be.null
-                  expect(data).to.not.be.undefined
-                  done()
-                })
-            })
-          })
-
-          describe('through promise', function () {
-            it('should be a successful call', function (done) {
-              init()
-                .Static
-                .Item.list(config.options, config.region)
-                .then(data => {
-                  expect(data).to.not.be.undefined
-                  done()
-                })
-            })
           })
         })
       })

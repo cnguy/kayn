@@ -14,7 +14,7 @@ var id = 497
 const config = {
   id,
   options: {
-    champData: 'all',
+    champData: 'all'
   },
   region: 'kr'
 }
@@ -64,71 +64,71 @@ describe('Static Champion', function () {
               }), Error)
         })
       })
+    })
 
-      describe('standard params', function () {
-        it('should throw on empty', function () {
-          assert.throws(() => init().Static.Champion.by.id(), Error)
-        })
+    describe('standard params', function () {
+      it('should throw on empty', function () {
+        assert.throws(() => init().Static.Champion.by.id(), Error)
+      })
 
-        describe('by id', function () {
-          describe('through callback', function () {
-            it('should be a successful call', function (done) {
-              init()
-                .Static
-                .Champion.by.id(id, function testCB(err, data) {
-                  expect(err).to.be.null
-                  expect(data).to.not.be.undefined
-                  done()
-                })
-            })
-          })
-
-          describe('through promise', function () {
-            it('should be a successful call', function (done) {
-              init()
-                .Static
-                .Champion.by.id(id)
-                .then(data => {
-                  expect(data).to.not.be.undefined
-                  done()
-                })
-            })
-          })
-        })
-
-        describe('by id and options and callback', function () {
+      describe('by id', function () {
+        describe('through callback', function () {
           it('should be a successful call', function (done) {
             init()
               .Static
-              .Champion.by.id(id, config.options, function testCB(err, data) {
+              .Champion.by.id(id, function testCB(err, data) {
+                expect(err).to.be.null
                 expect(data).to.not.be.undefined
                 done()
               })
           })
         })
 
-        describe('by id and region', function () {
-          describe('through callback', function () {
-            it('should be a successful call', function (done) {
-              init()
-                .Static
-                .Champion.by.id(id, 'na', function testCB(err, data) {
-                  expect(data).to.not.be.undefined
-                  done()
-                })
-            })
+        describe('through promise', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .Static
+              .Champion.by.id(id)
+              .then(data => {
+                expect(data).to.not.be.undefined
+                done()
+              })
           })
+        })
+      })
 
-          describe('through promise', function () {
-            it('should be a successful call', function (done) {
-              init()
-                .Static
-                .Champion.by.id(id, 'na')
-                .then(data => {
-                  expect(data).to.not.be.undefined
-                  done()
-                })
+      describe('by id and options and callback', function () {
+        it('should be a successful call', function (done) {
+          init()
+            .Static
+            .Champion.by.id(id, config.options, function testCB(err, data) {
+              expect(data).to.not.be.undefined
+              done()
             })
+        })
+      })
+
+      describe('by id and region', function () {
+        describe('through callback', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .Static
+              .Champion.by.id(id, 'na', function testCB(err, data) {
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+
+        describe('through promise', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .Static
+              .Champion.by.id(id, 'na')
+              .then(data => {
+                expect(data).to.not.be.undefined
+                done()
+              })
           })
         })
       })
