@@ -97,6 +97,8 @@ describe('Runes', function () {
         describe('id', function () {
           it('should throw on empty', function () {
             assert.throws(() => init().Runes.by.id(), Error)
+            assert.throws(() => init().Runes.by.name(), Error)
+            assert.throws(() => init().Runes.by.account(), Error)
           })
 
           describe('through callback', function () {

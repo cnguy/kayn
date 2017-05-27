@@ -97,6 +97,8 @@ describe('Masteries', function () {
         describe('id', function () {
           it('should throw on empty', function () {
             assert.throws(() => init().Masteries.by.id(), Error)
+            assert.throws(() => init().Masteries.by.name(), Error)
+            assert.throws(() => init().Masteries.by.account(), Error)
           })
 
           describe('through callback', function () {

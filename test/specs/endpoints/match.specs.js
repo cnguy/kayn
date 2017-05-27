@@ -9,7 +9,8 @@ require('dotenv').config()
 
 var init = require('../../../utils/init')
 
-const matchId = 2450326677
+const matchId = 2478544123
+const krMatchId = 2711264368
 
 describe('Match', function () {
   this.timeout(0)
@@ -44,7 +45,7 @@ describe('Match', function () {
             assert.doesNotThrow(() => init().Match.by.id(matchId), Error)
           })
 
-          it('should be a successful call with no args', function (done) {
+          it('should be a successful call with matchId', function (done) {
             init().Match.by.id(matchId)
               .then(data => {
                 expect(data).to.not.be.undefined
@@ -66,28 +67,84 @@ describe('Match', function () {
         assert.doesNotThrow(() => init().Match.timeline({ matchId }), Error)
       })
 
-      it('should be a successful call with no args', function (done) {
-        init().Match.timeline({ matchId })
-          .then(data => {
-            expect(data).to.not.be.undefined
-            done()
-          })
+      describe('through callback', function () {
+        it('should be a successful call', function (done) {
+          init()
+            .Match
+            .timeline({ id: matchId }, function testCB(err, data) {
+              expect(err).to.be.null
+              expect(data).to.not.be.undefined
+              done()
+            })
+        })
+      })
+
+      describe('through promise', function () {
+        it('should be a successful call', function (done) {
+          init()
+            .Match
+            .timeline({ id: matchId })
+            .then(data => {
+              expect(data).to.not.be.undefined
+              done()
+            })
+        })
       })
     })
 
     describe('standard params', function () {
-      describe('by', function () {
-        describe('id', function () {
-          it('should throw on empty', function () {
-            assert.throws(() => init().Match.Timeline.by.id(), Error)
-          })
+      it('should throw on empty', function () {
+        assert.throws(() => init().Match.Timeline.by.id(), Error)
+      })
 
-          it('should not throw on non-empty', function () {
-            assert.doesNotThrow(() => init().Match.Timeline.by.id(matchId), Error)
-          })
+      it('should not throw on non-empty', function () {
+        assert.doesNotThrow(() => init().Match.Timeline.by.id(matchId), Error)
+      })
 
-          it('should be a successful call with no args', function (done) {
-            init().Match.Timeline.by.id(matchId)
+      describe('by id', function () {
+        describe('through callback', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .Match
+              .Timeline.by.id(matchId, function testCB(err, data) {
+                expect(err).to.be.null
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+
+        describe('through promise', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .Match
+              .Timeline.by.id(matchId)
+              .then(data => {
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+      })
+
+      describe('by id and region', function () {
+        describe('through callback', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .Match
+              .Timeline.by.id(krMatchId, 'kr', function testCB(err, data) {
+                expect(err).to.be.null
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+        })
+
+        describe('through promise', function () {
+          it('should be a successful call', function (done) {
+            init()
+              .Match
+              .Timeline.by.id(krMatchId, 'kr')
               .then(data => {
                 expect(data).to.not.be.undefined
                 done()
