@@ -1836,9 +1836,12 @@
       }
     }, {
       key: 'getProfileIcons',
-      value: function getProfileIcons(_ref37, cb) {
-        var region = _ref37.region,
+      value: function getProfileIcons() {
+        var _ref37 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref37.region,
             options = _ref37.options;
+
+        var cb = arguments[1];
 
         if (isFunction(arguments[0])) {
           cb = arguments[0];

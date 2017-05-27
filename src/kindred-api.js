@@ -1179,7 +1179,7 @@ class Kindred {
     }
   }
 
-  getProfileIcons({ region, options }, cb) {
+  getProfileIcons({ region, options } = {}, cb) {
     if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
