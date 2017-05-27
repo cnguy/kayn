@@ -22,12 +22,24 @@ describe('Status', function () {
         assert.throw(() => init().Status.get({ region: 'garbage' }), Error)
       })
 
-      it('should be a successful call', function (done) {
-        init().Status.get()
-          .then(data => {
+      describe('through callback', function () {
+        it('should be a successful call', function (done) {
+          init().Status.get(function testCB(err, data) {
+            expect(err).to.be.null
             expect(data).to.not.be.undefined
             done()
           })
+        })
+      })
+
+      describe('through promise', function () {
+        it('should be a successful call', function (done) {
+          init().Status.get()
+            .then(data => {
+              expect(data).to.not.be.undefined
+              done()
+            })
+        })
       })
     })
   })
