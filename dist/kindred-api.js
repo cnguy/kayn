@@ -852,14 +852,6 @@
           }
         }
       };
-
-      this.Ex = {
-        getSummonerByAccId: this.getSummonerByAccId.bind(this),
-        getMatchlistByName: this.getMatchlistByName.bind(this),
-        getRunesBySummonerId: this.getRunesBySummonerId.bind(this),
-        getRunesByAccountId: this.getRunesByAccountId.bind(this),
-        staticRuneList: this.staticRuneList.bind(this)
-      };
     }
 
     _createClass(Kindred$1, [{
@@ -2987,29 +2979,6 @@
 
         return this.Static.versions({
           region: region
-        }, cb);
-      }
-    }, {
-      key: 'getSummonerByAccId',
-      value: function getSummonerByAccId(accId, region, cb) {
-        return this.Summoner.get({
-          region: region,
-          accId: accId
-        }, cb);
-      }
-    }, {
-      key: 'getRunesBySummonerId',
-      value: function getRunesBySummonerId(id, region, cb) {
-        return this.Runes.get({
-          region: region,
-          id: id
-        }, cb);
-      }
-    }, {
-      key: 'staticRuneList',
-      value: function staticRuneList(region, options, cb) {
-        return this.Static.runes({
-          region: region, options: options
         }, cb);
       }
     }]);

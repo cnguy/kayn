@@ -416,14 +416,6 @@ class Kindred {
         }
       }
     }
-
-    this.Ex = {
-      getSummonerByAccId: this.getSummonerByAccId.bind(this),
-      getMatchlistByName: this.getMatchlistByName.bind(this),
-      getRunesBySummonerId: this.getRunesBySummonerId.bind(this),
-      getRunesByAccountId: this.getRunesByAccountId.bind(this),
-      staticRuneList: this.staticRuneList.bind(this)
-    }
   }
 
   canMakeRequest(region) {
@@ -2198,27 +2190,6 @@ class Kindred {
 
     return this.Static.versions({
       region
-    }, cb)
-  }
-
-  /* Examples */
-  getSummonerByAccId(accId, region, cb) {
-    return this.Summoner.get({
-      region,
-      accId
-    }, cb)
-  }
-
-  getRunesBySummonerId(id, region, cb) {
-    return this.Runes.get({
-      region,
-      id
-    }, cb)
-  }
-
-  staticRuneList(region, options, cb) {
-    return this.Static.runes({
-      region, options
     }, cb)
   }
 }

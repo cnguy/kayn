@@ -59,7 +59,7 @@ describe('Matchlist', function () {
         describe('through promise', function () {
           it('should be a successful call', function (done) {
             init()
-              .Matchlist.get({ id, options, region: 'na' })
+              .Matchlist.get({ id })
               .then(data => {
                 expect(data).to.not.be.undefined
                 done()

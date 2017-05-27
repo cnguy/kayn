@@ -6,7 +6,9 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
-## [2.0.53]() - getProfileIcons()/Static.profileIcons now works on empty.
+## [2.0.54]() - (minor) Removed some old examples.
+
+## [2.0.53](https://github.com/ChauTNguyen/kindred-api/commit/7a8df99de3c03a4c3c614cf1308c8dd2abbb1dd4) - getProfileIcons()/Static.profileIcons now works on empty.
 
 ## [2.0.52](https://github.com/ChauTNguyen/kindred-api/commit/1f6bd3ea9de0ef082e9e0db9e4a9cb76be6aaa4e) - Removed Status.get() and Match.get() standard functions.
 I decided that this wasn't a good idea due to many reasons (gotta do a lot of parameter handling which is annoying).
