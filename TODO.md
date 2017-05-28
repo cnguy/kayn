@@ -1,7 +1,8 @@
 # Task List
 ~ = in progress
 - [ ] Comment my code extensively.. ~
-- [ ] Add extensive tests that cover important functionality such as querystrings ~
+- [ ] Fix highly inefficient tests. ~
+- [ ] Add extensive tests that cover important functionality such as rate limiting. ~
 - [x] Add an [option to space out requests](https://github.com/ChauTNguyen/kindred-api/wiki/Rate-Limiter). ~~Maybe I should make this the default though (should still provide flexibility to users)~~.
 - [x] Add tests (that handle parameters, errors, then the API itself). Make sure I add callback printing tests too! (90% coverage!!! obviously isn't indicative of a good suite, but this is a good starting point)
 - [ ] Add the rest of the list, by.id, by.name, by.account functions ~
