@@ -15,7 +15,7 @@ notifications:
 sudo: true
 
 before_install:
-    - yarn add --g codecov
+    - yarn global add codecov
 
 after_success:
     - codecov
