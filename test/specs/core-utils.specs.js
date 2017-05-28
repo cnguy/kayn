@@ -143,7 +143,7 @@ describe('Core Utils', function () {
         const url = v3Url.baseUrl + v3Url.postfix
         const marker = '?'
         const exp = url + marker + apiKeyPrefix + fakeKey
-        const actual = init()._constructFullUrl(url, 'thisIsAKey')
+        const actual = init()._constructFullUrl(url, fakeKey)
         assert.equal(exp, actual)
       })
 
@@ -151,7 +151,7 @@ describe('Core Utils', function () {
         const url = v3Url.baseUrl + v3Url.postfix + v3Url.query
         const marker = '&'
         const exp = url + marker + apiKeyPrefix + fakeKey
-        const actual = init()._constructFullUrl(url, 'thisIsAKey')
+        const actual = init()._constructFullUrl(url, fakeKey)
         assert.equal(exp, actual)
       })
     })
@@ -161,7 +161,7 @@ describe('Core Utils', function () {
         const url = preV3Url.baseUrl + preV3Url.postfix
         const marker = '?'
         const exp = url + marker + apiKeyPrefix + fakeKey
-        const actual = init()._constructFullUrl(url, 'thisIsAKey')
+        const actual = init()._constructFullUrl(url, fakeKey)
         assert.equal(exp, actual)
       })
 
@@ -169,7 +169,7 @@ describe('Core Utils', function () {
         const url = preV3Url.baseUrl + preV3Url.postfix + preV3Url.query
         const marker = '&'
         const exp = url + marker + apiKeyPrefix + fakeKey
-        const actual = init()._constructFullUrl(url, 'thisIsAKey')
+        const actual = init()._constructFullUrl(url, fakeKey)
         assert.equal(exp, actual)
       })
     })

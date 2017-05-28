@@ -2550,7 +2550,6 @@
     }, {
       key: 'getMatchlistByAccountId',
       value: function getMatchlistByAccountId(accId, options, region, cb) {
-        console.log(options);
         if (isFunction(options)) {
           cb = options;
           options = undefined;
