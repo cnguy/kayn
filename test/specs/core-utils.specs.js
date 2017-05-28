@@ -137,7 +137,7 @@ describe('Core Utils', function () {
     })
   })
 
-  describe('constructorFullUrl', function () {
+  describe('constructFullUrl', function () {
     describe('v3', function () {
       it('should work without params', function () {
         const url = v3Url.baseUrl + v3Url.postfix
