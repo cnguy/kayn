@@ -460,10 +460,45 @@ class Kindred {
     const newUrl = `https://${PLATFORM_IDS[REGIONS_BACK[region]].toLowerCase()}.${base}/${prefix}${encodeURI(query)}`
 
     /* TODO: Small hack. Leave here until Riot has implemented all endpoints. */
-    if (newUrl.lastIndexOf('v3') == -1)
+    if (newUrl.lastIndexOf('v3') === -1)
       return oldUrl
 
     return newUrl
+  }
+
+  _stringifyOptions(options, endUrl) {
+    let stringifiedOpts = ''
+
+    // Returns stringified opts with appended key-value pair.
+    const appendKey = (str, key, el) => str + (str ? '&' : '') + `${key}=${el}`
+
+    if (endUrl.lastIndexOf('v3') === -1) {
+      // Supports older endpoints (not deprecated until middle of June).
+      // Game/Stats are the only ones remaining left,
+      // but they don't take multi-valued params.
+      stringifiedOpts = queryString.stringify(options)
+    } else {
+      for (const key of Object.keys(options)) {
+        if (Array.isArray(options[key])) {
+          for (const el of options[key]) {
+            stringifiedOpts = appendKey(stringifiedOpts, key, el)
+          }
+        } else {
+          stringifiedOpts = appendKey(stringifiedOpts, key, options[key])
+        }
+      }
+    }
+
+    return stringifiedOpts
+  }
+
+  _constructFullUrl(reqUrl, key) {
+    return (
+      reqUrl + (reqUrl.lastIndexOf('?') === -1
+        ? '?'
+        : '&'
+      ) + `api_key=${key}`
+    )
   }
 
   _baseRequest({
@@ -475,33 +510,10 @@ class Kindred {
   }, cb) {
     const tryRequest = () => {
       return new Promise((resolve, reject) => {
-        let stringifiedOpts = ''
-
-        if (endUrl.lastIndexOf('v3') == -1) {
-          for (const key of Object.keys(options)) {
-            if (Array.isArray(options[key])) {
-              options[key] = options[key].join(',')
-            }
-          }
-
-          stringifiedOpts = queryString.stringify(options).replace(/%2C/, ',')
-        } else {
-          for (const key of Object.keys(options)) {
-            if (Array.isArray(options[key])) {
-              for (let i = 0; i < options[key].length; ++i) {
-                if (stringifiedOpts) stringifiedOpts += '&'
-                stringifiedOpts += `${key}=${options[key][i]}`
-              }
-            } else {
-              if (stringifiedOpts) stringifiedOpts += '&'
-              stringifiedOpts += `${key}=${options[key]}`
-            }
-          }
-        }
-
+        const stringifiedOpts = this._stringifyOptions(options, endUrl)
         const postfix = stringifiedOpts ? '?' + stringifiedOpts : ''
         const reqUrl = this._makeUrl(endUrl + postfix, region, staticReq)
-        const fullUrl = reqUrl + (reqUrl.lastIndexOf('?') === -1 ? '?' : '&') + `api_key=${this.key}`
+        const fullUrl = this._constructFullUrl(reqUrl, this.key)
 
         this.cache.get({ key: reqUrl }, (err, data) => {
           if (data) {
@@ -1792,8 +1804,7 @@ class Kindred {
     }
 
     return this.Matchlist.get({
-      region,
-      accId
+      accId, options, region
     }, cb)
   }
 
@@ -1814,8 +1825,7 @@ class Kindred {
     }
 
     return this.Matchlist.get({
-      region,
-      id
+      id, options, region
     }, cb)
   }
 

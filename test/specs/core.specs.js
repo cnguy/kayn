@@ -160,9 +160,9 @@ describe('Core', function () {
 
         k.Summoner
           .by.name('abcdefghichau', function (err, data) {
+            expect(err).is.not.null
             if (err) {
               if (err === 404) {
-                expect(err).is.not.undefined
                 done()
               }
             }
@@ -196,10 +196,10 @@ describe('Core', function () {
 
         k.Summoner
           .by.name('abcdefghichau')
-          .then(function (data) { return data })
-          .catch(function (err) {
+          .then(data => data)
+          .catch(err => {
+            expect(err).is.not.null
             if (err === 404) {
-              expect(err).is.not.undefined
               done()
             }
           })

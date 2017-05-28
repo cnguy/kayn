@@ -891,9 +891,81 @@
         var oldUrl = 'https://' + region + '.api.riotgames.com/' + oldPrefix + encodeURI(query);
         var newUrl = 'https://' + platformIds[regions$1[region]].toLowerCase() + '.' + base + '/' + prefix + encodeURI(query);
 
-        if (newUrl.lastIndexOf('v3') == -1) return oldUrl;
+        if (newUrl.lastIndexOf('v3') === -1) return oldUrl;
 
         return newUrl;
+      }
+    }, {
+      key: '_stringifyOptions',
+      value: function _stringifyOptions(options, endUrl) {
+        var stringifiedOpts = '';
+
+        var appendKey = function appendKey(str, key, el) {
+          return str + (str ? '&' : '') + (key + '=' + el);
+        };
+
+        if (endUrl.lastIndexOf('v3') === -1) {
+          stringifiedOpts = queryString.stringify(options);
+        } else {
+          var _iteratorNormalCompletion3 = true;
+          var _didIteratorError3 = false;
+          var _iteratorError3 = undefined;
+
+          try {
+            for (var _iterator3 = Object.keys(options)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+              var key = _step3.value;
+
+              if (Array.isArray(options[key])) {
+                var _iteratorNormalCompletion4 = true;
+                var _didIteratorError4 = false;
+                var _iteratorError4 = undefined;
+
+                try {
+                  for (var _iterator4 = options[key][Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                    var el = _step4.value;
+
+                    stringifiedOpts = appendKey(stringifiedOpts, key, el);
+                  }
+                } catch (err) {
+                  _didIteratorError4 = true;
+                  _iteratorError4 = err;
+                } finally {
+                  try {
+                    if (!_iteratorNormalCompletion4 && _iterator4.return) {
+                      _iterator4.return();
+                    }
+                  } finally {
+                    if (_didIteratorError4) {
+                      throw _iteratorError4;
+                    }
+                  }
+                }
+              } else {
+                stringifiedOpts = appendKey(stringifiedOpts, key, options[key]);
+              }
+            }
+          } catch (err) {
+            _didIteratorError3 = true;
+            _iteratorError3 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                _iterator3.return();
+              }
+            } finally {
+              if (_didIteratorError3) {
+                throw _iteratorError3;
+              }
+            }
+          }
+        }
+
+        return stringifiedOpts;
+      }
+    }, {
+      key: '_constructFullUrl',
+      value: function _constructFullUrl(reqUrl, key) {
+        return reqUrl + (reqUrl.lastIndexOf('?') === -1 ? '?' : '&') + ('api_key=' + key);
       }
     }, {
       key: '_baseRequest',
@@ -912,75 +984,10 @@
 
         var tryRequest = function tryRequest() {
           return new Promise(function (resolve, reject) {
-            var stringifiedOpts = '';
-
-            if (endUrl.lastIndexOf('v3') == -1) {
-              var _iteratorNormalCompletion3 = true;
-              var _didIteratorError3 = false;
-              var _iteratorError3 = undefined;
-
-              try {
-                for (var _iterator3 = Object.keys(options)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                  var key = _step3.value;
-
-                  if (Array.isArray(options[key])) {
-                    options[key] = options[key].join(',');
-                  }
-                }
-              } catch (err) {
-                _didIteratorError3 = true;
-                _iteratorError3 = err;
-              } finally {
-                try {
-                  if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                    _iterator3.return();
-                  }
-                } finally {
-                  if (_didIteratorError3) {
-                    throw _iteratorError3;
-                  }
-                }
-              }
-
-              stringifiedOpts = queryString.stringify(options).replace(/%2C/, ',');
-            } else {
-              var _iteratorNormalCompletion4 = true;
-              var _didIteratorError4 = false;
-              var _iteratorError4 = undefined;
-
-              try {
-                for (var _iterator4 = Object.keys(options)[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-                  var _key = _step4.value;
-
-                  if (Array.isArray(options[_key])) {
-                    for (var i = 0; i < options[_key].length; ++i) {
-                      if (stringifiedOpts) stringifiedOpts += '&';
-                      stringifiedOpts += _key + '=' + options[_key][i];
-                    }
-                  } else {
-                    if (stringifiedOpts) stringifiedOpts += '&';
-                    stringifiedOpts += _key + '=' + options[_key];
-                  }
-                }
-              } catch (err) {
-                _didIteratorError4 = true;
-                _iteratorError4 = err;
-              } finally {
-                try {
-                  if (!_iteratorNormalCompletion4 && _iterator4.return) {
-                    _iterator4.return();
-                  }
-                } finally {
-                  if (_didIteratorError4) {
-                    throw _iteratorError4;
-                  }
-                }
-              }
-            }
-
+            var stringifiedOpts = _this._stringifyOptions(options, endUrl);
             var postfix = stringifiedOpts ? '?' + stringifiedOpts : '';
             var reqUrl = _this._makeUrl(endUrl + postfix, region, staticReq);
-            var fullUrl = reqUrl + (reqUrl.lastIndexOf('?') === -1 ? '?' : '&') + ('api_key=' + _this.key);
+            var fullUrl = _this._constructFullUrl(reqUrl, _this.key);
 
             _this.cache.get({ key: reqUrl }, function (err, data) {
               if (data) {
@@ -1006,7 +1013,7 @@
                           var responseMessage = prettifyStatusMessage(statusCode);
                           var retry = response.headers['retry-after'] * SECOND || SECOND;
 
-                          var _key2 = reqUrl;
+                          var key = reqUrl;
                           var ttl = cacheParams.ttl;
 
 
@@ -1021,7 +1028,7 @@
                             } else if (statusCode >= ERROR_THRESHOLD) {
                               return callback(statusCode);
                             } else {
-                              self._cacheData(_key2, ttl, body);
+                              self._cacheData(key, ttl, body);
                               return callback(error, JSON.parse(body));
                             }
                           } else {
@@ -1033,7 +1040,7 @@
                             } else if (statusCode >= ERROR_THRESHOLD) {
                               return reject(statusCode);
                             } else {
-                              self._cacheData(_key2, ttl, body);
+                              self._cacheData(key, ttl, body);
                               return resolve(JSON.parse(body));
                             }
                           }
@@ -2559,8 +2566,7 @@
         }
 
         return this.Matchlist.get({
-          region: region,
-          accId: accId
+          accId: accId, options: options, region: region
         }, cb);
       }
     }, {
@@ -2582,8 +2588,7 @@
         }
 
         return this.Matchlist.get({
-          region: region,
-          id: id
+          id: id, options: options, region: region
         }, cb);
       }
     }, {
