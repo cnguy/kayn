@@ -1,4 +1,8 @@
 # Kindred
+[![Build Status](https://travis-ci.org/ChauTNguyen/kindred-api.svg?branch=master)](https://travis-ci.org/ChauTNguyen/kindred-api)
+[![codecov](https://codecov.io/gh/ChauTNguyen/kindred-api/branch/master/graph/badge.svg)](https://codecov.io/gh/ChauTNguyen/kindred-api)
+[![dependencies Status](https://david-dm.org/chautnguyen/kindred-api/status.svg)](https://david-dm.org/chautnguyen/kindred-api)
+
 Node.js League of Legends v3 API wrapper with built-in rate-limiting (enforced per region, burst/spread, follows retry headers), caching (in-memory, Redis), automatic retries, and parameter checking on top of [Riot's League of Legends API](http://www.developer.riotgames.com).
 
 To get started, run one of the following!
