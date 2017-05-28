@@ -984,7 +984,6 @@
 
         var tryRequest = function tryRequest() {
           return new Promise(function (resolve, reject) {
-            console.log(options);
             var stringifiedOpts = _this._stringifyOptions(options, endUrl);
             var postfix = stringifiedOpts ? '?' + stringifiedOpts : '';
             var reqUrl = _this._makeUrl(endUrl + postfix, region, staticReq);
