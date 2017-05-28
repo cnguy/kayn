@@ -6,11 +6,11 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
-## [2.0.55](https://github.com/ChauTNguyen/kindred-api/commit/ae680079d486d55e34e3c6d1e87088142bf73b4f) - Fixed getMatchlistByAccId & getMatchlistById
+## [2.0.55]() - Fixed getMatchlistByAccId & getMatchlistById
 
 Options weren't being passed into the request functions.
 
-## [2.0.54]() - (minor) Removed some old examples.
+## [2.0.54](https://github.com/ChauTNguyen/kindred-api/commit/ae680079d486d55e34e3c6d1e87088142bf73b4f) - (minor) Removed some old examples.
 
 ## [2.0.53](https://github.com/ChauTNguyen/kindred-api/commit/7a8df99de3c03a4c3c614cf1308c8dd2abbb1dd4) - getProfileIcons()/Static.profileIcons now works on empty.
 
