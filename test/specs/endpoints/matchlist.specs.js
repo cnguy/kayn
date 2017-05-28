@@ -18,19 +18,21 @@ const options = {
 }
 const region = 'na'
 
+const k = init()
+
 describe('Matchlist', function () {
   this.timeout(0)
 
   describe('get', function () {
     describe('object param', function () {
       it('should throw on empty', function () {
-        assert.throws(() => init().Matchlist.get(), Error)
+        assert.throws(() => k.Matchlist.get(), Error)
       })
 
       describe('by id', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
-            init().Matchlist.get({ id }, function testCB(err, data) {
+            k.Matchlist.get({ id }, function testCB(err, data) {
               expect(err).to.be.null
               expect(data).to.not.be.undefined
               done()
@@ -38,7 +40,7 @@ describe('Matchlist', function () {
           })
 
           it('should be a successful call with region and options', function (done) {
-            init()
+            k
               .Matchlist.get({ id, options, region: 'na' }, function testCB(err, data) {
                 expect(err).to.be.null
                 expect(data).to.not.be.undefined
@@ -47,7 +49,7 @@ describe('Matchlist', function () {
           })
 
           it('should be a successful call with region', function (done) {
-            init()
+            k
               .Matchlist.get({ id, region: 'na' }, function testCB(err, data) {
                 expect(err).to.be.null
                 expect(data).to.not.be.undefined
@@ -58,7 +60,7 @@ describe('Matchlist', function () {
 
         describe('through promise', function () {
           it('should be a successful call', function (done) {
-            init()
+            k
               .Matchlist.get({ id })
               .then(data => {
                 expect(data).to.not.be.undefined
@@ -67,7 +69,7 @@ describe('Matchlist', function () {
           })
 
           it('should be a successful call with region and options', function (done) {
-            init()
+            k
               .Matchlist.get({ id, options, region: 'na' })
               .then(data => {
                 expect(data).to.not.be.undefined
@@ -76,7 +78,7 @@ describe('Matchlist', function () {
           })
 
           it('should be a successful call with region', function (done) {
-            init()
+            k
               .Matchlist.get({ id, region: 'na' })
               .then(data => {
                 expect(data).to.not.be.undefined
@@ -89,7 +91,7 @@ describe('Matchlist', function () {
       describe('by name', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
-            init().Matchlist.get({ name }, function testCB(err, data) {
+            k.Matchlist.get({ name }, function testCB(err, data) {
               expect(err).to.be.null
               expect(data).to.not.be.undefined
               done()
@@ -99,7 +101,7 @@ describe('Matchlist', function () {
 
         describe('through promise', function () {
           it('should be a successful call', function (done) {
-            init()
+            k
               .Matchlist.get({ name })
               .then(data => {
                 expect(data).to.not.be.undefined
@@ -112,7 +114,7 @@ describe('Matchlist', function () {
       describe('by account id', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
-            init().Matchlist.get({ accId }, function testCB(err, data) {
+            k.Matchlist.get({ accId }, function testCB(err, data) {
               expect(err).to.be.null
               expect(data).to.not.be.undefined
               done()
@@ -122,7 +124,7 @@ describe('Matchlist', function () {
 
         describe('through promise', function () {
           it('should be a successful call', function (done) {
-            init()
+            k
               .Matchlist.get({ accId })
               .then(data => {
                 expect(data).to.not.be.undefined
@@ -137,14 +139,14 @@ describe('Matchlist', function () {
       describe('by', function () {
         describe('id', function () {
           it('should throw on empty', function () {
-            assert.throws(() => init().Matchlist.by.id(), Error)
-            assert.throws(() => init().Matchlist.by.name(), Error)
-            assert.throws(() => init().Matchlist.by.account(), Error)
+            assert.throws(() => k.Matchlist.by.id(), Error)
+            assert.throws(() => k.Matchlist.by.name(), Error)
+            assert.throws(() => k.Matchlist.by.account(), Error)
           })
 
           describe('through callback', function () {
             it('should be a successful call', function (done) {
-              init()
+              k
                 .Matchlist.by.id(id, function testCB(err, data) {
                   expect(err).to.be.null
                   expect(data).to.not.be.undefined
@@ -153,7 +155,7 @@ describe('Matchlist', function () {
             })
 
             it('should be a successful call with options', function (done) {
-              init()
+              k
                 .Matchlist.by.id(id, options, function testCB(err, data) {
                   expect(err).to.be.null
                   expect(data).to.not.be.undefined
@@ -162,7 +164,7 @@ describe('Matchlist', function () {
             })
 
             it('should be a successful call with opts/reg', function (done) {
-              init()
+              k
                 .Matchlist.by.id(id, options, region, function testCB(err, data) {
                   expect(err).to.be.null
                   expect(data).to.not.be.undefined
@@ -171,7 +173,7 @@ describe('Matchlist', function () {
             })
 
             it('should be a successful call with region', function (done) {
-              init()
+              k
                 .Matchlist.by.id(id, region, function testCB(err, data) {
                   expect(err).to.be.null
                   expect(data).to.not.be.undefined
@@ -182,7 +184,7 @@ describe('Matchlist', function () {
 
           describe('through promise', function () {
             it('should be a successful call', function (done) {
-              init()
+              k
                 .Matchlist.by.id(id)
                 .then(data => {
                   expect(data).to.not.be.undefined
@@ -194,12 +196,12 @@ describe('Matchlist', function () {
 
         describe('name', function () {
           it('should throw on empty', function () {
-            assert.throws(() => init().Matchlist.by.name(), Error)
+            assert.throws(() => k.Matchlist.by.name(), Error)
           })
 
           describe('through callback', function () {
             it('should be a successful call', function (done) {
-              init()
+              k
                 .Matchlist.by.name(name, function testCB(err, data) {
                   expect(err).to.be.null
                   expect(data).to.not.be.undefined
@@ -208,7 +210,7 @@ describe('Matchlist', function () {
             })
 
             it('should be a successful call with options', function (done) {
-              init()
+              k
                 .Matchlist.by.name(name, options, function testCB(err, data) {
                   expect(err).to.be.null
                   expect(data).to.not.be.undefined
@@ -217,7 +219,7 @@ describe('Matchlist', function () {
             })
 
             it('should be a successful call with opts/reg', function (done) {
-              init()
+              k
                 .Matchlist.by.name(name, options, region, function testCB(err, data) {
                   expect(err).to.be.null
                   expect(data).to.not.be.undefined
@@ -226,7 +228,7 @@ describe('Matchlist', function () {
             })
 
             it('should be a successful call with region', function (done) {
-              init()
+              k
                 .Matchlist.by.name(name, region, function testCB(err, data) {
                   expect(err).to.be.null
                   expect(data).to.not.be.undefined
@@ -237,7 +239,7 @@ describe('Matchlist', function () {
 
           describe('through promise', function () {
             it('should be a successful call', function (done) {
-              init()
+              k
                 .Matchlist.by.name(name)
                 .then(data => {
                   expect(data).to.not.be.undefined
@@ -249,12 +251,12 @@ describe('Matchlist', function () {
 
         describe('account', function () {
           it('should throw on empty', function () {
-            assert.throws(() => init().Matchlist.by.account(), Error)
+            assert.throws(() => k.Matchlist.by.account(), Error)
           })
 
           describe('through callback', function () {
             it('should be a successful call', function (done) {
-              init()
+              k
                 .Matchlist.by.account(accId, function testCB(err, data) {
                   expect(err).to.be.null
                   expect(data).to.not.be.undefined
@@ -263,7 +265,7 @@ describe('Matchlist', function () {
             })
 
             it('should be a successful call with options', function (done) {
-              init()
+              k
                 .Matchlist.by.account(accId, options, function testCB(err, data) {
                   expect(err).to.be.null
                   expect(data).to.not.be.undefined
@@ -272,7 +274,7 @@ describe('Matchlist', function () {
             })
 
             it('should be a successful call with opts/reg', function (done) {
-              init()
+              k
                 .Matchlist.by.account(accId, options, region, function testCB(err, data) {
                   expect(err).to.be.null
                   expect(data).to.not.be.undefined
@@ -281,7 +283,7 @@ describe('Matchlist', function () {
             })
 
             it('should be a successful call with region', function (done) {
-              init()
+              k
                 .Matchlist.by.account(accId, region, function testCB(err, data) {
                   expect(err).to.be.null
                   expect(data).to.not.be.undefined
@@ -292,7 +294,7 @@ describe('Matchlist', function () {
 
           describe('through promise', function () {
             it('should be a successful call', function (done) {
-              init()
+              k
                 .Matchlist.by.account(accId)
                 .then(data => {
                   expect(data).to.not.be.undefined
@@ -308,13 +310,13 @@ describe('Matchlist', function () {
   describe('recent', function () {
     describe('object param', function () {
       it('should throw on empty', function () {
-        assert.throws(() => init().Matchlist.recent(), Error)
+        assert.throws(() => k.Matchlist.recent(), Error)
       })
 
       describe('by id', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
-            init().Matchlist.recent({ id }, function testCB(err, data) {
+            k.Matchlist.recent({ id }, function testCB(err, data) {
               expect(err).to.be.null
               expect(data).to.not.be.undefined
               done()
@@ -324,7 +326,7 @@ describe('Matchlist', function () {
 
         describe('through promise', function () {
           it('should be a successful call', function (done) {
-            init()
+            k
               .Matchlist.recent({ id })
               .then(data => {
                 expect(data).to.not.be.undefined
@@ -337,7 +339,7 @@ describe('Matchlist', function () {
       describe('by name', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
-            init().Matchlist.recent({ name }, function testCB(err, data) {
+            k.Matchlist.recent({ name }, function testCB(err, data) {
               expect(err).to.be.null
               expect(data).to.not.be.undefined
               done()
@@ -347,7 +349,7 @@ describe('Matchlist', function () {
 
         describe('through promise', function () {
           it('should be a successful call', function (done) {
-            init()
+            k
               .Matchlist.recent({ name })
               .then(data => {
                 expect(data).to.not.be.undefined
@@ -360,7 +362,7 @@ describe('Matchlist', function () {
       describe('by account id', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
-            init().Matchlist.recent({ accId }, function testCB(err, data) {
+            k.Matchlist.recent({ accId }, function testCB(err, data) {
               expect(err).to.be.null
               expect(data).to.not.be.undefined
               done()
@@ -370,7 +372,7 @@ describe('Matchlist', function () {
 
         describe('through promise', function () {
           it('should be a successful call', function (done) {
-            init()
+            k
               .Matchlist.recent({ accId })
               .then(data => {
                 expect(data).to.not.be.undefined

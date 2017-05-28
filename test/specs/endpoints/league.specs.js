@@ -13,19 +13,21 @@ const name = 'Chaser Cat'
 const id = 32932398
 const accId = 47776491
 
+const k = init()
+
 describe('League', function () {
   this.timeout(0)
 
   describe('get all leagues', function () {
     it('should throw on empty', function () {
-      assert.throws(() => init().League.get(), Error)
+      assert.throws(() => k.League.get(), Error)
     })
 
     describe('object params', function () {
       describe('by id', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
-            init().League.get({ id }, function (err, data) {
+            k.League.get({ id }, function (err, data) {
               expect(err).to.be.null
               expect(data).to.not.be.undefined
               done()
@@ -35,7 +37,7 @@ describe('League', function () {
 
         describe('by promise', function () {
           it('should be a successful call', function (done) {
-            init()
+            k
               .League
               .get({ id })
               .then(data => {
@@ -49,7 +51,7 @@ describe('League', function () {
       describe('by name', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
-            init().League.get({ name }, function (err, data) {
+            k.League.get({ name }, function (err, data) {
               expect(err).to.be.null
               expect(data).to.not.be.undefined
               done()
@@ -59,7 +61,7 @@ describe('League', function () {
 
         describe('through promise', function () {
           it('should be a successful call', function (done) {
-            init()
+            k
               .League
               .get({ name })
               .then(data => {
@@ -73,7 +75,7 @@ describe('League', function () {
       describe('through account id', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
-            init().League.get({ accId }, function (err, data) {
+            k.League.get({ accId }, function (err, data) {
               expect(err).to.be.null
               expect(data).to.not.be.undefined
               done()
@@ -83,7 +85,7 @@ describe('League', function () {
 
         describe('through promise', function () {
           it('should be a successful call', function (done) {
-            init().League
+            k.League
               .get({ accId })
               .then(data => {
                 expect(data).to.not.be.undefined
@@ -98,13 +100,13 @@ describe('League', function () {
   describe('get league positions', function () {
     describe('object params', function () {
       it('should throw on empty', function () {
-        assert.throws(() => init().League.positions(), Error)
+        assert.throws(() => k.League.positions(), Error)
       })
 
       describe('by id', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
-            init()
+            k
               .League
               .positions({ id }, function (err, data) {
                 expect(err).to.be.null
@@ -116,7 +118,7 @@ describe('League', function () {
 
         describe('through promise', function () {
           it('should be a successful call', function (done) {
-            init()
+            k
               .League
               .positions({ id })
               .then(data => {
@@ -130,7 +132,7 @@ describe('League', function () {
       describe('by name', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
-            init()
+            k
               .League
               .positions({ name }, function (err, data) {
                 expect(err).to.be.null
@@ -142,7 +144,7 @@ describe('League', function () {
 
         describe('through promise', function () {
           it('should be a successful call', function (done) {
-            init()
+            k
               .League
               .positions({ name })
               .then(data => {
@@ -156,7 +158,7 @@ describe('League', function () {
       describe('by account id', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
-            init()
+            k
               .League
               .positions({ accId }, function (err, data) {
                 expect(err).to.be.null
@@ -168,7 +170,7 @@ describe('League', function () {
 
         describe('through promise', function () {
           it('should be a successful call', function (done) {
-            init()
+            k
               .League
               .positions({ accId })
               .then(data => {
@@ -184,39 +186,39 @@ describe('League', function () {
   describe('get master leagues', function () {
     describe('standard params', function () {
       it('should not throw with no args', function () {
-        assert.doesNotThrow(() => init().Master.list(), Error)
+        assert.doesNotThrow(() => k.Master.list(), Error)
       })
 
       it('should throw with invalid queue type', function () {
-        assert.throws(() => init().Master.list(420), Error)
+        assert.throws(() => k.Master.list(420), Error)
       })
 
       it('should not throw with queue', function () {
-        assert.doesNotThrow(() => init().Master.list('RANKED_SOLO_5x5'), Error)
+        assert.doesNotThrow(() => k.Master.list('RANKED_SOLO_5x5'), Error)
       })
 
       it('should not throw with queue & region (2 args)', function () {
-        assert.doesNotThrow(() => init().Master.list('RANKED_SOLO_5x5', 'na'), Error)
+        assert.doesNotThrow(() => k.Master.list('RANKED_SOLO_5x5', 'na'), Error)
       })
 
       it('should not throw with region & cb (2 args)', function () {
-        assert.doesNotThrow(() => init().Master.list('na', function () { }), Error)
+        assert.doesNotThrow(() => k.Master.list('na', function () { }), Error)
       })
 
       it('should not throw with queue & cb (2 args)', function () {
-        assert.doesNotThrow(() => init().Master.list('RANKED_SOLO_5x5', function () { }), Error)
+        assert.doesNotThrow(() => k.Master.list('RANKED_SOLO_5x5', function () { }), Error)
       })
 
       it('should not throw with queue & region & cb (3 args)', function () {
-        assert.doesNotThrow(() => init().Master.list('RANKED_SOLO_5x5', 'na', function () { }), Error)
+        assert.doesNotThrow(() => k.Master.list('RANKED_SOLO_5x5', 'na', function () { }), Error)
       })
 
       it('should not throw with cb (1 args)', function () {
-        assert.doesNotThrow(() => init().Master.list(function () { }), Error)
+        assert.doesNotThrow(() => k.Master.list(function () { }), Error)
       })
 
       it('should be a successful call with no args', function (done) {
-        init().Master.list()
+        k.Master.list()
           .then(data => {
             expect(data).to.not.be.undefined
             done()
@@ -228,39 +230,39 @@ describe('League', function () {
   describe('get challenger leagues', function () {
     describe('standard params', function () {
       it('should not throw with no args', function () {
-        assert.doesNotThrow(() => init().Challenger.list(), Error)
+        assert.doesNotThrow(() => k.Challenger.list(), Error)
       })
 
       it('should throw with invalid queue type', function () {
-        assert.throws(() => init().Challenger.list(420), Error)
+        assert.throws(() => k.Challenger.list(420), Error)
       })
 
       it('should not throw with queue', function () {
-        assert.doesNotThrow(() => init().Challenger.list('RANKED_SOLO_5x5'), Error)
+        assert.doesNotThrow(() => k.Challenger.list('RANKED_SOLO_5x5'), Error)
       })
 
       it('should not throw with queue & region (2 args)', function () {
-        assert.doesNotThrow(() => init().Challenger.list('RANKED_SOLO_5x5', 'na'), Error)
+        assert.doesNotThrow(() => k.Challenger.list('RANKED_SOLO_5x5', 'na'), Error)
       })
 
       it('should not throw with region & cb (2 args)', function () {
-        assert.doesNotThrow(() => init().Challenger.list('na', function () { }), Error)
+        assert.doesNotThrow(() => k.Challenger.list('na', function () { }), Error)
       })
 
       it('should not throw with queue & cb (2 args)', function () {
-        assert.doesNotThrow(() => init().Challenger.list('RANKED_SOLO_5x5', function () { }), Error)
+        assert.doesNotThrow(() => k.Challenger.list('RANKED_SOLO_5x5', function () { }), Error)
       })
 
       it('should not throw with queue & region & cb (3 args)', function () {
-        assert.doesNotThrow(() => init().Challenger.list('RANKED_SOLO_5x5', 'na', function () { }), Error)
+        assert.doesNotThrow(() => k.Challenger.list('RANKED_SOLO_5x5', 'na', function () { }), Error)
       })
 
       it('should not throw with cb (1 args)', function () {
-        assert.doesNotThrow(() => init().Challenger.list(function () { }), Error)
+        assert.doesNotThrow(() => k.Challenger.list(function () { }), Error)
       })
 
       it('should be a successful call with no args', function (done) {
-        init().Challenger.list()
+        k.Challenger.list()
           .then(data => {
             expect(data).to.not.be.undefined
             done()

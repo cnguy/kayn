@@ -19,19 +19,21 @@ const config = {
   region: 'na'
 }
 
+const k = init()
+
 describe('Champion Mastery', function () {
   this.timeout(0)
 
   describe('get all champion masteries', function () {
     describe('object param', function () {
       it('should throw on empty', function () {
-        assert.throws(() => init().ChampionMastery.all(), Error)
+        assert.throws(() => k.ChampionMastery.all(), Error)
       })
 
       describe('by id', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
-            init().ChampionMastery.all({ id }, function testCB(err, data) {
+            k.ChampionMastery.all({ id }, function testCB(err, data) {
               expect(err).to.be.null
               expect(data).to.not.be.undefined
               done()
@@ -41,7 +43,7 @@ describe('Champion Mastery', function () {
 
         describe('through promise', function () {
           it('should be a successful call', function (done) {
-            init()
+            k
               .ChampionMastery.all({ id })
               .then(data => {
                 expect(data).to.not.be.undefined
@@ -54,7 +56,7 @@ describe('Champion Mastery', function () {
       describe('by name', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
-            init().ChampionMastery.all({ name }, function testCB(err, data) {
+            k.ChampionMastery.all({ name }, function testCB(err, data) {
               expect(err).to.be.null
               expect(data).to.not.be.undefined
               done()
@@ -64,7 +66,7 @@ describe('Champion Mastery', function () {
 
         describe('through promise', function () {
           it('should be a successful call', function (done) {
-            init()
+            k
               .ChampionMastery.all({ name })
               .then(data => {
                 expect(data).to.not.be.undefined
@@ -77,7 +79,7 @@ describe('Champion Mastery', function () {
       describe('by account ID', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
-            init().ChampionMastery.all({ accId }, function testCB(err, data) {
+            k.ChampionMastery.all({ accId }, function testCB(err, data) {
               expect(err).to.be.null
               expect(data).to.not.be.undefined
               done()
@@ -87,7 +89,7 @@ describe('Champion Mastery', function () {
 
         describe('through promise', function () {
           it('should be a successful call', function (done) {
-            init()
+            k
               .ChampionMastery.all({ accId })
               .then(data => {
                 expect(data).to.not.be.undefined
@@ -103,7 +105,7 @@ describe('Champion Mastery', function () {
     describe('object param', function () {
       describe('through playerID and championID', function () {
         it('through callback', function (done) {
-          init()
+          k
             .ChampionMastery.get(config, function (err, data) {
               expect(err).to.be.null
               expect(data).to.not.be.undefined
@@ -112,7 +114,7 @@ describe('Champion Mastery', function () {
         })
 
         it('through promise', function (done) {
-          init()
+          k
             .ChampionMastery.get(config)
             .then(data => {
               expect(data).to.not.be.undefined
@@ -122,13 +124,13 @@ describe('Champion Mastery', function () {
       })
 
       it('should throw with just playerID', function () {
-        assert.throws(() => init()
+        assert.throws(() => k
           .ChampionMastery
           .get({ playerID: config.playerId }), Error)
       })
 
       it('should throw with just championID', function () {
-        assert.throws(() => init()
+        assert.throws(() => k
           .ChampionMastery
           .get({ championId: config.championId }), Error)
       })
@@ -138,7 +140,7 @@ describe('Champion Mastery', function () {
   describe('get total champion mastery score', function () {
     describe('object param', function () {
       it('should throw on empty args', function () {
-        assert.throws(() => init()
+        assert.throws(() => k
           .ChampionMastery
           .score(), Error)
       })
@@ -146,7 +148,7 @@ describe('Champion Mastery', function () {
       describe('through id', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
-            init().ChampionMastery
+            k.ChampionMastery
               .score({ id }, function testCB(err, data) {
                 expect(err).to.be.null
                 expect(data).to.not.be.undefined
@@ -157,7 +159,7 @@ describe('Champion Mastery', function () {
 
         describe('through promise', function () {
           it('should be a successful call', function (done) {
-            init()
+            k
               .ChampionMastery
               .score({ id })
               .then(data => {
@@ -171,7 +173,7 @@ describe('Champion Mastery', function () {
       describe('through name', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
-            init()
+            k
               .ChampionMastery
               .score({ name }, function testCB(err, data) {
                 expect(err).to.be.null
@@ -183,7 +185,7 @@ describe('Champion Mastery', function () {
 
         describe('through promise', function () {
           it('should be a successful call', function (done) {
-            init()
+            k
               .ChampionMastery
               .score({ name })
               .then(data => {
@@ -197,7 +199,7 @@ describe('Champion Mastery', function () {
       describe('through account ID', function () {
         describe('through callback', function () {
           it('should be a successful call', function (done) {
-            init()
+            k
               .ChampionMastery
               .score({ accId }, function testCB(err, data) {
                 expect(err).to.be.null
@@ -209,7 +211,7 @@ describe('Champion Mastery', function () {
 
         describe('through promise', function () {
           it('should be a successful call', function (done) {
-            init()
+            k
               .ChampionMastery
               .score({ accId })
               .then(data => {
