@@ -66,12 +66,32 @@ describe('Summoner', function () {
             assert.throws(() => init().Summoner.by.id(), Error)
           })
 
-          it('should be a successful call', function (done) {
-            init().Summoner.by.id(id)
-              .then(data => {
+          describe('through callback', function () {
+            it('should be a successful call', function (done) {
+              init().Summoner.by.id(id, function testCB(err, data) {
+                expect(err).to.be.null
                 expect(data).to.not.be.undefined
                 done()
               })
+            })
+
+            it('should be a successful call with region', function (done) {
+              init().Summoner.by.id(id, 'na', function testCB(err, data) {
+                expect(err).to.be.null
+                expect(data).to.not.be.undefined
+                done()
+              })
+            })
+          })
+
+          describe('through promise', function () {
+            it('should be a successful call', function (done) {
+              init().Summoner.by.id(id)
+                .then(data => {
+                  expect(data).to.not.be.undefined
+                  done()
+                })
+            })
           })
         })
 
@@ -94,12 +114,32 @@ describe('Summoner', function () {
             assert.throws(() => init().Summoner.by.account(), Error)
           })
 
-          it('should be a successful call', function (done) {
-            init().Summoner.by.account(accId)
-              .then(data => {
+          describe('through callback', function () {
+            it('should be a successful call', function (done) {
+              init().Summoner.by.account(accId, function testCB(err, data) {
+                expect(err).to.be.null
                 expect(data).to.not.be.undefined
                 done()
               })
+            })
+
+            it('should be a successful call with region', function (done) {
+              init().Summoner.by.account(accId, 'na', function testCB(err, data) {
+                expect(err).to.be.null
+                expect(data).to.not.be.undefined
+                done()
+              })
+            })
+          })
+
+          describe('through promise', function () {
+            it('should be a successful call', function (done) {
+              init().Summoner.by.account(accId)
+                .then(data => {
+                  expect(data).to.not.be.undefined
+                  done()
+                })
+            })
           })
         })
       })

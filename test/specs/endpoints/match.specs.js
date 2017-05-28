@@ -45,12 +45,42 @@ describe('Match', function () {
             assert.doesNotThrow(() => init().Match.by.id(matchId), Error)
           })
 
-          it('should be a successful call with matchId', function (done) {
-            init().Match.by.id(matchId)
-              .then(data => {
+          describe('through callback', function () {
+            it('should be a successful call with matchId', function (done) {
+              init().Match.by.id(matchId, function testCB(err, data) {
+                expect(err).to.be.null
                 expect(data).to.not.be.undefined
                 done()
               })
+            })
+
+            describe('with region', function () {
+              it('should be a successful call with matchId', function (done) {
+                init().Match.by.id(matchId, 'na', function testCB(err, data) {
+                  expect(err).to.be.null
+                  expect(data).to.not.be.undefined
+                  done()
+                })
+              })
+            })
+          })
+
+          describe('through promise', function () {
+            it('should be a successful call with matchId', function (done) {
+              init().Match.by.id(matchId)
+                .then(data => {
+                  expect(data).to.not.be.undefined
+                  done()
+                })
+            })
+
+            it('should be a successful call with matchId and region', function (done) {
+              init().Match.by.id(matchId, 'na')
+                .then(data => {
+                  expect(data).to.not.be.undefined
+                  done()
+                })
+            })
           })
         })
       })
