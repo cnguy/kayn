@@ -891,7 +891,7 @@
         var oldUrl = 'https://' + region + '.api.riotgames.com/' + oldPrefix + encodeURI(query);
         var newUrl = 'https://' + platformIds[regions$1[region]].toLowerCase() + '.' + base + '/' + prefix + encodeURI(query);
 
-        if (newUrl.lastIndexOf('v3') == -1) return oldUrl;
+        if (newUrl.lastIndexOf('v3') === -1) return oldUrl;
 
         return newUrl;
       }
@@ -904,7 +904,7 @@
           return str + (str ? '&' : '') + (key + '=' + el);
         };
 
-        if (endUrl.lastIndexOf('v3') == -1) {
+        if (endUrl.lastIndexOf('v3') === -1) {
           stringifiedOpts = queryString.stringify(options);
         } else {
           var _iteratorNormalCompletion3 = true;

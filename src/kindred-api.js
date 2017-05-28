@@ -460,7 +460,7 @@ class Kindred {
     const newUrl = `https://${PLATFORM_IDS[REGIONS_BACK[region]].toLowerCase()}.${base}/${prefix}${encodeURI(query)}`
 
     /* TODO: Small hack. Leave here until Riot has implemented all endpoints. */
-    if (newUrl.lastIndexOf('v3') == -1)
+    if (newUrl.lastIndexOf('v3') === -1)
       return oldUrl
 
     return newUrl
@@ -472,9 +472,9 @@ class Kindred {
     // Returns stringified opts with appended key-value pair.
     const appendKey = (str, key, el) => str + (str ? '&' : '') + `${key}=${el}`
 
-    if (endUrl.lastIndexOf('v3') == -1) {
+    if (endUrl.lastIndexOf('v3') === -1) {
       // Supports older endpoints (not deprecated until middle of June).
-      // Game/Stats are the only ones implemented left,
+      // Game/Stats are the only ones remaining left,
       // but they don't take multi-valued params.
       stringifiedOpts = queryString.stringify(options)
     } else {
