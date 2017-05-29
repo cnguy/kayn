@@ -13,11 +13,6 @@ class RedisCache {
       console.log('Redis error:', err)
     })
 
-    process.on('exit', function () {
-      console.log('closing')
-      this.client.quit()
-    })
-
     this.prefix = options.keyPrefix
   }
 

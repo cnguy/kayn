@@ -19,3 +19,6 @@ before_install:
 
 after_success:
     - codecov
+
+services:
+    - redis-server

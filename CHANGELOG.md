@@ -6,7 +6,9 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
-## [2.0.55](https://github.com/ChauTNguyen/kindred-api/commit/49ddb3ef1a7789c2d36556a0b3e2c7404d30cf7a) - Fixed getMatchlistByAccId & getMatchlistById
+## [2.0.56]() - Removed redis client quit handler.
+
+## [2.0.55](https://github.com/ChauTNguyen/kindred-api/commit/49ddb3ef1a7789c2d36556a0b3e2c7404d30cf7a) - Fixed getMatchlistByAccId & getMatchlistById.
 
 Options weren't being passed into the request functions.
 
