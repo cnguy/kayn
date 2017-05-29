@@ -29,7 +29,7 @@ import printResponseDebug from './helpers/print-response-debug'
 import shouldRetry from './helpers/should-retry'
 import validTTL from './helpers/valid-ttl'
 
-const ERROR_THRESHOLD = 400
+const ERROR_THRESHOLD = 400 // res code >= 400 = error
 const SECOND = 1000
 
 class Kindred {
@@ -63,6 +63,7 @@ class Kindred {
         set: (args, value) => { }
       }
     } else {
+      // TODO: Rework this.
       if (cacheOptions === CACHE_TYPES[0])
         this.cache = new IMC()
       else if (cacheOptions === CACHE_TYPES[1])
@@ -73,21 +74,8 @@ class Kindred {
       this.CACHE_TIMERS = cacheTTL ? cacheTTL : CACHE_TIMERS
     }
 
-    if (!this.CACHE_TIMERS) this.CACHE_TIMERS = {
-      CHAMPION: 0,
-      CHAMPION_MASTERY: 0,
-      CURRENT_GAME: 0,
-      FEATURED_GAMES: 0,
-      GAME: 0,
-      LEAGUE: 0,
-      STATIC: 0,
-      STATUS: 0,
-      MATCH: 0,
-      MATCHLIST: 0,
-      RUNES_MASTERIES: 0,
-      STATS: 0,
-      SUMMONER: 0
-    }
+    if (!this.CACHE_TIMERS)
+      this.CACHE_TIMERS = this._disableCache(CACHE_TIMERS)
 
     if (limits) {
       if (invalidLimits(limits)) {
@@ -98,10 +86,6 @@ class Kindred {
       }
 
       this.limits = {}
-
-      if (limits === 'dev') limits = LIMITS.DEV
-      if (limits === 'prod') limits = LIMITS.PROD
-
       this.spread = spread
 
       for (const region of Object.keys(REGIONS)) {
@@ -455,11 +439,12 @@ class Kindred {
     const oldPrefix = `api/lol/${mid}`
     const prefix = 'lol/'
     const base = 'api.riotgames.com'
+    const encodedQuery = encodeURI(query)
 
-    const oldUrl = `https://${region}.api.riotgames.com/${oldPrefix}${encodeURI(query)}`
-    const newUrl = `https://${PLATFORM_IDS[REGIONS_BACK[region]].toLowerCase()}.${base}/${prefix}${encodeURI(query)}`
+    const oldUrl = `https://${region}.api.riotgames.com/${oldPrefix}${encodedQuery}`
+    const newUrl = `https://${PLATFORM_IDS[REGIONS_BACK[region]].toLowerCase()}.${base}/${prefix}${encodedQuery}`
 
-    /* TODO: Small hack. Leave here until Riot has implemented all endpoints. */
+    // TODO: Remove this when Riot has deprecated the endpoints.
     if (newUrl.lastIndexOf('v3') === -1)
       return oldUrl
 
@@ -472,6 +457,7 @@ class Kindred {
     // Returns stringified opts with appended key-value pair.
     const appendKey = (str, key, el) => str + (str ? '&' : '') + `${key}=${el}`
 
+    // TODO: Remove this when Riot has deprecated the endpoints.
     if (endUrl.lastIndexOf('v3') === -1) {
       // Supports older endpoints (not deprecated until middle of June).
       // Game/Stats are the only ones remaining left,
@@ -499,6 +485,13 @@ class Kindred {
         : '&'
       ) + `api_key=${key}`
     )
+  }
+
+  _disableCache(timers) {
+    for (const key of Object.keys(timers))
+      timers[key] = 0
+
+    return timers
   }
 
   _baseRequest({
@@ -530,9 +523,8 @@ class Kindred {
                     if (!staticReq) {
                       self.limits[region][0].addRequest()
                       self.limits[region][1].addRequest()
-                      if (self.spread) {
+                      if (self.spread)
                         self.limits[region][2].addRequest()
-                      }
                     }
 
                     request({ url: fullUrl }, (error, response, body) => {
@@ -541,7 +533,7 @@ class Kindred {
                         const responseMessage = prettifyStatusMessage(statusCode)
                         const retry = response.headers['retry-after'] * SECOND || SECOND
 
-                        // For caching
+                        // caching-related variables
                         const key = reqUrl
                         const { ttl } = cacheParams
 
@@ -574,6 +566,8 @@ class Kindred {
                       }
                     })
                   } else {
+                    // Buffer allows us to avoid the pitfalls of
+                    // coding with respect to millisecond granularity.
                     const buffer = SECOND / 4.5
                     return setTimeout(() => sendRequest.bind(self)(callback), buffer)
                   }

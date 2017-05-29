@@ -488,21 +488,7 @@
         this.CACHE_TIMERS = cacheTTL ? cacheTTL : endpointCacheTimers;
       }
 
-      if (!this.CACHE_TIMERS) this.CACHE_TIMERS = {
-        CHAMPION: 0,
-        CHAMPION_MASTERY: 0,
-        CURRENT_GAME: 0,
-        FEATURED_GAMES: 0,
-        GAME: 0,
-        LEAGUE: 0,
-        STATIC: 0,
-        STATUS: 0,
-        MATCH: 0,
-        MATCHLIST: 0,
-        RUNES_MASTERIES: 0,
-        STATS: 0,
-        SUMMONER: 0
-      };
+      if (!this.CACHE_TIMERS) this.CACHE_TIMERS = this._disableCache(endpointCacheTimers);
 
       if (limits$$1) {
         if (check$1(limits$$1)) {
@@ -513,10 +499,6 @@
         }
 
         this.limits = {};
-
-        if (limits$$1 === 'dev') limits$$1 = limits.DEV;
-        if (limits$$1 === 'prod') limits$$1 = limits.PROD;
-
         this.spread = spread;
 
         var _iteratorNormalCompletion2 = true;
@@ -882,9 +864,10 @@
         var oldPrefix = 'api/lol/' + mid;
         var prefix = 'lol/';
         var base = 'api.riotgames.com';
+        var encodedQuery = encodeURI(query);
 
-        var oldUrl = 'https://' + region + '.api.riotgames.com/' + oldPrefix + encodeURI(query);
-        var newUrl = 'https://' + platformIds[regions$1[region]].toLowerCase() + '.' + base + '/' + prefix + encodeURI(query);
+        var oldUrl = 'https://' + region + '.api.riotgames.com/' + oldPrefix + encodedQuery;
+        var newUrl = 'https://' + platformIds[regions$1[region]].toLowerCase() + '.' + base + '/' + prefix + encodedQuery;
 
         if (newUrl.lastIndexOf('v3') === -1) return oldUrl;
 
@@ -963,6 +946,36 @@
         return reqUrl + (reqUrl.lastIndexOf('?') === -1 ? '?' : '&') + ('api_key=' + key);
       }
     }, {
+      key: '_disableCache',
+      value: function _disableCache(timers) {
+        var _iteratorNormalCompletion5 = true;
+        var _didIteratorError5 = false;
+        var _iteratorError5 = undefined;
+
+        try {
+          for (var _iterator5 = Object.keys(timers)[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+            var key = _step5.value;
+
+            timers[key] = 0;
+          }
+        } catch (err) {
+          _didIteratorError5 = true;
+          _iteratorError5 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion5 && _iterator5.return) {
+              _iterator5.return();
+            }
+          } finally {
+            if (_didIteratorError5) {
+              throw _iteratorError5;
+            }
+          }
+        }
+
+        return timers;
+      }
+    }, {
       key: '_baseRequest',
       value: function _baseRequest(_ref2, cb) {
         var _this = this;
@@ -996,9 +1009,7 @@
                       if (!staticReq) {
                         self.limits[region][0].addRequest();
                         self.limits[region][1].addRequest();
-                        if (self.spread) {
-                          self.limits[region][2].addRequest();
-                        }
+                        if (self.spread) self.limits[region][2].addRequest();
                       }
 
                       request({ url: fullUrl }, function (error, response, body) {

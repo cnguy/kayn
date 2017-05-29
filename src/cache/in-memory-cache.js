@@ -23,6 +23,7 @@ class InMemoryCache {
   }
 
   setExp(date, secs)  {
+    // Must convert to milliseconds.
     return date + secs * 1000
   }
 }

@@ -1,3 +1,7 @@
+// Maps abbreviated regions -> names
+// for `platform-ids.js`.
+// I prefer grabbing the values through
+// nicer, longer key names (better for the editor).
 const regions = {
   br: 'BRAZIL',
   eune: 'EUROPE',
