@@ -34,7 +34,8 @@ const SECOND = 1000
 
 class Kindred {
   constructor({
-    key, defaultRegion = REGIONS.NORTH_AMERICA, debug = false,
+    key, defaultRegion = REGIONS.NORTH_AMERICA,
+    debug = false, showKey = false,
     limits, spread,
     cacheOptions, cacheTTL
   } = {}) {
@@ -56,6 +57,7 @@ class Kindred {
     }
 
     this.debug = debug
+    this.showKey = showKey
 
     if (!cacheOptions) {
       this.cache = {
@@ -74,13 +76,13 @@ class Kindred {
       this.CACHE_TIMERS = cacheTTL ? cacheTTL : CACHE_TIMERS
     }
 
-    if (!this.CACHE_TIMERS)
+    if (!cacheTTL)
       this.CACHE_TIMERS = this._disableCache(CACHE_TIMERS)
 
     if (limits) {
       if (invalidLimits(limits)) {
         console.log(`${chalk.red(`Initialization of Kindred failed: Invalid ${chalk.yellow('limits')}. Valid examples: ${chalk.yellow('[[10, 10], [500, 600]]')}`)}.`)
-        console.log(`${(chalk.red('You can also pass in one of these two strings:'))} dev/prod `)
+        console.log(`${(chalk.red('You can also pass in one of these two constants:'))} LIMITS.DEV/LIMITS.PROD`)
         console.log(`${(chalk.red('and Kindred will set the limits appropriately.'))}`)
         throw new Error()
       }
@@ -382,24 +384,6 @@ class Kindred {
         name: this.getSummonerByName.bind(this)
       }
     }
-
-    this.Tournament = {
-      getDTOByCode: this.getDTOByCode.bind(this),
-
-      DTO: {
-        by: {
-          code: this.getDTOByCode.bind(this)
-        }
-      },
-
-      getLobbyListEventsByCode: this.getLobbyListEventsByCode.bind(this),
-
-      LobbyListEvents: {
-        by: {
-          code: this.getLobbyListEventsByCode.bind(this)
-        }
-      }
-    }
   }
 
   canMakeRequest(region) {
@@ -537,8 +521,10 @@ class Kindred {
                         const key = reqUrl
                         const { ttl } = cacheParams
 
-                        if (self.debug)
-                          printResponseDebug(response, responseMessage, chalk.yellow(fullUrl))
+                        if (self.debug) {
+                          const url = self.showKey ? fullUrl : reqUrl
+                          printResponseDebug(response, responseMessage, chalk.yellow(url))
+                        }
 
                         if (isFunction(callback)) {
                           if (shouldRetry(statusCode)) {
@@ -580,8 +566,10 @@ class Kindred {
                   const { statusCode } = response
                   const statusMessage = prettifyStatusMessage(statusCode)
 
-                  if (self.debug)
-                    printResponseDebug(response, statusMessage, chalk.yellow(fullUrl))
+                  if (self.debug) {
+                    const url = self.showKey ? fullUrl : reqUrl
+                    printResponseDebug(response, statusMessage, chalk.yellow(url))
+                  }
 
                   if (isFunction(cb)) {
                     if (statusCode >= ERROR_THRESHOLD)
@@ -716,15 +704,6 @@ class Kindred {
       endUrl: `${SERVICES.SUMMONER}/v${VERSIONS.SUMMONER}/summoners/${endUrl}`, region,
       cacheParams: {
         ttl: this.CACHE_TIMERS.SUMMONER
-      }
-    }, cb)
-  }
-
-  _tournamentRequest({ endUrl, region }, cb) {
-    return this._baseRequest({
-      endUrl: `${SERVICES.TOURNAMENT}/v${VERSIONS.TOURNAMENT}`, region,
-      cacheParams: {
-        ttl: this.CACHE_TIMERS.TOURNAMENT
       }
     }, cb)
   }
@@ -1570,33 +1549,6 @@ class Kindred {
       return this._logError(
         this.getSummoner.name,
         `required params ${chalk.yellow('`id/summonerId/playerId` (int)')}, ${chalk.yellow('`accountId/accId` (int)')}, or ${chalk.yellow('`name` (string)')} not passed in`
-      )
-    }
-  }
-
-  /* TOURNAMENT-V3 */
-  getDTOByCode(code, cb) {
-    if (typeof code === 'string') {
-      return this._tournamentRequest({
-        endUrl: `lobby-events/codes/${code}`
-      }, cb)
-    } else {
-      return this._logError(
-        this.getDTOByCode.name,
-        `required params ${chalk.yellow('`code` (string)')} not passed in`
-      )
-    }
-  }
-
-  getLobbyListEventsByCode(code, cb) {
-    if (typeof code === 'string') {
-      return this._tournamentRequest({
-        endUrl: `lobby-events/by-code/${code}`
-      }, cb)
-    } else {
-      return this._logError(
-        this.getLobbyListEventsByCode.name,
-        `required params ${chalk.yellow('`code` (string)')} not passed in`
       )
     }
   }

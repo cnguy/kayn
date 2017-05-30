@@ -6,7 +6,21 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
-## [2.0.56]() - Removed redis client quit handler.
+## [2.0.57]() - Add showKey option for initialization and removed Tournament requests.
+
+### showKey
+Although this is useful for debugging Riot's API, I'm allowing users
+to decide if they want to show their API key as a precaution. This also allows me to
+not show my API key in my tests (I don't want to use other loggers for now).
+
+### tournament requests
+Removed this mostly because I wanted higher test coverage and because I don't
+want to support it at the moment.
+
+### dev/prod string (limit) initialization
+Removed initialization through 'dev' and 'prod' strings.
+
+## [2.0.56](https://github.com/ChauTNguyen/kindred-api/commit/387a568fab15af420510a5e300aed01fe620f78a) - Removed redis client quit handler.
 
 ## [2.0.55](https://github.com/ChauTNguyen/kindred-api/commit/49ddb3ef1a7789c2d36556a0b3e2c7404d30cf7a) - Fixed getMatchlistByAccId & getMatchlistById.
 

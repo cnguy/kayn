@@ -2,7 +2,11 @@
 var chai = require('chai')
 
 var expect = chai.expect,
-  assert = chai.assert
+  assert = chai.assert,
+  sinonChai = require('sinon-chai'),
+  sinon = require('sinon')
+
+chai.use(sinonChai)
 
 require('dotenv').config()
 
@@ -141,11 +145,47 @@ describe('Core', function () {
 
     it('should init with key & debug (2 args)', function () {
       const api = require('../../dist/kindred-api')
-      const { REGIONS } = api
+      const k = api.QuickStart(process.env.KEY, true)
+      expect(k).is.not.undefined
+    })
 
+    it('should init with cache timers', function () {
+      const api = require('../../dist/kindred-api')
       const k = api.QuickStart(process.env.KEY, true)
 
-      expect(k).is.not.undefined
+      // k.CACHE_TIMERS = {
+      //   CHAMPION: 2592000,
+      //   CHAMPION_MASTERY: 21600,
+      //   CURRENT_GAME: null,
+      //   FEATURED_GAMES: null,
+      //   GAME: 3600,
+      //   LEAGUE: 21600,
+      //   STATIC: 2592000,
+      //   STATUS: null,
+      //   MATCH: 2592000,
+      //   MATCHLIST: 3600,
+      //   RUNES_MASTERIES: 604800,
+      //   SPECTATOR: null,
+      //   STATS: 3600,
+      //   SUMMONER: 846400,
+      //   TOURNAMENT_STUB: 3600,
+      //   TOURNAMENT: 3600
+      // }
+
+      // while (k.CACHE_TIMERS) {
+      //   if (k.CACHE_TIMERS)
+      // }
+    })
+
+    it('should init with nulled cache timers', function () {
+      const api = require('../../dist/kindred-api')
+      const k = new api.Kindred({
+        key: process.env.KEY
+      })
+
+      for (var i = 0; i < Object.keys(k.CACHE_TIMERS).length; ++i) {
+        assert.equal(k.CACHE_TIMERS[Object.keys(k.CACHE_TIMERS)[i]], 0)
+      }
     })
   })
 
@@ -223,6 +263,109 @@ describe('Core', function () {
             .catch(err => console.error(err))
         }
       })
+    })
+  })
+
+  describe('cache', function () {
+    it('should work with callbacks', function (done) {
+      const k = init()
+
+      k.CACHE_TIMERS = {
+        SUMMONER: 5000
+      }
+
+      k.Summoner
+        .get({ name: 'Contractz' }, function (err, data) {
+          if (data) {
+            k.Summoner.get({ name: 'Contractz' }, function (err, data) {
+              done()
+            })
+          }
+        })
+    })
+
+    it('should work with promises', function (done) {
+      const k = init()
+
+      k.CACHE_TIMERS = {
+        SUMMONER: 5000
+      }
+
+      k.Summoner
+        .get({ name: 'Contractz' })
+        .then(data => k.Summoner.get({ name: 'Contractz' }))
+        .then(data => done())
+    })
+  })
+
+  describe('debug', function () {
+    beforeEach(function () {
+      sinon.spy(console, 'log')
+    })
+
+    afterEach(function () {
+      console.log.restore()
+    })
+
+    describe('print response debug', function () {
+      it('should work with limits', function (done) {
+        const api = require('../../dist/kindred-api')
+
+        const debug = true
+
+        const k = new api.Kindred({
+          key: process.env.KEY,
+          debug,
+          showKey: false,
+          limits: [[1, 1], [1, 1]]
+        })
+
+        k.Static.Champion.list(function (err, data) {
+          expect(console.log).to.have.been.called
+          done()
+        })
+      })
+
+      it('should work w/o limits', function (done) {
+        const api = require('../../dist/kindred-api')
+
+        const debug = true
+
+        const k = new api.Kindred({
+          key: process.env.KEY,
+          debug,
+          showKey: false
+        })
+
+        k.Static.Champion.list(function (err, data) {
+          expect(console.log).to.have.been.called
+          done()
+        })
+      })
+    })
+  })
+
+  describe('error messages', function () {
+    beforeEach(function () {
+      sinon.spy(console, 'log')
+    })
+
+    afterEach(function () {
+      console.log.restore()
+    })
+
+    it('should not initialize with bad limits', function () {
+      const api = require('../../dist/kindred-api')
+      const debug = true
+
+      assert.throws(() => new api.Kindred({
+        key: process.env.KEY,
+        debug,
+        showKey: false,
+        limits: []
+      }), Error)
+
+      expect(console.log).to.have.been.called
     })
   })
 })
