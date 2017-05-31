@@ -130,11 +130,21 @@ k.Static.champion(rakanConfig)
 
 ## Standard Functions
 ```javascript
-// I included normal methods too though.
 const QUEUES = KindredAPI.QUEUE_TYPES
 
 k.Summoner.by.name('Contractz', KindredAPI.print)
 k.Summoner.by.id(32932398, KindredAPI.print)
+
+// The way these functions handle parameters is:
+// Optimal parameters can be excluded, but it's in a left -> right order.
+// For example, not including options when it's possible
+// would mean whatever you place in there will be in region.
+// function(
+//  <id>|<name>|<accId>, type varies, existence depends on endpoint, not optional
+//  <options>, object, existence depends on endpoint, optional
+//  <region>, string, in every function, optional
+//  <callback>, function, in every function, optional
+//)
 
 k.Summoner
  .by.account(47776491)

@@ -1,8 +1,9 @@
 # Task List
 ~ = in progress
+- [ ] Right now, passing incorrect options (query params) doesn't throw any errors. Adding this feature would help reduce incomplete data from typos. ~
 - [ ] Comment my code extensively.. ~
 - [ ] Fix highly inefficient tests. ~
-- [ ] Add extensive tests that cover important functionality such as rate limiting. ~
+- [ ] Add extensive tests that cover important functionality such as rate limiting and options. Not sure how I should test this right now though. ~
 - [x] Add an [option to space out requests](https://github.com/ChauTNguyen/kindred-api/wiki/Rate-Limiter). ~~Maybe I should make this the default though (should still provide flexibility to users)~~.
 - [x] Add tests (that handle parameters, errors, then the API itself). Make sure I add callback printing tests too! (90% coverage!!! obviously isn't indicative of a good suite, but this is a good starting point)
 - [ ] Add the rest of the list, by.id, by.name, by.account functions ~
