@@ -7,17 +7,18 @@ import RC from './cache/redis-cache'
 
 import RateLimit from './rate-limit'
 
-import SERVICES from './constants/services'
-import TIME_CONSTANTS from './cache/constants/cache-timers'
 import CACHE_TIMERS from './cache/constants/endpoint-cache-timers'
+import CACHE_TYPES from './constants/caches'
 import LIMITS from './constants/limits'
 import PLATFORM_IDS from './constants/platform-ids'
+import QUERY_PARAMS from './constants/query-params'
 import QUEUE_TYPES from './constants/queue-types'
 import QUEUE_STRINGS from './constants/queue-strings'
 import REGIONS from './constants/regions'
 import REGIONS_BACK from './constants/regions-back'
+import SERVICES from './constants/services'
+import TIME_CONSTANTS from './cache/constants/cache-timers'
 import VERSIONS from './constants/versions'
-import CACHE_TYPES from './constants/caches'
 
 import re from './constants/valid-summoner-name-regex'
 
@@ -478,6 +479,19 @@ class Kindred {
     return timers
   }
 
+  _verifyOptions(options, allowed) {
+    const keys = Object.keys(options)
+
+    // No need to check if both are empty.
+    if (allowed.length === 0 && keys.length === 0)
+      return
+
+    // Check each passed `key` against hard-coded query params.
+    for (const key of keys)
+      if (!allowed.includes(key))
+        throw new Error(chalk.red('Invalid query params! Valid: ' + allowed))
+  }
+
   _baseRequest({
     endUrl,
     region = this.defaultRegion,
@@ -756,12 +770,11 @@ class Kindred {
   /* CHAMPION-MASTERY-V3 */
   getChampMastery({
     region,
-    playerId, championId,
-    options
+    playerId, championId
   } = {}, cb) {
     if (Number.isInteger(playerId) && Number.isInteger(championId)) {
       return this._championMasteryRequest({
-        endUrl: `champion-masteries/by-summoner/${playerId}/by-champion/${championId}`, region, options
+        endUrl: `champion-masteries/by-summoner/${playerId}/by-champion/${championId}`, region
       }, cb)
     } else {
       return this._logError(
@@ -942,8 +955,7 @@ class Kindred {
     region,
     accountId, accId,
     id, summonerId, playerId,
-    name,
-    options
+    name
   } = {}, cb) {
     if (Number.isInteger(accountId || accId)) {
       return new Promise((resolve, reject) => {
@@ -951,14 +963,14 @@ class Kindred {
           if (err) { cb ? cb(err) : reject(err); return }
           return resolve(this._leagueRequest({
             endUrl: `leagues/by-summoner/${data.id}`,
-            region, options
+            region
           }, cb))
         })
       })
     } else if (Number.isInteger(id || summonerId || playerId)) {
       return this._leagueRequest({
         endUrl: `leagues/by-summoner/${id || summonerId || playerId}`,
-        region, options
+        region
       }, cb)
     } else if (typeof name === 'string') {
       return new Promise((resolve, reject) => {
@@ -966,7 +978,7 @@ class Kindred {
           if (err) { cb ? cb(err) : reject(err); return }
           return resolve(this._leagueRequest({
             endUrl: `leagues/by-summoner/${data.id}`,
-            region, options
+            region
           }, cb))
         })
       })
@@ -1055,6 +1067,8 @@ class Kindred {
 
   /* STATIC-DATA-V3 */
   getChampionList({ region, options } = {}, cb) {
+    this._verifyOptions(options, QUERY_PARAMS.STATIC.CHAMPION.LIST)
+
     if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
@@ -1273,6 +1287,8 @@ class Kindred {
     name,
     options = { queue: QUEUE_TYPES.TEAM_BUILDER_RANKED_SOLO }
   } = {}, cb) {
+    this._verifyOptions(options, QUERY_PARAMS.MATCHLIST.GET)
+
     if (Number.isInteger(accountId || accId)) {
       return this._matchlistRequest({
         endUrl: `by-account/${accountId || accId}`,

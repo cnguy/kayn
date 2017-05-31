@@ -152,25 +152,6 @@
     return RateLimit;
   }();
 
-  var services = {
-    'CHAMPION': 'platform',
-    'CHAMPION_MASTERY': 'champion-mastery',
-    'GAME': null,
-    'LEAGUE': 'league',
-    'STATUS': 'status',
-    'MASTERIES': 'platform',
-    'MATCH': 'match',
-    'MATCHLIST': null,
-    'RUNES': 'platform',
-    'RUNES_MASTERIES': 'platform',
-    'SPECTATOR': 'spectator',
-    'STATIC_DATA': 'static-data',
-    'STATS': null,
-    'SUMMONER': 'summoner',
-    'TOURNAMENT_STUB': 'tournament-stub',
-    'TOURNAMENT': 'tournament'
-  };
-
   var cacheTimers = {
     MONTH: 2592000,
     WEEK: 604800,
@@ -202,6 +183,8 @@
     TOURNAMENT_STUB: cacheTimers.HOUR,
     TOURNAMENT: cacheTimers.HOUR };
 
+  var caches = ['in-memory-cache', 'redis'];
+
   var limits = {
     'DEV': [[10, 10], [500, 600]],
 
@@ -220,6 +203,78 @@
     RUSSIA: 'RU',
     TURKEY: 'TR1',
     JAPAN: 'JP1'
+  };
+
+  var VERSION = 'version';
+  var LOCALE = 'locale';
+  var DATA_BY_ID = 'dataById';
+  var FREE_TO_PLAY = 'freeToPlay';
+  var QUEUE = 'queue';
+  var BEGIN_TIME = 'beginTime';
+  var END_INDEX = 'endIndex';
+  var SEASON = 'season';
+  var CHAMPION = 'champion';
+  var BEGIN_INDEX = 'beginIndex';
+  var END_TIME = 'endTime';
+  var CHAMP_LIST_DATA = 'champListData';
+  var CHAMP_DATA = 'champData';
+  var ITEM_LIST_DATA = 'itemListData';
+  var ITEM_DATA = 'itemData';
+  var MASTERY_LIST_DATA = 'masteryListData';
+
+  var MASTERY_DATA = 'masteryData';
+
+  var RUNE_LIST_DATA = 'runeListData';
+
+  var RUNE_DATA = 'runeData';
+
+  var SPELL_LIST_DATA = 'spellListData';
+
+  var SPELL_DATA = 'spellData';
+
+  var STATS_SEASON = 'season';
+  var VERSION_AND_LOCALE = [VERSION, LOCALE];
+
+  var queryParams = {
+    NONE: [],
+    CHAMPION: {
+      LIST: [FREE_TO_PLAY]
+    },
+    STATIC: {
+      CHAMPION: {
+        LIST: [].concat(VERSION_AND_LOCALE, [DATA_BY_ID, CHAMP_LIST_DATA]),
+        ONE: [].concat(VERSION_AND_LOCALE, [CHAMP_DATA])
+      },
+      ITEM: {
+        LIST: [].concat(VERSION_AND_LOCALE, [ITEM_LIST_DATA]),
+        ONE: [].concat(VERSION_AND_LOCALE, [ITEM_DATA])
+      },
+      LANGUAGE_STRING: {
+        LIST: [].concat(VERSION_AND_LOCALE)
+      },
+      MAP: {
+        LIST: [].concat(VERSION_AND_LOCALE)
+      },
+      MASTERY: {
+        LIST: [].concat(VERSION_AND_LOCALE, [MASTERY_LIST_DATA]),
+        ONE: [].concat(VERSION_AND_LOCALE, [MASTERY_DATA])
+      },
+      RUNE: {
+        LIST: [].concat(VERSION_AND_LOCALE, [RUNE_LIST_DATA]),
+        ONE: [].concat(VERSION_AND_LOCALE, [RUNE_DATA])
+      },
+      SUMMONER_SPELL: {
+        LIST: [].concat(VERSION_AND_LOCALE, [DATA_BY_ID, SPELL_LIST_DATA]),
+        ONE: [].concat(VERSION_AND_LOCALE, [SPELL_DATA])
+      },
+      STATS: {
+        RANKED: [STATS_SEASON],
+        SUMMARY: [STATS_SEASON]
+      }
+    },
+    MATCHLIST: {
+      GET: [QUEUE, BEGIN_TIME, END_INDEX, SEASON, CHAMPION, BEGIN_INDEX, END_TIME]
+    }
   };
 
   var queueTypes = {
@@ -305,6 +360,25 @@
     jp: 'JAPAN'
   };
 
+  var services = {
+    'CHAMPION': 'platform',
+    'CHAMPION_MASTERY': 'champion-mastery',
+    'GAME': null,
+    'LEAGUE': 'league',
+    'STATUS': 'status',
+    'MASTERIES': 'platform',
+    'MATCH': 'match',
+    'MATCHLIST': null,
+    'RUNES': 'platform',
+    'RUNES_MASTERIES': 'platform',
+    'SPECTATOR': 'spectator',
+    'STATIC_DATA': 'static-data',
+    'STATS': null,
+    'SUMMONER': 'summoner',
+    'TOURNAMENT_STUB': 'tournament-stub',
+    'TOURNAMENT': 'tournament'
+  };
+
   var versions = {
     'CHAMPION': 3,
     'CHAMPION_MASTERY': 3,
@@ -322,8 +396,6 @@
     'TOURNAMENT_STUB': 3,
     'TOURNAMENT': 3
   };
-
-  var caches = ['in-memory-cache', 'redis'];
 
   var re = XRegExp('^[0-9\\p{L} _\\.]+$');
 
@@ -389,12 +461,15 @@
   var responseStrings = {
     200: 'Success',
     400: 'Bad Request',
+    401: 'Unauthorized',
     403: 'Forbidden',
-    404: 'Not Found',
+    404: 'Data Not Found',
+    405: 'Method not allowed',
     415: 'Unsupported Media Type',
     429: 'Rate Limit Exceeded',
     500: 'Internal Service Error',
-    503: 'Service Unavailable'
+    503: 'Service Unavailable',
+    504: 'Gateway Timeout'
   };
 
   var getResponseMessage = function getResponseMessage(code) {
@@ -424,12 +499,15 @@
 
   var codes = {
     BAD_REQUEST: 400,
+    UNAUTHORIZED: 401,
     FORBIDDEN: 403,
-    NOT_FOUND: 404,
+    DATA_NOT_FOUND: 404,
+    METHOD_NOT_ALLOWED: 405,
     UNSUPPORTED_MEDIA_TYPE: 415,
     RATE_LIMIT_EXCEEDED: 429,
     INTERNAL_SERVICE_ERROR: 500,
-    SERVICE_UNAVAILABLE: 503
+    SERVICE_UNAVAILABLE: 503,
+    GATEWAY_TIMEOUT: 504
   };
 
   var ISE = codes.INTERNAL_SERVICE_ERROR;
@@ -961,6 +1039,38 @@
         return timers;
       }
     }, {
+      key: '_verifyOptions',
+      value: function _verifyOptions(options, allowed) {
+        var keys = Object.keys(options);
+
+        if (allowed.length === 0 && keys.length === 0) return;
+
+        var _iteratorNormalCompletion6 = true;
+        var _didIteratorError6 = false;
+        var _iteratorError6 = undefined;
+
+        try {
+          for (var _iterator6 = keys[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+            var key = _step6.value;
+
+            if (!allowed.includes(key)) throw new Error(chalk.red('Invalid query params! Valid: ' + allowed));
+          }
+        } catch (err) {
+          _didIteratorError6 = true;
+          _iteratorError6 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion6 && _iterator6.return) {
+              _iterator6.return();
+            }
+          } finally {
+            if (_didIteratorError6) {
+              throw _iteratorError6;
+            }
+          }
+        }
+      }
+    }, {
       key: '_baseRequest',
       value: function _baseRequest(_ref2, cb) {
         var _this = this;
@@ -1306,14 +1416,13 @@
         var _ref17 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref17.region,
             playerId = _ref17.playerId,
-            championId = _ref17.championId,
-            options = _ref17.options;
+            championId = _ref17.championId;
 
         var cb = arguments[1];
 
         if (Number.isInteger(playerId) && Number.isInteger(championId)) {
           return this._championMasteryRequest({
-            endUrl: 'champion-masteries/by-summoner/' + playerId + '/by-champion/' + championId, region: region, options: options
+            endUrl: 'champion-masteries/by-summoner/' + playerId + '/by-champion/' + championId, region: region
           }, cb);
         } else {
           return this._logError(this.getChampMastery.name, 'required params ' + chalk.yellow('`playerId` (int) AND `championId` (int)') + ' not passed in');
@@ -1541,8 +1650,7 @@
             id = _ref23.id,
             summonerId = _ref23.summonerId,
             playerId = _ref23.playerId,
-            name = _ref23.name,
-            options = _ref23.options;
+            name = _ref23.name;
 
         var cb = arguments[1];
 
@@ -1554,14 +1662,14 @@
               }
               return resolve(_this6._leagueRequest({
                 endUrl: 'leagues/by-summoner/' + data.id,
-                region: region, options: options
+                region: region
               }, cb));
             });
           });
         } else if (Number.isInteger(id || summonerId || playerId)) {
           return this._leagueRequest({
             endUrl: 'leagues/by-summoner/' + (id || summonerId || playerId),
-            region: region, options: options
+            region: region
           }, cb);
         } else if (typeof name === 'string') {
           return new Promise(function (resolve, reject) {
@@ -1571,7 +1679,7 @@
               }
               return resolve(_this6._leagueRequest({
                 endUrl: 'leagues/by-summoner/' + data.id,
-                region: region, options: options
+                region: region
               }, cb));
             });
           });
@@ -1676,6 +1784,8 @@
             options = _ref27.options;
 
         var cb = arguments[1];
+
+        this._verifyOptions(options, queryParams.STATIC.CHAMPION.LIST);
 
         if (isFunction(arguments[0])) {
           cb = arguments[0];
@@ -1985,6 +2095,8 @@
             options = _ref45$options === undefined ? { queue: queueTypes.TEAM_BUILDER_RANKED_SOLO } : _ref45$options;
 
         var cb = arguments[1];
+
+        this._verifyOptions(options, queryParams.MATCHLIST.GET);
 
         if (Number.isInteger(accountId || accId)) {
           return this._matchlistRequest({

@@ -18,6 +18,12 @@ const options = {
 }
 const region = 'na'
 
+const badConfig = {
+  options: {
+    Queue: 420 // instead of queue
+  }
+}
+
 const k = init()
 
 describe('Matchlist', function () {
@@ -27,6 +33,10 @@ describe('Matchlist', function () {
     describe('object param', function () {
       it('should throw on empty', function () {
         assert.throws(() => k.Matchlist.get(), Error)
+      })
+
+      it('should throw on falsy config', function () {
+        assert.throws(() => k.Matchlist.get(badConfig), Error)
       })
 
       describe('by id', function () {
