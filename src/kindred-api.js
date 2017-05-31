@@ -530,7 +530,7 @@ class Kindred {
    * @param {object} options; object representing desired query arguments
    * @param {array} allowed; query parameters (usually in the form of a QUERY_PARAMS constant)
    */
-  _verifyOptions(options, allowed) {
+  _verifyOptions(options = {}, allowed) {
     const keys = Object.keys(options)
 
     // No need to check if both are empty.

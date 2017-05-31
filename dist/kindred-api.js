@@ -1043,7 +1043,10 @@
       }
     }, {
       key: '_verifyOptions',
-      value: function _verifyOptions(options, allowed) {
+      value: function _verifyOptions() {
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+        var allowed = arguments[1];
+
         var keys = Object.keys(options);
 
         if (allowed.length === 0 && keys.length === 0) return;

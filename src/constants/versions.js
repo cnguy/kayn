@@ -1,4 +1,4 @@
-/* This will be removed once all the endpoints are implemented by Riot. */
+// This will be removed once all the endpoints are implemented by Riot.
 const versions = {
   'CHAMPION': 3,
   'CHAMPION_MASTERY': 3,
