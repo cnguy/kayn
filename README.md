@@ -25,6 +25,8 @@ Node.js League of Legends v3 API wrapper with built-in rate-limiting (enforced p
 * **Burst/Spread** rate limiter that is **enforced per region** and **follows retry headers**.
     * **Retries** on 429 and >= 500 **until all calls are successful**. (Doesn't retry on 404)
 * Built-in **parameter checks** so you can hopefully refer to documentation less! :)
+    * Checks type of parameters (id, name, accout id).
+    * Checks if you're not passing valid query parameters!
 * Built-in **caching** (in-memory and Redis).
     * **Customized expiration timers**. You can set a timer for each endpoint type. Refer to [Caching](https://github.com/ChauTNguyen/kindred-api/wiki/Caching) for more info.
 * Designed to be simple but convenient. For example, you can call an exclusively by-id endpoint (such as grabbing the runes of a player) **with just the summoner name**.
@@ -39,12 +41,9 @@ All `list` and `by.xxx` functions will have standard parameters.
 
 These methods can work with different type of parameters (id, name, accountId) when applicable.
 
-For example, Match.get, and Status.get.
+What I like about the functions that take object parameters is that you can declare config objects and pass in things really cleanly instead of worrying about the order of parameters in standard functions.
 
-What I specifically like about the functions that take object parameters is that you can declare config objects
-and pass in things really cleanly instead of worrying about the order of parameters in standard function.
-
-These functions take in an optional `region` and an optional `options` parameter (whenever possible) WITHIN the same first parameter. Most of the time, when they're called, they look like this:
+These functions take in an optional `region` and an optional `options` parameter (whenever possible) WITHIN the same object parameter. Most of the time, when they're called, they look like this:
 
 ## Object and Callback Functions
 ```javascript

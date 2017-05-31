@@ -387,6 +387,12 @@ class Kindred {
     }
   }
 
+  /**
+   * Checks if client can make a request in a certain region.
+   * Checks if client should use spread limiter or not as well.
+   * @param {string} region; some region string
+   * @returns {boolean} true if client can make a request
+   */
   canMakeRequest(region) {
     const spread = this.spread
       ? this.limits[region][2].requestAvailable()
@@ -399,6 +405,11 @@ class Kindred {
     )
   }
 
+  /**
+   * Sanitizes summoner name.
+   * @param {string} name; summoner name
+   * @returns {string} sanitized name
+   */
   _sanitizeName(name) {
     if (this._validName(name)) {
       return name.replace(/\s/g, '').toLowerCase()
@@ -410,15 +421,33 @@ class Kindred {
     }
   }
 
+  /**
+   * Checks if summoner name is valid using Riot League of Legends regex rule.
+   * @param {string} name; summoner name
+   * @returns {boolean} true if both rules are adhered
+   */
   _validName(name) {
-    return re.test(name)
+    return re.test(name) && name.length <= 16
   }
 
+  /**
+   * Caches data.
+   * @param {string} key; cache key
+   * @param {int} ttl; some integer
+   * @param {object} body; some object of data
+   */
   _cacheData(key, ttl, body) {
-    if (validTTL)
+    if (validTTL(ttl))
       this.cache.set({ key, ttl }, body)
   }
 
+  /**
+   * Creates a request url.
+   * @param {string} query; the string after the url origin
+   * @param {string} region; region string
+   * @param {boolean} staticReq; this is still needed for older urls that are not normalized
+   * @returns {string} a request url
+   */
   _makeUrl(query, region, staticReq) {
     const mid = staticReq ? '' : `${region}/`
     const oldPrefix = `api/lol/${mid}`
@@ -436,6 +465,12 @@ class Kindred {
     return newUrl
   }
 
+  /**
+   * Stringifies a query arguments object.
+   * @param {object} options; object representing desired query arguments
+   * @param {string} endUrl; the string after the url origin
+   * @returns {string} options stringified (form depends on endpoint version for now)
+   */
   _stringifyOptions(options, endUrl) {
     let stringifiedOpts = ''
 
@@ -463,6 +498,12 @@ class Kindred {
     return stringifiedOpts
   }
 
+  /**
+   * Concatenates request url with key.
+   * @param {string} reqUrl; the full request url
+   * @param {string} key; an API key
+   * @returns {string} the full url used to make requests
+   */
   _constructFullUrl(reqUrl, key) {
     return (
       reqUrl + (reqUrl.lastIndexOf('?') === -1
@@ -472,6 +513,11 @@ class Kindred {
     )
   }
 
+  /**
+   * Resets cache timers in the case that users do not want to cache.
+   * @param {object} timers; an object with <string, int> pairs
+   * @returns {object} an object with <string, 0> pairs
+   */
   _disableCache(timers) {
     for (const key of Object.keys(timers))
       timers[key] = 0
@@ -479,6 +525,11 @@ class Kindred {
     return timers
   }
 
+  /**
+   * Validates query arguments passed into options.
+   * @param {object} options; object representing desired query arguments
+   * @param {array} allowed; query parameters (usually in the form of a QUERY_PARAMS constant)
+   */
   _verifyOptions(options, allowed) {
     const keys = Object.keys(options)
 
@@ -740,6 +791,8 @@ class Kindred {
 
   /* CHAMPION-V3 */
   getChamps({ region, options } = {}, cb) {
+    this._verifyOptions(options, QUERY_PARAMS.CHAMPION.LIST)
+
     if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
@@ -1082,6 +1135,8 @@ class Kindred {
     id, championId,
     options
   } = {}, cb) {
+    this._verifyOptions(options, QUERY_PARAMS.STATIC.CHAMPION.ONE)
+
     if (Number.isInteger(id || championId)) {
       return this._staticRequest({ endUrl: `champions/${id || championId}`, region, options }, cb)
     } else {
@@ -1093,6 +1148,8 @@ class Kindred {
   }
 
   getItems({ region, options } = {}, cb) {
+    this._verifyOptions(options, QUERY_PARAMS.STATIC.ITEM.LIST)
+
     if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
@@ -1106,6 +1163,8 @@ class Kindred {
     id, itemId,
     options
   } = {}, cb) {
+    this._verifyOptions(options, QUERY_PARAMS.STATIC.ITEM.ONE)
+
     if (Number.isInteger(id || itemId)) {
       return this._staticRequest({ endUrl: `items/${id || itemId}`, region, options }, cb)
     } else {
@@ -1117,6 +1176,8 @@ class Kindred {
   }
 
   getLanguageStrings({ region, options } = {}, cb) {
+    this._verifyOptions(options, QUERY_PARAMS.STATIC.LANGUAGE_STRING.LIST)
+
     if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
@@ -1135,6 +1196,8 @@ class Kindred {
   }
 
   getMapData({ region, options } = {}, cb) {
+    this._verifyOptions(options, QUERY_PARAMS.STATIC.MAP.LIST)
+
     if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
@@ -1144,6 +1207,8 @@ class Kindred {
   }
 
   getMasteryList({ region, options } = {}, cb) {
+    this._verifyOptions(options, QUERY_PARAMS.STATIC.MASTERY.LIST)
+
     if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
@@ -1157,6 +1222,8 @@ class Kindred {
     id, masteryId,
     options
   } = {}, cb) {
+    this._verifyOptions(options, QUERY_PARAMS.STATIC.MASTERY.ONE)
+
     if (Number.isInteger(id || masteryId)) {
       return this._staticRequest({
         endUrl: `masteries/${id || masteryId}`,
@@ -1171,6 +1238,8 @@ class Kindred {
   }
 
   getProfileIcons({ region, options } = {}, cb) {
+    this._verifyOptions(options, QUERY_PARAMS.STATIC.PROFILE_ICON.LIST)
+
     if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
@@ -1189,6 +1258,8 @@ class Kindred {
   }
 
   getRuneList({ region, options } = {}, cb) {
+    this._verifyOptions(options, QUERY_PARAMS.STATIC.RUNE.LIST)
+
     if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
@@ -1202,6 +1273,8 @@ class Kindred {
     id, runeId,
     options
   } = {}, cb) {
+    this._verifyOptions(options, QUERY_PARAMS.STATIC.RUNE.ONE)
+
     if (Number.isInteger(id || runeId)) {
       return this._staticRequest({ endUrl: `runes/${id || runeId}`, region, options }, cb)
     } else {
@@ -1213,6 +1286,8 @@ class Kindred {
   }
 
   getSummonerSpells({ region, options } = {}, cb) {
+    this._verifyOptions(options, QUERY_PARAMS.STATIC.SUMMONER_SPELL.LIST)
+
     if (isFunction(arguments[0])) {
       cb = arguments[0]
       arguments[0] = undefined
@@ -1226,6 +1301,8 @@ class Kindred {
     id, spellId, summonerSpellId,
     options
   } = {}, cb) {
+    this._verifyOptions(options, QUERY_PARAMS.STATIC.SUMMONER_SPELL.ONE)
+
     if (Number.isInteger(id || spellId || summonerSpellId)) {
       return this._staticRequest({
         endUrl: `summoner-spells/${id || spellId || summonerSpellId}`,
@@ -1267,11 +1344,10 @@ class Kindred {
   /* MATCH-V3 */
   getMatch({
     region,
-    id, matchId,
-    options
+    id, matchId
   } = {}, cb) {
     if (Number.isInteger(id || matchId)) {
-      return this._matchRequest({ endUrl: `matches/${id || matchId}`, region, options }, cb)
+      return this._matchRequest({ endUrl: `matches/${id || matchId}`, region }, cb)
     } else {
       return this._logError(
         this.getMatch.name,
@@ -1466,6 +1542,8 @@ class Kindred {
     name,
     options
   } = {}, cb) {
+    this._verifyOptions(options, QUERY_PARAMS.STATS.RANKED)
+
     if (Number.isInteger(accountId || accId)) {
       return new Promise((resolve, reject) => {
         return this.getSummoner({ accId: accountId || accId, region }, (err, data) => {
@@ -1506,6 +1584,8 @@ class Kindred {
     name,
     options
   } = {}, cb) {
+    this._verifyOptions(options, QUERY_PARAMS.STATS.SUMMARY)
+
     if (Number.isInteger(accountId || accId)) {
       return new Promise((resolve, reject) => {
         return this.getSummoner({ accId: accountId || accId, region }, (err, data) => {

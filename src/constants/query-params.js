@@ -1,3 +1,12 @@
+// This file maps endpoints to hard-coded string constants.
+// This is used to verify that the user is passing in the options
+// they desire. API endpoints do not throw errors when extra query parameters
+// or misspelled parameters are passed in.
+// Typos or the wrong type of options are common mistakes, so this
+// should help a lot.
+//
+// eg: runeListData instead of runeData for grabbing a single rune.
+
 // Might add type-checking in the future
 const VERSION = 'version' // string
 const LOCALE = 'locale' // string
@@ -106,6 +115,9 @@ const queryParams = {
       LIST: [...VERSION_AND_LOCALE, MASTERY_LIST_DATA],
       ONE: [...VERSION_AND_LOCALE, MASTERY_DATA]
     },
+    PROFILE_ICON: {
+      LIST: [...VERSION_AND_LOCALE]
+    },
     RUNE: {
       LIST: [...VERSION_AND_LOCALE, RUNE_LIST_DATA],
       ONE: [...VERSION_AND_LOCALE, RUNE_DATA]
@@ -113,16 +125,16 @@ const queryParams = {
     SUMMONER_SPELL: {
       LIST: [...VERSION_AND_LOCALE, DATA_BY_ID, SPELL_LIST_DATA],
       ONE: [...VERSION_AND_LOCALE, SPELL_DATA]
-    },
-    STATS: {
-      RANKED: [STATS_SEASON],
-      SUMMARY: [STATS_SEASON]
     }
   },
   MATCHLIST: {
     GET: [
       QUEUE, BEGIN_TIME, END_INDEX, SEASON, CHAMPION, BEGIN_INDEX, END_TIME
     ]
+  },
+  STATS: {
+    RANKED: [STATS_SEASON],
+    SUMMARY: [STATS_SEASON]
   }
 }
 

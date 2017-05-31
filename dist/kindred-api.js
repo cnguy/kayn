@@ -259,6 +259,9 @@
         LIST: [].concat(VERSION_AND_LOCALE, [MASTERY_LIST_DATA]),
         ONE: [].concat(VERSION_AND_LOCALE, [MASTERY_DATA])
       },
+      PROFILE_ICON: {
+        LIST: [].concat(VERSION_AND_LOCALE)
+      },
       RUNE: {
         LIST: [].concat(VERSION_AND_LOCALE, [RUNE_LIST_DATA]),
         ONE: [].concat(VERSION_AND_LOCALE, [RUNE_DATA])
@@ -266,14 +269,14 @@
       SUMMONER_SPELL: {
         LIST: [].concat(VERSION_AND_LOCALE, [DATA_BY_ID, SPELL_LIST_DATA]),
         ONE: [].concat(VERSION_AND_LOCALE, [SPELL_DATA])
-      },
-      STATS: {
-        RANKED: [STATS_SEASON],
-        SUMMARY: [STATS_SEASON]
       }
     },
     MATCHLIST: {
       GET: [QUEUE, BEGIN_TIME, END_INDEX, SEASON, CHAMPION, BEGIN_INDEX, END_TIME]
+    },
+    STATS: {
+      RANKED: [STATS_SEASON],
+      SUMMARY: [STATS_SEASON]
     }
   };
 
@@ -913,12 +916,12 @@
     }, {
       key: '_validName',
       value: function _validName(name) {
-        return re.test(name);
+        return re.test(name) && name.length <= 16;
       }
     }, {
       key: '_cacheData',
       value: function _cacheData(key, ttl, body) {
-        if (validTTL) this.cache.set({ key: key, ttl: ttl }, body);
+        if (validTTL(ttl)) this.cache.set({ key: key, ttl: ttl }, body);
       }
     }, {
       key: '_makeUrl',
@@ -1382,6 +1385,8 @@
 
         var cb = arguments[1];
 
+        this._verifyOptions(options, queryParams.CHAMPION.LIST);
+
         if (isFunction(arguments[0])) {
           cb = arguments[0];
           arguments[0] = undefined;
@@ -1805,6 +1810,8 @@
 
         var cb = arguments[1];
 
+        this._verifyOptions(options, queryParams.STATIC.CHAMPION.ONE);
+
         if (Number.isInteger(id || championId)) {
           return this._staticRequest({ endUrl: 'champions/' + (id || championId), region: region, options: options }, cb);
         } else {
@@ -1819,6 +1826,8 @@
             options = _ref29.options;
 
         var cb = arguments[1];
+
+        this._verifyOptions(options, queryParams.STATIC.ITEM.LIST);
 
         if (isFunction(arguments[0])) {
           cb = arguments[0];
@@ -1838,6 +1847,8 @@
 
         var cb = arguments[1];
 
+        this._verifyOptions(options, queryParams.STATIC.ITEM.ONE);
+
         if (Number.isInteger(id || itemId)) {
           return this._staticRequest({ endUrl: 'items/' + (id || itemId), region: region, options: options }, cb);
         } else {
@@ -1852,6 +1863,8 @@
             options = _ref31.options;
 
         var cb = arguments[1];
+
+        this._verifyOptions(options, queryParams.STATIC.LANGUAGE_STRING.LIST);
 
         if (isFunction(arguments[0])) {
           cb = arguments[0];
@@ -1884,6 +1897,8 @@
 
         var cb = arguments[1];
 
+        this._verifyOptions(options, queryParams.STATIC.MAP.LIST);
+
         if (isFunction(arguments[0])) {
           cb = arguments[0];
           arguments[0] = undefined;
@@ -1899,6 +1914,8 @@
             options = _ref34.options;
 
         var cb = arguments[1];
+
+        this._verifyOptions(options, queryParams.STATIC.MASTERY.LIST);
 
         if (isFunction(arguments[0])) {
           cb = arguments[0];
@@ -1918,6 +1935,8 @@
 
         var cb = arguments[1];
 
+        this._verifyOptions(options, queryParams.STATIC.MASTERY.ONE);
+
         if (Number.isInteger(id || masteryId)) {
           return this._staticRequest({
             endUrl: 'masteries/' + (id || masteryId),
@@ -1935,6 +1954,8 @@
             options = _ref36.options;
 
         var cb = arguments[1];
+
+        this._verifyOptions(options, queryParams.STATIC.PROFILE_ICON.LIST);
 
         if (isFunction(arguments[0])) {
           cb = arguments[0];
@@ -1967,6 +1988,8 @@
 
         var cb = arguments[1];
 
+        this._verifyOptions(options, queryParams.STATIC.RUNE.LIST);
+
         if (isFunction(arguments[0])) {
           cb = arguments[0];
           arguments[0] = undefined;
@@ -1985,6 +2008,8 @@
 
         var cb = arguments[1];
 
+        this._verifyOptions(options, queryParams.STATIC.RUNE.ONE);
+
         if (Number.isInteger(id || runeId)) {
           return this._staticRequest({ endUrl: 'runes/' + (id || runeId), region: region, options: options }, cb);
         } else {
@@ -1999,6 +2024,8 @@
             options = _ref40.options;
 
         var cb = arguments[1];
+
+        this._verifyOptions(options, queryParams.STATIC.SUMMONER_SPELL.LIST);
 
         if (isFunction(arguments[0])) {
           cb = arguments[0];
@@ -2018,6 +2045,8 @@
             options = _ref41.options;
 
         var cb = arguments[1];
+
+        this._verifyOptions(options, queryParams.STATIC.SUMMONER_SPELL.ONE);
 
         if (Number.isInteger(id || spellId || summonerSpellId)) {
           return this._staticRequest({
@@ -2067,13 +2096,12 @@
         var _ref44 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref44.region,
             id = _ref44.id,
-            matchId = _ref44.matchId,
-            options = _ref44.options;
+            matchId = _ref44.matchId;
 
         var cb = arguments[1];
 
         if (Number.isInteger(id || matchId)) {
-          return this._matchRequest({ endUrl: 'matches/' + (id || matchId), region: region, options: options }, cb);
+          return this._matchRequest({ endUrl: 'matches/' + (id || matchId), region: region }, cb);
         } else {
           return this._logError(this.getMatch.name, 'required params ' + chalk.yellow('`id/matchId` (int)') + ' not passed in');
         }
@@ -2314,6 +2342,8 @@
 
         var cb = arguments[1];
 
+        this._verifyOptions(options, queryParams.STATS.RANKED);
+
         if (Number.isInteger(accountId || accId)) {
           return new Promise(function (resolve, reject) {
             return _this12.getSummoner({ accId: accountId || accId, region: region }, function (err, data) {
@@ -2363,6 +2393,8 @@
             options = _ref51.options;
 
         var cb = arguments[1];
+
+        this._verifyOptions(options, queryParams.STATS.SUMMARY);
 
         if (Number.isInteger(accountId || accId)) {
           return new Promise(function (resolve, reject) {

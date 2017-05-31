@@ -6,7 +6,22 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
-## [2.0.57]() - Add showKey option for initialization and removed Tournament requests.
+## [2.0.57]() - Added query params handling, added, showKey option for initialization, and removed Tournament requests.
+
+### query params handling
+The `query-params.js` file maps endpoints to hard-coded string constants and
+`Kindred` now has a `_verifyOptions` method.
+
+These are used together to verify that the user is passing in the options
+they desire. API endpoints do not throw errors when extra query parameters
+or misspelled parameters are passed in.
+
+Typos or the wrong type of options are common mistakes, so this
+should help a lot.
+
+eg: runeListData instead of runeData for grabbing a single rune.
+
+Option errors will now always throw errors.
 
 ### showKey
 Although this is useful for debugging Riot's API, I'm allowing users
@@ -19,6 +34,9 @@ want to support it at the moment.
 
 ### dev/prod string (limit) initialization
 Removed initialization through 'dev' and 'prod' strings.
+
+### Fix validTTL checker
+validTTL -> validTTL(ttl)
 
 ## [2.0.56](https://github.com/ChauTNguyen/kindred-api/commit/387a568fab15af420510a5e300aed01fe620f78a) - Removed redis client quit handler.
 
