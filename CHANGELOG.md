@@ -6,7 +6,9 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
-## [2.0.58]() - Fixed initialization bug I made in 2.0.57.
+## [2.0.59]() - Cache hits shouldn't have api keys in urls as well.
+
+## [2.0.58](https://github.com/ChauTNguyen/kindred-api/commit/6a9a50460e99055c690e8b146ee250098cb3e586) - Fixed initialization bug I made in 2.0.57.
 
 Default cache timers weren't set up when cache ttl was not passed in. Fixed.
 

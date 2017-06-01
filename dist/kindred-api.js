@@ -1100,7 +1100,11 @@
 
             _this.cache.get({ key: reqUrl }, function (err, data) {
               if (data) {
-                if (_this.debug) console.log(chalk.green('CACHE HIT') + ' ' + fullUrl);
+                if (_this.debug) {
+                  var url = _this.showKey ? fullUrl : reqUrl;
+                  console.log(chalk.green('CACHE HIT') + ' @ ' + url);
+                }
+
                 var json = JSON.parse(data);
                 if (cb) return cb(err, json);else return resolve(json);
               } else {
@@ -1125,8 +1129,8 @@
 
 
                           if (self.debug) {
-                            var url = self.showKey ? fullUrl : reqUrl;
-                            printResponseDebug(response, responseMessage, chalk.yellow(url));
+                            var _url = self.showKey ? fullUrl : reqUrl;
+                            printResponseDebug(response, responseMessage, chalk.yellow(_url));
                           }
 
                           if (isFunction(callback)) {
@@ -1175,8 +1179,8 @@
                       var statusMessage = prettifyStatusMessage(statusCode);
 
                       if (self.debug) {
-                        var url = self.showKey ? fullUrl : reqUrl;
-                        printResponseDebug(response, statusMessage, chalk.yellow(url));
+                        var _url2 = self.showKey ? fullUrl : reqUrl;
+                        printResponseDebug(response, statusMessage, chalk.yellow(_url2));
                       }
 
                       if (isFunction(cb)) {

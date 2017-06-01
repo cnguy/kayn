@@ -559,7 +559,11 @@ class Kindred {
 
         this.cache.get({ key: reqUrl }, (err, data) => {
           if (data) {
-            if (this.debug) console.log(`${chalk.green('CACHE HIT')} ${fullUrl}`)
+            if (this.debug) {
+              const url = this.showKey ? fullUrl : reqUrl
+              console.log(`${chalk.green('CACHE HIT')} @ ${url}`)
+            }
+
             var json = JSON.parse(data)
             if (cb) return cb(err, json)
             else return resolve(json)
