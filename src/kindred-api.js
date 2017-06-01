@@ -77,7 +77,7 @@ class Kindred {
       this.CACHE_TIMERS = cacheTTL ? cacheTTL : CACHE_TIMERS
     }
 
-    if (!cacheTTL)
+    if (!cacheOptions)
       this.CACHE_TIMERS = this._disableCache(CACHE_TIMERS)
 
     if (limits) {

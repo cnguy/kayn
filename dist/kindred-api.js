@@ -572,7 +572,7 @@
         this.CACHE_TIMERS = cacheTTL ? cacheTTL : endpointCacheTimers;
       }
 
-      if (!cacheTTL) this.CACHE_TIMERS = this._disableCache(endpointCacheTimers);
+      if (!cacheOptions) this.CACHE_TIMERS = this._disableCache(endpointCacheTimers);
 
       if (limits$$1) {
         if (check$1(limits$$1)) {

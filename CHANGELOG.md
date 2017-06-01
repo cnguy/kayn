@@ -6,6 +6,10 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
+## [2.0.58]() - Fixed initialization bug I made in 2.0.57.
+
+Default cache timers weren't set up when cache ttl was not passed in. Fixed.
+
 ## [2.0.57]() - Added query params handling, added, showKey option for initialization, and removed Tournament requests.
 
 ### query params handling
