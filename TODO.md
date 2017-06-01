@@ -1,8 +1,8 @@
 # Task List
 ~ = in progress
-- [ ] Right now, passing incorrect options (query params) doesn't throw any errors. Adding this feature would help reduce incomplete data from typos. ~
+- [x] Right now, passing incorrect options (query params) doesn't throw any errors. Adding this feature would help reduce incomplete data from typos.
 - [ ] Make promises retry more flexible (users can pass in time before retry, how many times they want it to keep going).
-- [ ] Comment my code extensively.. ~
+- [x] ~~Comment my code extensively..~~ This is okay for now. :)
 - [ ] Fix highly inefficient tests. ~
 - [ ] Add extensive tests that cover important functionality such as rate limiting and options. Not sure how I should test this right now though. ~
 - [x] Add an [option to space out requests](https://github.com/ChauTNguyen/kindred-api/wiki/Rate-Limiter). ~~Maybe I should make this the default though (should still provide flexibility to users)~~.
