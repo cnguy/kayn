@@ -210,15 +210,26 @@ describe('Core', function () {
       })
 
       it('should retry on 429s until all calls are successful and returned', function (done) {
-        // Mock call to rate limit
-        // Make sure to use dev key
-        init().Summoner.by.name('Contractz')
+        const api = require('../../dist/kindred-api')
 
-        // Begin
-        const k = init()
+        const debug = true
+        const LIMITS = api.LIMITS
+
+        const z = new api.Kindred({
+          key: process.env.KEY_TO_RATE_LIMIT,
+          limits: LIMITS.DEV
+        })
+
+        z.Summoner.get({ name: 'Contractz' }) // mock 429 causer
+
+        const k = new api.Kindred({
+          key: process.env.KEY_TO_RATE_LIMIT,
+          debug,
+          limits: LIMITS.DEV
+        })
 
         function count(err, data) {
-          if (data) --num
+          if (data)--num
           if (num === 0) done()
         }
 
@@ -246,11 +257,23 @@ describe('Core', function () {
       })
 
       it('should retry on 429s until all calls are successful and returned', function (done) {
-        // Mock call to rate limit
-        // Make sure to use dev key
-        init().Summoner.by.name('Contractz')
+        const api = require('../../dist/kindred-api')
 
-        const k = init()
+        const debug = true
+        const LIMITS = api.LIMITS
+
+        const z = new api.Kindred({
+          key: process.env.KEY_TO_RATE_LIMIT,
+          limits: LIMITS.DEV
+        })
+
+        z.Summoner.get({ name: 'Contractz' }) // mock 429 causer
+
+        const k = new api.Kindred({
+          key: process.env.KEY_TO_RATE_LIMIT,
+          debug,
+          limits: LIMITS.DEV
+        })
 
         let num = 10
 
@@ -308,6 +331,32 @@ describe('Core', function () {
     })
 
     describe('print response debug', function () {
+      it('should print text on cache hit', function (done) {
+        const api = require('../../dist/kindred-api')
+
+        const debug = true
+        const LIMITS = api.LIMITS
+
+        const k = new api.Kindred({
+          key: process.env.KEY,
+          debug,
+          limits: LIMITS.DEV,
+          cacheOptions: api.CACHE_TYPES[0]
+        })
+
+        k.CACHE_TIMERS = {
+          SUMMONER: 5000
+        }
+
+        k.Summoner
+          .get({ name: 'Contractz' })
+          .then(data => k.Summoner.get({ name: 'Contractz' }))
+          .then(data => {
+            expect(console.log).to.have.been.called
+            done()
+          })
+      })
+
       it('should work with limits', function (done) {
         const api = require('../../dist/kindred-api')
 

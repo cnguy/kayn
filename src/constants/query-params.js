@@ -7,6 +7,8 @@
 //
 // eg: runeListData instead of runeData for grabbing a single rune.
 
+// TODO: champListData, itemListData and what not will become `tags` in the future
+
 // Might add type-checking in the future
 const VERSION = 'version' // string
 const LOCALE = 'locale' // string
