@@ -323,7 +323,7 @@ describe('Core', function () {
 
   describe('debug', function () {
     beforeEach(function () {
-      sinon.spy(console, 'log')
+      this.spied = sinon.spy(console, 'log')
     })
 
     afterEach(function () {
@@ -388,6 +388,42 @@ describe('Core', function () {
 
         k.Static.Champion.list(function (err, data) {
           expect(console.log).to.have.been.called
+          done()
+        })
+      })
+
+      it('should print headers', function (done) {
+        const api = require('../../dist/kindred-api')
+
+        const debug = true
+        const showHeaders = true
+
+        const k = new api.Kindred({
+          key: process.env.KEY,
+          debug,
+          showHeaders
+        })
+
+        k.Static.Champion.list(function (err, data) {
+          sinon.assert.calledThrice(console.log)
+          done()
+        })
+      })
+
+      it('should not print headers', function (done) {
+        const api = require('../../dist/kindred-api')
+
+        const debug = true
+        const showHeaders = false
+
+        const k = new api.Kindred({
+          key: process.env.KEY,
+          debug,
+          showHeaders
+        })
+
+        k.Static.Champion.list(function (err, data) {
+          sinon.assert.calledOnce(console.log)
           done()
         })
       })

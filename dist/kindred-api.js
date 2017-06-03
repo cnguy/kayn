@@ -488,16 +488,19 @@
     if (statusCode >= statusCodeBisector[0] && statusCode < statusCodeBisector[1]) return chalk$1.green(statusCode);else if (statusCode >= statusCodeBisector[1] && statusCode < statusCodeBisector[2]) return chalk$1.red(msg);else return chalk$1.bold.red(msg);
   };
 
-  var printResponseDebug = function printResponseDebug(response, statusMessage, reqUrl) {
+  var printResponseDebug = function printResponseDebug(response, statusMessage, reqUrl, headers) {
     console.log(statusMessage, '@', reqUrl);
-    console.log({
-      'x-rate-limit-type': response.headers['x-rate-limit-type'],
-      'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
-      'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
-      'x-rate-limit-count': response.headers['x-rate-limit-count'],
-      'retry-after': response.headers['retry-after']
-    });
-    console.log();
+
+    if (headers) {
+      console.log({
+        'x-rate-limit-type': response.headers['x-rate-limit-type'],
+        'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
+        'x-method-rate-limit-count': response.headers['x-method-rate-limit-count'],
+        'x-rate-limit-count': response.headers['x-rate-limit-count'],
+        'retry-after': response.headers['retry-after']
+      });
+      console.log();
+    }
   };
 
   var codes = {
@@ -537,6 +540,8 @@
           debug = _ref$debug === undefined ? false : _ref$debug,
           _ref$showKey = _ref.showKey,
           showKey = _ref$showKey === undefined ? false : _ref$showKey,
+          _ref$showHeaders = _ref.showHeaders,
+          showHeaders = _ref$showHeaders === undefined ? false : _ref$showHeaders,
           limits$$1 = _ref.limits,
           spread = _ref.spread,
           cacheOptions = _ref.cacheOptions,
@@ -558,6 +563,7 @@
 
       this.debug = debug;
       this.showKey = showKey;
+      this.showHeaders = showHeaders;
 
       if (!cacheOptions) {
         this.cache = {
@@ -1008,7 +1014,7 @@
     }, {
       key: '_constructFullUrl',
       value: function _constructFullUrl(reqUrl, key) {
-        return reqUrl + (reqUrl.lastIndexOf('?') === -1 ? '?' : '&') + ('api_key=' + key);
+        return reqUrl + this._getAPISuffix(reqUrl, key);
       }
     }, {
       key: '_disableCache',
@@ -1076,6 +1082,11 @@
         }
       }
     }, {
+      key: '_getAPISuffix',
+      value: function _getAPISuffix(url, key) {
+        return (url.lastIndexOf('?') === -1 ? '?' : '&') + ('api_key=' + (key ? key : ''));
+      }
+    }, {
       key: '_baseRequest',
       value: function _baseRequest(_ref2, cb) {
         var _this = this;
@@ -1095,6 +1106,7 @@
             var stringifiedOpts = _this._stringifyOptions(options, endUrl);
             var postfix = stringifiedOpts ? '?' + stringifiedOpts : '';
             var reqUrl = _this._makeUrl(endUrl + postfix, region);
+            var displayUrl = reqUrl + _this._getAPISuffix(reqUrl);
             var fullUrl = _this._constructFullUrl(reqUrl, _this.key);
 
             _this.cache.get({ key: reqUrl }, function (err, data) {
@@ -1128,8 +1140,8 @@
 
 
                           if (self.debug) {
-                            var _url = self.showKey ? fullUrl : reqUrl;
-                            printResponseDebug(response, responseMessage, chalk.yellow(_url));
+                            var _url = self.showKey ? fullUrl : displayUrl;
+                            printResponseDebug(response, responseMessage, chalk.yellow(_url), self.showHeaders);
                           }
 
                           if (isFunction(callback)) {
@@ -1178,8 +1190,8 @@
                       var statusMessage = prettifyStatusMessage(statusCode);
 
                       if (self.debug) {
-                        var _url2 = self.showKey ? fullUrl : reqUrl;
-                        printResponseDebug(response, statusMessage, chalk.yellow(_url2));
+                        var _url2 = self.showKey ? fullUrl : displayUrl;
+                        printResponseDebug(response, statusMessage, chalk.yellow(_url2), self.showHeaders);
                       }
 
                       if (isFunction(cb)) {

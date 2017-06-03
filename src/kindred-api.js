@@ -36,7 +36,7 @@ const SECOND = 1000
 class Kindred {
   constructor({
     key, defaultRegion = REGIONS.NORTH_AMERICA,
-    debug = false, showKey = false,
+    debug = false, showKey = false, showHeaders = false,
     limits, spread,
     cacheOptions, cacheTTL
   } = {}) {
@@ -59,6 +59,7 @@ class Kindred {
 
     this.debug = debug
     this.showKey = showKey
+    this.showHeaders = showHeaders
 
     if (!cacheOptions) {
       this.cache = {
@@ -505,12 +506,7 @@ class Kindred {
    * @returns {string} the full url used to make requests
    */
   _constructFullUrl(reqUrl, key) {
-    return (
-      reqUrl + (reqUrl.lastIndexOf('?') === -1
-        ? '?'
-        : '&'
-      ) + `api_key=${key}`
-    )
+    return reqUrl + this._getAPISuffix(reqUrl, key)
   }
 
   /**
@@ -543,6 +539,18 @@ class Kindred {
         throw new Error(chalk.red('Invalid query params! Valid: ' + allowed))
   }
 
+  /**
+   * Grabs API suffix. This may contain a key if present.
+   * @param {string} url; request url
+   * @param {string} key; api key
+   */
+  _getAPISuffix(url, key) {
+    return (url.lastIndexOf('?') === -1
+      ? '?'
+      : '&'
+    ) + `api_key=${key ? key : ''}`
+  }
+
   _baseRequest({
     endUrl,
     region = this.defaultRegion,
@@ -555,6 +563,7 @@ class Kindred {
         const stringifiedOpts = this._stringifyOptions(options, endUrl)
         const postfix = stringifiedOpts ? '?' + stringifiedOpts : ''
         const reqUrl = this._makeUrl(endUrl + postfix, region)
+        const displayUrl = reqUrl + this._getAPISuffix(reqUrl) // no key
         const fullUrl = this._constructFullUrl(reqUrl, this.key)
 
         this.cache.get({ key: reqUrl }, (err, data) => {
@@ -591,8 +600,8 @@ class Kindred {
                         const { ttl } = cacheParams
 
                         if (self.debug) {
-                          const url = self.showKey ? fullUrl : reqUrl
-                          printResponseDebug(response, responseMessage, chalk.yellow(url))
+                          const url = self.showKey ? fullUrl : displayUrl
+                          printResponseDebug(response, responseMessage, chalk.yellow(url), self.showHeaders)
                         }
 
                         if (isFunction(callback)) {
@@ -636,8 +645,8 @@ class Kindred {
                   const statusMessage = prettifyStatusMessage(statusCode)
 
                   if (self.debug) {
-                    const url = self.showKey ? fullUrl : reqUrl
-                    printResponseDebug(response, statusMessage, chalk.yellow(url))
+                    const url = self.showKey ? fullUrl : displayUrl
+                    printResponseDebug(response, statusMessage, chalk.yellow(url), self.showHeaders)
                   }
 
                   if (isFunction(cb)) {

@@ -6,7 +6,57 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
-## [2.0.59]() - Cache hits shouldn't have api keys in urls as well.
+## [2.0.61]() - Fix query parameter constants.
+
+Riot has recently updated their API to make passing in query params to API endpoints simpler. Instead of `champListData` or `runeListData`, it is now universally named `tags`.
+
+## [2.0.60]() Add showHeaders, add `api_key=` to URL for developer convenience
+
+### showHeaders
+*showHeaders on (old behavior) & showKey off & debug on*
+
+![Imgur](http://i.imgur.com/JsamNSn.png)
+
+```javascript
+/*
+
+200 https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/contractz?api_key=
+{ 'x-app-rate-limit-count': '1:10,1:600',
+  'x-method-rate-limit-count': '1:10,2:600',
+  'x-rate-limit-count': '1:10,1:600',
+  'retry-after': undefined }
+
+*/
+```
+
+*showHeaders off & showKey off & debug on*
+
+![Imgur](http://i.imgur.com/w6BzkDz.png)
+
+```javascript
+/*
+
+200 https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/contractz?api_key=
+
+*/
+
+```
+
+### `api_key=`
+
+*new behavior with appended `api_key` & showKey off & debug on*
+
+```javascript
+// https://na1.api.riotgames.com/lol/static-data/v3/champions?champListData=all&api_key=
+```
+
+*old behavior & showKey off & debug on*
+
+```javascript
+// https://na1.api.riotgames.com/lol/static-data/v3/champions?champListData=all
+```
+
+## [2.0.59](https://github.com/ChauTNguyen/kindred-api/commit/5543ee9c62d455ba5c2c9f8855556444a0997357) - Cache hits shouldn't have api keys in urls as well.
 
 ## [2.0.58](https://github.com/ChauTNguyen/kindred-api/commit/6a9a50460e99055c690e8b146ee250098cb3e586) - Fixed initialization bug I made in 2.0.57.
 
