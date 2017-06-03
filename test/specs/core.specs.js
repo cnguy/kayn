@@ -323,7 +323,7 @@ describe('Core', function () {
 
   describe('debug', function () {
     beforeEach(function () {
-      this.spied = sinon.spy(console, 'log')
+      sinon.spy(console, 'log')
     })
 
     afterEach(function () {
