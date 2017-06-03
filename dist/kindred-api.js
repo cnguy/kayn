@@ -1014,7 +1014,7 @@
     }, {
       key: '_constructFullUrl',
       value: function _constructFullUrl(reqUrl, key) {
-        return reqUrl + this._getAPISuffix(reqUrl, key);
+        return reqUrl + this._getAPIKeySuffix(reqUrl, key);
       }
     }, {
       key: '_disableCache',
@@ -1082,8 +1082,8 @@
         }
       }
     }, {
-      key: '_getAPISuffix',
-      value: function _getAPISuffix(url, key) {
+      key: '_getAPIKeySuffix',
+      value: function _getAPIKeySuffix(url, key) {
         return (url.lastIndexOf('?') === -1 ? '?' : '&') + ('api_key=' + (key ? key : ''));
       }
     }, {
@@ -1106,7 +1106,7 @@
             var stringifiedOpts = _this._stringifyOptions(options, endUrl);
             var postfix = stringifiedOpts ? '?' + stringifiedOpts : '';
             var reqUrl = _this._makeUrl(endUrl + postfix, region);
-            var displayUrl = reqUrl + _this._getAPISuffix(reqUrl);
+            var displayUrl = reqUrl + _this._getAPIKeySuffix(reqUrl);
             var fullUrl = _this._constructFullUrl(reqUrl, _this.key);
 
             _this.cache.get({ key: reqUrl }, function (err, data) {

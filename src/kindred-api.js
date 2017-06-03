@@ -506,7 +506,7 @@ class Kindred {
    * @returns {string} the full url used to make requests
    */
   _constructFullUrl(reqUrl, key) {
-    return reqUrl + this._getAPISuffix(reqUrl, key)
+    return reqUrl + this._getAPIKeySuffix(reqUrl, key)
   }
 
   /**
@@ -540,11 +540,12 @@ class Kindred {
   }
 
   /**
-   * Grabs API suffix. This may contain a key if present.
+   * Returns API key suffix. This may contain a key if present.
    * @param {string} url; request url
    * @param {string} key; api key
+   * @returns {string} api key suffix
    */
-  _getAPISuffix(url, key) {
+  _getAPIKeySuffix(url, key) {
     return (url.lastIndexOf('?') === -1
       ? '?'
       : '&'
@@ -563,7 +564,7 @@ class Kindred {
         const stringifiedOpts = this._stringifyOptions(options, endUrl)
         const postfix = stringifiedOpts ? '?' + stringifiedOpts : ''
         const reqUrl = this._makeUrl(endUrl + postfix, region)
-        const displayUrl = reqUrl + this._getAPISuffix(reqUrl) // no key
+        const displayUrl = reqUrl + this._getAPIKeySuffix(reqUrl) // no key
         const fullUrl = this._constructFullUrl(reqUrl, this.key)
 
         this.cache.get({ key: reqUrl }, (err, data) => {

@@ -174,4 +174,48 @@ describe('Core Utils', function () {
       })
     })
   })
+
+  describe('getAPIKeySuffix', function () {
+    describe('w/o key', function () {
+      describe('w/ `?`', function () {
+        it('should work', function () {
+          const k = init()
+          const url = v3Url.baseUrl + v3Url.postfix + v3Url.query
+          const exp = '&api_key='
+          assert.equal(k._getAPIKeySuffix(url), exp)
+        })
+      })
+
+      describe('w/o `?`', function () {
+        it('should work', function () {
+          const k = init()
+          const url = v3Url.baseUrl + v3Url.postfix
+          const exp = '?api_key='
+          assert.equal(k._getAPIKeySuffix(url), exp)
+        })
+      })
+    })
+
+    describe('w/ key', function () {
+      describe('w/ `?`', function () {
+        it('should work', function () {
+          const k = init()
+          const url = v3Url.baseUrl + v3Url.postfix + v3Url.query
+          const fakeKey = 'foo'
+          const exp = '&api_key=' + fakeKey
+          assert.equal(k._getAPIKeySuffix(url, fakeKey), exp)
+        })
+      })
+
+      describe('w/o `?`', function () {
+        it('should work', function () {
+          const k = init()
+          const url = v3Url.baseUrl + v3Url.postfix
+          const fakeKey = 'foo'
+          const exp = '?api_key=' + fakeKey
+          assert.equal(k._getAPIKeySuffix(url, fakeKey), exp)
+        })
+      })
+    })
+  })
 })
