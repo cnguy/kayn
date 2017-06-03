@@ -341,7 +341,7 @@ describe('Core', function () {
           key: process.env.KEY,
           debug,
           limits: LIMITS.DEV,
-          cacheOptions: api.CACHE_TYPES[0]
+          cache: new api.InMemoryCache()
         })
 
         k.CACHE_TIMERS = {
