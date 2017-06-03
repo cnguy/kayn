@@ -43,14 +43,14 @@
     };
   }();
 
-  var InMemoryCache = function () {
-    function InMemoryCache() {
-      _classCallCheck(this, InMemoryCache);
+  var InMemoryCache$1 = function () {
+    function InMemoryCache$1() {
+      _classCallCheck(this, InMemoryCache$1);
 
       this.cache = {};
     }
 
-    _createClass(InMemoryCache, [{
+    _createClass(InMemoryCache$1, [{
       key: 'get',
       value: function get(args, cb) {
         if (this.cache[args.key]) {
@@ -78,12 +78,12 @@
       }
     }]);
 
-    return InMemoryCache;
+    return InMemoryCache$1;
   }();
 
-  var RedisCache = function () {
-    function RedisCache(opts) {
-      _classCallCheck(this, RedisCache);
+  var RedisCache$1 = function () {
+    function RedisCache$1(opts) {
+      _classCallCheck(this, RedisCache$1);
 
       var options = Object.assign({}, opts || {}, {
         host: '127.0.0.1',
@@ -99,7 +99,7 @@
       this.prefix = options.keyPrefix;
     }
 
-    _createClass(RedisCache, [{
+    _createClass(RedisCache$1, [{
       key: 'get',
       value: function get(args, cb) {
         this.client.get(this.prefix + args.key, function (err, reply) {
@@ -114,7 +114,7 @@
       }
     }]);
 
-    return RedisCache;
+    return RedisCache$1;
   }();
 
   var RateLimit = function () {
@@ -182,8 +182,6 @@
     SUMMONER: cacheTimers.DAY,
     TOURNAMENT_STUB: cacheTimers.HOUR,
     TOURNAMENT: cacheTimers.HOUR };
-
-  var caches = ['in-memory-cache', 'redis'];
 
   var limits = {
     'DEV': [[10, 10], [500, 600]],
@@ -544,7 +542,7 @@
           showHeaders = _ref$showHeaders === undefined ? false : _ref$showHeaders,
           limits$$1 = _ref.limits,
           spread = _ref.spread,
-          cacheOptions = _ref.cacheOptions,
+          cache = _ref.cache,
           cacheTTL = _ref.cacheTTL;
 
       _classCallCheck(this, Kindred$1);
@@ -565,20 +563,18 @@
       this.showKey = showKey;
       this.showHeaders = showHeaders;
 
-      if (!cacheOptions) {
+      if (cache) {
+        this.cache = cache;
+        this.CACHE_TIMERS = cacheTTL ? cacheTTL : endpointCacheTimers;
+      } else {
         this.cache = {
           get: function get(args, cb) {
             return cb(null, null);
           },
           set: function set(args, value) {}
         };
-      } else {
-        if (cacheOptions === caches[0]) this.cache = new InMemoryCache();else if (cacheOptions === caches[1]) this.cache = new RedisCache();else this.cache = new cacheOptions();
-
-        this.CACHE_TIMERS = cacheTTL ? cacheTTL : endpointCacheTimers;
+        this.CACHE_TIMERS = this._disableCache(endpointCacheTimers);
       }
-
-      if (!cacheOptions) this.CACHE_TIMERS = this._disableCache(endpointCacheTimers);
 
       if (limits$$1) {
         if (check$1(limits$$1)) {
@@ -3126,7 +3122,7 @@
       defaultRegion: region,
       debug: debug,
       limits: limits.DEV,
-      cacheOptions: caches[0]
+      cache: new InMemoryCache$1()
     });
   }
 
@@ -3134,16 +3130,21 @@
     if (err) console.log(err);else console.log(data);
   }
 
+  var InMemoryCache = InMemoryCache$1;
+  var RedisCache = RedisCache$1;
+
   var Kindred$2 = {
     Kindred: Kindred$1,
-    CACHE_TYPES: caches,
     LIMITS: limits,
     QUEUE_STRINGS: queueStrings,
     QUEUE_TYPES: queueTypes,
     REGIONS: regions,
     TIME_CONSTANTS: cacheTimers,
     QuickStart: QuickStart,
-    print: print
+    print: print,
+
+    InMemoryCache: InMemoryCache,
+    RedisCache: RedisCache
   };
 
   module.exports = Kindred$2;
