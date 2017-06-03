@@ -197,7 +197,7 @@ for working, copy-pastable examples.
 var KindredAPI = require('kindred-api')
 var REGIONS = KindredAPI.REGIONS
 var QUEUES = KindredAPI.QUEUE_TYPES // numbers for match endpoints
-var debug = true
+var debug = true // // shows status code + url on request. enables showKey and showHeaders.
 var k = KindredAPI.QuickStart('YOUR_KEY', REGIONS.NORTH_AMERICA, debug)
 var Q_STRINGS = KindredAPI.QUEUE_STRINGS // strings for editor convenience
 

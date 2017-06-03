@@ -1,5 +1,6 @@
 # Task List
 ~ = in progress
+- [ ] Change `champListData` and `runeListData` style query params to `tags`.
 - [x] Right now, passing incorrect options (query params) doesn't throw any errors. Adding this feature would help reduce incomplete data from typos.
 - [ ] Make promises retry more flexible (users can pass in time before retry, how many times they want it to keep going).
 - [x] ~~Comment my code extensively..~~ This is okay for now. :)
