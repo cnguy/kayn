@@ -213,6 +213,7 @@ describe('Core', function () {
         const api = require('../../dist/kindred-api')
 
         const debug = true
+        const spread = true
         const LIMITS = api.LIMITS
 
         const z = new api.Kindred({
@@ -225,6 +226,7 @@ describe('Core', function () {
         const k = new api.Kindred({
           key: process.env.KEY_TO_RATE_LIMIT,
           debug,
+          spread,
           limits: LIMITS.DEV
         })
 
@@ -260,6 +262,7 @@ describe('Core', function () {
         const api = require('../../dist/kindred-api')
 
         const debug = true
+        const spread = true
         const LIMITS = api.LIMITS
 
         const z = new api.Kindred({
@@ -272,6 +275,7 @@ describe('Core', function () {
         const k = new api.Kindred({
           key: process.env.KEY_TO_RATE_LIMIT,
           debug,
+          spread,
           limits: LIMITS.DEV
         })
 
