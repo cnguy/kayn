@@ -100,6 +100,7 @@ class Kindred {
       }
     }
 
+    /* MARK: API BINDINGS */
     this.Champion = {
       getChampions: this.getChamps.bind(this),
       getAll: this.getChamps.bind(this),
@@ -385,6 +386,7 @@ class Kindred {
         name: this.getSummonerByName.bind(this)
       }
     }
+    /* END MARK: API BINDINGS */
   }
 
   /**
@@ -445,12 +447,10 @@ class Kindred {
    * Creates a request url.
    * @param {string} query; the string after the url origin
    * @param {string} region; region string
-   * @param {boolean} staticReq; this is still needed for older urls that are not normalized
    * @returns {string} a request url
    */
-  _makeUrl(query, region, staticReq) {
-    const mid = staticReq ? '' : `${region}/`
-    const oldPrefix = `api/lol/${mid}`
+  _makeUrl(query, region) {
+    const oldPrefix = `api/lol/${region}/`
     const prefix = 'lol/'
     const base = 'api.riotgames.com'
     const encodedQuery = encodeURI(query)
@@ -554,7 +554,7 @@ class Kindred {
       return new Promise((resolve, reject) => {
         const stringifiedOpts = this._stringifyOptions(options, endUrl)
         const postfix = stringifiedOpts ? '?' + stringifiedOpts : ''
-        const reqUrl = this._makeUrl(endUrl + postfix, region, staticReq)
+        const reqUrl = this._makeUrl(endUrl + postfix, region)
         const fullUrl = this._constructFullUrl(reqUrl, this.key)
 
         this.cache.get({ key: reqUrl }, (err, data) => {

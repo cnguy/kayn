@@ -925,9 +925,8 @@
       }
     }, {
       key: '_makeUrl',
-      value: function _makeUrl(query, region, staticReq) {
-        var mid = staticReq ? '' : region + '/';
-        var oldPrefix = 'api/lol/' + mid;
+      value: function _makeUrl(query, region) {
+        var oldPrefix = 'api/lol/' + region + '/';
         var prefix = 'lol/';
         var base = 'api.riotgames.com';
         var encodedQuery = encodeURI(query);
@@ -1095,7 +1094,7 @@
           return new Promise(function (resolve, reject) {
             var stringifiedOpts = _this._stringifyOptions(options, endUrl);
             var postfix = stringifiedOpts ? '?' + stringifiedOpts : '';
-            var reqUrl = _this._makeUrl(endUrl + postfix, region, staticReq);
+            var reqUrl = _this._makeUrl(endUrl + postfix, region);
             var fullUrl = _this._constructFullUrl(reqUrl, _this.key);
 
             _this.cache.get({ key: reqUrl }, function (err, data) {
