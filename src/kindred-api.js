@@ -8,7 +8,6 @@ import RC from './cache/redis-cache'
 import RateLimit from './rate-limit'
 
 import CACHE_TIMERS from './cache/constants/endpoint-cache-timers'
-import CACHE_TYPES from './constants/caches'
 import LIMITS from './constants/limits'
 import PLATFORM_IDS from './constants/platform-ids'
 import QUERY_PARAMS from './constants/query-params'
@@ -38,7 +37,7 @@ class Kindred {
     key, defaultRegion = REGIONS.NORTH_AMERICA,
     debug = false, showKey = false, showHeaders = false,
     limits, spread,
-    cacheOptions, cacheTTL
+    cache, cacheTTL
   } = {}) {
     if (arguments.length === 0 || typeof arguments[0] !== 'object' || typeof key !== 'string') {
       throw new Error(
@@ -61,25 +60,16 @@ class Kindred {
     this.showKey = showKey
     this.showHeaders = showHeaders
 
-    if (!cacheOptions) {
+    if (cache) {
+      this.cache = cache
+      this.CACHE_TIMERS = cacheTTL ? cacheTTL : CACHE_TIMERS
+    } else {
       this.cache = {
         get: (args, cb) => cb(null, null),
         set: (args, value) => { }
       }
-    } else {
-      // TODO: Rework this.
-      if (cacheOptions === CACHE_TYPES[0])
-        this.cache = new IMC()
-      else if (cacheOptions === CACHE_TYPES[1])
-        this.cache = new RC()
-      else
-        this.cache = new cacheOptions()
-
-      this.CACHE_TIMERS = cacheTTL ? cacheTTL : CACHE_TIMERS
-    }
-
-    if (!cacheOptions)
       this.CACHE_TIMERS = this._disableCache(CACHE_TIMERS)
+    }
 
     if (limits) {
       if (invalidLimits(limits)) {
@@ -2271,7 +2261,7 @@ function QuickStart(apiKey, region, debug) {
     defaultRegion: region,
     debug,
     limits: LIMITS.DEV,
-    cacheOptions: CACHE_TYPES[0]
+    cache: new IMC()
   })
 }
 
@@ -2280,14 +2270,19 @@ function print(err, data) {
   else console.log(data)
 }
 
+const InMemoryCache = IMC
+const RedisCache = RC
+
 export default {
   Kindred,
-  CACHE_TYPES,
   LIMITS,
   QUEUE_STRINGS,
   QUEUE_TYPES,
   REGIONS,
   TIME_CONSTANTS,
   QuickStart,
-  print
+  print,
+  // Caches
+  InMemoryCache,
+  RedisCache
 }

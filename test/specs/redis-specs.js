@@ -12,7 +12,7 @@ require('dotenv').config()
 const KindredAPI = require('../../dist/kindred-api')
 const k = new KindredAPI.Kindred({
   key: 'fakeKey',
-  cacheOptions: KindredAPI.CACHE_TYPES[1]
+  cache: new KindredAPI.RedisCache()
 })
 
 describe('Redis Cache', function () {
