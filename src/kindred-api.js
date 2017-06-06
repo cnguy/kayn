@@ -1098,7 +1098,7 @@ class Kindred {
 
   getChallengers({
     region,
-    queue
+    queue = 'RANKED_SOLO_5x5'
   } = {}, cb) {
     cb = isFunction(arguments[0]) ? arguments[0] : arguments[1]
 
@@ -1116,7 +1116,7 @@ class Kindred {
 
   getMasters({
     region,
-    queue
+    queue = 'RANKED_SOLO_5x5'
   } = {}, cb) {
     cb = isFunction(arguments[0]) ? arguments[0] : arguments[1]
 

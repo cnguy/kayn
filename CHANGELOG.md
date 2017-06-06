@@ -6,10 +6,16 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
-## [2.0.63]() - Removed defaults for queue / queueType.
+## [2.0.64]() - Added defaults back for getMasters / getChallengers.
+
+Last patch I hastily removed the queue defaults from getChallengers/getMasters.
+
+Adding that back in because in hindsight the only default that should be removed is the queue default from getMatchlist.
+
+## [2.0.63](https://github.com/ChauTNguyen/kindred-api/commit/90e2fb75b91da66b641cdc5313f96b25aff9c461) - Removed defaults for queue.
 
 getMatchlist queue previously defaulted to `420 (TEAM_BUILDER_RANKED_SOLO)`.
-getChallengers/getMasters queueType previously defaulted to `RANKED_SOLO_5x5`.
+getChallengers/getMasters queue previously defaulted to `RANKED_SOLO_5x5`.
 
 ## [2.0.62](https://github.com/ChauTNguyen/kindred-api/commit/61b77b91a0e89952e7d092fddf569242533c09a3) - Allow disabling of automatic retries.
 

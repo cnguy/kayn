@@ -1767,7 +1767,8 @@
       value: function getChallengers() {
         var _ref25 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref25.region,
-            queue = _ref25.queue;
+            _ref25$queue = _ref25.queue,
+            queue = _ref25$queue === undefined ? 'RANKED_SOLO_5x5' : _ref25$queue;
 
         var cb = arguments[1];
 
@@ -1786,7 +1787,8 @@
       value: function getMasters() {
         var _ref26 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref26.region,
-            queue = _ref26.queue;
+            _ref26$queue = _ref26.queue,
+            queue = _ref26$queue === undefined ? 'RANKED_SOLO_5x5' : _ref26$queue;
 
         var cb = arguments[1];
 
