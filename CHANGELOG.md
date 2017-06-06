@@ -6,7 +6,12 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
-## [2.0.62]() - Allow disabling of automatic retries.
+## [2.0.63]() - Removed defaults for queue / queueType.
+
+getMatchlist queue previously defaulted to `420 (TEAM_BUILDER_RANKED_SOLO)`.
+getChallengers/getMasters queueType previously defaulted to `RANKED_SOLO_5x5`.
+
+## [2.0.62](https://github.com/ChauTNguyen/kindred-api/commit/61b77b91a0e89952e7d092fddf569242533c09a3) - Allow disabling of automatic retries.
 
 ```javascript
 const k = new KindredAPI.Kindred({
