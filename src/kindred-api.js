@@ -1098,7 +1098,7 @@ class Kindred {
 
   getChallengers({
     region,
-    queue = 'RANKED_SOLO_5x5'
+    queue
   } = {}, cb) {
     cb = isFunction(arguments[0]) ? arguments[0] : arguments[1]
 
@@ -1116,7 +1116,7 @@ class Kindred {
 
   getMasters({
     region,
-    queue = 'RANKED_SOLO_5x5'
+    queue
   } = {}, cb) {
     cb = isFunction(arguments[0]) ? arguments[0] : arguments[1]
 
@@ -1375,7 +1375,7 @@ class Kindred {
     accountId, accId,
     id, summonerId, playerId,
     name,
-    options = { queue: QUEUE_TYPES.TEAM_BUILDER_RANKED_SOLO }
+    options
   } = {}, cb) {
     this._verifyOptions(options, QUERY_PARAMS.MATCHLIST.GET)
 
