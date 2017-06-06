@@ -241,54 +241,54 @@ describe('Core', function () {
           k.Champion.list('na', count)
         }
       })
-    })
 
-    describe('returning promises', function () {
-      it('should not retry on 404s', function (done) {
-        const k = init()
+      describe('returning promises', function () {
+        it('should not retry on 404s', function (done) {
+          const k = init()
 
-        k.Summoner
-          .by.name('abcdefghichau')
-          .then(data => data)
-          .catch(err => {
-            expect(err).is.not.null
-            if (err === 404) {
-              done()
-            }
-          })
-      })
-
-      it('should retry on 429s until all calls are successful and returned', function (done) {
-        const api = require('../../dist/kindred-api')
-
-        const debug = true
-        const spread = true
-        const LIMITS = api.LIMITS
-
-        const z = new api.Kindred({
-          key: process.env.KEY_TO_RATE_LIMIT,
-          limits: LIMITS.DEV
-        })
-
-        z.Summoner.get({ name: 'Contractz' }) // mock 429 causer
-
-        const k = new api.Kindred({
-          key: process.env.KEY_TO_RATE_LIMIT,
-          debug,
-          spread,
-          limits: LIMITS.DEV
-        })
-
-        let num = 10
-
-        for (var i = 0; i < 10; ++i) {
-          k.Champion.list('na')
-            .then(data => {
-              --num
-              if (num === 0) done()
+          k.Summoner
+            .by.name('abcdefghichau')
+            .then(data => data)
+            .catch(err => {
+              expect(err).is.not.null
+              if (err === 404) {
+                done()
+              }
             })
-            .catch(err => console.error(err))
-        }
+        })
+
+        it('should retry on 429s until all calls are successful and returned', function (done) {
+          const api = require('../../dist/kindred-api')
+
+          const debug = true
+          const spread = true
+          const LIMITS = api.LIMITS
+
+          const z = new api.Kindred({
+            key: process.env.KEY_TO_RATE_LIMIT,
+            limits: LIMITS.DEV
+          })
+
+          z.Summoner.get({ name: 'Contractz' }) // mock 429 causer
+
+          const k = new api.Kindred({
+            key: process.env.KEY_TO_RATE_LIMIT,
+            debug,
+            spread,
+            limits: LIMITS.DEV
+          })
+
+          let num = 10
+
+          for (var i = 0; i < 20; ++i) {
+            k.Champion.list('na')
+              .then(data => {
+                --num
+                if (num === 0) done()
+              })
+              .catch(err => console.error(err))
+          }
+        })
       })
     })
   })

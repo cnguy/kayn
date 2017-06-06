@@ -37,6 +37,9 @@ class Kindred {
     key, defaultRegion = REGIONS.NORTH_AMERICA,
     debug = false, showKey = false, showHeaders = false,
     limits, spread,
+    retryOptions = {
+      auto: true
+    },
     cache, cacheTTL
   } = {}) {
     if (arguments.length === 0 || typeof arguments[0] !== 'object' || typeof key !== 'string') {
@@ -81,6 +84,7 @@ class Kindred {
 
       this.limits = {}
       this.spread = spread
+      this.retryOptions = retryOptions
 
       for (const region of Object.keys(REGIONS)) {
         this.limits[REGIONS[region]] = [
@@ -597,7 +601,10 @@ class Kindred {
 
                         if (isFunction(callback)) {
                           if (shouldRetry(statusCode)) {
-                            if (self.debug) console.log('Resending callback request.\n')
+                            if (!self.retryOptions.auto)
+                              return callback(statusCode)
+                            if (self.debug)
+                              console.log('Resending callback request.\n')
                             return setTimeout(() => sendRequest.bind(self)(callback), retry)
                           } else if (statusCode >= ERROR_THRESHOLD) {
                             return callback(statusCode)
@@ -607,7 +614,10 @@ class Kindred {
                           }
                         } else {
                           if (shouldRetry(statusCode)) {
-                            if (self.debug) console.log('Resending promise request.\n')
+                            if (!self.retryOptions.auto)
+                              return reject(statusCode)
+                            if (self.debug)
+                              console.log('Resending promise request.\n')  
                             return setTimeout(() => resolve(tryRequest()), retry)
                           } else if (statusCode >= ERROR_THRESHOLD) {
                             return reject(statusCode)
