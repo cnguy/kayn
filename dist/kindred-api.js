@@ -542,6 +542,10 @@
           showHeaders = _ref$showHeaders === undefined ? false : _ref$showHeaders,
           limits$$1 = _ref.limits,
           spread = _ref.spread,
+          _ref$retryOptions = _ref.retryOptions,
+          retryOptions = _ref$retryOptions === undefined ? {
+        auto: true
+      } : _ref$retryOptions,
           cache = _ref.cache,
           cacheTTL = _ref.cacheTTL;
 
@@ -586,6 +590,7 @@
 
         this.limits = {};
         this.spread = spread;
+        this.retryOptions = retryOptions;
 
         var _iteratorNormalCompletion2 = true;
         var _didIteratorError2 = false;
@@ -1142,6 +1147,7 @@
 
                           if (isFunction(callback)) {
                             if (shouldRetry(statusCode)) {
+                              if (!self.retryOptions.auto) return callback(statusCode);
                               if (self.debug) console.log('Resending callback request.\n');
                               return setTimeout(function () {
                                 return sendRequest.bind(self)(callback);
@@ -1154,6 +1160,7 @@
                             }
                           } else {
                             if (shouldRetry(statusCode)) {
+                              if (!self.retryOptions.auto) return reject(statusCode);
                               if (self.debug) console.log('Resending promise request.\n');
                               return setTimeout(function () {
                                 return resolve(tryRequest());
