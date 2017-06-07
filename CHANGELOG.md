@@ -6,7 +6,27 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
-## [2.0.64]() - Added defaults back for getMasters / getChallengers.
+## [2.0.65]() - Added configuration for number of retries.
+
+```javascript
+const k = new KindredAPI.Kindred({
+  key: 'fakeKey',
+  defaultRegion: KindredAPI.REGIONS.NORTH_AMERICA,
+  limits: KindredAPI.LIMITS.DEV,
+  debug: true,
+  // showKey: true,
+  //showDebug: true,
+  retryOptions: {
+    auto: false, // true by default
+    numberOfRetriesBeforeBreak: 3 // infinite by default
+  },
+  showHeaders: true,
+  cache: new KindredAPI.InMemoryCache()
+  // cacheTTL default if not passed in and cache is passed in
+})
+```
+
+## [2.0.64](https://github.com/ChauTNguyen/kindred-api/commit/fdda733bbb3c9c43e84006058def99e52af1d4f2) - Added defaults back for getMasters / getChallengers.
 
 Last patch I hastily removed the queue defaults from getChallengers/getMasters.
 
@@ -34,6 +54,7 @@ const k = new KindredAPI.Kindred({
   cache: new KindredAPI.InMemoryCache()
   // cacheTTL default if not passed in and cache is passed in
 })
+```
 
 ## [2.0.61](https://github.com/ChauTNguyen/kindred-api/commit/00ba2892b8f737ba63fc8e4737dca33ccaf5fb49) - Cleanup cache initialization
 The old way is ugly and not how libraries should do it.
