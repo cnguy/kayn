@@ -593,6 +593,8 @@
         this.spread = spread;
         this.retryOptions = retryOptions;
 
+        this.numberOfRetriesBeforeBreak = this.retryOptions.numberOfRetriesBeforeBreak;
+
         var _iteratorNormalCompletion2 = true;
         var _didIteratorError2 = false;
         var _iteratorError2 = undefined;
@@ -1215,7 +1217,7 @@
           });
         };
 
-        return tryRequest(this.retryOptions.numberOfRetriesBeforeBreak);
+        return tryRequest(this.numberOfRetriesBeforeBreak);
       }
     }, {
       key: '_championMasteryRequest',

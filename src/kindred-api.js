@@ -87,6 +87,10 @@ class Kindred {
       this.spread = spread
       this.retryOptions = retryOptions
 
+      // hack because retryOptions becomes undefined when returning
+      // for some reason
+      this.numberOfRetriesBeforeBreak = this.retryOptions.numberOfRetriesBeforeBreak
+
       for (const region of Object.keys(REGIONS)) {
         this.limits[REGIONS[region]] = [
           new RateLimit(limits[0][0], limits[0][1]),
@@ -676,7 +680,7 @@ class Kindred {
       })
     }
 
-    return tryRequest(this.retryOptions.numberOfRetriesBeforeBreak)
+    return tryRequest(this.numberOfRetriesBeforeBreak)
   }
 
   _championMasteryRequest({ endUrl, region, options }, cb) {
