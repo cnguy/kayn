@@ -544,7 +544,8 @@
           spread = _ref.spread,
           _ref$retryOptions = _ref.retryOptions,
           retryOptions = _ref$retryOptions === undefined ? {
-        auto: true
+        auto: true,
+        numberOfRetriesBeforeBreak: Number.MAX_VALUE
       } : _ref$retryOptions,
           cache = _ref.cache,
           cacheTTL = _ref.cacheTTL;
@@ -1102,7 +1103,7 @@
             _ref2$cacheParams = _ref2.cacheParams,
             cacheParams = _ref2$cacheParams === undefined ? {} : _ref2$cacheParams;
 
-        var tryRequest = function tryRequest() {
+        var tryRequest = function tryRequest(iterations) {
           return new Promise(function (resolve, reject) {
             var stringifiedOpts = _this._stringifyOptions(options, endUrl);
             var postfix = stringifiedOpts ? '?' + stringifiedOpts : '';
@@ -1121,7 +1122,7 @@
                 if (cb) return cb(err, json);else return resolve(json);
               } else {
                 if (_this.limits) {
-                  var self = _this;(function sendRequest(callback) {
+                  var self = _this;(function sendRequest(callback, iterationsUntilError) {
                     if (self.canMakeRequest(region)) {
                       if (!staticReq) {
                         self.limits[region][0].addRequest();
@@ -1147,10 +1148,11 @@
 
                           if (isFunction(callback)) {
                             if (shouldRetry(statusCode)) {
+                              if (--iterationsUntilError === 0) return callback(statusCode);
                               if (!self.retryOptions.auto) return callback(statusCode);
                               if (self.debug) console.log('Resending callback request.\n');
                               return setTimeout(function () {
-                                return sendRequest.bind(self)(callback);
+                                return sendRequest.bind(self)(callback, iterationsUntilError);
                               }, retry);
                             } else if (statusCode >= ERROR_THRESHOLD) {
                               return callback(statusCode);
@@ -1160,10 +1162,11 @@
                             }
                           } else {
                             if (shouldRetry(statusCode)) {
+                              if (--iterationsUntilError === 0) return reject(statusCode);
                               if (!self.retryOptions.auto) return reject(statusCode);
                               if (self.debug) console.log('Resending promise request.\n');
                               return setTimeout(function () {
-                                return resolve(tryRequest());
+                                return resolve(tryRequest(iterationsUntilError));
                               }, retry);
                             } else if (statusCode >= ERROR_THRESHOLD) {
                               return reject(statusCode);
@@ -1182,7 +1185,7 @@
                         return sendRequest.bind(self)(callback);
                       }, buffer);
                     }
-                  })(cb);
+                  })(cb, iterations);
                 } else {
                   request({ url: fullUrl }, function (error, response, body) {
                     if (response) {
@@ -1212,7 +1215,7 @@
           });
         };
 
-        return tryRequest();
+        return tryRequest(this.retryOptions.numberOfRetriesBeforeBreak);
       }
     }, {
       key: '_championMasteryRequest',

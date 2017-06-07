@@ -38,7 +38,8 @@ class Kindred {
     debug = false, showKey = false, showHeaders = false,
     limits, spread,
     retryOptions = {
-      auto: true
+      auto: true,
+      numberOfRetriesBeforeBreak: Number.MAX_VALUE
     },
     cache, cacheTTL
   } = {}) {
@@ -553,7 +554,7 @@ class Kindred {
     options = {},
     cacheParams = {}
   }, cb) {
-    const tryRequest = () => {
+    const tryRequest = (iterations) => {
       return new Promise((resolve, reject) => {
         const stringifiedOpts = this._stringifyOptions(options, endUrl)
         const postfix = stringifiedOpts ? '?' + stringifiedOpts : ''
@@ -575,7 +576,7 @@ class Kindred {
             if (this.limits) {
               var self = this
 
-                ; (function sendRequest(callback) {
+                ; (function sendRequest(callback, iterationsUntilError) {
                   if (self.canMakeRequest(region)) {
                     if (!staticReq) {
                       self.limits[region][0].addRequest()
@@ -601,11 +602,13 @@ class Kindred {
 
                         if (isFunction(callback)) {
                           if (shouldRetry(statusCode)) {
+                            if (--iterationsUntilError === 0)
+                              return callback(statusCode)
                             if (!self.retryOptions.auto)
                               return callback(statusCode)
                             if (self.debug)
                               console.log('Resending callback request.\n')
-                            return setTimeout(() => sendRequest.bind(self)(callback), retry)
+                            return setTimeout(() => sendRequest.bind(self)(callback, iterationsUntilError), retry)
                           } else if (statusCode >= ERROR_THRESHOLD) {
                             return callback(statusCode)
                           } else {
@@ -614,11 +617,13 @@ class Kindred {
                           }
                         } else {
                           if (shouldRetry(statusCode)) {
+                            if (--iterationsUntilError === 0)
+                              return reject(statusCode)
                             if (!self.retryOptions.auto)
                               return reject(statusCode)
                             if (self.debug)
-                              console.log('Resending promise request.\n')  
-                            return setTimeout(() => resolve(tryRequest()), retry)
+                              console.log('Resending promise request.\n')
+                            return setTimeout(() => resolve(tryRequest(iterationsUntilError)), retry)
                           } else if (statusCode >= ERROR_THRESHOLD) {
                             return reject(statusCode)
                           } else {
@@ -636,7 +641,7 @@ class Kindred {
                     const buffer = SECOND / 4.5
                     return setTimeout(() => sendRequest.bind(self)(callback), buffer)
                   }
-                })(cb)
+                })(cb, iterations)
             } else {
               request({ url: fullUrl }, (error, response, body) => {
                 if (response) {
@@ -671,7 +676,7 @@ class Kindred {
       })
     }
 
-    return tryRequest()
+    return tryRequest(this.retryOptions.numberOfRetriesBeforeBreak)
   }
 
   _championMasteryRequest({ endUrl, region, options }, cb) {
