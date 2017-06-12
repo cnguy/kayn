@@ -306,6 +306,10 @@ k.Static.Champion
 
 # Known Issues
 
+## No header validation.
+
+## Allow users to ignore timeout-related issues.
+
 ## [~~Burst rate limiter would not work well for production.~~ (FIXED 2.0.39)](https://github.com/ChauTNguyen/kindred-api/commit/8089717995d42ae2b222b18c57f79c0fb8e11a27)
 
 Good explanation by Matviy##4429 in #RiotAPIDevCommunity
