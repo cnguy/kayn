@@ -192,15 +192,19 @@ for working, copy-pastable examples.
 * In-memory (JS) cache with default settings on for quick scripts
 * Burst Rate Limiter
 
-[For Custom Initialization (caching, spread rate limiter), refer to wiki.](https://github.com/ChauTNguyen/kindred-api/wiki/Initialization)
+This initialization's purpose should be fairly obvious; This is just for quickly starting on a project. You can always easily replace the QuickStart code with the code required for for initializing through the regular way (see below), and Kindred will work just fine.
+
+Start out with this if you want to make test calls right away to play around with the library and decide if you like it.
+
+[For regular and more customizable Initialization (caching, spread rate limiter), refer to wiki.](https://github.com/ChauTNguyen/kindred-api/wiki/Initialization)
 
 ```javascript
-var KindredAPI = require('kindred-api')
-var REGIONS = KindredAPI.REGIONS
-var QUEUES = KindredAPI.QUEUE_TYPES // numbers for match endpoints
-var debug = true // shows status code + url on request. enables showKey and showHeaders.
-var k = KindredAPI.QuickStart('YOUR_KEY', REGIONS.NORTH_AMERICA, debug)
-var Q_STRINGS = KindredAPI.QUEUE_STRINGS // strings for editor convenience
+const KindredAPI = require('kindred-api')
+const REGIONS = KindredAPI.REGIONS
+const QUEUES = KindredAPI.QUEUE_TYPES // numbers for match endpoints
+const debug = true // shows status code + url on request. enables showKey and showHeaders.
+const k = KindredAPI.QuickStart('YOUR_KEY', REGIONS.NORTH_AMERICA, debug)
+const Q_STRINGS = KindredAPI.QUEUE_STRINGS // strings for editor convenience
 
 // Make sure to read `How the methods work` to understand the difference between
 // get/noun functions VS by.id/list.
@@ -223,9 +227,9 @@ const runesConfig = {
 
 k.Static.runes(runesConfig, KindredAPI.print)
 
-var name = 'caaaaaaaaaria'
-var region = REGIONS.NORTH_AMERICA
-var options = {
+const name = 'caaaaaaaaaria'
+const region = REGIONS.NORTH_AMERICA
+const options = {
   // no need for joins or messy strings
   queue: [QUEUES.TEAM_BUILDER_RANKED_SOLO, QUEUES.RANKED_FLEX_SR],
   // array values will always be joined into a string
@@ -254,8 +258,8 @@ k.Matchlist
  .then(data => console.log(data))
  .catch(err => console.error(err))
 
-var accId = 47776491
-var id = 32932398 // summonerId
+const accId = 47776491
+const id = 32932398 // summonerId
 k.Matchlist.get({ name }, KindredAPI.print)
 k.Matchlist.get({ accId }, KindredAPI.print)
 k.Matchlist.get({ id }, KindredAPI.print)
