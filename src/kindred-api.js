@@ -39,8 +39,9 @@ class Kindred {
     limits, spread,
     retryOptions = {
       auto: true,
-      numberOfRetriesBeforeBreak: Number.MAX_VALUE
+      numberOfRetriesBeforeBreak: Number.MAX_VALUE,
     },
+    timeout,
     cache, cacheTTL
   } = {}) {
     if (arguments.length === 0 || typeof arguments[0] !== 'object' || typeof key !== 'string') {
@@ -86,6 +87,7 @@ class Kindred {
       this.limits = {}
       this.spread = spread
       this.retryOptions = retryOptions
+      this.timeout = timeout
 
       // hack because retryOptions becomes undefined when returning
       // for some reason
@@ -589,7 +591,7 @@ class Kindred {
                         self.limits[region][2].addRequest()
                     }
 
-                    request({ url: fullUrl }, (error, response, body) => {
+                    request({ url: fullUrl, timeout: self.timeout }, (error, response, body) => {
                       if (response && body) {
                         const { statusCode } = response
                         const responseMessage = prettifyStatusMessage(statusCode)
