@@ -6,7 +6,28 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
-## [2.0.65]() - Added configuration for number of retries.
+## [2.0.66] - Allow users to set timeout.
+
+```javascript
+const k = new KindredAPI.Kindred({
+  key: 'fakeKey',
+  defaultRegion: KindredAPI.REGIONS.NORTH_AMERICA,
+  limits: KindredAPI.LIMITS.DEV,
+  debug: true,
+  // showKey: true,
+  //showDebug: true,
+  retryOptions: {
+    auto: false, // true by default
+    numberOfRetriesBeforeBreak: 3 // infinite by default
+  },
+  timeout: 1000,
+  showHeaders: true,
+  cache: new KindredAPI.InMemoryCache()
+  // cacheTTL default if not passed in and cache is passed in
+})
+```
+
+## [2.0.65](https://github.com/ChauTNguyen/kindred-api/commit/4f0203cc5b37c507158f5884a5790662cf8b7734) - Added configuration for number of retries.
 
 ```javascript
 const k = new KindredAPI.Kindred({

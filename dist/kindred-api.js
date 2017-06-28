@@ -547,6 +547,7 @@
         auto: true,
         numberOfRetriesBeforeBreak: Number.MAX_VALUE
       } : _ref$retryOptions,
+          timeout = _ref.timeout,
           cache = _ref.cache,
           cacheTTL = _ref.cacheTTL;
 
@@ -592,6 +593,7 @@
         this.limits = {};
         this.spread = spread;
         this.retryOptions = retryOptions;
+        this.timeout = timeout;
 
         this.numberOfRetriesBeforeBreak = this.retryOptions.numberOfRetriesBeforeBreak;
 
@@ -1132,7 +1134,7 @@
                         if (self.spread) self.limits[region][2].addRequest();
                       }
 
-                      request({ url: fullUrl }, function (error, response, body) {
+                      request({ url: fullUrl, timeout: self.timeout }, function (error, response, body) {
                         if (response && body) {
                           var statusCode = response.statusCode;
 
