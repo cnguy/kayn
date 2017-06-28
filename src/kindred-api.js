@@ -39,7 +39,7 @@ class Kindred {
     limits, spread,
     retryOptions = {
       auto: true,
-      numberOfRetriesBeforeBreak: Number.MAX_VALUE,
+      numberOfRetriesBeforeBreak: Number.MAX_VALUE
     },
     timeout,
     cache, cacheTTL
