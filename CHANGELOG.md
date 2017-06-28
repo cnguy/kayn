@@ -6,7 +6,7 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
-## [2.0.66] - Allow users to set timeout.
+## [2.0.66](https://github.com/ChauTNguyen/kindred-api/commit/02fc262fd0f89e1253b501cc9199042af9c7f2f0) - Allow users to set timeout.
 
 ```javascript
 const k = new KindredAPI.Kindred({
