@@ -6,6 +6,15 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
+## [2.0.67]() - Changed static data options to "tags"
+
+All static data tag options (ex: runeListData, runeData) will all be renamed to `tags`. The old labels will become deprecated so I'm releasing this early.
+
+[source](https://discussion.developer.riotgames.com/articles/1736/updates-to-lol-static-data-v3.html)
+```
+For each endpoint that provides tags on which the response can be filtered, we have renamed that parameter to 'tags', to be consistent and more clear. The old parameter names (e.g., champData, itemListData, etc.) will be supported for the V3 endpoints until the end of the deprecation period, to give those of you that have already swapped over time to update to the new 'tags' parameter name.
+```
+
 ## [2.0.66](https://github.com/ChauTNguyen/kindred-api/commit/02fc262fd0f89e1253b501cc9199042af9c7f2f0) - Allow users to set timeout.
 
 ```javascript
