@@ -6,7 +6,7 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
-## [2.0.67]() - Changed static data options to "tags"
+## [2.0.67]() - Changed static data options to "tags".
 
 All static data tag options (ex: runeListData, runeData) will all be renamed to `tags`. The old labels will become deprecated so I'm releasing this early.
 
@@ -86,7 +86,7 @@ const k = new KindredAPI.Kindred({
 })
 ```
 
-## [2.0.61](https://github.com/ChauTNguyen/kindred-api/commit/00ba2892b8f737ba63fc8e4737dca33ccaf5fb49) - Cleanup cache initialization
+## [2.0.61](https://github.com/ChauTNguyen/kindred-api/commit/00ba2892b8f737ba63fc8e4737dca33ccaf5fb49) - Clean up cache initialization.
 The old way is ugly and not how libraries should do it.
 
 Now, the library now exports the InMemoryCache and RedisCache classes so the user can now do something like this:
@@ -105,7 +105,7 @@ const k = new KindredAPI.Kindred({
 })
 ```
 
-## [2.0.60](https://github.com/ChauTNguyen/kindred-api/commit/c547132784829de0af506ea7d5dd3fc2d6863ab0) Add showHeaders, add `api_key=` to URL for developer convenience
+## [2.0.60](https://github.com/ChauTNguyen/kindred-api/commit/c547132784829de0af506ea7d5dd3fc2d6863ab0) Add showHeaders, add `api_key=` to URL for developer convenience.
 
 ### showHeaders
 *showHeaders on (old behavior) & showKey off & debug on*
