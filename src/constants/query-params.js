@@ -35,19 +35,19 @@ const END_TIME = 'endTime' // long
   // ALL CHAMPIONS
 // VERSION
 // LOCALE
-const CHAMP_LIST_DATA = 'champListData' // string
+const CHAMP_LIST_DATA = 'tags' // string
   // SINGLE CHAMPION
 // VERSION
 // LOCALE
-const CHAMP_DATA = 'champData' // string
+const CHAMP_DATA = 'tags' // string
   // ALL ITEMS
 // VERSION
 // LOCALE
-const ITEM_LIST_DATA = 'itemListData' // string
+const ITEM_LIST_DATA = 'tags' // string
   // SINGLE ITEM
 // VERSION
 // LOCALE
-const ITEM_DATA = 'itemData' // string
+const ITEM_DATA = 'tags' // string
   // LANGUAGE STRINGS
 // VERSION
 // LOCALE
@@ -58,11 +58,11 @@ const ITEM_DATA = 'itemData' // string
   // MASTERIES
 // VERSION
 // LOCALE
-const MASTERY_LIST_DATA = 'masteryListData'
+const MASTERY_LIST_DATA = 'tags' // string
   // SINGLE MASTERY
 // VERSION
 // LOCALE
-const MASTERY_DATA = 'masteryData'
+const MASTERY_DATA = 'tags' // string
   // PROFILE ICONS
 // VERSION
 // LOCALE
@@ -70,20 +70,20 @@ const MASTERY_DATA = 'masteryData'
   // RUNES
 // VERSION
 // LOCALE
-const RUNE_LIST_DATA = 'runeListData'
+const RUNE_LIST_DATA = 'tags' // string
   // SINGLE RUNE
 // VERSION
 // LOCALE
-const RUNE_DATA = 'runeData'
+const RUNE_DATA = 'tags' // string
   // SUMMONER SPELLS ILST
 // VERSION
 // LOCALE
 // dataById
-const SPELL_LIST_DATA = 'spellListData'
+const SPELL_LIST_DATA = 'tags' // string
   // SUMMONER SPELL
 // VERSION
 // LOCALE
-const SPELL_DATA = 'spellData'
+const SPELL_DATA = 'tags' // string
   // VERSIONS NONE
 
 // STATS-V1.3

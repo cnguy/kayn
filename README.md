@@ -230,7 +230,7 @@ k.Static.runes(runesConfig, KindredAPI.print)
 const name = 'caaaaaaaaaria'
 const region = REGIONS.NORTH_AMERICA
 const options = {
-  // no need for joins or messy strings
+  // no need for joins or hardcoded numbers
   queue: [QUEUES.TEAM_BUILDER_RANKED_SOLO, QUEUES.RANKED_FLEX_SR],
   // array values will always be joined into a string
   champion: 79

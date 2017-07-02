@@ -214,22 +214,16 @@
   var CHAMPION = 'champion';
   var BEGIN_INDEX = 'beginIndex';
   var END_TIME = 'endTime';
-  var CHAMP_LIST_DATA = 'champListData';
-  var CHAMP_DATA = 'champData';
-  var ITEM_LIST_DATA = 'itemListData';
-  var ITEM_DATA = 'itemData';
-  var MASTERY_LIST_DATA = 'masteryListData';
-
-  var MASTERY_DATA = 'masteryData';
-
-  var RUNE_LIST_DATA = 'runeListData';
-
-  var RUNE_DATA = 'runeData';
-
-  var SPELL_LIST_DATA = 'spellListData';
-
-  var SPELL_DATA = 'spellData';
-
+  var CHAMP_LIST_DATA = 'tags';
+  var CHAMP_DATA = 'tags';
+  var ITEM_LIST_DATA = 'tags';
+  var ITEM_DATA = 'tags';
+  var MASTERY_LIST_DATA = 'tags';
+  var MASTERY_DATA = 'tags';
+  var RUNE_LIST_DATA = 'tags';
+  var RUNE_DATA = 'tags';
+  var SPELL_LIST_DATA = 'tags';
+  var SPELL_DATA = 'tags';
   var STATS_SEASON = 'season';
   var VERSION_AND_LOCALE = [VERSION, LOCALE];
 

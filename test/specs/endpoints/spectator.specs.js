@@ -27,7 +27,7 @@ describe('Spectator', function () {
             .FeaturedGames
             .list()
             .then(data => {
-              const name = data['gameList'][0]['participants'][0]['summonerName']
+              const name = data.gameList[0].participants[0].summonerName
               return k.Summoner.by.name(name)
             })
             .then(data => {
@@ -48,7 +48,7 @@ describe('Spectator', function () {
             .FeaturedGames
             .list()
             .then(data => {
-              const name = data['gameList'][0]['participants'][0]['summonerName']
+              const name = data.gameList[0].participants[0].summonerName
               return k.Summoner.by.name(name)
             })
             .then(data => {
@@ -69,7 +69,7 @@ describe('Spectator', function () {
             .FeaturedGames
             .list()
             .then(data => {
-              const name = data['gameList'][0]['participants'][0]['summonerName']
+              const name = data.gameList[0].participants[0].summonerName
               return k.Summoner.by.name(name)
             })
             .then(data => {

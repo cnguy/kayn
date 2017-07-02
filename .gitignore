@@ -19,5 +19,8 @@ coverage
 .env
 
 test.js
+test-compiled.js
 test.md
 save.js
+
+.babelrc
