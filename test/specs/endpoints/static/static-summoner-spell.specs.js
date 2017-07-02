@@ -14,7 +14,7 @@ var id = 3
 const config = {
   id,
   options: {
-    spellData: 'cooldown'
+    tags: 'cooldown'
   },
   region: 'kr'
 }

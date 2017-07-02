@@ -14,7 +14,7 @@ var id = 6323
 const config = {
   id,
   options: {
-    masteryData: 'all'
+    tags: 'all'
   },
   region: 'kr'
 }

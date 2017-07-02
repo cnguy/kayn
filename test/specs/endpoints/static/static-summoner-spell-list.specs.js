@@ -11,7 +11,7 @@ var init = require('../../../../utils/init')
 
 const config = {
   options: {
-    spellListData: 'cost',
+    tags: 'cost',
     dataById: true
   },
   region: 'kr'

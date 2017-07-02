@@ -14,7 +14,7 @@ var id = 10002
 const config = {
   id,
   options: {
-    runeData: 'all'
+    tags: 'all'
   },
   region: 'kr'
 }

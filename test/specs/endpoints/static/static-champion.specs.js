@@ -14,7 +14,7 @@ var id = 497
 const config = {
   id,
   options: {
-    champData: 'all'
+    tags: 'all'
   },
   region: 'kr'
 }

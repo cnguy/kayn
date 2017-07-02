@@ -11,7 +11,7 @@ var init = require('../../../../utils/init')
 
 const config = {
   options: {
-    itemListData: 'all'
+    tags: 'all'
   },
   region: 'na'
 }

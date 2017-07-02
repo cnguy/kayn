@@ -14,7 +14,7 @@ var id = 3903
 const config = {
   id,
   options: {
-    itemData: 'all'
+    tags: 'all'
   },
   region: 'ru'
 }

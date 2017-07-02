@@ -11,7 +11,7 @@ var init = require('../../../../utils/init')
 
 const config = {
   options: {
-    masteryListData: 'all'
+    tags: 'all'
   },
   region: 'kr'
 }
