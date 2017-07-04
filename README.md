@@ -312,7 +312,9 @@ k.Static.Champion
 
 ## No header validation.
 
-## Allow users to ignore timeout-related issues.
+It'd be cool if we could do something like this [library](https://github.com/NitashEU/zed.gg). Adjusting the headers on the first request would be really useful for scripts and all that to prevent rate-limiting (especially when they have high production limits) on app/script restart.
+
+## [~~Allow users to ignore timeout-related issues.~~ (ADDED 2.0.67)](https://github.com/ChauTNguyen/kindred-api/commit/b8fec78fe0283e515a4845edcb193f59ecbe6e07)
 
 ## [~~Burst rate limiter would not work well for production.~~ (FIXED 2.0.39)](https://github.com/ChauTNguyen/kindred-api/commit/8089717995d42ae2b222b18c57f79c0fb8e11a27)
 
