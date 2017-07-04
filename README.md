@@ -25,7 +25,7 @@ Node.js League of Legends v3 API wrapper with built-in rate-limiting (enforced p
 * **Burst/Spread** rate limiter that is **enforced per region** and **follows retry headers**.
     * **Retries** on 429 and >= 500 **until all calls are successful**. (Doesn't retry on 404)
 * Built-in **parameter checks** so you can hopefully refer to documentation less! :)
-    * Checks type of parameters (id, name, accout id).
+    * Checks type of parameters (id, name, account id).
     * Checks if you're not passing valid query parameters!
 * Built-in **caching** (in-memory and Redis).
     * **Customized expiration timers**. You can set a timer for each endpoint type. Refer to [Caching](https://github.com/ChauTNguyen/kindred-api/wiki/Caching) for more info.
@@ -115,7 +115,7 @@ k.Static.champions(koreaChampListConfig)
 const rakanConfig = {
   id: 497,
   options: {
-    champData: 'all'
+    tags: 'all'
   },
   region: REGIONS.BRAZIL
 }
@@ -175,10 +175,10 @@ k.Matchlist
  .then(data => console.log(data))
  .catch(error => console.error(error))
 
-k.Static.Champion.list({ champListData: 'all' }, KindredAPI.print)
+k.Static.Champion.list({ tags: 'all' }, KindredAPI.print)
 k.Static.Champion.list(KindredAPI.print)
 k.Static.Champion.list(REGIONS.KOREA, KindredAPI.print)
-k.Static.Champion.list({ champListData: 'all' }, REGIONS.KOREA, KindredAPI.print)
+k.Static.Champion.list({ tags: 'all' }, REGIONS.KOREA, KindredAPI.print)
 
 // Notice how parameters are somewhat flexible! This is the case for all functions.
 ```
@@ -288,7 +288,7 @@ k.Static.champions(koreaChampListConfig)
 const rakanConfig = {
   id: 497,
   options: {
-    champData: 'all'
+    tags: 'all'
   },
   region: REGIONS.BRAZIL
 }
