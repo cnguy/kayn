@@ -66,7 +66,7 @@ const config = {
     id: 6323,
     region: REGIONS.NORTH_AMERICA,
     options: {
-        masteryData: ['image', 'sanitizedDescription']
+        tags: ['image', 'sanitizedDescription']
     }
 }
 
@@ -85,7 +85,7 @@ k.Matchlist.get(matchlistConfig, KindredAPI.print)
 const runesConfig = {
   options: {
     locale: 'es_ES',
-    runeListData: 'stats'
+    tags: 'stats'
   },
   region: REGIONS.NORTH_AMERICA
 }
@@ -94,7 +94,7 @@ k.Static.runes(runesConfig, KindredAPI.print)
 
 const championsConfig = {
   options: {
-    champListData: 'all',
+    tags: 'all',
     version: '7.9.1'
   }
 }
@@ -103,7 +103,7 @@ k.Static.champions(championsConfig, KindredAPI.print)
 
 const koreaChampListConfig = {
   options: {
-    champListData: 'all'
+    tags: 'all'
   },
   region: REGIONS.KOREA
 }
@@ -220,7 +220,7 @@ k.Summoner.by.name('Contractz', REGIONS.NORTH_AMERICA, KindredAPI.print)
 const runesConfig = {
   options: {
     locale: 'es_ES',
-    runeListData: 'stats'
+    tags: 'stats'
   },
   region: REGIONS.NORTH_AMERICA,
 }
@@ -276,7 +276,7 @@ k.Summoner.matchHistory({ name }, KindredAPI.print) // recent matches (20)
 
 const koreaChampListConfig = {
   options: {
-    champListData: 'all'
+    tags: 'all'
   },
   region: REGIONS.KOREA
 }
