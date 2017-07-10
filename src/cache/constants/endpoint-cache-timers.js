@@ -1,6 +1,25 @@
+// @flow
+
 import cacheTimers from './cache-timers'
 
-const endpointCacheTimers = {
+const endpointCacheTimers: {
+  CHAMPION: number,
+  CHAMPION_MASTERY: number,
+  CURRENT_GAME: number,
+  FEATURED_GAMES: number,
+  GAME: number,
+  LEAGUE: number,
+  STATIC: number,
+  STATUS: number,
+  MATCH: number,
+  MATCHLIST: number,
+  RUNES_MASTERIES: number,
+  SPECTATOR: number,
+  STATS: number,
+  SUMMONER: number,
+  TOURNAMENT_STUB: number,
+  TOURNAMENT: number,
+} = {
   // defaults
   CHAMPION: cacheTimers.MONTH,
   CHAMPION_MASTERY: cacheTimers.SIX_HOURS,

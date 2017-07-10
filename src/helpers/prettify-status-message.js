@@ -1,10 +1,12 @@
+// @flow
+// $FlowFixMe
 const chalk = require('chalk')
 
 import getResponseMessage from './get-response-message'
 
 const statusCodeBisector = [200, 400, 500]
 
-const prettifyStatusMessage = statusCode => {
+const prettifyStatusMessage = (statusCode: number): string => {
   const capsMessage = getResponseMessage(statusCode).toUpperCase()
   const msg = `${statusCode} ${capsMessage}`
 

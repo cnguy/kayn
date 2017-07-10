@@ -2,7 +2,8 @@ var utils = require('./_utils'),
   rollup = require( 'rollup' ),
   mkdirp = require('mkdirp'),
   fs = require('fs'),
-  babel = require('babel-core')
+  babel = require('babel-core'),
+  flow = require('rollup-plugin-flow')
 
 module.exports = function(options) {
 
@@ -19,7 +20,8 @@ module.exports = function(options) {
       // The bundle's starting point. This file will be
       // included, along with the minimum necessary code
       // from its dependencies
-      entry: './src/index.js'
+      entry: './src/index.js',
+      plugins: [flow()]
     }).then( function ( bundle ) {
 
       // convert to valid es5 code with babel

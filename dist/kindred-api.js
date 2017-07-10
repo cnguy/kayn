@@ -19,6 +19,23 @@
     return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
   };
 
+  var _responseStrings;
+
+  function _defineProperty(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+
+    return obj;
+  }
+
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
@@ -43,14 +60,14 @@
     };
   }();
 
-  var InMemoryCache$1 = function () {
-    function InMemoryCache$1() {
-      _classCallCheck(this, InMemoryCache$1);
+  var InMemoryCache = function () {
+    function InMemoryCache() {
+      _classCallCheck(this, InMemoryCache);
 
       this.cache = {};
     }
 
-    _createClass(InMemoryCache$1, [{
+    _createClass(InMemoryCache, [{
       key: 'get',
       value: function get(args, cb) {
         if (this.cache[args.key]) {
@@ -78,12 +95,12 @@
       }
     }]);
 
-    return InMemoryCache$1;
+    return InMemoryCache;
   }();
 
-  var RedisCache$1 = function () {
-    function RedisCache$1(opts) {
-      _classCallCheck(this, RedisCache$1);
+  var RedisCache = function () {
+    function RedisCache(opts) {
+      _classCallCheck(this, RedisCache);
 
       var options = Object.assign({}, opts || {}, {
         host: '127.0.0.1',
@@ -99,7 +116,7 @@
       this.prefix = options.keyPrefix;
     }
 
-    _createClass(RedisCache$1, [{
+    _createClass(RedisCache, [{
       key: 'get',
       value: function get(args, cb) {
         this.client.get(this.prefix + args.key, function (err, reply) {
@@ -114,7 +131,7 @@
       }
     }]);
 
-    return RedisCache$1;
+    return RedisCache;
   }();
 
   var RateLimit = function () {
@@ -184,9 +201,9 @@
     TOURNAMENT: cacheTimers.HOUR };
 
   var limits = {
-    'DEV': [[10, 10], [500, 600]],
+    DEV: [[10, 10], [500, 600]],
 
-    'PROD': [[500, 10], [30000, 600]]
+    PROD: [[500, 10], [30000, 600]]
   };
 
   var platformIds = {
@@ -356,22 +373,22 @@
   };
 
   var services = {
-    'CHAMPION': 'platform',
-    'CHAMPION_MASTERY': 'champion-mastery',
-    'GAME': null,
-    'LEAGUE': 'league',
-    'STATUS': 'status',
-    'MASTERIES': 'platform',
-    'MATCH': 'match',
-    'MATCHLIST': null,
-    'RUNES': 'platform',
-    'RUNES_MASTERIES': 'platform',
-    'SPECTATOR': 'spectator',
-    'STATIC_DATA': 'static-data',
-    'STATS': null,
-    'SUMMONER': 'summoner',
-    'TOURNAMENT_STUB': 'tournament-stub',
-    'TOURNAMENT': 'tournament'
+    CHAMPION: 'platform',
+    CHAMPION_MASTERY: 'champion-mastery',
+    GAME: null,
+    LEAGUE: 'league',
+    STATUS: 'status',
+    MASTERIES: 'platform',
+    MATCH: 'match',
+    MATCHLIST: null,
+    RUNES: 'platform',
+    RUNES_MASTERIES: 'platform',
+    SPECTATOR: 'spectator',
+    STATIC_DATA: 'static-data',
+    STATS: null,
+    SUMMONER: 'summoner',
+    TOURNAMENT_STUB: 'tournament-stub',
+    TOURNAMENT: 'tournament'
   };
 
   var versions = {
@@ -395,32 +412,9 @@
   var re = XRegExp('^[0-9\\p{L} _\\.]+$');
 
   var check = function check(region) {
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
-
-    try {
-      for (var _iterator = Object.keys(regions)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-        var r = _step.value;
-
-        if (regions[r] === region) return true;
-      }
-    } catch (err) {
-      _didIteratorError = true;
-      _iteratorError = err;
-    } finally {
-      try {
-        if (!_iteratorNormalCompletion && _iterator.return) {
-          _iterator.return();
-        }
-      } finally {
-        if (_didIteratorError) {
-          throw _iteratorError;
-        }
-      }
-    }
-
-    return false;
+    return Object.keys(regions).some(function (key) {
+      return regions[key] === region;
+    });
   };
 
   var checkAllHelpers = {
@@ -453,22 +447,14 @@
     return typeof item === 'function';
   };
 
-  var responseStrings = {
-    200: 'Success',
-    400: 'Bad Request',
-    401: 'Unauthorized',
-    403: 'Forbidden',
-    404: 'Data Not Found',
-    405: 'Method not allowed',
-    415: 'Unsupported Media Type',
-    429: 'Rate Limit Exceeded',
-    500: 'Internal Service Error',
-    503: 'Service Unavailable',
-    504: 'Gateway Timeout'
+  var responseStrings = (_responseStrings = {}, _defineProperty(_responseStrings, 200, 'Success'), _defineProperty(_responseStrings, 400, 'Bad Request'), _defineProperty(_responseStrings, 401, 'Unauthorized'), _defineProperty(_responseStrings, 403, 'Forbidden'), _defineProperty(_responseStrings, 404, 'Data Not Found'), _defineProperty(_responseStrings, 405, 'Method not allowed'), _defineProperty(_responseStrings, 415, 'Unsupported Media Type'), _defineProperty(_responseStrings, 429, 'Rate Limit Exceeded'), _defineProperty(_responseStrings, 500, 'Internal Service Error'), _defineProperty(_responseStrings, 503, 'Service Unavailable'), _defineProperty(_responseStrings, 504, 'Gateway Timeout'), _responseStrings);
+
+  var get = function get(code) {
+    return responseStrings[code];
   };
 
   var getResponseMessage = function getResponseMessage(code) {
-    return responseStrings[code] || '';
+    return get(code) || '';
   };
 
   var statusCodeBisector = [200, 400, 500];
@@ -480,10 +466,10 @@
     if (statusCode >= statusCodeBisector[0] && statusCode < statusCodeBisector[1]) return chalk$1.green(statusCode);else if (statusCode >= statusCodeBisector[1] && statusCode < statusCodeBisector[2]) return chalk$1.red(msg);else return chalk$1.bold.red(msg);
   };
 
-  var printResponseDebug = function printResponseDebug(response, statusMessage, reqUrl, headers) {
+  var printResponseDebug = function printResponseDebug(response, statusMessage, reqUrl, showHeaders) {
     console.log(statusMessage, '@', reqUrl);
 
-    if (headers) {
+    if (showHeaders) {
       console.log({
         'x-rate-limit-type': response.headers['x-rate-limit-type'],
         'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],
@@ -553,9 +539,9 @@
 
       this.key = key;
 
-      this.defaultRegion = check(defaultRegion) ? defaultRegion : undefined;
+      this.defaultRegion = check(defaultRegion) ? defaultRegion : '';
 
-      if (!this.defaultRegion) {
+      if (this.defaultRegion.length === 0) {
         throw new Error(chalk.red('setRegion() by Kindred failed: ' + chalk.yellow(defaultRegion) + ' is an invalid region.') + '\n' + ('' + chalk.red('Try importing ' + chalk.yellow('require(\'kindred-api\').REGIONS') + ' and using one of those values instead.')));
       }
 
@@ -591,27 +577,27 @@
 
         this.numberOfRetriesBeforeBreak = this.retryOptions.numberOfRetriesBeforeBreak;
 
-        var _iteratorNormalCompletion2 = true;
-        var _didIteratorError2 = false;
-        var _iteratorError2 = undefined;
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
 
         try {
-          for (var _iterator2 = Object.keys(regions)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var region = _step2.value;
+          for (var _iterator = Object.keys(regions)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var region = _step.value;
 
             this.limits[regions[region]] = [new RateLimit(limits$$1[0][0], limits$$1[0][1]), new RateLimit(limits$$1[1][0], limits$$1[1][1]), this.spread ? new RateLimit(limits$$1[0][0] / 10, 0.5) : null];
           }
         } catch (err) {
-          _didIteratorError2 = true;
-          _iteratorError2 = err;
+          _didIteratorError = true;
+          _iteratorError = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion2 && _iterator2.return) {
-              _iterator2.return();
+            if (!_iteratorNormalCompletion && _iterator.return) {
+              _iterator.return();
             }
           } finally {
-            if (_didIteratorError2) {
-              throw _iteratorError2;
+            if (_didIteratorError) {
+              throw _iteratorError;
             }
           }
         }
@@ -927,7 +913,9 @@
     }, {
       key: '_cacheData',
       value: function _cacheData(key, ttl, body) {
-        if (validTTL(ttl)) this.cache.set({ key: key, ttl: ttl }, body);
+        if (validTTL(ttl)) {
+          this.cache.set({ key: key, ttl: ttl }, body);
+        }
       }
     }, {
       key: '_makeUrl',
@@ -940,7 +928,9 @@
         var oldUrl = 'https://' + region + '.api.riotgames.com/' + oldPrefix + encodedQuery;
         var newUrl = 'https://' + platformIds[regions$1[region]].toLowerCase() + '.' + base + '/' + prefix + encodedQuery;
 
-        if (newUrl.lastIndexOf('v3') === -1) return oldUrl;
+        if (newUrl.lastIndexOf('v3') === -1) {
+          return oldUrl;
+        }
 
         return newUrl;
       }
@@ -949,43 +939,43 @@
       value: function _stringifyOptions(options, endUrl) {
         var stringifiedOpts = '';
 
-        var appendKey = function appendKey(str, key, el) {
-          return str + (str ? '&' : '') + (key + '=' + el);
+        var appendKey = function appendKey(str, key, value) {
+          return str + (str ? '&' : '') + (key + '=' + value);
         };
 
         if (endUrl.lastIndexOf('v3') === -1) {
           stringifiedOpts = queryString.stringify(options);
         } else {
-          var _iteratorNormalCompletion3 = true;
-          var _didIteratorError3 = false;
-          var _iteratorError3 = undefined;
+          var _iteratorNormalCompletion2 = true;
+          var _didIteratorError2 = false;
+          var _iteratorError2 = undefined;
 
           try {
-            for (var _iterator3 = Object.keys(options)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-              var key = _step3.value;
+            for (var _iterator2 = Object.keys(options)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+              var key = _step2.value;
 
               if (Array.isArray(options[key])) {
-                var _iteratorNormalCompletion4 = true;
-                var _didIteratorError4 = false;
-                var _iteratorError4 = undefined;
+                var _iteratorNormalCompletion3 = true;
+                var _didIteratorError3 = false;
+                var _iteratorError3 = undefined;
 
                 try {
-                  for (var _iterator4 = options[key][Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-                    var el = _step4.value;
+                  for (var _iterator3 = options[key][Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                    var value = _step3.value;
 
-                    stringifiedOpts = appendKey(stringifiedOpts, key, el);
+                    stringifiedOpts = appendKey(stringifiedOpts, key, value);
                   }
                 } catch (err) {
-                  _didIteratorError4 = true;
-                  _iteratorError4 = err;
+                  _didIteratorError3 = true;
+                  _iteratorError3 = err;
                 } finally {
                   try {
-                    if (!_iteratorNormalCompletion4 && _iterator4.return) {
-                      _iterator4.return();
+                    if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                      _iterator3.return();
                     }
                   } finally {
-                    if (_didIteratorError4) {
-                      throw _iteratorError4;
+                    if (_didIteratorError3) {
+                      throw _iteratorError3;
                     }
                   }
                 }
@@ -994,16 +984,16 @@
               }
             }
           } catch (err) {
-            _didIteratorError3 = true;
-            _iteratorError3 = err;
+            _didIteratorError2 = true;
+            _iteratorError2 = err;
           } finally {
             try {
-              if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                _iterator3.return();
+              if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                _iterator2.return();
               }
             } finally {
-              if (_didIteratorError3) {
-                throw _iteratorError3;
+              if (_didIteratorError2) {
+                throw _iteratorError2;
               }
             }
           }
@@ -1019,27 +1009,27 @@
     }, {
       key: '_disableCache',
       value: function _disableCache(timers) {
-        var _iteratorNormalCompletion5 = true;
-        var _didIteratorError5 = false;
-        var _iteratorError5 = undefined;
+        var _iteratorNormalCompletion4 = true;
+        var _didIteratorError4 = false;
+        var _iteratorError4 = undefined;
 
         try {
-          for (var _iterator5 = Object.keys(timers)[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-            var key = _step5.value;
+          for (var _iterator4 = Object.keys(timers)[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+            var key = _step4.value;
 
             timers[key] = 0;
           }
         } catch (err) {
-          _didIteratorError5 = true;
-          _iteratorError5 = err;
+          _didIteratorError4 = true;
+          _iteratorError4 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion5 && _iterator5.return) {
-              _iterator5.return();
+            if (!_iteratorNormalCompletion4 && _iterator4.return) {
+              _iterator4.return();
             }
           } finally {
-            if (_didIteratorError5) {
-              throw _iteratorError5;
+            if (_didIteratorError4) {
+              throw _iteratorError4;
             }
           }
         }
@@ -1054,29 +1044,33 @@
 
         var keys = Object.keys(options);
 
-        if (allowed.length === 0 && keys.length === 0) return;
+        if (allowed.length === 0 && keys.length === 0) {
+          return;
+        }
 
-        var _iteratorNormalCompletion6 = true;
-        var _didIteratorError6 = false;
-        var _iteratorError6 = undefined;
+        var _iteratorNormalCompletion5 = true;
+        var _didIteratorError5 = false;
+        var _iteratorError5 = undefined;
 
         try {
-          for (var _iterator6 = keys[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-            var key = _step6.value;
+          for (var _iterator5 = keys[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+            var key = _step5.value;
 
-            if (!allowed.includes(key)) throw new Error(chalk.red('Invalid query params! Valid: ' + allowed));
+            if (!allowed.includes(key)) {
+              throw new Error(chalk.red('Invalid query params! Valid: ' + allowed.toString()));
+            }
           }
         } catch (err) {
-          _didIteratorError6 = true;
-          _iteratorError6 = err;
+          _didIteratorError5 = true;
+          _iteratorError5 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion6 && _iterator6.return) {
-              _iterator6.return();
+            if (!_iteratorNormalCompletion5 && _iterator5.return) {
+              _iterator5.return();
             }
           } finally {
-            if (_didIteratorError6) {
-              throw _iteratorError6;
+            if (_didIteratorError5) {
+              throw _iteratorError5;
             }
           }
         }
@@ -1394,9 +1388,9 @@
     }, {
       key: 'setRegion',
       value: function setRegion(region) {
-        this.defaultRegion = check(region) ? region : undefined;
+        this.defaultRegion = check(region) ? region : '';
 
-        if (!this.defaultRegion) throw new Error(chalk.red('setRegion() by Kindred failed: ' + chalk.yellow(region) + ' is an invalid region.') + '\n' + ('' + chalk.red('Try importing ' + chalk.yellow('require(\'kindred-api\').REGIONS') + ' and using one of those values instead.')));
+        if (this.defaultRegion.length === 0) throw new Error(chalk.red('setRegion() by Kindred failed: ' + chalk.yellow(region) + ' is an invalid region.') + '\n' + ('' + chalk.red('Try importing ' + chalk.yellow('require(\'kindred-api\').REGIONS') + ' and using one of those values instead.')));
       }
     }, {
       key: 'getChamps',
@@ -1428,9 +1422,16 @@
 
         var cb = arguments[1];
 
+        var endUrl = '';
         if (Number.isInteger(id) || Number.isInteger(championId)) {
+          if (id) {
+            endUrl = id.toString();
+          }
+          if (championId) {
+            endUrl = championId.toString();
+          }
           return this._championRequest({
-            endUrl: 'champions/' + (id || championId),
+            endUrl: 'champions/' + endUrl,
             region: region
           }, cb);
         } else {
@@ -1447,7 +1448,7 @@
 
         var cb = arguments[1];
 
-        if (Number.isInteger(playerId) && Number.isInteger(championId)) {
+        if (playerId && championId && Number.isInteger(playerId) && Number.isInteger(championId)) {
           return this._championMasteryRequest({
             endUrl: 'champion-masteries/by-summoner/' + playerId + '/by-champion/' + championId, region: region
           }, cb);
@@ -1471,21 +1472,40 @@
 
         var cb = arguments[1];
 
+        var endUrl = '';
         if (Number.isInteger(accountId || accId)) {
+          var tempNum = void 0;
+          if (accountId) {
+            tempNum = accountId;
+          }
+          if (accId) {
+            tempNum = accId;
+          }
           return new Promise(function (resolve, reject) {
-            return _this2.getSummoner({ accId: accountId || accId, region: region }, function (err, data) {
+            return _this2.getSummoner({ accId: tempNum, region: region }, function (err, data) {
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-              return resolve(_this2._championMasteryRequest({
-                endUrl: 'champion-masteries/by-summoner/' + data.id,
-                region: region
-              }, cb));
+              if (data && data.id) {
+                return resolve(_this2._championMasteryRequest({
+                  endUrl: 'champion-masteries/by-summoner/' + data.id,
+                  region: region
+                }, cb));
+              }
             });
           });
         } else if (Number.isInteger(id || summonerId || playerId)) {
+          if (id) {
+            endUrl = id.toString();
+          }
+          if (summonerId) {
+            endUrl = summonerId.toString();
+          }
+          if (playerId) {
+            endUrl = playerId.toString();
+          }
           return this._championMasteryRequest({
-            endUrl: 'champion-masteries/by-summoner/' + (id || summonerId || playerId), region: region
+            endUrl: 'champion-masteries/by-summoner/' + endUrl, region: region
           }, cb);
         } else if (typeof name === 'string') {
           return new Promise(function (resolve, reject) {
@@ -1493,10 +1513,12 @@
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-              return resolve(_this2._championMasteryRequest({
-                endUrl: 'champion-masteries/by-summoner/' + data.id,
-                region: region
-              }, cb));
+              if (data && data.id) {
+                return resolve(_this2._championMasteryRequest({
+                  endUrl: 'champion-masteries/by-summoner/' + data.id,
+                  region: region
+                }, cb));
+              }
             });
           });
         } else {
@@ -1519,21 +1541,40 @@
 
         var cb = arguments[1];
 
+        var endUrl = '';
         if (Number.isInteger(accountId || accId)) {
+          var tempNum = void 0;
+          if (accountId) {
+            tempNum = accountId;
+          }
+          if (accId) {
+            tempNum = accId;
+          }
           return new Promise(function (resolve, reject) {
-            return _this3.getSummoner({ accId: accountId || accId, region: region }, function (err, data) {
+            return _this3.getSummoner({ accId: tempNum, region: region }, function (err, data) {
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-              return resolve(_this3._championMasteryRequest({
-                endUrl: 'scores/by-summoner/' + data.id,
-                region: region
-              }, cb));
+              if (data && data.id) {
+                return resolve(_this3._championMasteryRequest({
+                  endUrl: 'scores/by-summoner/' + data.id,
+                  region: region
+                }, cb));
+              }
             });
           });
         } else if (Number.isInteger(id || summonerId || playerId)) {
+          if (id) {
+            endUrl = id.toString();
+          }
+          if (summonerId) {
+            endUrl = summonerId.toString();
+          }
+          if (playerId) {
+            endUrl = playerId.toString();
+          }
           return this._championMasteryRequest({
-            endUrl: 'scores/by-summoner/' + (id || summonerId || playerId), region: region
+            endUrl: 'scores/by-summoner/' + endUrl, region: region
           }, cb);
         } else if (typeof name === 'string') {
           return new Promise(function (resolve, reject) {
@@ -1541,10 +1582,12 @@
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-              return resolve(_this3._championMasteryRequest({
-                endUrl: 'scores/by-summoner/' + data.id,
-                region: region
-              }, cb));
+              if (data && data.id) {
+                return resolve(_this3._championMasteryRequest({
+                  endUrl: 'scores/by-summoner/' + data.id,
+                  region: region
+                }, cb));
+              }
             });
           });
         } else {
@@ -1567,21 +1610,33 @@
 
         var cb = arguments[1];
 
+        var endUrl = '';
         if (Number.isInteger(accountId || accId)) {
           return new Promise(function (resolve, reject) {
             return _this4.getSummoner({ accId: accountId || accId, region: region }, function (err, data) {
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-              return resolve(_this4._spectatorRequest({
-                endUrl: 'active-games/by-summoner/' + data.id,
-                region: region
-              }, cb));
+              if (data && data.id) {
+                return resolve(_this4._spectatorRequest({
+                  endUrl: 'active-games/by-summoner/' + data.id,
+                  region: region
+                }, cb));
+              }
             });
           });
         } else if (Number.isInteger(id || summonerId || playerId)) {
+          if (id) {
+            endUrl = id.toString();
+          }
+          if (summonerId) {
+            endUrl = summonerId.toString();
+          }
+          if (playerId) {
+            endUrl = playerId.toString();
+          }
           return this._spectatorRequest({
-            endUrl: 'active-games/by-summoner/' + (id || summonerId || playerId),
+            endUrl: 'active-games/by-summoner/' + endUrl,
             region: region
           }, cb);
         } else if (typeof name === 'string') {
@@ -1590,10 +1645,12 @@
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-              return resolve(_this4._spectatorRequest({
-                endUrl: 'active-games/by-summoner/' + data.id,
-                region: region
-              }, cb));
+              if (data && data.id) {
+                return resolve(_this4._spectatorRequest({
+                  endUrl: 'active-games/by-summoner/' + data.id,
+                  region: region
+                }, cb));
+              }
             });
           });
         } else {
@@ -1634,20 +1691,32 @@
 
         var cb = arguments[1];
 
+        var endUrl = '';
         if (Number.isInteger(accountId || accId)) {
           return new Promise(function (resolve, reject) {
             return _this5.getSummoner({ accId: accountId || accId, region: region }, function (err, data) {
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-              return resolve(_this5._gameRequest({
-                endUrl: 'by-summoner/' + data.id + '/recent', region: region
-              }, cb));
+              if (data && data.id) {
+                return resolve(_this5._gameRequest({
+                  endUrl: 'by-summoner/' + data.id + '/recent', region: region
+                }, cb));
+              }
             });
           });
         } else if (Number.isInteger(id || summonerId || playerId)) {
+          if (id) {
+            endUrl = id.toString();
+          }
+          if (summonerId) {
+            endUrl = summonerId.toString();
+          }
+          if (playerId) {
+            endUrl = playerId.toString();
+          }
           return this._gameRequest({
-            endUrl: 'by-summoner/' + (id || summonerId || playerId) + '/recent',
+            endUrl: 'by-summoner/' + endUrl + '/recent',
             region: region
           }, cb);
         } else if (typeof name === 'string') {
@@ -1656,9 +1725,11 @@
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-              return resolve(_this5._gameRequest({
-                endUrl: 'by-summoner/' + data.id + '/recent', region: region
-              }, cb));
+              if (data && data.id) {
+                return resolve(_this5._gameRequest({
+                  endUrl: 'by-summoner/' + data.id + '/recent', region: region
+                }, cb));
+              }
             });
           });
         } else {
@@ -1681,21 +1752,40 @@
 
         var cb = arguments[1];
 
+        var endUrl = '';
         if (Number.isInteger(accountId || accId)) {
+          var tempNum = void 0;
+          if (accountId) {
+            tempNum = accountId;
+          }
+          if (accId) {
+            tempNum = accId;
+          }
           return new Promise(function (resolve, reject) {
-            return _this6.getSummoner({ accId: accountId || accId, region: region }, function (err, data) {
+            return _this6.getSummoner({ accId: tempNum, region: region }, function (err, data) {
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-              return resolve(_this6._leagueRequest({
-                endUrl: 'leagues/by-summoner/' + data.id,
-                region: region
-              }, cb));
+              if (data && data.id) {
+                return resolve(_this6._leagueRequest({
+                  endUrl: 'leagues/by-summoner/' + data.id,
+                  region: region
+                }, cb));
+              }
             });
           });
         } else if (Number.isInteger(id || summonerId || playerId)) {
+          if (id) {
+            endUrl = id.toString();
+          }
+          if (summonerId) {
+            endUrl = summonerId.toString();
+          }
+          if (playerId) {
+            endUrl = playerId.toString();
+          }
           return this._leagueRequest({
-            endUrl: 'leagues/by-summoner/' + (id || summonerId || playerId),
+            endUrl: 'leagues/by-summoner/' + endUrl,
             region: region
           }, cb);
         } else if (typeof name === 'string') {
@@ -1704,10 +1794,12 @@
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-              return resolve(_this6._leagueRequest({
-                endUrl: 'leagues/by-summoner/' + data.id,
-                region: region
-              }, cb));
+              if (data && data.id) {
+                return resolve(_this6._leagueRequest({
+                  endUrl: 'leagues/by-summoner/' + data.id,
+                  region: region
+                }, cb));
+              }
             });
           });
         } else {
@@ -1730,21 +1822,40 @@
 
         var cb = arguments[1];
 
+        var endUrl = '';
         if (Number.isInteger(accountId || accId)) {
+          var tempNum = void 0;
+          if (accountId) {
+            tempNum = accountId;
+          }
+          if (accId) {
+            tempNum = accId;
+          }
           return new Promise(function (resolve, reject) {
-            return _this7.getSummoner({ accId: accountId || accId, region: region }, function (err, data) {
+            return _this7.getSummoner({ accId: tempNum, region: region }, function (err, data) {
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-              return resolve(_this7._leagueRequest({
-                endUrl: 'positions/by-summoner/' + data.id,
-                region: region
-              }, cb));
+              if (data && data.id) {
+                return resolve(_this7._leagueRequest({
+                  endUrl: 'positions/by-summoner/' + data.id,
+                  region: region
+                }, cb));
+              }
             });
           });
         } else if (Number.isInteger(id || summonerId || playerId)) {
+          if (id) {
+            endUrl = id.toString();
+          }
+          if (summonerId) {
+            endUrl = summonerId.toString();
+          }
+          if (playerId) {
+            endUrl = playerId.toString();
+          }
           return this._leagueRequest({
-            endUrl: 'positions/by-summoner/' + (id || summonerId || playerId),
+            endUrl: 'positions/by-summoner/' + endUrl,
             region: region
           }, cb);
         } else if (typeof name === 'string') {
@@ -1753,10 +1864,12 @@
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-              return resolve(_this7._leagueRequest({
-                endUrl: 'positions/by-summoner/' + data.id,
-                region: region
-              }, cb));
+              if (data && data.id) {
+                return resolve(_this7._leagueRequest({
+                  endUrl: 'positions/by-summoner/' + data.id,
+                  region: region
+                }, cb));
+              }
             });
           });
         } else {
@@ -1833,9 +1946,15 @@
         var cb = arguments[1];
 
         this._verifyOptions(options, queryParams.STATIC.CHAMPION.ONE);
-
+        var endUrl = '';
         if (Number.isInteger(id || championId)) {
-          return this._staticRequest({ endUrl: 'champions/' + (id || championId), region: region, options: options }, cb);
+          if (id) {
+            endUrl = id.toString();
+          }
+          if (championId) {
+            endUrl = championId.toString();
+          }
+          return this._staticRequest({ endUrl: 'champions/' + endUrl, region: region, options: options }, cb);
         } else {
           return this._logError(this.getChampion.name, 'required params ' + chalk.yellow('`id/championId` (int)') + ' not passed in');
         }
@@ -1870,9 +1989,15 @@
         var cb = arguments[1];
 
         this._verifyOptions(options, queryParams.STATIC.ITEM.ONE);
-
+        var endUrl = '';
         if (Number.isInteger(id || itemId)) {
-          return this._staticRequest({ endUrl: 'items/' + (id || itemId), region: region, options: options }, cb);
+          if (id) {
+            endUrl = id.toString();
+          }
+          if (itemId) {
+            endUrl = itemId.toString();
+          }
+          return this._staticRequest({ endUrl: 'items/' + endUrl, region: region, options: options }, cb);
         } else {
           return this._logError(this.getItem.name, 'required params ' + chalk.yellow('`id/itemId` (int)') + ' not passed in');
         }
@@ -1958,10 +2083,16 @@
         var cb = arguments[1];
 
         this._verifyOptions(options, queryParams.STATIC.MASTERY.ONE);
-
+        var endUrl = '';
         if (Number.isInteger(id || masteryId)) {
+          if (id) {
+            endUrl = id.toString();
+          }
+          if (masteryId) {
+            endUrl = masteryId.toString();
+          }
           return this._staticRequest({
-            endUrl: 'masteries/' + (id || masteryId),
+            endUrl: 'masteries/' + endUrl,
             region: region, options: options
           }, cb);
         } else {
@@ -2031,9 +2162,15 @@
         var cb = arguments[1];
 
         this._verifyOptions(options, queryParams.STATIC.RUNE.ONE);
-
+        var endUrl = '';
         if (Number.isInteger(id || runeId)) {
-          return this._staticRequest({ endUrl: 'runes/' + (id || runeId), region: region, options: options }, cb);
+          if (id) {
+            endUrl = id.toString();
+          }
+          if (runeId) {
+            endUrl = runeId.toString();
+          }
+          return this._staticRequest({ endUrl: 'runes/' + endUrl, region: region, options: options }, cb);
         } else {
           return this._logError(this.getRune.name, 'required params ' + chalk.yellow('`id/runeId` (int)') + ' not passed in');
         }
@@ -2069,10 +2206,19 @@
         var cb = arguments[1];
 
         this._verifyOptions(options, queryParams.STATIC.SUMMONER_SPELL.ONE);
-
+        var endUrl = '';
         if (Number.isInteger(id || spellId || summonerSpellId)) {
+          if (id) {
+            endUrl = id.toString();
+          }
+          if (spellId) {
+            endUrl = spellId.toString();
+          }
+          if (summonerSpellId) {
+            endUrl = summonerSpellId.toString();
+          }
           return this._staticRequest({
-            endUrl: 'summoner-spells/' + (id || spellId || summonerSpellId),
+            endUrl: 'summoner-spells/' + endUrl,
             region: region, options: options
           }, cb);
         } else {
@@ -2108,7 +2254,9 @@
           arguments[0] = undefined;
         }
 
-        if (typeof region === 'string' && !check(region)) return this._logError(this.getShardStatus.name, 'invalid region!');
+        if (typeof region === 'string' && !check(region)) {
+          return this._logError(this.getShardStatus.name, 'invalid region!');
+        }
 
         return this._statusRequest({ endUrl: 'shard-data', region: region }, cb);
       }
@@ -2122,8 +2270,15 @@
 
         var cb = arguments[1];
 
+        var endUrl = '';
         if (Number.isInteger(id || matchId)) {
-          return this._matchRequest({ endUrl: 'matches/' + (id || matchId), region: region }, cb);
+          if (id) {
+            endUrl = id.toString();
+          }
+          if (matchId) {
+            endUrl = matchId.toString();
+          }
+          return this._matchRequest({ endUrl: 'matches/' + endUrl, region: region }, cb);
         } else {
           return this._logError(this.getMatch.name, 'required params ' + chalk.yellow('`id/matchId` (int)') + ' not passed in');
         }
@@ -2146,10 +2301,16 @@
         var cb = arguments[1];
 
         this._verifyOptions(options, queryParams.MATCHLIST.GET);
-
+        var endUrl = '';
         if (Number.isInteger(accountId || accId)) {
+          if (accountId) {
+            endUrl = accountId.toString();
+          }
+          if (accId) {
+            endUrl = accId.toString();
+          }
           return this._matchlistRequest({
-            endUrl: 'by-account/' + (accountId || accId),
+            endUrl: 'by-account/' + endUrl,
             region: region, options: options
           }, cb);
         } else if (Number.isInteger(id || summonerId || playerId)) {
@@ -2158,10 +2319,12 @@
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-              return resolve(_this8._matchlistRequest({
-                endUrl: 'by-account/' + data.accountId,
-                region: region, options: options
-              }, cb));
+              if (data && data.accountId) {
+                return resolve(_this8._matchlistRequest({
+                  endUrl: 'by-account/' + data.accountId,
+                  region: region, options: options
+                }, cb));
+              }
             });
           });
         } else if (typeof name === 'string') {
@@ -2170,10 +2333,12 @@
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-              return resolve(_this8._matchlistRequest({
-                endUrl: 'by-account/' + data.accountId,
-                region: region, options: options
-              }, cb));
+              if (data && data.accountId) {
+                return resolve(_this8._matchlistRequest({
+                  endUrl: 'by-account/' + data.accountId,
+                  region: region, options: options
+                }, cb));
+              }
             });
           });
         } else {
@@ -2196,9 +2361,16 @@
 
         var cb = arguments[1];
 
+        var endUrl = '';
         if (Number.isInteger(accountId || accId)) {
+          if (accountId) {
+            endUrl = accountId.toString();
+          }
+          if (accId) {
+            endUrl = accId.toString();
+          }
           return this._matchlistRequest({
-            endUrl: 'by-account/' + (accountId || accId) + '/recent',
+            endUrl: 'by-account/' + endUrl + '/recent',
             region: region
           }, cb);
         } else if (Number.isInteger(id || summonerId || playerId)) {
@@ -2207,10 +2379,12 @@
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-              return resolve(_this9._matchlistRequest({
-                endUrl: 'by-account/' + data.accountId + '/recent',
-                region: region
-              }, cb));
+              if (data && data.accountId) {
+                return resolve(_this9._matchlistRequest({
+                  endUrl: 'by-account/' + data.accountId + '/recent',
+                  region: region
+                }, cb));
+              }
             });
           });
         } else if (typeof name === 'string') {
@@ -2219,10 +2393,12 @@
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-              return resolve(_this9._matchlistRequest({
-                endUrl: 'by-account/' + data.accountId + '/recent',
-                region: region
-              }, cb));
+              if (data && data.accountId) {
+                return resolve(_this9._matchlistRequest({
+                  endUrl: 'by-account/' + data.accountId + '/recent',
+                  region: region
+                }, cb));
+              }
             });
           });
         } else {
@@ -2239,9 +2415,16 @@
 
         var cb = arguments[1];
 
+        var endUrl = '';
         if (Number.isInteger(id || matchId)) {
+          if (id) {
+            endUrl = id.toString();
+          }
+          if (matchId) {
+            endUrl = matchId.toString();
+          }
           return this._matchRequest({
-            endUrl: 'timelines/by-match/' + (id || matchId),
+            endUrl: 'timelines/by-match/' + endUrl,
             region: region
           }, cb);
         } else {
@@ -2264,21 +2447,33 @@
 
         var cb = arguments[1];
 
+        var endUrl = '';
         if (Number.isInteger(accountId || accId)) {
           return new Promise(function (resolve, reject) {
             return _this10.getSummoner({ accId: accountId || accId, region: region }, function (err, data) {
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-              return resolve(_this10._runesMasteriesRequest({
-                endUrl: 'runes/by-summoner/' + data.id,
-                region: region
-              }, cb));
+              if (data && data.id) {
+                return resolve(_this10._runesMasteriesRequest({
+                  endUrl: 'runes/by-summoner/' + data.id,
+                  region: region
+                }, cb));
+              }
             });
           });
         } else if (Number.isInteger(id || summonerId || playerId)) {
+          if (id) {
+            endUrl = id.toString();
+          }
+          if (summonerId) {
+            endUrl = summonerId.toString();
+          }
+          if (playerId) {
+            endUrl = playerId.toString();
+          }
           return this._runesMasteriesRequest({
-            endUrl: 'runes/by-summoner/' + (id || summonerId || playerId),
+            endUrl: 'runes/by-summoner/' + endUrl,
             region: region
           }, cb);
         } else if (typeof name === 'string') {
@@ -2287,10 +2482,12 @@
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-              return resolve(_this10._runesMasteriesRequest({
-                endUrl: 'runes/by-summoner/' + data.id,
-                region: region
-              }, cb));
+              if (data && data.id) {
+                return resolve(_this10._runesMasteriesRequest({
+                  endUrl: 'runes/by-summoner/' + data.id,
+                  region: region
+                }, cb));
+              }
             });
           });
         } else {
@@ -2313,21 +2510,33 @@
 
         var cb = arguments[1];
 
+        var endUrl = '';
         if (Number.isInteger(accountId || accId)) {
           return new Promise(function (resolve, reject) {
             return _this11.getSummoner({ accId: accountId || accId, region: region }, function (err, data) {
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-              return resolve(_this11._runesMasteriesRequest({
-                endUrl: 'masteries/by-summoner/' + data.id,
-                region: region
-              }, cb));
+              if (data && data.id) {
+                return resolve(_this11._runesMasteriesRequest({
+                  endUrl: 'masteries/by-summoner/' + data.id,
+                  region: region
+                }, cb));
+              }
             });
           });
         } else if (Number.isInteger(id || summonerId || playerId)) {
+          if (id) {
+            endUrl = id.toString();
+          }
+          if (summonerId) {
+            endUrl = summonerId.toString();
+          }
+          if (playerId) {
+            endUrl = playerId.toString();
+          }
           return this._runesMasteriesRequest({
-            endUrl: 'masteries/by-summoner/' + (id || summonerId || playerId),
+            endUrl: 'masteries/by-summoner/' + endUrl,
             region: region
           }, cb);
         } else if (typeof name === 'string') {
@@ -2336,10 +2545,12 @@
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-              return resolve(_this11._runesMasteriesRequest({
-                endUrl: 'masteries/by-summoner/' + data.id,
-                region: region
-              }, cb));
+              if (data && data.id) {
+                return resolve(_this11._runesMasteriesRequest({
+                  endUrl: 'masteries/by-summoner/' + data.id,
+                  region: region
+                }, cb));
+              }
             });
           });
         } else {
@@ -2364,22 +2575,34 @@
         var cb = arguments[1];
 
         this._verifyOptions(options, queryParams.STATS.RANKED);
-
+        var endUrl = '';
         if (Number.isInteger(accountId || accId)) {
           return new Promise(function (resolve, reject) {
             return _this12.getSummoner({ accId: accountId || accId, region: region }, function (err, data) {
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-              return resolve(_this12._statsRequest({
-                endUrl: data.id + '/ranked',
-                region: region, options: options
-              }, cb));
+              if (data && data.id) {
+                return resolve(_this12._statsRequest({
+                  endUrl: data.id + '/ranked',
+                  region: region, options: options
+                }, cb));
+              }
             });
           });
         } else if (Number.isInteger(id || summonerId || playerId)) {
+          var _endUrl = '';
+          if (id) {
+            _endUrl = id.toString();
+          }
+          if (summonerId) {
+            _endUrl = summonerId.toString();
+          }
+          if (playerId) {
+            _endUrl = playerId.toString();
+          }
           return this._statsRequest({
-            endUrl: (id || summonerId || playerId) + '/ranked',
+            endUrl: _endUrl + '/ranked',
             region: region, options: options
           }, cb);
         } else if (typeof name === 'string') {
@@ -2388,10 +2611,12 @@
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-              return resolve(_this12._statsRequest({
-                endUrl: data.id + '/ranked',
-                region: region, options: options
-              }, cb));
+              if (data && data.id) {
+                return resolve(_this12._statsRequest({
+                  endUrl: data.id + '/ranked',
+                  region: region, options: options
+                }, cb));
+              }
             });
           });
         } else {
@@ -2416,22 +2641,33 @@
         var cb = arguments[1];
 
         this._verifyOptions(options, queryParams.STATS.SUMMARY);
-
+        var endUrl = '';
         if (Number.isInteger(accountId || accId)) {
           return new Promise(function (resolve, reject) {
             return _this13.getSummoner({ accId: accountId || accId, region: region }, function (err, data) {
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-              return resolve(_this13._statsRequest({
-                endUrl: data.id + '/summary',
-                region: region, options: options
-              }, cb));
+              if (data && data.id) {
+                return resolve(_this13._statsRequest({
+                  endUrl: data.id + '/summary',
+                  region: region, options: options
+                }, cb));
+              }
             });
           });
         } else if (Number.isInteger(id || summonerId || playerId)) {
+          if (id) {
+            endUrl = id.toString();
+          }
+          if (summonerId) {
+            endUrl = summonerId.toString();
+          }
+          if (playerId) {
+            endUrl = playerId.toString();
+          }
           return this._statsRequest({
-            endUrl: (id || summonerId || playerId) + '/summary',
+            endUrl: endUrl + '/summary',
             region: region, options: options
           }, cb);
         } else if (typeof name === 'string') {
@@ -2440,10 +2676,12 @@
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
-              return resolve(_this13._statsRequest({
-                endUrl: data.id + '/summary',
-                region: region, options: options
-              }, cb));
+              if (data && data.id) {
+                return resolve(_this13._statsRequest({
+                  endUrl: data.id + '/summary',
+                  region: region, options: options
+                }, cb));
+              }
             });
           });
         } else {
@@ -2464,19 +2702,35 @@
 
         var cb = arguments[1];
 
+        var endUrl = '';
         if (Number.isInteger(id || summonerId || playerId)) {
+          if (id) {
+            endUrl = id.toString();
+          }
+          if (summonerId) {
+            endUrl = summonerId.toString();
+          }
+          if (playerId) {
+            endUrl = playerId.toString();
+          }
           return this._summonerRequest({
-            endUrl: '' + (id || summonerId || playerId),
+            endUrl: endUrl,
             region: region
           }, cb);
-        } else if (typeof name === 'string') {
+        } else if (name && typeof name === 'string') {
           return this._summonerRequest({
             endUrl: 'by-name/' + this._sanitizeName(name),
             region: region
           }, cb);
         } else if (Number.isInteger(accountId || accId)) {
+          if (accountId) {
+            endUrl = accountId.toString();
+          }
+          if (accId) {
+            endUrl = accId.toString();
+          }
           return this._summonerRequest({
-            endUrl: 'by-account/' + (accountId || accId),
+            endUrl: 'by-account/' + endUrl,
             region: region
           }, cb);
         } else {
@@ -2488,17 +2742,17 @@
       value: function listChampions(options, region, cb) {
         if (isFunction(options)) {
           cb = options;
-          options = undefined;
+          options = undefined_;
         }
 
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         if (typeof options === 'string') {
           region = options;
-          options = undefined;
+          options = undefined_;
         }
 
         return this.Champion.all({
@@ -2510,7 +2764,7 @@
       value: function getChampionById(id, region, cb) {
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         return this.Champion.get({
@@ -2522,7 +2776,7 @@
       value: function listFeaturedGames(region, cb) {
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         return this.FeaturedGames.get({
@@ -2535,21 +2789,21 @@
         if (check(queue)) {
           if (isFunction(region)) {
             cb = region;
-            region = undefined;
+            region = undefined_;
           }
 
           region = queue;
-          queue = undefined;
+          queue = undefined_;
         }
 
         if (isFunction(queue)) {
           cb = queue;
-          queue = undefined;
+          queue = undefined_;
         }
 
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         return this.League.challengers({
@@ -2562,21 +2816,21 @@
         if (check(queue)) {
           if (isFunction(region)) {
             cb = region;
-            region = undefined;
+            region = undefined_;
           }
 
           region = queue;
-          queue = undefined;
+          queue = undefined_;
         }
 
         if (isFunction(queue)) {
           cb = queue;
-          queue = undefined;
+          queue = undefined_;
         }
 
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         return this.League.masters({
@@ -2588,7 +2842,7 @@
       value: function getSummonerByAccountId(accId, region, cb) {
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         return this.Summoner.get({
@@ -2601,7 +2855,7 @@
       value: function getSummonerById(id, region, cb) {
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         return this.Summoner.get({
@@ -2614,7 +2868,7 @@
       value: function getSummonerByName(name, region, cb) {
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         return this.Summoner.get({
@@ -2627,7 +2881,7 @@
       value: function getMasteriesByAccountId(accId, region, cb) {
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         return this.Masteries.get({
@@ -2640,7 +2894,7 @@
       value: function getMasteriesById(id, region, cb) {
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         return this.Masteries.get({
@@ -2653,7 +2907,7 @@
       value: function getMasteriesByName(name, region, cb) {
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         return this.Masteries.get({
@@ -2666,7 +2920,7 @@
       value: function getMatchById(id, region, cb) {
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         return this.Match.get({
@@ -2679,17 +2933,17 @@
       value: function getMatchlistByAccountId(accId, options, region, cb) {
         if (isFunction(options)) {
           cb = options;
-          options = undefined;
+          options = undefined_;
         }
 
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         if (typeof options === 'string') {
           region = options;
-          options = undefined;
+          options = undefined_;
         }
 
         return this.Matchlist.get({
@@ -2701,17 +2955,17 @@
       value: function getMatchlistById(id, options, region, cb) {
         if (isFunction(options)) {
           cb = options;
-          options = undefined;
+          options = undefined_;
         }
 
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         if (typeof options === 'string') {
           region = options;
-          options = undefined;
+          options = undefined_;
         }
 
         return this.Matchlist.get({
@@ -2723,17 +2977,17 @@
       value: function getMatchlistByName(name, options, region, cb) {
         if (isFunction(options)) {
           cb = options;
-          options = undefined;
+          options = undefined_;
         }
 
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         if (typeof options === 'string') {
           region = options;
-          options = undefined;
+          options = undefined_;
         }
 
         return this.Matchlist.get({
@@ -2745,7 +2999,7 @@
       value: function getMatchTimelineById(id, region, cb) {
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         return this.Match.timeline({
@@ -2757,7 +3011,7 @@
       value: function getRunesByAccountId(accId, region, cb) {
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         return this.Runes.get({
@@ -2770,7 +3024,7 @@
       value: function getRunesById(id, region, cb) {
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         return this.Runes.get({
@@ -2783,7 +3037,7 @@
       value: function getRunesByName(name, region, cb) {
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         return this.Runes.get({
@@ -2796,17 +3050,17 @@
       value: function getStaticChampionList(options, region, cb) {
         if (isFunction(options)) {
           cb = options;
-          options = undefined;
+          options = undefined_;
         }
 
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         if (typeof options === 'string') {
           region = options;
-          options = undefined;
+          options = undefined_;
         }
 
         return this.Static.champions({
@@ -2818,17 +3072,17 @@
       value: function getStaticChampionById(id, options, region, cb) {
         if (isFunction(options)) {
           cb = options;
-          options = undefined;
+          options = undefined_;
         }
 
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         if (typeof options === 'string') {
           region = options;
-          options = undefined;
+          options = undefined_;
         }
 
         return this.Static.champion({
@@ -2840,17 +3094,17 @@
       value: function getStaticItemList(options, region, cb) {
         if (isFunction(options)) {
           cb = options;
-          options = undefined;
+          options = undefined_;
         }
 
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         if (typeof options === 'string') {
           region = options;
-          options = undefined;
+          options = undefined_;
         }
 
         return this.Static.items({
@@ -2862,17 +3116,17 @@
       value: function getStaticItemById(id, options, region, cb) {
         if (isFunction(options)) {
           cb = options;
-          options = undefined;
+          options = undefined_;
         }
 
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         if (typeof options === 'string') {
           region = options;
-          options = undefined;
+          options = undefined_;
         }
 
         return this.Static.item({
@@ -2884,17 +3138,17 @@
       value: function getStaticLanguageStringList(options, region, cb) {
         if (isFunction(options)) {
           cb = options;
-          options = undefined;
+          options = undefined_;
         }
 
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         if (typeof options === 'string') {
           region = options;
-          options = undefined;
+          options = undefined_;
         }
 
         return this.Static.languageStrings({
@@ -2906,7 +3160,7 @@
       value: function getStaticLanguageList(region, cb) {
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         return this.Static.languages({
@@ -2918,17 +3172,17 @@
       value: function getStaticMapList(options, region, cb) {
         if (isFunction(options)) {
           cb = options;
-          options = undefined;
+          options = undefined_;
         }
 
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         if (typeof options === 'string') {
           region = options;
-          options = undefined;
+          options = undefined_;
         }
 
         return this.Static.mapData({
@@ -2940,17 +3194,17 @@
       value: function getStaticMasteryList(options, region, cb) {
         if (isFunction(options)) {
           cb = options;
-          options = undefined;
+          options = undefined_;
         }
 
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         if (typeof options === 'string') {
           region = options;
-          options = undefined;
+          options = undefined_;
         }
 
         return this.Static.masteries({
@@ -2962,17 +3216,17 @@
       value: function getStaticMasteryById(id, options, region, cb) {
         if (isFunction(options)) {
           cb = options;
-          options = undefined;
+          options = undefined_;
         }
 
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         if (typeof options === 'string') {
           region = options;
-          options = undefined;
+          options = undefined_;
         }
 
         return this.Static.mastery({
@@ -2984,17 +3238,17 @@
       value: function getStaticProfileIconList(options, region, cb) {
         if (isFunction(options)) {
           cb = options;
-          options = undefined;
+          options = undefined_;
         }
 
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         if (typeof options === 'string') {
           region = options;
-          options = undefined;
+          options = undefined_;
         }
 
         return this.Static.profileIcons({
@@ -3006,7 +3260,7 @@
       value: function getStaticRealmList(region, cb) {
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         return this.Static.realm({
@@ -3018,17 +3272,17 @@
       value: function getStaticRuneList(options, region, cb) {
         if (isFunction(options)) {
           cb = options;
-          options = undefined;
+          options = undefined_;
         }
 
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         if (typeof options === 'string') {
           region = options;
-          options = undefined;
+          options = undefined_;
         }
 
         return this.Static.runes({
@@ -3040,17 +3294,17 @@
       value: function getStaticRuneById(id, options, region, cb) {
         if (isFunction(options)) {
           cb = options;
-          options = undefined;
+          options = undefined_;
         }
 
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         if (typeof options === 'string') {
           region = options;
-          options = undefined;
+          options = undefined_;
         }
 
         return this.Static.rune({
@@ -3062,17 +3316,17 @@
       value: function getStaticSummonerSpellList(options, region, cb) {
         if (isFunction(options)) {
           cb = options;
-          options = undefined;
+          options = undefined_;
         }
 
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         if (typeof options === 'string') {
           region = options;
-          options = undefined;
+          options = undefined_;
         }
 
         return this.Static.spells({
@@ -3084,17 +3338,17 @@
       value: function getStaticSummonerSpellById(id, options, region, cb) {
         if (isFunction(options)) {
           cb = options;
-          options = undefined;
+          options = undefined_;
         }
 
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         if (typeof options === 'string') {
           region = options;
-          options = undefined;
+          options = undefined_;
         }
 
         return this.Static.spell({
@@ -3106,7 +3360,7 @@
       value: function getStaticVersionList(region, cb) {
         if (isFunction(region)) {
           cb = region;
-          region = undefined;
+          region = undefined_;
         }
 
         return this.Static.versions({
@@ -3121,7 +3375,7 @@
   function QuickStart(apiKey, region, debug) {
     if (typeof region == 'boolean') {
       debug = region;
-      region = undefined;
+      region = undefined_;
     }
 
     return new Kindred$1({
@@ -3129,7 +3383,7 @@
       defaultRegion: region,
       debug: debug,
       limits: limits.DEV,
-      cache: new InMemoryCache$1()
+      cache: new InMemoryCache()
     });
   }
 
@@ -3137,8 +3391,7 @@
     if (err) console.log(err);else console.log(data);
   }
 
-  var InMemoryCache = InMemoryCache$1;
-  var RedisCache = RedisCache$1;
+  var undefined_ = undefined;
 
   var Kindred$2 = {
     Kindred: Kindred$1,

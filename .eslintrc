@@ -10,6 +10,11 @@ env:
 
   browser: true
   es6: true
+  
+parser: "babel-eslint"
+
+extends: ["plugin:flowtype/recommended"]
+plugins: ["flowtype"]
 
 parserOptions:
   sourceType: "module"
@@ -39,7 +44,7 @@ rules:
   #                                                                         #
   ###########################################################################
 
-  comma-dangle: 1         # disallow trailing commas in object literals
+  comma-dangle: 1            # disallow trailing commas in object literals
   no-cond-assign: 0          # disallow assignment in conditional expressions
   no-console: 0              # disallow use of console
   no-constant-condition: 2   # disallow use of constant expressions in conditions
@@ -204,7 +209,6 @@ rules:
   no-trailing-spaces: 2          # disallow trailing whitespace at the end of lines
   no-multiple-empty-lines: 0     # disallow multiple empty lines
   no-underscore-dangle: 0        # disallow dangling underscores in identifiers
-  no-extra-parens: 2                # disallow wrapping of non-IIFE statements in parens
   one-var: 0                     # allow just one var statement per function
   padded-blocks: 0               # enforce padding within blocks
   quotes:                        # specify whether double or single quotes should be used

@@ -1,10 +1,8 @@
-import REGIONS from '../constants/regions'
+// @flow
 
-const check = region => {
-  for (const r of Object.keys(REGIONS))
-    if (REGIONS[r] === region) return true
+import RGS from '../constants/regions'
 
-  return false
-}
+const check = (region: string): boolean =>
+  Object.keys(RGS).some(key => RGS[key] === region)
 
 export default check

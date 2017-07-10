@@ -1,4 +1,17 @@
-const codes = {
+// @flow
+
+const codes: {
+  BAD_REQUEST: number,
+  UNAUTHORIZED: number,
+  FORBIDDEN: number,
+  DATA_NOT_FOUND: number,
+  METHOD_NOT_ALLOWED: number,
+  UNSUPPORTED_MEDIA_TYPE: number,
+  RATE_LIMIT_EXCEEDED: number,
+  INTERNAL_SERVICE_ERROR: number,
+  SERVICE_UNAVAILABLE: number,
+  GATEWAY_TIMEOUT: number
+} = {
   BAD_REQUEST: 400,
   UNAUTHORIZED: 401,
   FORBIDDEN: 403,

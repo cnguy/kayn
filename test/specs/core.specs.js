@@ -84,6 +84,29 @@ describe('Core', function () {
       expect(k).is.not.undefined
     })
 
+    it('should init with na default region', function () {
+      const api = require('../../dist/kindred-api')
+
+      const k = new api.Kindred({
+        key: process.env.KEY
+      })
+
+      expect(k).is.not.undefined
+      assert.equal(k.defaultRegion, 'na')
+    })
+
+    it('should init with right region with region arg', function () {
+      const api = require('../../dist/kindred-api')
+
+      const k = new api.Kindred({
+        key: process.env.KEY,
+        defaultRegion: api.REGIONS.KOREA
+      })
+
+      expect(k).is.not.undefined
+      assert.equal(k.defaultRegion, 'kr')
+    })
+
     it('should not have any limits', function () {
       const api = require('../../dist/kindred-api')
 
@@ -147,6 +170,24 @@ describe('Core', function () {
       const api = require('../../dist/kindred-api')
       const k = api.QuickStart(process.env.KEY, true)
       expect(k).is.not.undefined
+    })
+
+    it('should init with right region with key & region (2 args)', function () {
+      const api = require('../../dist/kindred-api')
+      const k = api.QuickStart(process.env.KEY, api.REGIONS.KOREA)
+      assert.equal(k.defaultRegion, 'kr')
+    })
+
+    it('should init with right region with key & region & debug (3 args)', function () {
+      const api = require('../../dist/kindred-api')
+      const k = api.QuickStart(process.env.KEY, api.REGIONS.KOREA, true)
+      assert.equal(k.defaultRegion, 'kr')
+    })
+
+    it('should init with default na region with key & debug (2 args)', function () {
+      const api = require('../../dist/kindred-api')
+      const k = api.QuickStart(process.env.KEY, true)
+      assert.equal(k.defaultRegion, 'na')
     })
 
     it('should init with cache timers', function () {

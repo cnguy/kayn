@@ -1,7 +1,14 @@
-const printResponseDebug = (response, statusMessage, reqUrl, headers) => {
+// @flow
+
+const printResponseDebug = (
+  response: any,
+  statusMessage: string,
+  reqUrl: string,
+  showHeaders: boolean
+): void => {
   console.log(statusMessage, '@', reqUrl)
 
-  if (headers) {
+  if (showHeaders) {
     console.log({
       'x-rate-limit-type': response.headers['x-rate-limit-type'],
       'x-app-rate-limit-count': response.headers['x-app-rate-limit-count'],

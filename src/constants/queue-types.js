@@ -1,6 +1,55 @@
+// @flow
+
 /* https://developer.riotgames.com/game-constants.html */
 
-const queueTypes = {
+const queueTypes: {
+  CUSTOM: number,
+  NORMAL_3x3: number,
+  NORMAL_5x5_BLIND: number,
+  NORMAL_5x5_DRAFT: number,
+  RANKED_SOLO_5x5: number,
+  RANKED_PREMADE_5x5: number, // deprecated
+  RANKED_PREMADE_3x3: number, // deprecated
+  RANKED_FLEX_TT: number,
+  RANKED_TEAM_3x3: number, // deprecated
+  RANKED_TEAM_5x5: number,
+  ODIN_5x5_BLIND: number,
+  ODIN_5x5_DRAFT: number,
+  BOT_5x5: number, // deprecated
+  BOT_ODIN_5x5: number,
+  BOT_5x5_INTRO: number,
+  BOT_5x5_BEGINNER: number,
+  BOT_5x5_INTERMEDIATE: number,
+  BOT_TT_3x3: number,
+  GROUP_FINDER_5x5: number,
+  ARAM_5x5: number,
+  ONEFORALL_5x5: number,
+  FIRSTBLOOD_1x1: number,
+  FIRSTBLOOD_2x2: number,
+  SR_6x6: number,
+  URF_5x5: number,
+  ONEFORALL_MIRRORMODE_5x5: number,
+  BOT_URF_5x5: number,
+  NIGHTMARE_BOT_5x5_RANK1: number,
+  NIGHTMARE_BOT_5x5_RANK2: number,
+  NIGHTMARE_BOT_5x5_RANK5: number,
+  ASCENSION_5x5: number,
+  HEXAKILL: number,
+  BILGEWATER_ARAM_5x5: number,
+  KING_PORO_5x5: number,
+  COUNTER_PICK: number,
+  BILGEWATER_5x5: number,
+  SIEGE: number,
+  DEFINITELY_NOT_DOMINION_5x5: number,
+  ARURF_5X5: number,
+  ARSR_5x5: number,
+  TEAM_BUILDER_DRAFT_UNRANKED_5x5: number,
+  TEAM_BUILDER_DRAFT_RANKED_5x5: number, // deprecated
+  TEAM_BUILDER_RANKED_SOLO: number,
+  RANKED_FLEX_SR: number,
+  ASSASSINATE_5x5: number,
+  DARKSTAR_3x3: number
+} = {
   CUSTOM: 0,
   NORMAL_3x3: 8,
   NORMAL_5x5_BLIND: 2,
