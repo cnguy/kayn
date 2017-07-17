@@ -2,7 +2,7 @@
 
 const limits: {
   DEV: Array<Array<number>>,
-  OLD_EEV: Array<Array<number>>,
+  OLD_DEV: Array<Array<number>>,
   PROD: Array<Array<number>>
 } = {
   DEV: [[20, 1], [100, 120]],
