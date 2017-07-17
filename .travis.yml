@@ -20,3 +20,7 @@ after_success:
 
 services:
     - redis-server
+
+notifications:
+  email:
+    - chautnguyen96@gmail.com
