@@ -6,7 +6,12 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
-## [2.0.67]() - Changed static data options to "tags".
+## [2.0.68](https://github.com/ChauTNguyen/kindred-api/commit/9cc9bf6123f0622126391901be48366d2ff64c1f) - Added a new dev rate limit and more response header information is now printed.
+
+LIMITS.DEV = 20req/1s, 100req/120s
+LIMITS.OLD_DEV = 10req/10s, 500req/60s
+
+## [2.0.67](https://github.com/ChauTNguyen/kindred-api/commit/9cc9bf6123f0622126391901be48366d2ff64c1f) - Changed static data options to "tags".
 
 All static data tag options (ex: runeListData, runeData) will all be renamed to `tags`. The old labels will become deprecated so I'm releasing this early.
 
