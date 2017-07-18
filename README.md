@@ -298,12 +298,12 @@ k.Static.champion(rakanConfig)
         .catch(err => console.error(err))
 
 k.Static.Champion
-        .list({ champListData: 'all' }, REGIONS.KOREA)
+        .list({ tags: 'all' }, REGIONS.KOREA)
         .then(data => console.log(data))
         .catch(error => console.error(error))
 
 k.Static.Champion
-        .by.id(497, { champData: 'all' })
+        .by.id(497, { tag: 'all' })
         .then(data => console.log(data))
         .catch(error => console.error(err))
 ```
