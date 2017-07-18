@@ -13,6 +13,7 @@ import RateLimit from './rate-limit'
 
 import CACHE_TIMERS from './cache/constants/endpoint-cache-timers'
 import LIMITS from './constants/limits'
+import METHOD_TYPES from './constants/method-types'
 import PLATFORM_IDS from './constants/platform-ids'
 import QUERY_PARAMS from './constants/query-params'
 import QUEUE_TYPES from './constants/queue-types'
@@ -112,6 +113,7 @@ class Kindred {
     set: cacheSet
   }
   spread: boolean
+  methodLimits: any
 
   constructor({
     key, defaultRegion = REGIONS.NORTH_AMERICA,
@@ -122,7 +124,8 @@ class Kindred {
       numberOfRetriesBeforeBreak: Number.MAX_VALUE
     },
     timeout,
-    cache, cacheTTL
+    cache, cacheTTL,
+    methodLimits
   }: {
     key: string,
     defaultRegion?: string,
@@ -133,7 +136,8 @@ class Kindred {
       numberOfRetriesBeforeBreak?: number
     },
     timeout?: number,
-    cache?: any, cacheTTL?: number
+    cache?: any, cacheTTL?: number,
+    methodLimits?: any
   } = {}) {
     if (arguments.length === 0 || typeof arguments[0] !== 'object' || typeof key !== 'string') {
       throw new Error(
@@ -179,6 +183,34 @@ class Kindred {
       this.spread = (spread: any)
       this.retryOptions = (retryOptions: any)
       this.timeout = (timeout: any)
+
+      this.methodLimits = {
+        [METHOD_TYPES.LIST_CHAMPION_MASTERIES]: new RateLimit(20000, 10),
+        [METHOD_TYPES.GET_CHAMPION_MASTERY]: new RateLimit(20000, 10),
+        [METHOD_TYPES.GET_TOTAL_CHAMPION_MASTERY_SCORE]: new RateLimit(20000, 10),
+        [METHOD_TYPES.LIST_CHAMPIONS]: new RateLimit(20000, 10),
+        [METHOD_TYPES.GET_CHAMPION]: new RateLimit(20000, 10),
+        [METHOD_TYPES.GET_CHALLENGER_LEAGUE]: new RateLimit(20000, 10),
+        [METHOD_TYPES.GET_LEAGUES_IN_ALL_QUEUES]: new RateLimit(20000, 10),
+        [METHOD_TYPES.GET_MASTER_LEAGUE]: new RateLimit(20000, 10),
+        [METHOD_TYPES.GET_LEAGUE_POSITIONS_IN_ALL_QUEUES]: new RateLimit(20000, 10),
+        [METHOD_TYPES.GET_MASTERY_PAGES]: new RateLimit(20000, 10),
+        GET_MATCH: new RateLimit(500, 10),
+        GET_MATCHLIST: new RateLimit(1000, 10),
+        [METHOD_TYPES.GET_RECENT_MATCHLIST]: new RateLimit(20000, 10),
+        GET_MATCH_TIMELINE: new RateLimit(500, 10),
+        [METHOD_TYPES.GET_RUNE_PAGES]: new RateLimit(20000, 10),
+        [METHOD_TYPES.GET_CURRENT_GAME]: new RateLimit(20000, 10),
+        [METHOD_TYPES.LIST_FEATURED_GAMES]: new RateLimit(20000, 10),
+        [METHOD_TYPES.GET_SUMMONER_BY_ACCOUNT_ID]: new RateLimit(20000, 10),
+        [METHOD_TYPES.GET_SUMMONER_BY_ID]: new RateLimit(20000, 10),
+        [METHOD_TYPES.GET_SUMMONER_BY_NAME]: new RateLimit(20000, 10)
+      }
+
+      Object.keys(this.methodLimits).map((key) =>
+        methodLimits ? methodLimits[key]
+            ? this.methodLimits[key] = new RateLimit(methodLimits[key], 10)
+            : key : key)
 
       // hack because retryOptions becomes undefined when returning
       // for some reason
@@ -486,17 +518,21 @@ class Kindred {
    * Checks if client can make a request in a certain region.
    * Checks if client should use spread limiter or not as well.
    * @param {string} region some region string
+   * @param {string} methodType the endpoint url
    * @returns {boolean} true if client can make a request
    */
-  canMakeRequest(region: string): boolean {
+  canMakeRequest(region: string, methodType: string): boolean {
     const spread = this.spread
       ? this.limits[region][2].requestAvailable()
       : true
-
+    const methodLimit = this.methodLimits[methodType]
+      ? this.methodLimits[methodType].requestAvailable()
+      : false
     return (
       this.limits[region][0].requestAvailable() &&
       this.limits[region][1].requestAvailable() &&
-      spread
+      spread &&
+      methodLimit
     )
   }
 
@@ -694,13 +730,15 @@ class Kindred {
     region = this.defaultRegion,
     staticReq = false,
     options = {},
-    cacheParams = {}
+    cacheParams = {},
+    methodType
   }: {
     endUrl: string,
     region?: string,
     staticReq?: boolean,
     options?: any,
-    cacheParams: any
+    cacheParams: any,
+    methodType?: string
   }, cb: callback) {
     const tryRequest = (iterations) => {
       return new Promise((resolve, reject) => {
@@ -725,12 +763,14 @@ class Kindred {
               var self = this
 
                 ; (function sendRequest(callback, iterationsUntilError) {
-                  if (self.canMakeRequest(region)) {
+                  if (self.canMakeRequest(region, (methodType: any))) {
                     if (!staticReq) {
                       self.limits[region][0].addRequest()
                       self.limits[region][1].addRequest()
                       if (self.spread)
                         self.limits[region][2].addRequest()
+                      if (self.methodLimits[methodType])
+                        self.methodLimits[methodType].addRequest()
                     }
 
                     request({ url: fullUrl, timeout: self.timeout }, (error, response, body) => {
@@ -830,51 +870,60 @@ class Kindred {
   _championMasteryRequest({
     endUrl,
     region,
-    options
+    options,
+    methodType
   }: {
     endUrl: string,
     region?: string,
-    options?: any
+    options?: any,
+    methodType: string
   }, cb: callback) {
     return this._baseRequest({
       endUrl: `${SERVICES.CHAMPION_MASTERY}/v${VERSIONS.CHAMPION}/${endUrl}`, region, options,
       cacheParams: {
         ttl: this.CACHE_TIMERS.CHAMPION_MASTERY
-      }
+      },
+      methodType
     }, cb)
   }
 
   _championRequest({
     endUrl,
     region,
-    options
+    options,
+    methodType
   }: {
     endUrl: string,
     region?: string,
-    options?: any
+    options?: any,
+    methodType: string
   }, cb: callback) {
     return this._baseRequest({
       endUrl: `${SERVICES.CHAMPION}/v${VERSIONS.CHAMPION}/${endUrl}`,
       region, options,
       cacheParams: {
         ttl: this.CACHE_TIMERS.CHAMPION
-      }
+      },
+      methodType
     }, cb)
   }
 
   _spectatorRequest({
     endUrl,
-    region
+    region,
+    methodType
   }: {
     endUrl: string,
-    region?: string
+    region?: string,
+    methodType: string
   }, cb: callback) {
     return this._baseRequest({
       endUrl: `${SERVICES.SPECTATOR}/v${VERSIONS.SPECTATOR}/${endUrl}`,
       region,
       cacheParams: {
         ttl: this.CACHE_TIMERS.SPECTATOR
-      }
+      },
+      methodType
     }, cb)
   }
 
@@ -901,11 +950,13 @@ class Kindred {
   _statusRequest({
     endUrl,
     region,
-    options
+    options,
+    methodType
   }: {
     endUrl: string,
     region?: string,
-    options?: any
+    options?: any,
+    methodType: string
   }, cb: callback) {
     return this._baseRequest({
       endUrl: `${SERVICES.STATUS}/v${VERSIONS.STATUS}/${endUrl}`,
@@ -913,7 +964,8 @@ class Kindred {
       options,
       cacheParams: {
         ttl: this.CACHE_TIMERS.STATUS
-      }
+      },
+      methodType
     }, cb)
   }
 
@@ -935,17 +987,20 @@ class Kindred {
   _leagueRequest({
     endUrl,
     region,
-    options
+    options,
+    methodType
   }: {
     endUrl: string,
     region?: string,
-    options?: any
+    options?: any,
+    methodType: string
   }, cb: callback) {
     return this._baseRequest({
       endUrl: `${SERVICES.LEAGUE}/v${VERSIONS.LEAGUE}/${endUrl}`, region, options,
       cacheParams: {
         ttl: this.CACHE_TIMERS.LEAGUE
-      }
+      },
+      methodType
     }, cb)
   }
 
@@ -953,48 +1008,57 @@ class Kindred {
     endUrl,
     region,
     options,
-    cacheParams = { ttl: this.CACHE_TIMERS.MATCH }
+    cacheParams = { ttl: this.CACHE_TIMERS.MATCH },
+    methodType
   }: {
     endUrl: string,
     region?: string,
     options?: any,
-    cacheParams?: { ttl: number }
+    cacheParams?: { ttl: number },
+    methodType: string
   }, cb: callback) {
     return this._baseRequest({
       endUrl: `${SERVICES.MATCH}/v${VERSIONS.MATCH}/${endUrl}`, region, options,
-      cacheParams
+      cacheParams,
+      methodType
     }, cb)
   }
 
   _matchlistRequest({
     endUrl,
     region,
-    options
+    options,
+    methodType
   }: {
     endUrl: string,
     region?: string,
-    options?: any
+    options?: any,
+    methodType: string
   }, cb: callback) {
     return this._matchRequest({
       endUrl: `matchlists/${endUrl}`, region, options,
       cacheParams: {
         ttl: this.CACHE_TIMERS.MATCHLIST
-      }
+      },
+      methodType
     }, cb)
   }
 
   _runesMasteriesRequest({
     endUrl,
-    region
+    region,
+    methodType
   }: {
     endUrl: string,
-    region?: string
+    region?: string,
+    methodType: string
   }, cb: callback) {
     return this._baseRequest({
       endUrl: `${SERVICES.RUNES_MASTERIES}/v${VERSIONS.RUNES_MASTERIES}/${endUrl}`, region,
       cacheParams: {
         ttl: this.CACHE_TIMERS.RUNES_MASTERIES
-      }
+      },
+      methodType
     }, cb)
   }
 
@@ -1017,16 +1081,19 @@ class Kindred {
 
   _summonerRequest({
     endUrl,
-    region
+    region,
+    methodType
   }: {
     endUrl: string,
-    region?: string
+    region?: string,
+    methodType: string
   }, cb: callback) {
     return this._baseRequest({
       endUrl: `${SERVICES.SUMMONER}/v${VERSIONS.SUMMONER}/summoners/${endUrl}`, region,
       cacheParams: {
         ttl: this.CACHE_TIMERS.SUMMONER
-      }
+      },
+      methodType
     }, cb)
   }
 
@@ -1056,7 +1123,8 @@ class Kindred {
     }
 
     return this._championRequest({
-      endUrl: 'champions', region, options
+      endUrl: 'champions', region, options,
+      methodType: METHOD_TYPES.GET_CHAMPION
     }, cb)
   }
 
@@ -1077,7 +1145,8 @@ class Kindred {
       }
       return this._championRequest({
         endUrl: `champions/${endUrl}`,
-        region
+        region,
+        methodType: METHOD_TYPES.LIST_CHAMPIONS
       }, cb)
     } else {
       return this._logError(
@@ -1097,7 +1166,8 @@ class Kindred {
   } = {}, cb: callback) {
     if (playerId && championId && Number.isInteger(playerId) && Number.isInteger(championId)) {
       return this._championMasteryRequest({
-        endUrl: `champion-masteries/by-summoner/${playerId}/by-champion/${championId}`, region
+        endUrl: `champion-masteries/by-summoner/${playerId}/by-champion/${championId}`, region,
+        methodType: METHOD_TYPES.GET_CHAMPION_MASTERY
       }, cb)
     } else {
       return this._logError(
@@ -1133,7 +1203,8 @@ class Kindred {
           if (data && data.id) {
             return resolve(this._championMasteryRequest({
               endUrl: `champion-masteries/by-summoner/${data.id}`,
-              region
+              region,
+              methodType: METHOD_TYPES.LIST_CHAMPION_MASTERIES
             }, cb))
           }
         })
@@ -1149,7 +1220,8 @@ class Kindred {
         endUrl = playerId.toString()
       }
       return this._championMasteryRequest({
-        endUrl: `champion-masteries/by-summoner/${endUrl}`, region
+        endUrl: `champion-masteries/by-summoner/${endUrl}`, region,
+        methodType: METHOD_TYPES.LIST_CHAMPION_MASTERIES
       }, cb)
     } else if (typeof name === 'string') {
       return new Promise((resolve, reject) => {
@@ -1158,7 +1230,8 @@ class Kindred {
           if (data && data.id) {
             return resolve(this._championMasteryRequest({
               endUrl: `champion-masteries/by-summoner/${data.id}`,
-              region
+              region,
+              methodType: METHOD_TYPES.LIST_CHAMPION_MASTERIES
             }, cb))
           }
         })
@@ -1197,7 +1270,8 @@ class Kindred {
           if (data && data.id) {
             return resolve(this._championMasteryRequest({
               endUrl: `scores/by-summoner/${data.id}`,
-              region
+              region,
+              methodType: METHOD_TYPES.GET_CHAMPION_MASTERY
             }, cb))
           }
         })
@@ -1213,7 +1287,8 @@ class Kindred {
         endUrl = playerId.toString()
       }
       return this._championMasteryRequest({
-        endUrl: `scores/by-summoner/${endUrl}`, region
+        endUrl: `scores/by-summoner/${endUrl}`, region,
+        methodType: METHOD_TYPES.GET_CHAMPION_MASTERY
       }, cb)
     } else if (typeof name === 'string') {
       return new Promise((resolve, reject) => {
@@ -1222,7 +1297,8 @@ class Kindred {
           if (data && data.id) {
             return resolve(this._championMasteryRequest({
               endUrl: `scores/by-summoner/${data.id}`,
-              region
+              region,
+              methodType: METHOD_TYPES.GET_CHAMPION_MASTERY
             }, cb))
           }
         })
@@ -1255,7 +1331,8 @@ class Kindred {
           if (data && data.id) {
             return resolve(this._spectatorRequest({
               endUrl: `active-games/by-summoner/${data.id}`,
-              region
+              region,
+              methodType: METHOD_TYPES.GET_CURRENT_GAME
             }, cb))
           }
         })
@@ -1272,7 +1349,8 @@ class Kindred {
       }
       return this._spectatorRequest({
         endUrl: `active-games/by-summoner/${endUrl}`,
-        region
+        region,
+        methodType: METHOD_TYPES.GET_CURRENT_GAME
       }, cb)
     } else if (typeof name === 'string') {
       return new Promise((resolve, reject) => {
@@ -1281,7 +1359,8 @@ class Kindred {
           if (data && data.id) {
             return resolve(this._spectatorRequest({
               endUrl: `active-games/by-summoner/${data.id}`,
-              region
+              region,
+              methodType: METHOD_TYPES.GET_CURRENT_GAME
             }, cb))
           }
         })
@@ -1302,7 +1381,8 @@ class Kindred {
 
     return this._spectatorRequest({
       endUrl: 'featured-games',
-      region
+      region,
+      methodType: METHOD_TYPES.LIST_FEATURED_GAMES
     }, cb)
   }
 
@@ -1390,7 +1470,8 @@ class Kindred {
           if (data && data.id) {
             return resolve(this._leagueRequest({
               endUrl: `leagues/by-summoner/${data.id}`,
-              region
+              region,
+              methodType: METHOD_TYPES.GET_LEAGUES_IN_ALL_QUEUES
             }, cb))
           }
         })
@@ -1407,7 +1488,8 @@ class Kindred {
       }
       return this._leagueRequest({
         endUrl: `leagues/by-summoner/${endUrl}`,
-        region
+        region,
+        methodType: METHOD_TYPES.GET_LEAGUES_IN_ALL_QUEUES
       }, cb)
     } else if (typeof name === 'string') {
       return new Promise((resolve, reject) => {
@@ -1416,7 +1498,8 @@ class Kindred {
           if (data && data.id) {
             return resolve(this._leagueRequest({
               endUrl: `leagues/by-summoner/${data.id}`,
-              region
+              region,
+              methodType: METHOD_TYPES.GET_LEAGUES_IN_ALL_QUEUES
             }, cb))
           }
         })
@@ -1455,7 +1538,8 @@ class Kindred {
           if (data && data.id) {
             return resolve(this._leagueRequest({
               endUrl: `positions/by-summoner/${data.id}`,
-              region
+              region,
+              methodType: METHOD_TYPES.GET_LEAGUE_POSITIONS_IN_ALL_QUEUES
             }, cb))
           }
         })
@@ -1472,7 +1556,8 @@ class Kindred {
       }
       return this._leagueRequest({
         endUrl: `positions/by-summoner/${endUrl}`,
-        region
+        region,
+        methodType: METHOD_TYPES.GET_LEAGUE_POSITIONS_IN_ALL_QUEUES
       }, cb)
     } else if (typeof name === 'string') {
       return new Promise((resolve, reject) => {
@@ -1481,7 +1566,8 @@ class Kindred {
           if (data && data.id) {
             return resolve(this._leagueRequest({
               endUrl: `positions/by-summoner/${data.id}`,
-              region
+              region,
+              methodType: METHOD_TYPES.GET_LEAGUE_POSITIONS_IN_ALL_QUEUES
             }, cb))
           }
         })
@@ -1505,7 +1591,8 @@ class Kindred {
 
     if (typeof queue === 'string') {
       return this._leagueRequest({
-        endUrl: `challengerleagues/by-queue/${queue}`, region
+        endUrl: `challengerleagues/by-queue/${queue}`, region,
+        methodType: METHOD_TYPES.GET_CHALLENGER_LEAGUE
       }, cb)
     } else {
       this._logError(
@@ -1526,7 +1613,8 @@ class Kindred {
 
     if (typeof queue === 'string') {
       return this._leagueRequest({
-        endUrl: `masterleagues/by-queue/${queue}`, region
+        endUrl: `masterleagues/by-queue/${queue}`, region,
+        methodType: METHOD_TYPES.GET_MASTER_LEAGUE
       }, cb)
     } else {
       this._logError(
@@ -1810,7 +1898,11 @@ class Kindred {
       )
     }
 
-    return this._statusRequest({ endUrl: 'shard-data', region }, cb)
+    return this._statusRequest({
+      endUrl: 'shard-data',
+      region,
+      methodType: METHOD_TYPES.GET_SHARD_STATUS
+    }, cb)
   }
 
   /* MATCH-V3 */
@@ -1829,7 +1921,11 @@ class Kindred {
       if (matchId) {
         endUrl = matchId.toString()
       }
-      return this._matchRequest({ endUrl: `matches/${endUrl}`, region }, cb)
+      return this._matchRequest({
+        endUrl: `matches/${endUrl}`,
+        region,
+        methodType: METHOD_TYPES.GET_MATCH
+      }, cb)
     } else {
       return this._logError(
         this.getMatch.name,
@@ -1862,7 +1958,8 @@ class Kindred {
       }
       return this._matchlistRequest({
         endUrl: `by-account/${endUrl}`,
-        region, options
+        region, options,
+        methodType: METHOD_TYPES.GET_MATCHLIST
       }, cb)
     } else if (Number.isInteger(id || summonerId || playerId)) {
       return new Promise((resolve, reject) => {
@@ -1871,7 +1968,8 @@ class Kindred {
           if (data && data.accountId) {
             return resolve(this._matchlistRequest({
               endUrl: `by-account/${data.accountId}`,
-              region, options
+              region, options,
+              methodType: METHOD_TYPES.GET_MATCH
             }, cb))
           }
         })
@@ -1883,7 +1981,8 @@ class Kindred {
           if (data && data.accountId) {
             return resolve(this._matchlistRequest({
               endUrl: `by-account/${data.accountId}`,
-              region, options
+              region, options,
+              methodType: METHOD_TYPES.GET_MATCH
             }, cb))
           }
         })
@@ -1917,7 +2016,8 @@ class Kindred {
       }
       return this._matchlistRequest({
         endUrl: `by-account/${endUrl}/recent`,
-        region
+        region,
+        methodType: METHOD_TYPES.GET_RECENT_MATCHLIST
       }, cb)
     } else if (Number.isInteger(id || summonerId || playerId)) {
       return new Promise((resolve, reject) => {
@@ -1926,7 +2026,8 @@ class Kindred {
           if (data && data.accountId) {
             return resolve(this._matchlistRequest({
               endUrl: `by-account/${data.accountId}/recent`,
-              region
+              region,
+              methodType: METHOD_TYPES.GET_RECENT_MATCHLIST
             }, cb))
           }
         })
@@ -1938,7 +2039,8 @@ class Kindred {
           if (data && data.accountId) {
             return resolve(this._matchlistRequest({
               endUrl: `by-account/${data.accountId}/recent`,
-              region
+              region,
+              methodType: METHOD_TYPES.GET_RECENT_MATCHLIST
             }, cb))
           }
         })
@@ -1968,7 +2070,8 @@ class Kindred {
       }
       return this._matchRequest({
         endUrl: `timelines/by-match/${endUrl}`,
-        region
+        region,
+        methodType: METHOD_TYPES.GET_MATCH_TIMELINE
       }, cb)
     } else {
       return this._logError(
@@ -1998,7 +2101,8 @@ class Kindred {
           if (data && data.id) {
             return resolve(this._runesMasteriesRequest({
               endUrl: `runes/by-summoner/${data.id}`,
-              region
+              region,
+              methodType: METHOD_TYPES.GET_RUNE_PAGES
             }, cb))
           }
         })
@@ -2015,7 +2119,8 @@ class Kindred {
       }
       return this._runesMasteriesRequest({
         endUrl: `runes/by-summoner/${endUrl}`,
-        region
+        region,
+        methodType: METHOD_TYPES.GET_RUNE_PAGES
       }, cb)
     } else if (typeof name === 'string') {
       return new Promise((resolve, reject) => {
@@ -2024,7 +2129,8 @@ class Kindred {
           if (data && data.id) {
             return resolve(this._runesMasteriesRequest({
               endUrl: `runes/by-summoner/${data.id}`,
-              region
+              region,
+              methodType: METHOD_TYPES.GET_RUNE_PAGES
             }, cb))
           }
         })
@@ -2057,7 +2163,8 @@ class Kindred {
           if (data && data.id) {
             return resolve(this._runesMasteriesRequest({
               endUrl: `masteries/by-summoner/${data.id}`,
-              region
+              region,
+              methodType: METHOD_TYPES.GET_MASTERY_PAGES
             }, cb))
           }
         })
@@ -2074,7 +2181,8 @@ class Kindred {
       }
       return this._runesMasteriesRequest({
         endUrl: `masteries/by-summoner/${endUrl}`,
-        region
+        region,
+        methodType: METHOD_TYPES.GET_MASTERY_PAGES
       }, cb)
     } else if (typeof name === 'string') {
       return new Promise((resolve, reject) => {
@@ -2083,7 +2191,8 @@ class Kindred {
           if (data && data.id) {
             return resolve(this._runesMasteriesRequest({
               endUrl: `masteries/by-summoner/${data.id}`,
-              region
+              region,
+              methodType: METHOD_TYPES.GET_MASTERY_PAGES
             }, cb))
           }
         })
@@ -2245,12 +2354,14 @@ class Kindred {
       }
       return this._summonerRequest({
         endUrl,
-        region
+        region,
+        methodType: METHOD_TYPES.GET_SUMMONER_BY_ID
       }, cb)
     } else if (name && typeof name === 'string') {
       return this._summonerRequest({
         endUrl: `by-name/${this._sanitizeName(name)}`,
-        region
+        region,
+        methodType: METHOD_TYPES.GET_SUMMONER_BY_NAME
       }, cb)
     } else if (Number.isInteger(accountId || accId)) {
       if (accountId) {
@@ -2261,7 +2372,8 @@ class Kindred {
       }
       return this._summonerRequest({
         endUrl: `by-account/${endUrl}`,
-        region
+        region,
+        methodType: METHOD_TYPES.GET_SUMMONER_BY_ACCOUNT_ID
       }, cb)
     } else {
       return this._logError(
@@ -2893,6 +3005,7 @@ const undefined_ = (undefined: any)
 export default {
   Kindred,
   LIMITS,
+  METHOD_TYPES,
   QUEUE_STRINGS,
   QUEUE_TYPES,
   REGIONS,
