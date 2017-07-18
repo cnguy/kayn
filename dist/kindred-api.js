@@ -1510,7 +1510,7 @@
 
         return this._championRequest({
           endUrl: 'champions', region: region, options: options,
-          methodType: methodTypes.GET_CHAMPION
+          methodType: methodTypes.LIST_CHAMPIONS
         }, cb);
       }
     }, {
@@ -1534,7 +1534,7 @@
           return this._championRequest({
             endUrl: 'champions/' + endUrl,
             region: region,
-            methodType: methodTypes.LIST_CHAMPIONS
+            methodType: methodTypes.GET_CHAMPION
           }, cb);
         } else {
           return this._logError(this.getChamp.name, 'required params ' + chalk.yellow('`id/championId` (int)') + ' not passed in');
@@ -2453,7 +2453,7 @@
                 return resolve(_this9._matchlistRequest({
                   endUrl: 'by-account/' + data.accountId,
                   region: region, options: options,
-                  methodType: methodTypes.GET_MATCH
+                  methodType: methodTypes.GET_MATCHLIST
                 }, cb));
               }
             });
@@ -2468,7 +2468,7 @@
                 return resolve(_this9._matchlistRequest({
                   endUrl: 'by-account/' + data.accountId,
                   region: region, options: options,
-                  methodType: methodTypes.GET_MATCH
+                  methodType: methodTypes.GET_MATCHLIST
                 }, cb));
               }
             });

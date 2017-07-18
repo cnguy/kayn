@@ -1124,7 +1124,7 @@ class Kindred {
 
     return this._championRequest({
       endUrl: 'champions', region, options,
-      methodType: METHOD_TYPES.GET_CHAMPION
+      methodType: METHOD_TYPES.LIST_CHAMPIONS
     }, cb)
   }
 
@@ -1146,7 +1146,7 @@ class Kindred {
       return this._championRequest({
         endUrl: `champions/${endUrl}`,
         region,
-        methodType: METHOD_TYPES.LIST_CHAMPIONS
+        methodType: METHOD_TYPES.GET_CHAMPION
       }, cb)
     } else {
       return this._logError(
@@ -1969,7 +1969,7 @@ class Kindred {
             return resolve(this._matchlistRequest({
               endUrl: `by-account/${data.accountId}`,
               region, options,
-              methodType: METHOD_TYPES.GET_MATCH
+              methodType: METHOD_TYPES.GET_MATCHLIST
             }, cb))
           }
         })
@@ -1982,7 +1982,7 @@ class Kindred {
             return resolve(this._matchlistRequest({
               endUrl: `by-account/${data.accountId}`,
               region, options,
-              methodType: METHOD_TYPES.GET_MATCH
+              methodType: METHOD_TYPES.GET_MATCHLIST
             }, cb))
           }
         })
