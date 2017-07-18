@@ -6,6 +6,40 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
+## [2.0.69](https://github.com/ChauTNguyen/kindred-api/commit/c3b3a794ff912b389d3ff535a4ef1b96f3c22a58) - Added method rate-limiting (also customizable).
+
+[Riot Method Limits](https://developer.riotgames.com/rate-limiting.html)
+
+kindred-api now respects method the above rate-limits. It's set by default.
+
+However, users can set their own method rate limits if they want.
+This is useful in the case that Riot updates the rate limits, and that I'm MIA.
+
+```javascript
+const methodTypes = KindredAPI.METHOD_TYPES
+
+const k = new KindredAPI.Kindred({
+  key: 'fakeKey',
+  defaultRegion: KindredAPI.REGIONS.NORTH_AMERICA,
+  limits: [[500, 10], [30000, 600]], // basic prod key
+  debug: true,
+  // showKey: true,
+  //showDebug: true,
+  retryOptions: {
+    auto: false, // true by default
+    numberOfRetriesBeforeBreak: 3 // infinite by default
+  },
+  timeout: 1000,
+  showHeaders: true,
+  cache: new KindredAPI.InMemoryCache(),
+  // cacheTTL default if not passed in and cache is passed in
+  methodLimits: {
+    [METHOD_TYPES.GET_SUMMONER_BY_NAME]: 3, // limits this endpoint to 3 requests per 10s
+    [METHOD_TYPES.GET_MATCH]: 1000 // limits this endpoint to 1000 requests per 10s
+  }
+})
+```
+
 ## [2.0.68](https://github.com/ChauTNguyen/kindred-api/commit/9cc9bf6123f0622126391901be48366d2ff64c1f) - Added a new dev rate limit and more response header information is now printed.
 
 LIMITS.DEV = 20req/1s, 100req/120s
