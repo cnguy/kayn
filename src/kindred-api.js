@@ -202,6 +202,7 @@ class Kindred {
         [METHOD_TYPES.GET_RUNE_PAGES]: new RateLimit(20000, 10),
         [METHOD_TYPES.GET_CURRENT_GAME]: new RateLimit(20000, 10),
         [METHOD_TYPES.LIST_FEATURED_GAMES]: new RateLimit(20000, 10),
+        [METHOD_TYPES.GET_SHARD_STATUS]: new RateLimit(20000, 10),
         [METHOD_TYPES.GET_SUMMONER_BY_ACCOUNT_ID]: new RateLimit(20000, 10),
         [METHOD_TYPES.GET_SUMMONER_BY_ID]: new RateLimit(20000, 10),
         [METHOD_TYPES.GET_SUMMONER_BY_NAME]: new RateLimit(20000, 10)
