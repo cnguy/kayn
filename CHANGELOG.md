@@ -34,8 +34,8 @@ const k = new KindredAPI.Kindred({
   cache: new KindredAPI.InMemoryCache(),
   // cacheTTL default if not passed in and cache is passed in
   methodLimits: {
-    [METHOD_TYPES.GET_SUMMONER_BY_NAME]: 3, // limits this endpoint to 3 requests per 10s
-    [METHOD_TYPES.GET_MATCH]: 1000 // limits this endpoint to 1000 requests per 10s
+    [methodTypes.GET_SUMMONER_BY_NAME]: 3, // limits this endpoint to 3 requests per 10s
+    [methodTypes.GET_MATCH]: 1000 // limits this endpoint to 1000 requests per 10s
   }
 })
 ```
