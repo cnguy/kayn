@@ -303,7 +303,7 @@ k.Static.Champion
         .catch(error => console.error(error))
 
 k.Static.Champion
-        .by.id(497, { tag: 'all' })
+        .by.id(497, { tags: 'all' })
         .then(data => console.log(data))
         .catch(error => console.error(err))
 ```
