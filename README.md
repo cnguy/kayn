@@ -22,15 +22,16 @@ Node.js League of Legends v3 API wrapper with built-in rate-limiting (enforced p
 # Core Features
 * All standard endpoints covered but tournament endpoints.
 * Supports both **callbacks** and **promises**.
-* **Burst/Spread** rate limiter that is **enforced per region** and **follows retry headers**.
-    * **Retries** on 429 and >= 500 **until all calls are successful**. (Doesn't retry on 404)
+* **Burst/Spread** rate limiter that is **enforced per region** and **respects method rate limits**.
+    * **Retries** on 429 and >= 500 **until all calls are successful**.
+    * **Follows and respects retry headers**.
 * Built-in **parameter checks** so you can hopefully refer to documentation less! :)
     * Checks type of parameters (id, name, account id).
     * Checks if you're not passing valid query parameters!
 * Built-in **caching** (in-memory and Redis).
     * **Customized expiration timers**. You can set a timer for each endpoint type. Refer to [Caching](https://github.com/ChauTNguyen/kindred-api/wiki/Caching) for more info.
 * Designed to be simple but convenient. For example, you can call an exclusively by-id endpoint (such as grabbing the runes of a player) **with just the summoner name**.
-* Tons of config (showing debug, configurable number of retries, turning off auto-retry, etcetc). Check out [Initialization](https://github.com/ChauTNguyen/kindred-api/wiki/Initialization) for all configs.
+* Tons of config (showing debug, configurable number of retries, turning off auto-retry, changing method rate limits, etcetc). Check out [Initialization](https://github.com/ChauTNguyen/kindred-api/wiki/Initialization) for all configs.
 
 # How the Methods Work
 * [Object + Callback Functions](#object-and-callback-functions)
