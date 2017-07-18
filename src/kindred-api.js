@@ -532,7 +532,7 @@ class Kindred {
       this.limits[region][0].requestAvailable() &&
       this.limits[region][1].requestAvailable() &&
       spread &&
-      methodLimit
+      methodType ? methodLimit : true
     )
   }
 
