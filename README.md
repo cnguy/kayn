@@ -67,7 +67,7 @@ const config = {
   id: 6323,
   region: REGIONS.NORTH_AMERICA,
   options: {
-      tags: ['image', 'sanitizedDescription']
+    tags: ['image', 'sanitizedDescription']
   }
 }
 
@@ -76,8 +76,8 @@ k.Static.mastery(config, KindredAPI.print)
 const matchlistConfig = {
   name: 'Contractz',
   options: {
-      queue: QUEUES.TEAM_BUILDER_RANKED_SOLO, // 420
-      champion: 67
+    queue: QUEUES.TEAM_BUILDER_RANKED_SOLO, // 420
+    champion: 67
   }
 }
 
