@@ -3554,7 +3554,7 @@
     InMemoryCache: InMemoryCache,
     RedisCache: RedisCache,
 
-    tags: {
+    TAGS: {
       STATIC_CHAMPION_TAGS: STATIC_CHAMPION_TAGS
     }
   };

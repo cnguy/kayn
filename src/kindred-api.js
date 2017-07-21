@@ -3021,7 +3021,7 @@ export default {
   InMemoryCache,
   RedisCache,
   // tags
-  tags: {
+  TAGS: {
     STATIC_CHAMPION_TAGS
   }
 }

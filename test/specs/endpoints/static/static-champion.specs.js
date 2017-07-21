@@ -11,7 +11,7 @@ require('dotenv').config()
 
 var init = require('../../../../utils/init')
 var KindredAPI = require('../../../../dist/kindred-api')
-const STATIC_CHAMPION_TAGS = KindredAPI.tags.STATIC_CHAMPION_TAGS
+const STATIC_CHAMPION_TAGS = KindredAPI.TAGS.STATIC_CHAMPION_TAGS
 
 var id = 497 // Rakan
 
@@ -84,7 +84,7 @@ describe('Static Champion', function () {
               done()
             })
             .catch(err => {
-              throw new Error()
+              throw new Error('wrong path', err)
             })
         })
 
@@ -102,7 +102,7 @@ describe('Static Champion', function () {
               done()
             })
             .catch(err => {
-              throw new Error()
+              throw new Error('wrong path', err)
             })
         })
 
@@ -120,7 +120,26 @@ describe('Static Champion', function () {
               done()
             })
             .catch(err => {
-              throw new Error()
+              throw new Error('wrong path', err)
+            })
+        })
+
+        it('should get blurb with tags=array of allytips & blurb', function (done) {
+          init()
+            .Static
+            .champion({
+              id,
+              options: {
+                tags: ['allytips', 'blurb']
+              }
+            })
+            .then(data => {
+              expect(has(data, 'allytips')).to.be.true
+              expect(has(data, 'blurb')).to.be.true
+              done()
+            })
+            .catch(err => {
+              throw new Error('wrong path', err)
             })
         })
 
@@ -140,12 +159,11 @@ describe('Static Champion', function () {
               done()
             })
             .catch(err => {
-              console.log(err)
-              throw new Error()
+              throw new Error('wrong path', err)
             })
         })
 
-        it('should not 400 bad request with typo in tags set', function (done) {
+        it('should return 400 bad request with typo in tags set', function (done) {
           init()
             .Static
             .champion({
@@ -155,7 +173,7 @@ describe('Static Champion', function () {
               }
             })
             .then(data => {
-              throw new Error()
+              throw new Error('wrong path', data)
             })
             .catch(err => {
               expect(err).to.equal(400)
@@ -229,6 +247,89 @@ describe('Static Champion', function () {
                 done()
               })
           })
+        })
+      })
+
+      describe('query params', function () {
+        it('should get allytips with tags=allytips set', function (done) {
+          init()
+            .Static
+            .Champion.by.id(id, { tags: 'allytips' })
+            .then(data => {
+              expect(has(data, 'allytips')).to.be.true
+              done()
+            })
+            .catch(err => {
+              throw new Error('wrong path', err)
+            })
+        })
+
+        it('should get blurb with tags=blurb set', function (done) {
+          init()
+            .Static
+            .Champion.by.id(id, { tags: 'blurb' })
+            .then(data => {
+              expect(has(data, 'blurb')).to.be.true
+              done()
+            })
+            .catch(err => {
+              throw new Error('wrong path', err)
+            })
+        })
+
+        it('should get blurb with tags=array of blurb', function (done) {
+          init()
+            .Static
+            .Champion.by.id(id, { tags: ['blurb'] })
+            .then(data => {
+              expect(has(data, 'blurb')).to.be.true
+              done()
+            })
+            .catch(err => {
+              throw new Error('wrong path', err)
+            })
+        })
+
+        it('should get blurb with tags=array of allytips & blurb', function (done) {
+          init()
+            .Static
+            .Champion.by.id(id, { tags: ['allytips', 'blurb'] })
+            .then(data => {
+              expect(has(data, 'allytips')).to.be.true
+              expect(has(data, 'blurb')).to.be.true
+              done()
+            })
+            .catch(err => {
+              throw new Error('wrong path', err)
+            })
+        })
+
+        it('should get all tags with all', function (done) {
+          init()
+            .Static
+            .Champion.by.id(id, { tags: 'all' })
+            .then(data => {
+              STATIC_CHAMPION_TAGS.map(tag => {
+                expect(has(data, tag)).to.be.true
+              })
+              done()
+            })
+            .catch(err => {
+              throw new Error('wrong path', err)
+            })
+        })
+
+        it('should return 400 bad request with typo in tags set', function (done) {
+          init()
+            .Static
+            .Champion.by.id(id, { tags: 'blurb' }) // TODO: purposely failing test to see what it looks like on travis
+            .then(data => {
+              throw new Error('wrong path')
+            })
+            .catch(err => {
+              expect(err).to.equal(400)
+              done()
+            })
         })
       })
     })
