@@ -322,7 +322,7 @@ describe('Static Champion', function () {
         it('should return 400 bad request with typo in tags set', function (done) {
           init()
             .Static
-            .Champion.by.id(id, { tags: 'blurb' }) // TODO: purposely failing test to see what it looks like on travis
+            .Champion.by.id(id, { tags: 'blurbie' })
             .then(data => {
               throw new Error('wrong path')
             })
