@@ -5,11 +5,15 @@ var expect = chai.expect,
   should = chai.should,
   assert = chai.assert
 
+var has = require('lodash.has')
+
 require('dotenv').config()
 
 var init = require('../../../../utils/init')
+var KindredAPI = require('../../../../dist/kindred-api')
+const STATIC_CHAMPION_TAGS = KindredAPI.tags.STATIC_CHAMPION_TAGS
 
-var id = 497
+var id = 497 // Rakan
 
 const config = {
   id,
@@ -62,6 +66,101 @@ describe('Static Champion', function () {
                 expect(data).to.not.be.undefined
                 done()
               }), Error)
+        })
+      })
+
+      describe('query params', function () {
+        it('should get allytips with tags=allytips set', function (done) {
+          init()
+            .Static
+            .champion({
+              id,
+              options: {
+                tags: 'allytips'
+              }
+            })
+            .then(data => {
+              expect(has(data, 'allytips')).to.be.true
+              done()
+            })
+            .catch(err => {
+              throw new Error()
+            })
+        })
+
+        it('should get blurb with tags=blurb set', function (done) {
+          init()
+            .Static
+            .champion({
+              id,
+              options: {
+                tags: 'blurb'
+              }
+            })
+            .then(data => {
+              expect(has(data, 'blurb')).to.be.true
+              done()
+            })
+            .catch(err => {
+              throw new Error()
+            })
+        })
+
+        it('should get blurb with tags=array of blurb', function (done) {
+          init()
+            .Static
+            .champion({
+              id,
+              options: {
+                tags: ['blurb']
+              }
+            })
+            .then(data => {
+              expect(has(data, 'blurb')).to.be.true
+              done()
+            })
+            .catch(err => {
+              throw new Error()
+            })
+        })
+
+        it('should get all tags with all', function (done) {
+          init()
+            .Static
+            .champion({
+              id,
+              options: {
+                tags: 'all'
+              }
+            })
+            .then(data => {
+              STATIC_CHAMPION_TAGS.map(tag => {
+                expect(has(data, tag)).to.be.true
+              })
+              done()
+            })
+            .catch(err => {
+              console.log(err)
+              throw new Error()
+            })
+        })
+
+        it('should not 400 bad request with typo in tags set', function (done) {
+          init()
+            .Static
+            .champion({
+              id,
+              options: {
+                tags: 'blurbie'
+              }
+            })
+            .then(data => {
+              throw new Error()
+            })
+            .catch(err => {
+              expect(err).to.equal(400)
+              done()
+            })
         })
       })
     })

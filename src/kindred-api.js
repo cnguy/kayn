@@ -24,6 +24,10 @@ import SERVICES from './constants/services'
 import TIME_CONSTANTS from './cache/constants/cache-timers'
 import VERSIONS from './constants/versions'
 
+import {
+  STATIC_CHAMPION_TAGS
+} from './constants/tags.js'
+
 import re from './constants/valid-summoner-name-regex'
 
 import checkValidRegion from './helpers/check-valid-region'
@@ -3015,5 +3019,9 @@ export default {
   print,
   // Caches
   InMemoryCache,
-  RedisCache
+  RedisCache,
+  // tags
+  tags: {
+    STATIC_CHAMPION_TAGS
+  }
 }

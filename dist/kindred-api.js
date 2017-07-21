@@ -476,6 +476,8 @@
     'TOURNAMENT': 3
   };
 
+  var STATIC_CHAMPION_TAGS = ['allytips', 'blurb', 'enemytips', 'image', 'info', 'lore', 'partype', 'passive', 'recommended', 'skins', 'spells', 'stats'];
+
   var re = XRegExp('^[0-9\\p{L} _\\.]+$');
 
   var check = function check(region) {
@@ -3550,7 +3552,11 @@
     print: print,
 
     InMemoryCache: InMemoryCache,
-    RedisCache: RedisCache
+    RedisCache: RedisCache,
+
+    tags: {
+      STATIC_CHAMPION_TAGS: STATIC_CHAMPION_TAGS
+    }
   };
 
   module.exports = Kindred$2;
