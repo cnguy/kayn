@@ -57,18 +57,18 @@ const k = new Kindred({ key: 'myRitoAPIKey' })
 k.Summoner.get({ name: 'Contractz' }, print)
 k.Summoner.by.name('Contractz', print)
 
-// both can take a callback
+// both take standard callbacks.
 // in this case, print is just
 // function (err, data) { if (err) console.error(err) else console.log(data) }
 // {"id":32932398,"accountId":47776491,"name":"Contractz","profileIconId":1626,"revisionDate":1497308139000,"summonerLevel":30}
 
-// Promises work too
+// promises work too.
 k.Summoner.by.name('Contractz')
  .then(data => console.log(data))
  .catch(error => console.error(error))
 
-// This is kinda boring though.
-// Let's try turning on the debug.
+// this is kinda boring though.
+// let's try turning on the debug.
 const lol = new Kindred({
   key: 'myRitoAPIKey',
   debug: true
@@ -78,8 +78,8 @@ lol.Summoner.by.name('Contractz', print)
 // 200 @ https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/contractz?api_key=
 // {"id":32932398,"accountId":47776491,"name":"Contractz","profileIconId":1626,"revisionDate":1497308139000,"summonerLevel":30}
 
-// Nice! The API key is hidden by default.
-// However, let's say I want the convenience of clicking on the URL for some minor debugging.
+// nice! the API key is hidden by default.
+// however, let's say I want the convenience of clicking on the URL for some minor debugging.
 
 const haha = new Kindred({
   key: 'myRitoAPIKey',
@@ -92,7 +92,7 @@ haha.Summoner.by.name('Contractz', print)
 // 200 @ https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/contractz?api_key=myRitoAPIKey easy clicks / copypasting :)
 // {"id":32932398,"accountId":47776491,"name":"Contractz","profileIconId":1626,"revisionDate":1497308139000,"summonerLevel":30}
 
-// Let's now add a timeout
+// let's now add a timeout.
 const omg = new Kindred({
   key: 'myRitoAPIKey',
   debug: true,
@@ -112,7 +112,7 @@ omg.Summoner.by.name('Contractz')
     Not fast enough, huh?
 */
 
-// Let's add the dev limit,
+// let's add the official new dev limit,
 // show the headers,
 // set the default region,
 // and add some in-memory-caching!
@@ -142,7 +142,7 @@ wowomg.Summoner
 */
 // CACHE HIT @ https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/contractz
 
-// Here's a production type of config
+// here's a production config I use for my repo/OneTricks
 const production = new Kindred({
   key: 'myProductionRitoAPIKey',
   limits: [[500, 10], [30000, 600]], // depends on app, this is base limit
@@ -151,9 +151,10 @@ const production = new Kindred({
   cache: new RedisCache()
 })
 
-// These are mostly the core configuration options.
-// There are many others though.
-// One useful one is
+// these are mostly the core configuration options.
+// there are many others though...
+// since Kindred tries to retry until
+// all calls are successful by default, a very useful config is
 const zxcv = new Kindred({
   key: 'myRitoAPIKey',
   limits: LIMITS.DEV,
@@ -163,11 +164,13 @@ const zxcv = new Kindred({
   }
 })
 
-// Now, if you hit an error that isn't a 404, it'll only retry
+// now, if you hit an error that isn't a 404, it'll only retry
 // up to N more time -- in this case, 3.
+// without this, you'll have a request constantly allocated
+// to Riot's 500 internal service error (which happens quite frequently!)
 
 // https://github.com/ChauTNguyen/kindred-api/wiki/Initialization
-// Make sure to check this for all possible configuration.
+// make sure to check this for all possible configuration.
 
 ```
 
