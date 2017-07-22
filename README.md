@@ -23,7 +23,7 @@ Node.js League of Legends v3 API wrapper with built-in rate-limiting (enforced p
 # Core Features
 * All standard endpoints covered but tournament endpoints.
 * Supports both **callbacks** and **promises**.
-* **Burst/Spread** rate limiter that is **enforced per region** and **respects method rate limits**.
+* **Burst/Spread** rate limiter that is **enforced per region** and **respects method rate limits (per region as well)**.
     * **Retries** on 429 and >= 500 **until all calls are successful**.
     * **Follows and respects retry headers**.
 * Built-in **parameter checks** so you can hopefully refer to documentation less! :)
@@ -366,7 +366,7 @@ const runesConfig = {
 
 k.Static.runes(runesConfig, KindredAPI.print)
 
-const name = 'caaaaaaaaaria'
+const name = 'do not nuke PROD'
 const region = REGIONS.NORTH_AMERICA
 const options = {
   // no need for joins or hardcoded numbers
