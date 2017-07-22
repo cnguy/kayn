@@ -6,7 +6,11 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
-## [2.0.69](https://github.com/ChauTNguyen/kindred-api/commit/c3b3a794ff912b389d3ff535a4ef1b96f3c22a58) - Added method rate-limiting (also customizable).
+## [2.0.70](https://github.com/ChauTNguyen/kindred-api/commits/feature/fix-method-rate-limiting-per-region) - Fix method rate-limiting to be per-region.
+
+[for more info!](https://github.com/ChauTNguyen/kindred-api/wiki/Rate-Limiter)
+
+## [2.0.69](https://github.com/ChauTNguyen/kindred-api/commit/c3b3a794ff912b389d3ff535a4ef1b96f3c22a58) - Add method rate-limiting (also customizable).
 
 [Riot Method Limits](https://developer.riotgames.com/rate-limiting.html)
 
@@ -40,7 +44,7 @@ const k = new KindredAPI.Kindred({
 })
 ```
 
-## [2.0.68](https://github.com/ChauTNguyen/kindred-api/commit/9cc9bf6123f0622126391901be48366d2ff64c1f) - Added a new dev rate limit and more response header information is now printed.
+## [2.0.68](https://github.com/ChauTNguyen/kindred-api/commit/9cc9bf6123f0622126391901be48366d2ff64c1f) - Add a new dev rate limit and more response header information is now printed.
 
 LIMITS.DEV = 20req/1s, 100req/120s
 LIMITS.OLD_DEV = 10req/10s, 500req/60s
@@ -291,6 +295,7 @@ This was mostly a patch to do a lot of code refactoring. :P
 Added basic check for initialization. Constructors must be called with a key parameter.
 
 ## [2.0.35](https://github.com/ChauTNguyen/kindred-api/commit/f49fe96e6b54bcdea4f14c73f4ff24720ca00553) - setRegion doesn't break your program! Tests introduced.
+
 * Fixed setRegion. It had a guaranteed exit function previously (brainfart).
 
 * Converted process.exit(1)'s into throws for testing purposes.
