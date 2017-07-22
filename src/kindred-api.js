@@ -171,6 +171,10 @@ class Kindred {
       this.CACHE_TIMERS = this._disableCache(CACHE_TIMERS)
     }
 
+    this.spread = (spread: any)
+    this.retryOptions = (retryOptions: any)
+    this.timeout = (timeout: any)
+
     if (limits) {
       if (invalidLimits(limits)) {
         console.log(`${chalk.red(`Initialization of Kindred failed: Invalid ${chalk.yellow('limits')}. Valid examples: ${chalk.yellow('[[10, 10], [500, 600]]')}`)}.`)
@@ -180,9 +184,6 @@ class Kindred {
       }
 
       this.limits = ({}: any)
-      this.spread = (spread: any)
-      this.retryOptions = (retryOptions: any)
-      this.timeout = (timeout: any)
       this.methodLimits = {}
 
       Object.keys(REGIONS).map(region => {
@@ -835,7 +836,7 @@ class Kindred {
                   }
                 })(cb, iterations)
             } else {
-              request({ url: fullUrl }, (error, response, body) => {
+              request({ url: fullUrl, timeout: this.timeout }, (error, response, body) => {
                 if (response) {
                   var self = this
 
@@ -874,7 +875,7 @@ class Kindred {
       })
     }
 
-    return tryRequest(this.numberOfRetriesBeforeBreak)
+    return tryRequest(this.numberOfRetriesBeforeBreak + 1)
   }
 
   _championMasteryRequest({

@@ -13,6 +13,7 @@ Node.js League of Legends v3 API wrapper with built-in rate-limiting (enforced p
 
 # Table of Contents:
 * [Core Features](#core-features)
+* [Introduction](#introduction)
 * [How the Methods Work](#how-the-methods-work)
 * [Quickstart](#quickstart)
 * [Known Issues](#known-issues)
@@ -32,6 +33,143 @@ Node.js League of Legends v3 API wrapper with built-in rate-limiting (enforced p
     * **Customized expiration timers**. You can set a timer for each endpoint type. Refer to [Caching](https://github.com/ChauTNguyen/kindred-api/wiki/Caching) for more info.
 * Designed to be simple but convenient. For example, you can call an exclusively by-id endpoint (such as grabbing the runes of a player) **with just the summoner name**.
 * Tons of config (showing debug, configurable number of retries, turning off auto-retry, changing method rate limits, etcetc). Check out [Initialization](https://github.com/ChauTNguyen/kindred-api/wiki/Initialization) for all configs.
+
+# Introduction
+
+This will just be a quick introduction to some of the core features & configuration mentioned above. Check out the QuickStart section below for a lot of method usage. Make sure to check the wiki as well for detailed information about anything.
+
+```javascript
+import {
+  Kindred,
+  REGIONS,
+  LIMITS,
+  METHOD_TYPES,
+  QUEUE_TYPES, // for matchlist query params
+  QUEUE_STRINGS, // for master/challenger leagues query params
+  InMemoryCache,
+  RedisCache,
+  print // simple callback function that prints the error or data
+} from 'kindred-api'
+
+const k = new Kindred({ key: 'myRitoAPIKey' })
+
+// read more about methods in # How the Methods Work
+k.Summoner.get({ name: 'Contractz' }, print)
+k.Summoner.by.name('Contractz', print)
+
+// both can take a callback
+// in this case, print is just
+// function (err, data) { if (err) console.error(err) else console.log(data) }
+// {"id":32932398,"accountId":47776491,"name":"Contractz","profileIconId":1626,"revisionDate":1497308139000,"summonerLevel":30}
+
+// Promises work too
+k.Summoner.by.name('Contractz')
+ .then(data => console.log(data))
+ .catch(error => console.error(error))
+
+// This is kinda boring though.
+// Let's try turning on the debug.
+const lol = new Kindred({
+  key: 'myRitoAPIKey',
+  debug: true
+})
+
+lol.Summoner.by.name('Contractz', print)
+// 200 @ https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/contractz?api_key=
+// {"id":32932398,"accountId":47776491,"name":"Contractz","profileIconId":1626,"revisionDate":1497308139000,"summonerLevel":30}
+
+// Nice! The API key is hidden by default.
+// However, let's say I want the convenience of clicking on the URL for some minor debugging.
+
+const haha = new Kindred({
+  key: 'myRitoAPIKey',
+  debug: true,
+  showKey: true
+})
+
+haha.Summoner.by.name('Contractz', print)
+
+// 200 @ https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/contractz?api_key=myRitoAPIKey easy clicks / copypasting :)
+// {"id":32932398,"accountId":47776491,"name":"Contractz","profileIconId":1626,"revisionDate":1497308139000,"summonerLevel":30}
+
+// Let's now add a timeout
+const omg = new Kindred({
+  key: 'myRitoAPIKey',
+  debug: true,
+  showKey: true,
+  timeout: 1 // millisecond
+})
+
+omg.Summoner.by.name('Contractz')
+
+/*
+{ Error: ETIMEDOUT
+    at Timeout._onTimeout (/Users/sani/dev/kindred-api/node_modules/request/request.js:852:19)
+    at ontimeout (timers.js:365:14)
+    at tryOnTimeout (timers.js:237:5)
+    at Timer.listOnTimeout (timers.js:207:5) code: 'ETIMEDOUT', connect: true } 'https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/contractz'
+
+    Not fast enough, huh?
+*/
+
+// Let's add the dev limit,
+// show the headers,
+// set the default region,
+// and add some in-memory-caching!
+const wowomg = new Kindred({
+  key: 'myRitoAPIKey',
+  defaultRegion: REGIONS.NORTH_AMERICA,
+  limits: LIMITS.DEV, // [[20, 1], [100, 120]] 20 reqs/1s. 100 reqs/2m.
+  debug: true,
+  timeout: 10000, // 10 seconds
+  cache: new InMemoryCache()
+})
+
+wowomg.Summoner
+      .get({ name: 'Contractz' })
+      .then(data => wowomg.Summoner.get({ name: 'Contractz' }))
+      .catch(error => console.error(error))
+
+// 200 @ https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/contractz?api_key=
+/*
+{ 'x-rate-limit-type': undefined,
+  'x-app-rate-limit': '100:120,20:1',
+  'x-app-rate-limit-count': '1:120,1:1',
+  'x-method-rate-limit': '20000:10,1200000:600',
+  'x-method-rate-limit-count': '1:10,3:600',
+  'x-rate-limit-count': '1:120,1:1',
+  'retry-after': undefined }
+*/
+// CACHE HIT @ https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/contractz
+
+// Here's a production type of config
+const production = new Kindred({
+  key: 'myProductionRitoAPIKey',
+  limits: [[500, 10], [30000, 600]], // depends on app, this is base limit
+  spread: true, // setting spread to true will help prevent timeout/econreset errors
+  timeout: 100000,
+  cache: new RedisCache()
+})
+
+// These are mostly the core configuration options.
+// There are many others though.
+// One useful one is
+const zxcv = new Kindred({
+  key: 'myRitoAPIKey',
+  limits: LIMITS.DEV,
+  retryOptions: {
+    auto: true, // make sure this is true
+    numberOfRetriesBeforeBreak: 3,
+  }
+})
+
+// Now, if you hit an error that isn't a 404, it'll only retry
+// up to N more time -- in this case, 3.
+
+// https://github.com/ChauTNguyen/kindred-api/wiki/Initialization
+// Make sure to check this for all possible configuration.
+
+```
 
 # How the Methods Work
 * [Object + Callback Functions](#object-and-callback-functions)
@@ -197,7 +335,7 @@ This initialization's purpose should be fairly obvious; This is just for quickly
 
 Start out with this if you want to make test calls right away to play around with the library and decide if you like it.
 
-[For regular and more customizable Initialization (caching, spread rate limiter), refer to wiki.](https://github.com/ChauTNguyen/kindred-api/wiki/Initialization)
+[For production apps and more customizable initialization (caching, spread rate limiter), refer to wiki.](https://github.com/ChauTNguyen/kindred-api/wiki/Initialization)
 
 ```javascript
 const KindredAPI = require('kindred-api')

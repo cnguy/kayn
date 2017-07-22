@@ -634,6 +634,10 @@
         this.CACHE_TIMERS = this._disableCache(endpointCacheTimers);
       }
 
+      this.spread = spread;
+      this.retryOptions = retryOptions;
+      this.timeout = timeout;
+
       if (limits$$1) {
         if (check$1(limits$$1)) {
           console.log(chalk.red('Initialization of Kindred failed: Invalid ' + chalk.yellow('limits') + '. Valid examples: ' + chalk.yellow('[[10, 10], [500, 600]]')) + '.');
@@ -643,9 +647,6 @@
         }
 
         this.limits = {};
-        this.spread = spread;
-        this.retryOptions = retryOptions;
-        this.timeout = timeout;
         this.methodLimits = {};
 
         Object.keys(regions).map(function (region) {
@@ -1264,7 +1265,7 @@
                     }
                   })(cb, iterations);
                 } else {
-                  request({ url: fullUrl }, function (error, response, body) {
+                  request({ url: fullUrl, timeout: _this2.timeout }, function (error, response, body) {
                     if (response) {
                       var self = _this2;
 
@@ -1305,7 +1306,7 @@
           });
         };
 
-        return tryRequest(this.numberOfRetriesBeforeBreak);
+        return tryRequest(this.numberOfRetriesBeforeBreak + 1);
       }
     }, {
       key: '_championMasteryRequest',
