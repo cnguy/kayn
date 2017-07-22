@@ -121,6 +121,7 @@ const wowomg = new Kindred({
   defaultRegion: REGIONS.NORTH_AMERICA,
   limits: LIMITS.DEV, // [[20, 1], [100, 120]] 20 reqs/1s. 100 reqs/2m.
   debug: true,
+  showHeaders: true,
   timeout: 10000, // 10 seconds
   cache: new InMemoryCache()
 })
@@ -165,7 +166,7 @@ const zxcv = new Kindred({
 })
 
 // now, if you hit an error that isn't a 404, it'll only retry
-// up to N more time -- in this case, 3.
+// up to N more times -- in this case, 3.
 // without this, you'll have a request constantly allocated
 // to Riot's 500 internal service error (which happens quite frequently!)
 
