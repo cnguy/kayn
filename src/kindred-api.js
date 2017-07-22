@@ -183,35 +183,38 @@ class Kindred {
       this.spread = (spread: any)
       this.retryOptions = (retryOptions: any)
       this.timeout = (timeout: any)
+      this.methodLimits = {}
 
-      this.methodLimits = {
-        [METHOD_TYPES.LIST_CHAMPION_MASTERIES]: new RateLimit(20000, 10),
-        [METHOD_TYPES.GET_CHAMPION_MASTERY]: new RateLimit(20000, 10),
-        [METHOD_TYPES.GET_TOTAL_CHAMPION_MASTERY_SCORE]: new RateLimit(20000, 10),
-        [METHOD_TYPES.LIST_CHAMPIONS]: new RateLimit(20000, 10),
-        [METHOD_TYPES.GET_CHAMPION]: new RateLimit(20000, 10),
-        [METHOD_TYPES.GET_CHALLENGER_LEAGUE]: new RateLimit(20000, 10),
-        [METHOD_TYPES.GET_LEAGUES_IN_ALL_QUEUES]: new RateLimit(20000, 10),
-        [METHOD_TYPES.GET_MASTER_LEAGUE]: new RateLimit(20000, 10),
-        [METHOD_TYPES.GET_LEAGUE_POSITIONS_IN_ALL_QUEUES]: new RateLimit(20000, 10),
-        [METHOD_TYPES.GET_MASTERY_PAGES]: new RateLimit(20000, 10),
-        [METHOD_TYPES.GET_MATCH]: new RateLimit(500, 10),
-        [METHOD_TYPES.GET_MATCHLIST]: new RateLimit(1000, 10),
-        [METHOD_TYPES.GET_RECENT_MATCHLIST]: new RateLimit(20000, 10),
-        [METHOD_TYPES.GET_MATCH_TIMELINE]: new RateLimit(500, 10),
-        [METHOD_TYPES.GET_RUNE_PAGES]: new RateLimit(20000, 10),
-        [METHOD_TYPES.GET_CURRENT_GAME]: new RateLimit(20000, 10),
-        [METHOD_TYPES.LIST_FEATURED_GAMES]: new RateLimit(20000, 10),
-        [METHOD_TYPES.GET_SHARD_STATUS]: new RateLimit(20000, 10),
-        [METHOD_TYPES.GET_SUMMONER_BY_ACCOUNT_ID]: new RateLimit(20000, 10),
-        [METHOD_TYPES.GET_SUMMONER_BY_ID]: new RateLimit(20000, 10),
-        [METHOD_TYPES.GET_SUMMONER_BY_NAME]: new RateLimit(20000, 10)
-      }
+      Object.keys(REGIONS).map(region => {
+        this.methodLimits[REGIONS[region]] = {
+          [METHOD_TYPES.LIST_CHAMPION_MASTERIES]: new RateLimit(20000, 10),
+          [METHOD_TYPES.GET_CHAMPION_MASTERY]: new RateLimit(20000, 10),
+          [METHOD_TYPES.GET_TOTAL_CHAMPION_MASTERY_SCORE]: new RateLimit(20000, 10),
+          [METHOD_TYPES.LIST_CHAMPIONS]: new RateLimit(20000, 10),
+          [METHOD_TYPES.GET_CHAMPION]: new RateLimit(20000, 10),
+          [METHOD_TYPES.GET_CHALLENGER_LEAGUE]: new RateLimit(20000, 10),
+          [METHOD_TYPES.GET_LEAGUES_IN_ALL_QUEUES]: new RateLimit(20000, 10),
+          [METHOD_TYPES.GET_MASTER_LEAGUE]: new RateLimit(20000, 10),
+          [METHOD_TYPES.GET_LEAGUE_POSITIONS_IN_ALL_QUEUES]: new RateLimit(20000, 10),
+          [METHOD_TYPES.GET_MASTERY_PAGES]: new RateLimit(20000, 10),
+          [METHOD_TYPES.GET_MATCH]: new RateLimit(500, 10),
+          [METHOD_TYPES.GET_MATCHLIST]: new RateLimit(1000, 10),
+          [METHOD_TYPES.GET_RECENT_MATCHLIST]: new RateLimit(20000, 10),
+          [METHOD_TYPES.GET_MATCH_TIMELINE]: new RateLimit(500, 10),
+          [METHOD_TYPES.GET_RUNE_PAGES]: new RateLimit(20000, 10),
+          [METHOD_TYPES.GET_CURRENT_GAME]: new RateLimit(20000, 10),
+          [METHOD_TYPES.LIST_FEATURED_GAMES]: new RateLimit(20000, 10),
+          [METHOD_TYPES.GET_SHARD_STATUS]: new RateLimit(20000, 10),
+          [METHOD_TYPES.GET_SUMMONER_BY_ACCOUNT_ID]: new RateLimit(20000, 10),
+          [METHOD_TYPES.GET_SUMMONER_BY_ID]: new RateLimit(20000, 10),
+          [METHOD_TYPES.GET_SUMMONER_BY_NAME]: new RateLimit(20000, 10)
+        }
 
-      Object.keys(this.methodLimits).map((key) =>
-        methodLimits ? methodLimits[key]
-            ? this.methodLimits[key] = new RateLimit(methodLimits[key], 10)
-            : key : key)
+        Object.keys(this.methodLimits[REGIONS[region]]).map((key) =>
+          methodLimits ? methodLimits[key]
+              ? this.methodLimits[REGIONS[region]][key] = new RateLimit(methodLimits[key], 10)
+              : key : key)
+      })
 
       // hack because retryOptions becomes undefined when returning
       // for some reason
@@ -526,8 +529,8 @@ class Kindred {
     const spread = this.spread
       ? this.limits[region][2].requestAvailable()
       : true
-    const methodLimit = this.methodLimits[methodType]
-      ? this.methodLimits[methodType].requestAvailable()
+    const methodLimit = this.methodLimits[region][methodType]
+      ? this.methodLimits[region][methodType].requestAvailable()
       : false
     return (
       this.limits[region][0].requestAvailable() &&
@@ -770,8 +773,8 @@ class Kindred {
                       self.limits[region][1].addRequest()
                       if (self.spread)
                         self.limits[region][2].addRequest()
-                      if (self.methodLimits[methodType])
-                        self.methodLimits[methodType].addRequest()
+                      if (self.methodLimits[region][methodType])
+                        self.methodLimits[region][methodType].addRequest()
                     }
 
                     request({ url: fullUrl, timeout: self.timeout }, (error, response, body) => {

@@ -635,8 +635,6 @@
       }
 
       if (limits$$1) {
-        var _methodLimits;
-
         if (check$1(limits$$1)) {
           console.log(chalk.red('Initialization of Kindred failed: Invalid ' + chalk.yellow('limits') + '. Valid examples: ' + chalk.yellow('[[10, 10], [500, 600]]')) + '.');
           console.log(chalk.red('You can also pass in one of these two constants:') + ' LIMITS.DEV/LIMITS.PROD');
@@ -648,11 +646,16 @@
         this.spread = spread;
         this.retryOptions = retryOptions;
         this.timeout = timeout;
+        this.methodLimits = {};
 
-        this.methodLimits = (_methodLimits = {}, _defineProperty(_methodLimits, methodTypes.LIST_CHAMPION_MASTERIES, new RateLimit(20000, 10)), _defineProperty(_methodLimits, methodTypes.GET_CHAMPION_MASTERY, new RateLimit(20000, 10)), _defineProperty(_methodLimits, methodTypes.GET_TOTAL_CHAMPION_MASTERY_SCORE, new RateLimit(20000, 10)), _defineProperty(_methodLimits, methodTypes.LIST_CHAMPIONS, new RateLimit(20000, 10)), _defineProperty(_methodLimits, methodTypes.GET_CHAMPION, new RateLimit(20000, 10)), _defineProperty(_methodLimits, methodTypes.GET_CHALLENGER_LEAGUE, new RateLimit(20000, 10)), _defineProperty(_methodLimits, methodTypes.GET_LEAGUES_IN_ALL_QUEUES, new RateLimit(20000, 10)), _defineProperty(_methodLimits, methodTypes.GET_MASTER_LEAGUE, new RateLimit(20000, 10)), _defineProperty(_methodLimits, methodTypes.GET_LEAGUE_POSITIONS_IN_ALL_QUEUES, new RateLimit(20000, 10)), _defineProperty(_methodLimits, methodTypes.GET_MASTERY_PAGES, new RateLimit(20000, 10)), _defineProperty(_methodLimits, methodTypes.GET_MATCH, new RateLimit(500, 10)), _defineProperty(_methodLimits, methodTypes.GET_MATCHLIST, new RateLimit(1000, 10)), _defineProperty(_methodLimits, methodTypes.GET_RECENT_MATCHLIST, new RateLimit(20000, 10)), _defineProperty(_methodLimits, methodTypes.GET_MATCH_TIMELINE, new RateLimit(500, 10)), _defineProperty(_methodLimits, methodTypes.GET_RUNE_PAGES, new RateLimit(20000, 10)), _defineProperty(_methodLimits, methodTypes.GET_CURRENT_GAME, new RateLimit(20000, 10)), _defineProperty(_methodLimits, methodTypes.LIST_FEATURED_GAMES, new RateLimit(20000, 10)), _defineProperty(_methodLimits, methodTypes.GET_SHARD_STATUS, new RateLimit(20000, 10)), _defineProperty(_methodLimits, methodTypes.GET_SUMMONER_BY_ACCOUNT_ID, new RateLimit(20000, 10)), _defineProperty(_methodLimits, methodTypes.GET_SUMMONER_BY_ID, new RateLimit(20000, 10)), _defineProperty(_methodLimits, methodTypes.GET_SUMMONER_BY_NAME, new RateLimit(20000, 10)), _methodLimits);
+        Object.keys(regions).map(function (region) {
+          var _this$methodLimits$re;
 
-        Object.keys(this.methodLimits).map(function (key) {
-          return methodLimits ? methodLimits[key] ? _this.methodLimits[key] = new RateLimit(methodLimits[key], 10) : key : key;
+          _this.methodLimits[regions[region]] = (_this$methodLimits$re = {}, _defineProperty(_this$methodLimits$re, methodTypes.LIST_CHAMPION_MASTERIES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_CHAMPION_MASTERY, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_TOTAL_CHAMPION_MASTERY_SCORE, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.LIST_CHAMPIONS, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_CHAMPION, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_CHALLENGER_LEAGUE, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_LEAGUES_IN_ALL_QUEUES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MASTER_LEAGUE, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_LEAGUE_POSITIONS_IN_ALL_QUEUES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MASTERY_PAGES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MATCH, new RateLimit(500, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MATCHLIST, new RateLimit(1000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_RECENT_MATCHLIST, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MATCH_TIMELINE, new RateLimit(500, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_RUNE_PAGES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_CURRENT_GAME, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.LIST_FEATURED_GAMES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_SHARD_STATUS, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_SUMMONER_BY_ACCOUNT_ID, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_SUMMONER_BY_ID, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_SUMMONER_BY_NAME, new RateLimit(20000, 10)), _this$methodLimits$re);
+
+          Object.keys(_this.methodLimits[regions[region]]).map(function (key) {
+            return methodLimits ? methodLimits[key] ? _this.methodLimits[regions[region]][key] = new RateLimit(methodLimits[key], 10) : key : key;
+          });
         });
 
         this.numberOfRetriesBeforeBreak = this.retryOptions.numberOfRetriesBeforeBreak;
@@ -973,7 +976,7 @@
       key: 'canMakeRequest',
       value: function canMakeRequest(region, methodType) {
         var spread = this.spread ? this.limits[region][2].requestAvailable() : true;
-        var methodLimit = this.methodLimits[methodType] ? this.methodLimits[methodType].requestAvailable() : false;
+        var methodLimit = this.methodLimits[region][methodType] ? this.methodLimits[region][methodType].requestAvailable() : false;
         return this.limits[region][0].requestAvailable() && this.limits[region][1].requestAvailable() && spread && methodType ? methodLimit : true;
       }
     }, {
@@ -1201,7 +1204,7 @@
                         self.limits[region][0].addRequest();
                         self.limits[region][1].addRequest();
                         if (self.spread) self.limits[region][2].addRequest();
-                        if (self.methodLimits[methodType]) self.methodLimits[methodType].addRequest();
+                        if (self.methodLimits[region][methodType]) self.methodLimits[region][methodType].addRequest();
                       }
 
                       request({ url: fullUrl, timeout: self.timeout }, function (error, response, body) {
