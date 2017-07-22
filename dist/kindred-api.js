@@ -1271,6 +1271,9 @@
                       var statusCode = response.statusCode;
 
                       var statusMessage = prettifyStatusMessage(statusCode);
+                      var key = reqUrl;
+                      var ttl = cacheParams.ttl;
+
 
                       if (self.debug) {
                         var _url2 = self.showKey ? fullUrl : displayUrl;
@@ -1278,9 +1281,19 @@
                       }
 
                       if (isFunction(cb)) {
-                        if (statusCode >= ERROR_THRESHOLD) return cb(statusCode);else return cb(error, JSON.parse(body));
+                        if (statusCode >= ERROR_THRESHOLD) {
+                          return cb(statusCode);
+                        } else {
+                          self._cacheData(key, ttl, body);
+                          return cb(error, JSON.parse(body));
+                        }
                       } else {
-                        if (statusCode >= ERROR_THRESHOLD) return reject(statusCode);else return resolve(JSON.parse(body));
+                        if (statusCode >= ERROR_THRESHOLD) {
+                          return reject(statusCode);
+                        } else {
+                          self._cacheData(key, ttl, body);
+                          return resolve(JSON.parse(body));
+                        }
                       }
                     } else {
                       console.log(error, reqUrl);

@@ -841,6 +841,8 @@ class Kindred {
 
                   const { statusCode } = response
                   const statusMessage = prettifyStatusMessage(statusCode)
+                  const key = reqUrl
+                  const { ttl } = cacheParams
 
                   if (self.debug) {
                     const url = self.showKey ? fullUrl : displayUrl
@@ -848,15 +850,19 @@ class Kindred {
                   }
 
                   if (isFunction(cb)) {
-                    if (statusCode >= ERROR_THRESHOLD)
+                    if (statusCode >= ERROR_THRESHOLD) {
                       return cb(statusCode)
-                    else
+                    } else {
+                      self._cacheData(key, ttl, body)
                       return cb(error, JSON.parse(body))
+                    }
                   } else {
-                    if (statusCode >= ERROR_THRESHOLD)
+                    if (statusCode >= ERROR_THRESHOLD) {
                       return reject(statusCode)
-                    else
+                    } else {
+                      self._cacheData(key, ttl, body)
                       return resolve(JSON.parse(body))
+                    }
                   }
                 } else {
                   console.log(error, reqUrl)

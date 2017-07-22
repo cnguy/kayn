@@ -364,6 +364,40 @@ describe('Core', function () {
         .then(data => k.Summoner.get({ name: 'Contractz' }))
         .then(data => done())
     })
+
+    it('should cache properly with limits and cache', function (done) {
+      const k = init()
+
+      k.CACHE_TIMERS = {
+        SUMMONER: 5000
+      }
+
+      k.Summoner
+        .get({ name: 'Contractz' })
+        .then(data => {
+          expect(Object.keys(k.cache.cache).length).to.equal(1)
+          done()
+        })
+    })
+
+    it('should cache properly with just cache', function (done) {
+      const KindredAPI = require('../../dist/kindred-api')
+      const k = new KindredAPI.Kindred({
+        key,
+        cache: new KindredAPI.InMemoryCache()
+      })
+
+      k.CACHE_TIMERS = {
+        SUMMONER: 5000
+      }
+
+      k.Summoner
+        .get({ name: 'Contractz' })
+        .then(data => {
+          expect(Object.keys(k.cache.cache).length).to.equal(1)
+          done()
+        })
+    })
   })
 
   describe('debug', function () {
