@@ -12,3 +12,22 @@ export const STATIC_CHAMPION_TAGS = [
   'spells',
   'stats'
 ]
+
+export const STATIC_CHAMPION_LIST_TAGS = [
+  'allytips',
+  'blurb',
+  'enemytips',
+  'format',
+  'image',
+  'info',
+  'keys',
+  'lore',
+  'partype',
+  'passive',
+  'recommended',
+  'skins',
+  'spells',
+  'stats',
+  'tags'
+]
+

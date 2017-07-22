@@ -25,7 +25,8 @@ import TIME_CONSTANTS from './cache/constants/cache-timers'
 import VERSIONS from './constants/versions'
 
 import {
-  STATIC_CHAMPION_TAGS
+  STATIC_CHAMPION_TAGS,
+  STATIC_CHAMPION_LIST_TAGS
 } from './constants/tags.js'
 
 import re from './constants/valid-summoner-name-regex'
@@ -3022,6 +3023,7 @@ export default {
   RedisCache,
   // tags
   TAGS: {
-    STATIC_CHAMPION_TAGS
+    STATIC_CHAMPION_TAGS,
+    STATIC_CHAMPION_LIST_TAGS
   }
 }

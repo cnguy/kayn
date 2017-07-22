@@ -478,6 +478,8 @@
 
   var STATIC_CHAMPION_TAGS = ['allytips', 'blurb', 'enemytips', 'image', 'info', 'lore', 'partype', 'passive', 'recommended', 'skins', 'spells', 'stats'];
 
+  var STATIC_CHAMPION_LIST_TAGS = ['allytips', 'blurb', 'enemytips', 'format', 'image', 'info', 'keys', 'lore', 'partype', 'passive', 'recommended', 'skins', 'spells', 'stats', 'tags'];
+
   var re = XRegExp('^[0-9\\p{L} _\\.]+$');
 
   var check = function check(region) {
@@ -3555,7 +3557,8 @@
     RedisCache: RedisCache,
 
     TAGS: {
-      STATIC_CHAMPION_TAGS: STATIC_CHAMPION_TAGS
+      STATIC_CHAMPION_TAGS: STATIC_CHAMPION_TAGS,
+      STATIC_CHAMPION_LIST_TAGS: STATIC_CHAMPION_LIST_TAGS
     }
   };
 

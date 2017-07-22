@@ -84,7 +84,7 @@ describe('Static Champion', function () {
               done()
             })
             .catch(err => {
-              throw new Error('wrong path', err)
+              throw new Error(err)
             })
         })
 
@@ -102,7 +102,7 @@ describe('Static Champion', function () {
               done()
             })
             .catch(err => {
-              throw new Error('wrong path', err)
+              throw new Error(err)
             })
         })
 
@@ -120,7 +120,7 @@ describe('Static Champion', function () {
               done()
             })
             .catch(err => {
-              throw new Error('wrong path', err)
+              throw new Error(err)
             })
         })
 
@@ -139,7 +139,7 @@ describe('Static Champion', function () {
               done()
             })
             .catch(err => {
-              throw new Error('wrong path', err)
+              throw new Error(err)
             })
         })
 
@@ -159,7 +159,7 @@ describe('Static Champion', function () {
               done()
             })
             .catch(err => {
-              throw new Error('wrong path', err)
+              throw new Error(err)
             })
         })
 
@@ -260,7 +260,7 @@ describe('Static Champion', function () {
               done()
             })
             .catch(err => {
-              throw new Error('wrong path', err)
+              throw new Error(err)
             })
         })
 
@@ -273,7 +273,7 @@ describe('Static Champion', function () {
               done()
             })
             .catch(err => {
-              throw new Error('wrong path', err)
+              throw new Error(err)
             })
         })
 
@@ -286,7 +286,7 @@ describe('Static Champion', function () {
               done()
             })
             .catch(err => {
-              throw new Error('wrong path', err)
+              throw new Error(err)
             })
         })
 
@@ -300,7 +300,7 @@ describe('Static Champion', function () {
               done()
             })
             .catch(err => {
-              throw new Error('wrong path', err)
+              throw new Error(err)
             })
         })
 
@@ -315,7 +315,7 @@ describe('Static Champion', function () {
               done()
             })
             .catch(err => {
-              throw new Error('wrong path', err)
+              throw new Error(err)
             })
         })
 

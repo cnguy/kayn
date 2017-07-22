@@ -5,9 +5,13 @@ var expect = chai.expect,
   should = chai.should,
   assert = chai.assert
 
+var has = require('lodash.has')
+
 require('dotenv').config()
 
 var init = require('../../../../utils/init')
+var KindredAPI = require('../../../../dist/kindred-api')
+const STATIC_CHAMPION_LIST_TAGS = KindredAPI.TAGS.STATIC_CHAMPION_LIST_TAGS
 
 const config = {
   options: {
@@ -30,7 +34,7 @@ describe('Static Champions', function () {
           it('should be a successful call', function (done) {
             init()
               .Static.champions(config, function testCB(err, data) {
-                expect(err).to.be.bull
+                expect(err).to.be.null
                 expect(data).to.not.be.undefined
                 done()
               })
@@ -56,6 +60,119 @@ describe('Static Champions', function () {
             .Static.champions(function testCB(err, data) {
               expect(err).to.be.null
               expect(data).to.not.be.undefined
+              done()
+            })
+        })
+      })
+
+      describe('query params', function () {
+        it('should get allytips with tags=allytips set', function (done) {
+          init()
+            .Static
+            .champions({
+              options: {
+                tags: 'allytips'
+              }
+            })
+            .then(data => {
+              expect(has(data.data.Kindred, 'allytips')).to.be.true
+              done()
+            })
+            .catch(err => {
+              throw new Error(err)
+            })
+        })
+
+        it('should get blurb with tags=blurb set', function (done) {
+          init()
+            .Static
+            .champions({
+              options: {
+                tags: 'blurb'
+              }
+            })
+            .then(data => {
+              expect(has(data.data.Kindred, 'blurb')).to.be.true
+              done()
+            })
+            .catch(err => {
+              throw new Error(err)
+            })
+        })
+
+        it('should get blurb with tags=array of blurb', function (done) {
+          init()
+            .Static
+            .champions({
+              options: {
+                tags: ['blurb']
+              }
+            })
+            .then(data => {
+              expect(has(data.data.Kindred, 'blurb')).to.be.true
+              done()
+            })
+            .catch(err => {
+              throw new Error(err)
+            })
+        })
+
+        it('should get blurb with tags=array of allytips & blurb', function (done) {
+          init()
+            .Static
+            .champions({
+              options: {
+                tags: ['allytips', 'blurb']
+              }
+            })
+            .then(data => {
+              expect(has(data.data.Kindred, 'allytips')).to.be.true
+              expect(has(data.data.Kindred, 'blurb')).to.be.true
+              done()
+            })
+            .catch(err => {
+              throw new Error(err)
+            })
+        })
+
+        it('should get all tags with all', function (done) {
+          init()
+            .Static
+            .champions({
+              options: {
+                tags: 'all'
+              }
+            })
+            .then(data => {
+              STATIC_CHAMPION_LIST_TAGS.map(tag => {
+                if (tag === 'format') {
+                  expect(has(data, tag)).to.be.true
+                } else if (tag === 'keys') {
+                  expect(has(data, tag)).to.be.true
+                } else {
+                  expect(has(data.data.Kindred, tag)).to.be.true
+                }
+              })
+              done()
+            })
+            .catch(err => {
+              throw new Error(err)
+            })
+        })
+
+        it('should return 400 bad request with typo in tags set', function (done) {
+          init()
+            .Static
+            .champions({
+              options: {
+                tags: 'blurbie'
+              }
+            })
+            .then(data => {
+              throw new Error(data)
+            })
+            .catch(err => {
+              expect(err).to.equal(400)
               done()
             })
         })
@@ -104,6 +221,101 @@ describe('Static Champions', function () {
               done()
             })
         })
+
+        describe('query params', function () {
+          it('should get allytips with tags=allytips set', function (done) {
+            init()
+              .Static
+              .Champion
+              .list({ tags: 'allytips' }, 'kr')
+              .then(data => {
+                expect(has(data.data.Kindred, 'allytips')).to.be.true
+                done()
+              })
+              .catch(err => {
+                throw new Error(err)
+              })
+          })
+
+          it('should get blurb with tags=blurb set', function (done) {
+            init()
+              .Static
+              .Champion
+              .list({ tags: 'blurb' }, 'kr')
+              .then(data => {
+                expect(has(data.data.Kindred, 'blurb')).to.be.true
+                done()
+              })
+              .catch(err => {
+                throw new Error(err)
+              })
+          })
+
+          it('should get blurb with tags=array of blurb', function (done) {
+            init()
+              .Static
+              .Champion
+              .list({ tags: ['blurb'] }, 'kr')
+              .then(data => {
+                expect(has(data.data.Kindred, 'blurb')).to.be.true
+                done()
+              })
+              .catch(err => {
+                throw new Error(err)
+              })
+          })
+
+          it('should get blurb with tags=array of allytips & blurb', function (done) {
+            init()
+              .Static
+              .Champion
+              .list({ tags: ['allytips', 'blurb'] }, 'kr')
+              .then(data => {
+                expect(has(data.data.Kindred, 'allytips')).to.be.true
+                expect(has(data.data.Kindred, 'blurb')).to.be.true
+                done()
+              })
+              .catch(err => {
+                throw new Error(err)
+              })
+          })
+
+          it('should get all tags with all', function (done) {
+            init()
+              .Static
+              .Champion
+              .list({ tags: 'all' }, 'kr')
+              .then(data => {
+                STATIC_CHAMPION_LIST_TAGS.map(tag => {
+                  if (tag === 'format') {
+                    expect(has(data, tag)).to.be.true
+                  } else if (tag === 'keys') {
+                    expect(has(data, tag)).to.be.true
+                  } else {
+                    expect(has(data.data.Kindred, tag)).to.be.true
+                  }
+                })
+                done()
+              })
+              .catch(err => {
+                throw new Error(err)
+              })
+          })
+
+          it('should return 400 bad request with typo in tags set', function (done) {
+            init()
+              .Static
+              .Champion
+              .list({ tags: 'blurbie' }, 'kr')
+              .then(data => {
+                throw new Error(data)
+              })
+              .catch(err => {
+                expect(err).to.equal(400)
+                done()
+              })
+          })
+        })
       })
 
       describe('by options', function () {
@@ -131,6 +343,101 @@ describe('Static Champions', function () {
                 done()
               })
           })
+        })
+      })
+
+      describe('query params', function () {
+        it('should get allytips with tags=allytips set', function (done) {
+          init()
+            .Static
+            .Champion
+            .list({ tags: 'allytips' })
+            .then(data => {
+              expect(has(data.data.Kindred, 'allytips')).to.be.true
+              done()
+            })
+            .catch(err => {
+              throw new Error(err)
+            })
+        })
+
+        it('should get blurb with tags=blurb set', function (done) {
+          init()
+            .Static
+            .Champion
+            .list({ tags: 'blurb' })
+            .then(data => {
+              expect(has(data.data.Kindred, 'blurb')).to.be.true
+              done()
+            })
+            .catch(err => {
+              throw new Error(err)
+            })
+        })
+
+        it('should get blurb with tags=array of blurb', function (done) {
+          init()
+            .Static
+            .Champion
+            .list({ tags: ['blurb'] })
+            .then(data => {
+              expect(has(data.data.Kindred, 'blurb')).to.be.true
+              done()
+            })
+            .catch(err => {
+              throw new Error(err)
+            })
+        })
+
+        it('should get blurb with tags=array of allytips & blurb', function (done) {
+          init()
+            .Static
+            .Champion
+            .list({ tags: ['allytips', 'blurb'] })
+            .then(data => {
+              expect(has(data.data.Kindred, 'allytips')).to.be.true
+              expect(has(data.data.Kindred, 'blurb')).to.be.true
+              done()
+            })
+            .catch(err => {
+              throw new Error(err)
+            })
+        })
+
+        it('should get all tags with all', function (done) {
+          init()
+            .Static
+            .Champion
+            .list({ tags: 'all' })
+            .then(data => {
+              STATIC_CHAMPION_LIST_TAGS.map(tag => {
+                if (tag === 'format') {
+                  expect(has(data, tag)).to.be.true
+                } else if (tag === 'keys') {
+                  expect(has(data, tag)).to.be.true
+                } else {
+                  expect(has(data.data.Kindred, tag)).to.be.true
+                }
+              })
+              done()
+            })
+            .catch(err => {
+              throw new Error(err)
+            })
+        })
+
+        it('should return 400 bad request with typo in tags set', function (done) {
+          init()
+            .Static
+            .Champion
+            .list({ tags: 'blurbie' })
+            .then(data => {
+              throw new Error(data)
+            })
+            .catch(err => {
+              expect(err).to.equal(400)
+              done()
+            })
         })
       })
     })
