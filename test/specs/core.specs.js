@@ -383,7 +383,7 @@ describe('Core', function () {
     it('should cache properly with just cache', function (done) {
       const KindredAPI = require('../../dist/kindred-api')
       const k = new KindredAPI.Kindred({
-        key,
+        key: process.env.KEY,
         cache: new KindredAPI.InMemoryCache()
       })
 
