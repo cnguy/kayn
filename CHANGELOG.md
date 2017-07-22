@@ -6,6 +6,8 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
+## [2.0.71](https://github.com/ChauTNguyen/kindred-api/commit/ab0bff509168607c171af27ea3c63abd90b1ed55) - Fix spread/retryOptions/timeout initialization (doesn't need limits).
+
 ## [2.0.70](https://github.com/ChauTNguyen/kindred-api/commits/feature/fix-method-rate-limiting-per-region) - Fix method rate-limiting to be per-region.
 
 [for more info!](https://github.com/ChauTNguyen/kindred-api/wiki/Rate-Limiter)
