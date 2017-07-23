@@ -11,12 +11,6 @@ require('dotenv').config()
 
 var init = require('../../utils/init')
 
-const preV3Url = {
-  baseUrl: 'https://na.api.riotgames.com/api/lol/na/v1.3',
-  postfix: '/stats/by-summoner/20026563/ranked',
-  query: '?season=SEASON2015'
-}
-
 const v3Url = {
   baseUrl: 'https://na1.api.riotgames.com/lol/match/v3/matchlists',
   postfix: '/by-account/47776491',
@@ -25,10 +19,6 @@ const v3Url = {
 
 const apiKeyPrefix = 'api_key='
 const fakeKey = 'thisIsAKey'
-
-const preV3Opts = {
-  foo: 'bar'
-}
 
 const v3Opts = {
   foo: 'bar',
@@ -40,13 +30,6 @@ describe('Core Utils', function () {
     it('should make the correct url for v3', function () {
       const endUrl = 'summoner/v3/summoners/by-name/contractz'
       const testUrl = 'https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/contractz'
-      const url = init()._makeUrl(endUrl, 'na')
-      assert.equal(url, testUrl)
-    })
-
-    it('should make the correct url for v1-2', function () {
-      const endUrl = 'v1.3/game/by-summoner/32932398/recent'
-      const testUrl = 'https://na.api.riotgames.com/api/lol/na/v1.3/game/by-summoner/32932398/recent'
       const url = init()._makeUrl(endUrl, 'na')
       assert.equal(url, testUrl)
     })
@@ -129,12 +112,6 @@ describe('Core Utils', function () {
       const actual = init()._stringifyOptions(v3Opts, v3Url.baseUrl + v3Url.postfix)
       assert.equal(exp, actual)
     })
-
-    describe('pre-v3', function () {
-      const exp = 'foo=bar'
-      const actual = init()._stringifyOptions(preV3Opts, preV3Url.baseUrl + preV3Url.postfix)
-      assert.equal(exp, actual)
-    })
   })
 
   describe('constructFullUrl', function () {
@@ -149,24 +126,6 @@ describe('Core Utils', function () {
 
       it('should work with params', function () {
         const url = v3Url.baseUrl + v3Url.postfix + v3Url.query
-        const marker = '&'
-        const exp = url + marker + apiKeyPrefix + fakeKey
-        const actual = init()._constructFullUrl(url, fakeKey)
-        assert.equal(exp, actual)
-      })
-    })
-
-    describe('pre-v3', function () {
-      it('should work without params', function () {
-        const url = preV3Url.baseUrl + preV3Url.postfix
-        const marker = '?'
-        const exp = url + marker + apiKeyPrefix + fakeKey
-        const actual = init()._constructFullUrl(url, fakeKey)
-        assert.equal(exp, actual)
-      })
-
-      it('should work with params', function () {
-        const url = preV3Url.baseUrl + preV3Url.postfix + preV3Url.query
         const marker = '&'
         const exp = url + marker + apiKeyPrefix + fakeKey
         const actual = init()._constructFullUrl(url, fakeKey)

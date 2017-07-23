@@ -187,7 +187,6 @@
     CHAMPION_MASTERY: cacheTimers.SIX_HOURS,
     CURRENT_GAME: cacheTimers.NONE,
     FEATURED_GAMES: cacheTimers.NONE,
-    GAME: cacheTimers.HOUR,
     LEAGUE: cacheTimers.SIX_HOURS,
     STATIC: cacheTimers.MONTH,
     STATUS: cacheTimers.NONE,
@@ -195,7 +194,6 @@
     MATCHLIST: cacheTimers.HOUR,
     RUNES_MASTERIES: cacheTimers.WEEK,
     SPECTATOR: cacheTimers.NONE,
-    STATS: cacheTimers.HOUR,
     SUMMONER: cacheTimers.DAY,
     TOURNAMENT_STUB: cacheTimers.HOUR,
     TOURNAMENT: cacheTimers.HOUR };
@@ -308,7 +306,6 @@
   var RUNE_DATA = 'tags';
   var SPELL_LIST_DATA = 'tags';
   var SPELL_DATA = 'tags';
-  var STATS_SEASON = 'season';
   var VERSION_AND_LOCALE = [VERSION, LOCALE];
 
   var queryParams = {
@@ -349,10 +346,6 @@
     },
     MATCHLIST: {
       GET: [QUEUE, BEGIN_TIME, END_INDEX, SEASON, CHAMPION$1, BEGIN_INDEX, END_TIME]
-    },
-    STATS: {
-      RANKED: [STATS_SEASON],
-      SUMMARY: [STATS_SEASON]
     }
   };
 
@@ -442,17 +435,14 @@
   var services = {
     CHAMPION: 'platform',
     CHAMPION_MASTERY: 'champion-mastery',
-    GAME: null,
     LEAGUE: 'league',
     STATUS: 'status',
     MASTERIES: 'platform',
     MATCH: 'match',
-    MATCHLIST: null,
     RUNES: 'platform',
     RUNES_MASTERIES: 'platform',
     SPECTATOR: 'spectator',
     STATIC_DATA: 'static-data',
-    STATS: null,
     SUMMONER: 'summoner',
     TOURNAMENT_STUB: 'tournament-stub',
     TOURNAMENT: 'tournament'
@@ -461,16 +451,12 @@
   var versions = {
     'CHAMPION': 3,
     'CHAMPION_MASTERY': 3,
-    'CURRENT_GAME': 1.0,
-    'FEATURED_GAMES': 1.0,
-    'GAME': 1.3,
     'LEAGUE': 3,
     'STATIC_DATA': 3,
     'STATUS': 3,
     'MATCH': 3,
     'RUNES_MASTERIES': 3,
     'SPECTATOR': 3,
-    'STATS': 1.3,
     'SUMMONER': 3,
     'TOURNAMENT_STUB': 3,
     'TOURNAMENT': 3
@@ -728,13 +714,6 @@
         list: this.listFeaturedGames.bind(this)
       };
 
-      this.Game = {
-        getRecentGames: this.getRecentGames.bind(this),
-        getRecent: this.getRecentGames.bind(this),
-        recent: this.getRecentGames.bind(this),
-        get: this.getRecentGames.bind(this)
-      };
-
       this.League = {
         getLeagues: this.getLeagues.bind(this),
         leagues: this.getLeagues.bind(this),
@@ -935,14 +914,6 @@
         }
       };
 
-      this.Stats = {
-        getRankedStats: this.getRankedStats.bind(this),
-        ranked: this.getRankedStats.bind(this),
-
-        getStatsSummary: this.getStatsSummary.bind(this),
-        summary: this.getStatsSummary.bind(this)
-      };
-
       this.Summoner = {
         getSummoner: this.getSummoner.bind(this),
         get: this.getSummoner.bind(this),
@@ -1004,19 +975,11 @@
     }, {
       key: '_makeUrl',
       value: function _makeUrl(query, region) {
-        var oldPrefix = 'api/lol/' + region + '/';
         var prefix = 'lol/';
         var base = 'api.riotgames.com';
         var encodedQuery = encodeURI(query);
-
-        var oldUrl = 'https://' + region + '.api.riotgames.com/' + oldPrefix + encodedQuery;
-        var newUrl = 'https://' + platformIds[regions$1[region]].toLowerCase() + '.' + base + '/' + prefix + encodedQuery;
-
-        if (newUrl.lastIndexOf('v3') === -1) {
-          return oldUrl;
-        }
-
-        return newUrl;
+        var url = '\n      https://' + platformIds[regions$1[region]].toLowerCase() + '.' + base + '/' + prefix + encodedQuery + '\n    ';
+        return url;
       }
     }, {
       key: '_stringifyOptions',
@@ -1027,58 +990,54 @@
           return str + (str ? '&' : '') + (key + '=' + value);
         };
 
-        if (endUrl.lastIndexOf('v3') === -1) {
-          stringifiedOpts = queryString.stringify(options);
-        } else {
-          var _iteratorNormalCompletion2 = true;
-          var _didIteratorError2 = false;
-          var _iteratorError2 = undefined;
+        var _iteratorNormalCompletion2 = true;
+        var _didIteratorError2 = false;
+        var _iteratorError2 = undefined;
 
-          try {
-            for (var _iterator2 = Object.keys(options)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-              var key = _step2.value;
+        try {
+          for (var _iterator2 = Object.keys(options)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            var key = _step2.value;
 
-              if (Array.isArray(options[key])) {
-                var _iteratorNormalCompletion3 = true;
-                var _didIteratorError3 = false;
-                var _iteratorError3 = undefined;
+            if (Array.isArray(options[key])) {
+              var _iteratorNormalCompletion3 = true;
+              var _didIteratorError3 = false;
+              var _iteratorError3 = undefined;
 
+              try {
+                for (var _iterator3 = options[key][Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                  var value = _step3.value;
+
+                  stringifiedOpts = appendKey(stringifiedOpts, key, value);
+                }
+              } catch (err) {
+                _didIteratorError3 = true;
+                _iteratorError3 = err;
+              } finally {
                 try {
-                  for (var _iterator3 = options[key][Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                    var value = _step3.value;
-
-                    stringifiedOpts = appendKey(stringifiedOpts, key, value);
+                  if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                    _iterator3.return();
                   }
-                } catch (err) {
-                  _didIteratorError3 = true;
-                  _iteratorError3 = err;
                 } finally {
-                  try {
-                    if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                      _iterator3.return();
-                    }
-                  } finally {
-                    if (_didIteratorError3) {
-                      throw _iteratorError3;
-                    }
+                  if (_didIteratorError3) {
+                    throw _iteratorError3;
                   }
                 }
-              } else {
-                stringifiedOpts = appendKey(stringifiedOpts, key, options[key]);
               }
+            } else {
+              stringifiedOpts = appendKey(stringifiedOpts, key, options[key]);
             }
-          } catch (err) {
-            _didIteratorError2 = true;
-            _iteratorError2 = err;
+          }
+        } catch (err) {
+          _didIteratorError2 = true;
+          _iteratorError2 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+              _iterator2.return();
+            }
           } finally {
-            try {
-              if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                _iterator2.return();
-              }
-            } finally {
-              if (_didIteratorError2) {
-                throw _iteratorError2;
-              }
+            if (_didIteratorError2) {
+              throw _iteratorError2;
             }
           }
         }
@@ -1469,25 +1428,11 @@
         }, cb);
       }
     }, {
-      key: '_statsRequest',
-      value: function _statsRequest(_ref13, cb) {
+      key: '_summonerRequest',
+      value: function _summonerRequest(_ref13, cb) {
         var endUrl = _ref13.endUrl,
             region = _ref13.region,
-            options = _ref13.options;
-
-        return this._baseRequest({
-          endUrl: 'v' + versions.STATS + '/stats/by-summoner/' + endUrl, region: region, options: options,
-          cacheParams: {
-            ttl: this.CACHE_TIMERS.STATS
-          }
-        }, cb);
-      }
-    }, {
-      key: '_summonerRequest',
-      value: function _summonerRequest(_ref14, cb) {
-        var endUrl = _ref14.endUrl,
-            region = _ref14.region,
-            methodType = _ref14.methodType;
+            methodType = _ref13.methodType;
 
         return this._baseRequest({
           endUrl: services.SUMMONER + '/v' + versions.SUMMONER + '/summoners/' + endUrl, region: region,
@@ -1512,9 +1457,9 @@
     }, {
       key: 'getChamps',
       value: function getChamps() {
-        var _ref15 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref15.region,
-            options = _ref15.options;
+        var _ref14 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref14.region,
+            options = _ref14.options;
 
         var cb = arguments[1];
 
@@ -1533,10 +1478,10 @@
     }, {
       key: 'getChamp',
       value: function getChamp() {
-        var _ref16 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref16.region,
-            id = _ref16.id,
-            championId = _ref16.championId;
+        var _ref15 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref15.region,
+            id = _ref15.id,
+            championId = _ref15.championId;
 
         var cb = arguments[1];
 
@@ -1560,10 +1505,10 @@
     }, {
       key: 'getChampMastery',
       value: function getChampMastery() {
-        var _ref17 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref17.region,
-            playerId = _ref17.playerId,
-            championId = _ref17.championId;
+        var _ref16 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref16.region,
+            playerId = _ref16.playerId,
+            championId = _ref16.championId;
 
         var cb = arguments[1];
 
@@ -1581,14 +1526,14 @@
       value: function getChampMasteries() {
         var _this3 = this;
 
-        var _ref18 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref18.region,
-            accountId = _ref18.accountId,
-            accId = _ref18.accId,
-            id = _ref18.id,
-            summonerId = _ref18.summonerId,
-            playerId = _ref18.playerId,
-            name = _ref18.name;
+        var _ref17 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref17.region,
+            accountId = _ref17.accountId,
+            accId = _ref17.accId,
+            id = _ref17.id,
+            summonerId = _ref17.summonerId,
+            playerId = _ref17.playerId,
+            name = _ref17.name;
 
         var cb = arguments[1];
 
@@ -1653,14 +1598,14 @@
       value: function getTotalChampMasteryScore() {
         var _this4 = this;
 
-        var _ref19 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref19.region,
-            accountId = _ref19.accountId,
-            accId = _ref19.accId,
-            id = _ref19.id,
-            summonerId = _ref19.summonerId,
-            playerId = _ref19.playerId,
-            name = _ref19.name;
+        var _ref18 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref18.region,
+            accountId = _ref18.accountId,
+            accId = _ref18.accId,
+            id = _ref18.id,
+            summonerId = _ref18.summonerId,
+            playerId = _ref18.playerId,
+            name = _ref18.name;
 
         var cb = arguments[1];
 
@@ -1725,14 +1670,14 @@
       value: function getCurrentGame() {
         var _this5 = this;
 
-        var _ref20 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref20.region,
-            accountId = _ref20.accountId,
-            accId = _ref20.accId,
-            id = _ref20.id,
-            summonerId = _ref20.summonerId,
-            playerId = _ref20.playerId,
-            name = _ref20.name;
+        var _ref19 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref19.region,
+            accountId = _ref19.accountId,
+            accId = _ref19.accId,
+            id = _ref19.id,
+            summonerId = _ref19.summonerId,
+            playerId = _ref19.playerId,
+            name = _ref19.name;
 
         var cb = arguments[1];
 
@@ -1789,8 +1734,8 @@
     }, {
       key: 'getFeaturedGames',
       value: function getFeaturedGames() {
-        var _ref21 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref21.region;
+        var _ref20 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref20.region;
 
         var cb = arguments[1];
 
@@ -1806,79 +1751,18 @@
         }, cb);
       }
     }, {
-      key: 'getRecentGames',
-      value: function getRecentGames() {
-        var _this6 = this;
-
-        var _ref22 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref22.region,
-            accountId = _ref22.accountId,
-            accId = _ref22.accId,
-            id = _ref22.id,
-            summonerId = _ref22.summonerId,
-            playerId = _ref22.playerId,
-            name = _ref22.name;
-
-        var cb = arguments[1];
-
-        var endUrl = '';
-        if (Number.isInteger(accountId || accId)) {
-          return new Promise(function (resolve, reject) {
-            return _this6.getSummoner({ accId: accountId || accId, region: region }, function (err, data) {
-              if (err) {
-                cb ? cb(err) : reject(err);return;
-              }
-              if (data && data.id) {
-                return resolve(_this6._gameRequest({
-                  endUrl: 'by-summoner/' + data.id + '/recent', region: region
-                }, cb));
-              }
-            });
-          });
-        } else if (Number.isInteger(id || summonerId || playerId)) {
-          if (id) {
-            endUrl = id.toString();
-          }
-          if (summonerId) {
-            endUrl = summonerId.toString();
-          }
-          if (playerId) {
-            endUrl = playerId.toString();
-          }
-          return this._gameRequest({
-            endUrl: 'by-summoner/' + endUrl + '/recent',
-            region: region
-          }, cb);
-        } else if (typeof name === 'string') {
-          return new Promise(function (resolve, reject) {
-            return _this6.getSummoner({ name: name, region: region }, function (err, data) {
-              if (err) {
-                cb ? cb(err) : reject(err);return;
-              }
-              if (data && data.id) {
-                return resolve(_this6._gameRequest({
-                  endUrl: 'by-summoner/' + data.id + '/recent', region: region
-                }, cb));
-              }
-            });
-          });
-        } else {
-          return this._logError(this.getRecentGames.name, 'required params ' + chalk.yellow('`id/summonerId/playerId` (int)') + ', ' + chalk.yellow('`accountId/accId` (int)') + ', or ' + chalk.yellow('`name` (string)') + ' not passed in');
-        }
-      }
-    }, {
       key: 'getLeagues',
       value: function getLeagues() {
-        var _this7 = this;
+        var _this6 = this;
 
-        var _ref23 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref23.region,
-            accountId = _ref23.accountId,
-            accId = _ref23.accId,
-            id = _ref23.id,
-            summonerId = _ref23.summonerId,
-            playerId = _ref23.playerId,
-            name = _ref23.name;
+        var _ref21 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref21.region,
+            accountId = _ref21.accountId,
+            accId = _ref21.accId,
+            id = _ref21.id,
+            summonerId = _ref21.summonerId,
+            playerId = _ref21.playerId,
+            name = _ref21.name;
 
         var cb = arguments[1];
 
@@ -1892,12 +1776,12 @@
             tempNum = accId;
           }
           return new Promise(function (resolve, reject) {
-            return _this7.getSummoner({ accId: tempNum, region: region }, function (err, data) {
+            return _this6.getSummoner({ accId: tempNum, region: region }, function (err, data) {
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
               if (data && data.id) {
-                return resolve(_this7._leagueRequest({
+                return resolve(_this6._leagueRequest({
                   endUrl: 'leagues/by-summoner/' + data.id,
                   region: region,
                   methodType: methodTypes.GET_LEAGUES_IN_ALL_QUEUES
@@ -1922,12 +1806,12 @@
           }, cb);
         } else if (typeof name === 'string') {
           return new Promise(function (resolve, reject) {
-            return _this7.getSummoner({ name: name, region: region }, function (err, data) {
+            return _this6.getSummoner({ name: name, region: region }, function (err, data) {
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
               if (data && data.id) {
-                return resolve(_this7._leagueRequest({
+                return resolve(_this6._leagueRequest({
                   endUrl: 'leagues/by-summoner/' + data.id,
                   region: region,
                   methodType: methodTypes.GET_LEAGUES_IN_ALL_QUEUES
@@ -1942,16 +1826,16 @@
     }, {
       key: 'getLeaguePositions',
       value: function getLeaguePositions() {
-        var _this8 = this;
+        var _this7 = this;
 
-        var _ref24 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref24.region,
-            accountId = _ref24.accountId,
-            accId = _ref24.accId,
-            id = _ref24.id,
-            summonerId = _ref24.summonerId,
-            playerId = _ref24.playerId,
-            name = _ref24.name;
+        var _ref22 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref22.region,
+            accountId = _ref22.accountId,
+            accId = _ref22.accId,
+            id = _ref22.id,
+            summonerId = _ref22.summonerId,
+            playerId = _ref22.playerId,
+            name = _ref22.name;
 
         var cb = arguments[1];
 
@@ -1965,12 +1849,12 @@
             tempNum = accId;
           }
           return new Promise(function (resolve, reject) {
-            return _this8.getSummoner({ accId: tempNum, region: region }, function (err, data) {
+            return _this7.getSummoner({ accId: tempNum, region: region }, function (err, data) {
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
               if (data && data.id) {
-                return resolve(_this8._leagueRequest({
+                return resolve(_this7._leagueRequest({
                   endUrl: 'positions/by-summoner/' + data.id,
                   region: region,
                   methodType: methodTypes.GET_LEAGUE_POSITIONS_IN_ALL_QUEUES
@@ -1995,12 +1879,12 @@
           }, cb);
         } else if (typeof name === 'string') {
           return new Promise(function (resolve, reject) {
-            return _this8.getSummoner({ name: name, region: region }, function (err, data) {
+            return _this7.getSummoner({ name: name, region: region }, function (err, data) {
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
               if (data && data.id) {
-                return resolve(_this8._leagueRequest({
+                return resolve(_this7._leagueRequest({
                   endUrl: 'positions/by-summoner/' + data.id,
                   region: region,
                   methodType: methodTypes.GET_LEAGUE_POSITIONS_IN_ALL_QUEUES
@@ -2015,10 +1899,10 @@
     }, {
       key: 'getChallengers',
       value: function getChallengers() {
-        var _ref25 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref25.region,
-            _ref25$queue = _ref25.queue,
-            queue = _ref25$queue === undefined ? 'RANKED_SOLO_5x5' : _ref25$queue;
+        var _ref23 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref23.region,
+            _ref23$queue = _ref23.queue,
+            queue = _ref23$queue === undefined ? 'RANKED_SOLO_5x5' : _ref23$queue;
 
         var cb = arguments[1];
 
@@ -2036,10 +1920,10 @@
     }, {
       key: 'getMasters',
       value: function getMasters() {
-        var _ref26 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref26.region,
-            _ref26$queue = _ref26.queue,
-            queue = _ref26$queue === undefined ? 'RANKED_SOLO_5x5' : _ref26$queue;
+        var _ref24 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref24.region,
+            _ref24$queue = _ref24.queue,
+            queue = _ref24$queue === undefined ? 'RANKED_SOLO_5x5' : _ref24$queue;
 
         var cb = arguments[1];
 
@@ -2057,9 +1941,9 @@
     }, {
       key: 'getChampionList',
       value: function getChampionList() {
-        var _ref27 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref27.region,
-            options = _ref27.options;
+        var _ref25 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref25.region,
+            options = _ref25.options;
 
         var cb = arguments[1];
 
@@ -2075,11 +1959,11 @@
     }, {
       key: 'getChampion',
       value: function getChampion() {
-        var _ref28 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref28.region,
-            id = _ref28.id,
-            championId = _ref28.championId,
-            options = _ref28.options;
+        var _ref26 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref26.region,
+            id = _ref26.id,
+            championId = _ref26.championId,
+            options = _ref26.options;
 
         var cb = arguments[1];
 
@@ -2100,9 +1984,9 @@
     }, {
       key: 'getItems',
       value: function getItems() {
-        var _ref29 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref29.region,
-            options = _ref29.options;
+        var _ref27 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref27.region,
+            options = _ref27.options;
 
         var cb = arguments[1];
 
@@ -2118,11 +2002,11 @@
     }, {
       key: 'getItem',
       value: function getItem() {
-        var _ref30 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref30.region,
-            id = _ref30.id,
-            itemId = _ref30.itemId,
-            options = _ref30.options;
+        var _ref28 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref28.region,
+            id = _ref28.id,
+            itemId = _ref28.itemId,
+            options = _ref28.options;
 
         var cb = arguments[1];
 
@@ -2143,9 +2027,9 @@
     }, {
       key: 'getLanguageStrings',
       value: function getLanguageStrings() {
-        var _ref31 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref31.region,
-            options = _ref31.options;
+        var _ref29 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref29.region,
+            options = _ref29.options;
 
         var cb = arguments[1];
 
@@ -2161,8 +2045,8 @@
     }, {
       key: 'getLanguages',
       value: function getLanguages() {
-        var _ref32 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref32.region;
+        var _ref30 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref30.region;
 
         var cb = arguments[1];
 
@@ -2176,9 +2060,9 @@
     }, {
       key: 'getMapData',
       value: function getMapData() {
-        var _ref33 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref33.region,
-            options = _ref33.options;
+        var _ref31 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref31.region,
+            options = _ref31.options;
 
         var cb = arguments[1];
 
@@ -2194,9 +2078,9 @@
     }, {
       key: 'getMasteryList',
       value: function getMasteryList() {
-        var _ref34 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref34.region,
-            options = _ref34.options;
+        var _ref32 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref32.region,
+            options = _ref32.options;
 
         var cb = arguments[1];
 
@@ -2212,11 +2096,11 @@
     }, {
       key: 'getMastery',
       value: function getMastery() {
-        var _ref35 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref35.region,
-            id = _ref35.id,
-            masteryId = _ref35.masteryId,
-            options = _ref35.options;
+        var _ref33 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref33.region,
+            id = _ref33.id,
+            masteryId = _ref33.masteryId,
+            options = _ref33.options;
 
         var cb = arguments[1];
 
@@ -2240,9 +2124,9 @@
     }, {
       key: 'getProfileIcons',
       value: function getProfileIcons() {
-        var _ref36 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref36.region,
-            options = _ref36.options;
+        var _ref34 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref34.region,
+            options = _ref34.options;
 
         var cb = arguments[1];
 
@@ -2258,8 +2142,8 @@
     }, {
       key: 'getRealmData',
       value: function getRealmData() {
-        var _ref37 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref37.region;
+        var _ref35 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref35.region;
 
         var cb = arguments[1];
 
@@ -2273,9 +2157,9 @@
     }, {
       key: 'getRuneList',
       value: function getRuneList() {
-        var _ref38 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref38.region,
-            options = _ref38.options;
+        var _ref36 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref36.region,
+            options = _ref36.options;
 
         var cb = arguments[1];
 
@@ -2291,11 +2175,11 @@
     }, {
       key: 'getRune',
       value: function getRune() {
-        var _ref39 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref39.region,
-            id = _ref39.id,
-            runeId = _ref39.runeId,
-            options = _ref39.options;
+        var _ref37 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref37.region,
+            id = _ref37.id,
+            runeId = _ref37.runeId,
+            options = _ref37.options;
 
         var cb = arguments[1];
 
@@ -2316,9 +2200,9 @@
     }, {
       key: 'getSummonerSpells',
       value: function getSummonerSpells() {
-        var _ref40 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref40.region,
-            options = _ref40.options;
+        var _ref38 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref38.region,
+            options = _ref38.options;
 
         var cb = arguments[1];
 
@@ -2334,12 +2218,12 @@
     }, {
       key: 'getSummonerSpell',
       value: function getSummonerSpell() {
-        var _ref41 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref41.region,
-            id = _ref41.id,
-            spellId = _ref41.spellId,
-            summonerSpellId = _ref41.summonerSpellId,
-            options = _ref41.options;
+        var _ref39 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref39.region,
+            id = _ref39.id,
+            spellId = _ref39.spellId,
+            summonerSpellId = _ref39.summonerSpellId,
+            options = _ref39.options;
 
         var cb = arguments[1];
 
@@ -2366,9 +2250,9 @@
     }, {
       key: 'getVersionData',
       value: function getVersionData() {
-        var _ref42 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref42.region,
-            options = _ref42.options;
+        var _ref40 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref40.region,
+            options = _ref40.options;
 
         var cb = arguments[1];
 
@@ -2382,8 +2266,8 @@
     }, {
       key: 'getShardStatus',
       value: function getShardStatus() {
-        var _ref43 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref43.region;
+        var _ref41 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref41.region;
 
         var cb = arguments[1];
 
@@ -2405,10 +2289,10 @@
     }, {
       key: 'getMatch',
       value: function getMatch() {
-        var _ref44 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref44.region,
-            id = _ref44.id,
-            matchId = _ref44.matchId;
+        var _ref42 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref42.region,
+            id = _ref42.id,
+            matchId = _ref42.matchId;
 
         var cb = arguments[1];
 
@@ -2432,17 +2316,17 @@
     }, {
       key: 'getMatchlist',
       value: function getMatchlist() {
-        var _this9 = this;
+        var _this8 = this;
 
-        var _ref45 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref45.region,
-            accountId = _ref45.accountId,
-            accId = _ref45.accId,
-            id = _ref45.id,
-            summonerId = _ref45.summonerId,
-            playerId = _ref45.playerId,
-            name = _ref45.name,
-            options = _ref45.options;
+        var _ref43 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref43.region,
+            accountId = _ref43.accountId,
+            accId = _ref43.accId,
+            id = _ref43.id,
+            summonerId = _ref43.summonerId,
+            playerId = _ref43.playerId,
+            name = _ref43.name,
+            options = _ref43.options;
 
         var cb = arguments[1];
 
@@ -2462,12 +2346,12 @@
           }, cb);
         } else if (Number.isInteger(id || summonerId || playerId)) {
           return new Promise(function (resolve, reject) {
-            return _this9.getSummoner({ id: id, region: region }, function (err, data) {
+            return _this8.getSummoner({ id: id, region: region }, function (err, data) {
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
               if (data && data.accountId) {
-                return resolve(_this9._matchlistRequest({
+                return resolve(_this8._matchlistRequest({
                   endUrl: 'by-account/' + data.accountId,
                   region: region, options: options,
                   methodType: methodTypes.GET_MATCHLIST
@@ -2477,12 +2361,12 @@
           });
         } else if (typeof name === 'string') {
           return new Promise(function (resolve, reject) {
-            return _this9.getSummoner({ name: name, region: region }, function (err, data) {
+            return _this8.getSummoner({ name: name, region: region }, function (err, data) {
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
               if (data && data.accountId) {
-                return resolve(_this9._matchlistRequest({
+                return resolve(_this8._matchlistRequest({
                   endUrl: 'by-account/' + data.accountId,
                   region: region, options: options,
                   methodType: methodTypes.GET_MATCHLIST
@@ -2497,16 +2381,16 @@
     }, {
       key: 'getRecentMatchlist',
       value: function getRecentMatchlist() {
-        var _this10 = this;
+        var _this9 = this;
 
-        var _ref46 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref46.region,
-            accountId = _ref46.accountId,
-            accId = _ref46.accId,
-            id = _ref46.id,
-            summonerId = _ref46.summonerId,
-            playerId = _ref46.playerId,
-            name = _ref46.name;
+        var _ref44 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref44.region,
+            accountId = _ref44.accountId,
+            accId = _ref44.accId,
+            id = _ref44.id,
+            summonerId = _ref44.summonerId,
+            playerId = _ref44.playerId,
+            name = _ref44.name;
 
         var cb = arguments[1];
 
@@ -2525,12 +2409,12 @@
           }, cb);
         } else if (Number.isInteger(id || summonerId || playerId)) {
           return new Promise(function (resolve, reject) {
-            return _this10.getSummoner({ id: id, region: region }, function (err, data) {
+            return _this9.getSummoner({ id: id, region: region }, function (err, data) {
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
               if (data && data.accountId) {
-                return resolve(_this10._matchlistRequest({
+                return resolve(_this9._matchlistRequest({
                   endUrl: 'by-account/' + data.accountId + '/recent',
                   region: region,
                   methodType: methodTypes.GET_RECENT_MATCHLIST
@@ -2540,12 +2424,12 @@
           });
         } else if (typeof name === 'string') {
           return new Promise(function (resolve, reject) {
-            return _this10.getSummoner({ name: name, region: region }, function (err, data) {
+            return _this9.getSummoner({ name: name, region: region }, function (err, data) {
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
               if (data && data.accountId) {
-                return resolve(_this10._matchlistRequest({
+                return resolve(_this9._matchlistRequest({
                   endUrl: 'by-account/' + data.accountId + '/recent',
                   region: region,
                   methodType: methodTypes.GET_RECENT_MATCHLIST
@@ -2560,10 +2444,10 @@
     }, {
       key: 'getMatchTimeline',
       value: function getMatchTimeline() {
-        var _ref47 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref47.region,
-            id = _ref47.id,
-            matchId = _ref47.matchId;
+        var _ref45 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref45.region,
+            id = _ref45.id,
+            matchId = _ref45.matchId;
 
         var cb = arguments[1];
 
@@ -2587,28 +2471,28 @@
     }, {
       key: 'getRunes',
       value: function getRunes() {
-        var _this11 = this;
+        var _this10 = this;
 
-        var _ref48 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref48.region,
-            accountId = _ref48.accountId,
-            accId = _ref48.accId,
-            id = _ref48.id,
-            summonerId = _ref48.summonerId,
-            playerId = _ref48.playerId,
-            name = _ref48.name;
+        var _ref46 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref46.region,
+            accountId = _ref46.accountId,
+            accId = _ref46.accId,
+            id = _ref46.id,
+            summonerId = _ref46.summonerId,
+            playerId = _ref46.playerId,
+            name = _ref46.name;
 
         var cb = arguments[1];
 
         var endUrl = '';
         if (Number.isInteger(accountId || accId)) {
           return new Promise(function (resolve, reject) {
-            return _this11.getSummoner({ accId: accountId || accId, region: region }, function (err, data) {
+            return _this10.getSummoner({ accId: accountId || accId, region: region }, function (err, data) {
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
               if (data && data.id) {
-                return resolve(_this11._runesMasteriesRequest({
+                return resolve(_this10._runesMasteriesRequest({
                   endUrl: 'runes/by-summoner/' + data.id,
                   region: region,
                   methodType: methodTypes.GET_RUNE_PAGES
@@ -2633,12 +2517,12 @@
           }, cb);
         } else if (typeof name === 'string') {
           return new Promise(function (resolve, reject) {
-            return _this11.getSummoner({ name: name, region: region }, function (err, data) {
+            return _this10.getSummoner({ name: name, region: region }, function (err, data) {
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
               if (data && data.id) {
-                return resolve(_this11._runesMasteriesRequest({
+                return resolve(_this10._runesMasteriesRequest({
                   endUrl: 'runes/by-summoner/' + data.id,
                   region: region,
                   methodType: methodTypes.GET_RUNE_PAGES
@@ -2653,28 +2537,28 @@
     }, {
       key: 'getMasteries',
       value: function getMasteries() {
-        var _this12 = this;
+        var _this11 = this;
 
-        var _ref49 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref49.region,
-            accountId = _ref49.accountId,
-            accId = _ref49.accId,
-            id = _ref49.id,
-            summonerId = _ref49.summonerId,
-            playerId = _ref49.playerId,
-            name = _ref49.name;
+        var _ref47 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref47.region,
+            accountId = _ref47.accountId,
+            accId = _ref47.accId,
+            id = _ref47.id,
+            summonerId = _ref47.summonerId,
+            playerId = _ref47.playerId,
+            name = _ref47.name;
 
         var cb = arguments[1];
 
         var endUrl = '';
         if (Number.isInteger(accountId || accId)) {
           return new Promise(function (resolve, reject) {
-            return _this12.getSummoner({ accId: accountId || accId, region: region }, function (err, data) {
+            return _this11.getSummoner({ accId: accountId || accId, region: region }, function (err, data) {
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
               if (data && data.id) {
-                return resolve(_this12._runesMasteriesRequest({
+                return resolve(_this11._runesMasteriesRequest({
                   endUrl: 'masteries/by-summoner/' + data.id,
                   region: region,
                   methodType: methodTypes.GET_MASTERY_PAGES
@@ -2699,12 +2583,12 @@
           }, cb);
         } else if (typeof name === 'string') {
           return new Promise(function (resolve, reject) {
-            return _this12.getSummoner({ name: name, region: region }, function (err, data) {
+            return _this11.getSummoner({ name: name, region: region }, function (err, data) {
               if (err) {
                 cb ? cb(err) : reject(err);return;
               }
               if (data && data.id) {
-                return resolve(_this12._runesMasteriesRequest({
+                return resolve(_this11._runesMasteriesRequest({
                   endUrl: 'masteries/by-summoner/' + data.id,
                   region: region,
                   methodType: methodTypes.GET_MASTERY_PAGES
@@ -2717,147 +2601,16 @@
         }
       }
     }, {
-      key: 'getRankedStats',
-      value: function getRankedStats() {
-        var _this13 = this;
-
-        var _ref50 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref50.region,
-            accountId = _ref50.accountId,
-            accId = _ref50.accId,
-            id = _ref50.id,
-            summonerId = _ref50.summonerId,
-            playerId = _ref50.playerId,
-            name = _ref50.name,
-            options = _ref50.options;
-
-        var cb = arguments[1];
-
-        this._verifyOptions(options, queryParams.STATS.RANKED);
-        var endUrl = '';
-        if (Number.isInteger(accountId || accId)) {
-          return new Promise(function (resolve, reject) {
-            return _this13.getSummoner({ accId: accountId || accId, region: region }, function (err, data) {
-              if (err) {
-                cb ? cb(err) : reject(err);return;
-              }
-              if (data && data.id) {
-                return resolve(_this13._statsRequest({
-                  endUrl: data.id + '/ranked',
-                  region: region, options: options
-                }, cb));
-              }
-            });
-          });
-        } else if (Number.isInteger(id || summonerId || playerId)) {
-          var _endUrl = '';
-          if (id) {
-            _endUrl = id.toString();
-          }
-          if (summonerId) {
-            _endUrl = summonerId.toString();
-          }
-          if (playerId) {
-            _endUrl = playerId.toString();
-          }
-          return this._statsRequest({
-            endUrl: _endUrl + '/ranked',
-            region: region, options: options
-          }, cb);
-        } else if (typeof name === 'string') {
-          return new Promise(function (resolve, reject) {
-            return _this13.getSummoner({ name: name, region: region }, function (err, data) {
-              if (err) {
-                cb ? cb(err) : reject(err);return;
-              }
-              if (data && data.id) {
-                return resolve(_this13._statsRequest({
-                  endUrl: data.id + '/ranked',
-                  region: region, options: options
-                }, cb));
-              }
-            });
-          });
-        } else {
-          this._logError(this.getRankedStats.name, 'required params ' + chalk.yellow('`id/summonerId/playerId` (int)') + ', ' + chalk.yellow('`accountId/accId` (int)') + ', or ' + chalk.yellow('`name` (string)') + ' not passed in');
-        }
-      }
-    }, {
-      key: 'getStatsSummary',
-      value: function getStatsSummary() {
-        var _this14 = this;
-
-        var _ref51 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref51.region,
-            accountId = _ref51.accountId,
-            accId = _ref51.accId,
-            id = _ref51.id,
-            summonerId = _ref51.summonerId,
-            playerId = _ref51.playerId,
-            name = _ref51.name,
-            options = _ref51.options;
-
-        var cb = arguments[1];
-
-        this._verifyOptions(options, queryParams.STATS.SUMMARY);
-        var endUrl = '';
-        if (Number.isInteger(accountId || accId)) {
-          return new Promise(function (resolve, reject) {
-            return _this14.getSummoner({ accId: accountId || accId, region: region }, function (err, data) {
-              if (err) {
-                cb ? cb(err) : reject(err);return;
-              }
-              if (data && data.id) {
-                return resolve(_this14._statsRequest({
-                  endUrl: data.id + '/summary',
-                  region: region, options: options
-                }, cb));
-              }
-            });
-          });
-        } else if (Number.isInteger(id || summonerId || playerId)) {
-          if (id) {
-            endUrl = id.toString();
-          }
-          if (summonerId) {
-            endUrl = summonerId.toString();
-          }
-          if (playerId) {
-            endUrl = playerId.toString();
-          }
-          return this._statsRequest({
-            endUrl: endUrl + '/summary',
-            region: region, options: options
-          }, cb);
-        } else if (typeof name === 'string') {
-          return new Promise(function (resolve, reject) {
-            return _this14.getSummoner({ name: name, region: region }, function (err, data) {
-              if (err) {
-                cb ? cb(err) : reject(err);return;
-              }
-              if (data && data.id) {
-                return resolve(_this14._statsRequest({
-                  endUrl: data.id + '/summary',
-                  region: region, options: options
-                }, cb));
-              }
-            });
-          });
-        } else {
-          this._logError(this.getStatsSummary.name, 'required params ' + chalk.yellow('`id/summonerId/playerId` (int)') + ', ' + chalk.yellow('`accountId/accId` (int)') + ', or ' + chalk.yellow('`name` (string)') + ' not passed in');
-        }
-      }
-    }, {
       key: 'getSummoner',
       value: function getSummoner() {
-        var _ref52 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-            region = _ref52.region,
-            id = _ref52.id,
-            summonerId = _ref52.summonerId,
-            playerId = _ref52.playerId,
-            accountId = _ref52.accountId,
-            accId = _ref52.accId,
-            name = _ref52.name;
+        var _ref48 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+            region = _ref48.region,
+            id = _ref48.id,
+            summonerId = _ref48.summonerId,
+            playerId = _ref48.playerId,
+            accountId = _ref48.accountId,
+            accId = _ref48.accId,
+            name = _ref48.name;
 
         var cb = arguments[1];
 

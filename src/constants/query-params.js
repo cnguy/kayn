@@ -18,7 +18,6 @@ const DATA_BY_ID = 'dataById' // boolean
   // all champs
     // freeToPlay
 const FREE_TO_PLAY = 'freeToPlay' // boolean
-// GAME-V1.3 NONE
 // LEAGUE-V3 NONE
 // STATUS-V3 NONE
 // MASTERIES-V3 NONE
@@ -86,10 +85,6 @@ const SPELL_LIST_DATA = 'tags' // string
 const SPELL_DATA = 'tags' // string
   // VERSIONS NONE
 
-// STATS-V1.3
-// both ranked and summary
-const STATS_SEASON = 'season' // string
-
 // helper constant
 const VERSION_AND_LOCALE = [VERSION, LOCALE]
 
@@ -134,10 +129,6 @@ const queryParams = {
       QUEUE, BEGIN_TIME, END_INDEX, SEASON, CHAMPION, BEGIN_INDEX, END_TIME
     ]
   },
-  STATS: {
-    RANKED: [STATS_SEASON],
-    SUMMARY: [STATS_SEASON]
-  }
 }
 
 export default queryParams

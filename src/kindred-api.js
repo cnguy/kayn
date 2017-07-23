@@ -49,7 +49,6 @@ class Kindred {
   ChampionMastery: Object
   CurrentGame: Object
   FeaturedGames: Object
-  Game: Object
   League: Object
   Challenger: Object
   Master: Object
@@ -61,7 +60,6 @@ class Kindred {
   RunesMasteries: Object
   Runes: Object
   Masteries: Object
-  Stats: Object
   Summoner: Object
 
   _sanitizeName: (string) => any
@@ -272,13 +270,6 @@ class Kindred {
       list: this.listFeaturedGames.bind(this)
     }
 
-    this.Game = {
-      getRecentGames: this.getRecentGames.bind(this),
-      getRecent: this.getRecentGames.bind(this),
-      recent: this.getRecentGames.bind(this),
-      get: this.getRecentGames.bind(this)
-    }
-
     this.League = {
       getLeagues: this.getLeagues.bind(this),
       leagues: this.getLeagues.bind(this),
@@ -480,14 +471,6 @@ class Kindred {
       }
     }
 
-    this.Stats = {
-      getRankedStats: this.getRankedStats.bind(this),
-      ranked: this.getRankedStats.bind(this),
-
-      getStatsSummary: this.getStatsSummary.bind(this),
-      summary: this.getStatsSummary.bind(this)
-    }
-
     this.Summoner = {
       getSummoner: this.getSummoner.bind(this),
       get: this.getSummoner.bind(this),
@@ -585,20 +568,13 @@ class Kindred {
    * @returns {string} a request url
    */
   _makeUrl(query: string, region: string): string {
-    const oldPrefix = `api/lol/${region}/`
     const prefix = 'lol/'
     const base = 'api.riotgames.com'
     const encodedQuery = encodeURI(query)
-
-    const oldUrl = `https://${region}.api.riotgames.com/${oldPrefix}${encodedQuery}`
-    const newUrl = `https://${PLATFORM_IDS[REGIONS_BACK[region]].toLowerCase()}.${base}/${prefix}${encodedQuery}`
-
-    // TODO: Remove this when Riot has deprecated the endpoints.
-    if (newUrl.lastIndexOf('v3') === -1) {
-      return oldUrl
-    }
-
-    return newUrl
+    const url = `
+      https://${PLATFORM_IDS[REGIONS_BACK[region]].toLowerCase()}.${base}/${prefix}${encodedQuery}
+    `
+    return url
   }
 
   /**
@@ -614,21 +590,13 @@ class Kindred {
     const appendKey = (str: string, key: string, value: string): string =>
       str + (str ? '&' : '') + `${key}=${value}`
 
-    // TODO: Remove this when Riot has deprecated the endpoints.
-    if (endUrl.lastIndexOf('v3') === -1) {
-      // Supports older endpoints (not deprecated until middle of June).
-      // Game/Stats are the only ones remaining left,
-      // but they don't take multi-valued params.
-      stringifiedOpts = queryString.stringify(options)
-    } else {
-      for (const key of Object.keys(options)) {
-        if (Array.isArray(options[key])) {
-          for (const value of options[key]) {
-            stringifiedOpts = appendKey(stringifiedOpts, key, value)
-          }
-        } else {
-          stringifiedOpts = appendKey(stringifiedOpts, key, options[key])
+    for (const key of Object.keys(options)) {
+      if (Array.isArray(options[key])) {
+        for (const value of options[key]) {
+          stringifiedOpts = appendKey(stringifiedOpts, key, value)
         }
+      } else {
+        stringifiedOpts = appendKey(stringifiedOpts, key, options[key])
       }
     }
 
@@ -1073,23 +1041,6 @@ class Kindred {
     }, cb)
   }
 
-  _statsRequest({
-    endUrl,
-    region,
-    options
-  }: {
-    endUrl: string,
-    region?: string,
-    options?: any
-  }, cb: callback) {
-    return this._baseRequest({
-      endUrl: `v${VERSIONS.STATS}/stats/by-summoner/${endUrl}`, region, options,
-      cacheParams: {
-        ttl: this.CACHE_TIMERS.STATS
-      }
-    }, cb)
-  }
-
   _summonerRequest({
     endUrl,
     region,
@@ -1395,63 +1346,6 @@ class Kindred {
       region,
       methodType: METHOD_TYPES.LIST_FEATURED_GAMES
     }, cb)
-  }
-
-  /* GAME-V1.3 */
-  getRecentGames({
-    region,
-    accountId, accId,
-    id, summonerId, playerId,
-    name
-  }: {
-    region?: string,
-    accountId?: number, accId?: number,
-    id?: number, summonerId?: number, playerId?: number,
-    name?: string
-  } = {}, cb: callback) {
-    let endUrl = ''
-    if (Number.isInteger(accountId || accId)) {
-      return new Promise((resolve, reject) => {
-        return this.getSummoner({ accId: accountId || accId, region }, (err, data) => {
-          if (err) { cb ? cb(err) : reject(err); return }
-          if (data && data.id) {
-            return resolve(this._gameRequest({
-              endUrl: `by-summoner/${data.id}/recent`, region
-            }, cb))
-          }
-        })
-      })
-    } else if (Number.isInteger(id || summonerId || playerId)) {
-      if (id) {
-        endUrl = id.toString()
-      }
-      if (summonerId) {
-        endUrl = summonerId.toString()
-      }
-      if (playerId) {
-        endUrl = playerId.toString()
-      }
-      return this._gameRequest({
-        endUrl: `by-summoner/${endUrl}/recent`,
-        region
-      }, cb)
-    } else if (typeof name === 'string') {
-      return new Promise((resolve, reject) => {
-        return this.getSummoner({ name, region }, (err, data) => {
-          if (err) { cb ? cb(err) : reject(err); return }
-          if (data && data.id) {
-            return resolve(this._gameRequest({
-              endUrl: `by-summoner/${data.id}/recent`, region
-            }, cb))
-          }
-        })
-      })
-    } else {
-      return this._logError(
-        this.getRecentGames.name,
-        `required params ${chalk.yellow('`id/summonerId/playerId` (int)')}, ${chalk.yellow('`accountId/accId` (int)')}, or ${chalk.yellow('`name` (string)')} not passed in`
-      )
-    }
   }
 
   /* LEAGUE-V3 */
@@ -2212,130 +2106,6 @@ class Kindred {
       return this._logError(
         this.getMasteries.name,
         `required params ${chalk.yellow('`id/summonerId/playerId` (int)')}, ${chalk.yellow('`accountId/accId` (int)')}, or ${chalk.yellow('`name` (str)')} not passed in`
-      )
-    }
-  }
-
-  /* STATS-V1.3 */
-  getRankedStats({
-    region,
-    accountId, accId,
-    id, summonerId, playerId,
-    name,
-    options
-  }: {
-    region?: string,
-    accountId?: number, accId?: number,
-    id?: number, summonerId?: number, playerId?: number,
-    name?: string,
-    options?: any,
-  } = {}, cb: callback) {
-    this._verifyOptions(options, QUERY_PARAMS.STATS.RANKED)
-    let endUrl = ''
-    if (Number.isInteger(accountId || accId)) {
-      return new Promise((resolve, reject) => {
-        return this.getSummoner({ accId: accountId || accId, region }, (err, data) => {
-          if (err) { cb ? cb(err) : reject(err); return }
-          if (data && data.id) {
-            return resolve(this._statsRequest({
-              endUrl: `${data.id}/ranked`,
-              region, options
-            }, cb))
-          }
-        })
-      })
-    } else if (Number.isInteger(id || summonerId || playerId)) {
-      let endUrl = ''
-      if (id) {
-        endUrl = id.toString()
-      }
-      if (summonerId) {
-        endUrl = summonerId.toString()
-      }
-      if (playerId) {
-        endUrl = playerId.toString()
-      }
-      return this._statsRequest({
-        endUrl: `${endUrl}/ranked`,
-        region, options
-      }, cb)
-    } else if (typeof name === 'string') {
-      return new Promise((resolve, reject) => {
-        return this.getSummoner({ name, region }, (err, data) => {
-          if (err) { cb ? cb(err) : reject(err); return }
-          if (data && data.id) {
-            return resolve(this._statsRequest({
-              endUrl: `${data.id}/ranked`,
-              region, options
-            }, cb))
-          }
-        })
-      })
-    } else {
-      this._logError(
-        this.getRankedStats.name,
-        `required params ${chalk.yellow('`id/summonerId/playerId` (int)')}, ${chalk.yellow('`accountId/accId` (int)')}, or ${chalk.yellow('`name` (string)')} not passed in`
-      )
-    }
-  }
-
-  getStatsSummary({
-    region,
-    accountId, accId,
-    id, summonerId, playerId,
-    name,
-    options
-  }: {
-    region?: string,
-    accountId: number, accId?: number,
-    id?: number, summonerId?: number, playerId?: number,
-    name?: string,
-    options?: any,
-  } = {}, cb: callback) {
-    this._verifyOptions(options, QUERY_PARAMS.STATS.SUMMARY)
-    let endUrl = ''
-    if (Number.isInteger(accountId || accId)) {
-      return new Promise((resolve, reject) => {
-        return this.getSummoner({ accId: accountId || accId, region }, (err, data) => {
-          if (err) { cb ? cb(err) : reject(err); return }
-          if (data && data.id) {
-            return resolve(this._statsRequest({
-              endUrl: `${data.id}/summary`,
-              region, options
-            }, cb))
-          }
-        })
-      })
-    } else if (Number.isInteger(id || summonerId || playerId)) {
-      if (id) {
-        endUrl = id.toString()
-      }
-      if (summonerId) {
-        endUrl = summonerId.toString()
-      }
-      if (playerId) {
-        endUrl = playerId.toString()
-      }
-      return this._statsRequest({
-        endUrl: `${endUrl}/summary`,
-        region, options
-      }, cb)
-    } else if (typeof name === 'string') {
-      return new Promise((resolve, reject) => {
-        return this.getSummoner({ name, region }, (err, data) => {
-          if (err) { cb ? cb(err) : reject(err); return }
-          if (data && data.id) {
-            return resolve(this._statsRequest({
-              endUrl: `${data.id}/summary`,
-              region, options
-            }, cb))
-          }
-        })
-      })
-    } else {
-      this._logError(
-        this.getStatsSummary.name,
-        `required params ${chalk.yellow('`id/summonerId/playerId` (int)')}, ${chalk.yellow('`accountId/accId` (int)')}, or ${chalk.yellow('`name` (string)')} not passed in`
       )
     }
   }
