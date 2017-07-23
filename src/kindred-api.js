@@ -71,7 +71,6 @@ class Kindred {
     CHAMPION_MASTERY: number,
     CURRENT_GAME: number,
     FEATURED_GAMES: number,
-    GAME: number,
     LEAGUE: number,
     STATIC: number,
     STATUS: number,
@@ -79,7 +78,6 @@ class Kindred {
     MATCHLIST: number,
     RUNES_MASTERIES: number,
     SPECTATOR: number,
-    STATS: number,
     SUMMONER: number,
     TOURNAMENT_STUB: number,
     TOURNAMENT: number
@@ -623,7 +621,6 @@ class Kindred {
     CHAMPION_MASTERY: number,
     CURRENT_GAME: number,
     FEATURED_GAMES: number,
-    GAME: number,
     LEAGUE: number,
     STATIC: number,
     STATUS: number,
@@ -631,7 +628,6 @@ class Kindred {
     MATCHLIST: number,
     RUNES_MASTERIES: number,
     SPECTATOR: number,
-    STATS: number,
     SUMMONER: number,
     TOURNAMENT_STUB: number,
     TOURNAMENT: number
@@ -640,7 +636,6 @@ class Kindred {
     CHAMPION_MASTERY: number,
     CURRENT_GAME: number,
     FEATURED_GAMES: number,
-    GAME: number,
     LEAGUE: number,
     STATIC: number,
     STATUS: number,
@@ -648,7 +643,6 @@ class Kindred {
     MATCHLIST: number,
     RUNES_MASTERIES: number,
     SPECTATOR: number,
-    STATS: number,
     SUMMONER: number,
     TOURNAMENT_STUB: number,
     TOURNAMENT: number
@@ -945,21 +939,6 @@ class Kindred {
         ttl: this.CACHE_TIMERS.STATUS
       },
       methodType
-    }, cb)
-  }
-
-  _gameRequest({
-    endUrl,
-    region
-  }: {
-    endUrl: string,
-    region?: string
-  }, cb: callback) {
-    return this._baseRequest({
-      endUrl: `v${VERSIONS.GAME}/game/${endUrl}`, region,
-      cacheParams: {
-        ttl: this.CACHE_TIMERS.GAME
-      }
     }, cb)
   }
 

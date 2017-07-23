@@ -128,7 +128,7 @@ const queryParams = {
     GET: [
       QUEUE, BEGIN_TIME, END_INDEX, SEASON, CHAMPION, BEGIN_INDEX, END_TIME
     ]
-  },
+  }
 }
 
 export default queryParams
