@@ -569,10 +569,8 @@ class Kindred {
     const prefix = 'lol/'
     const base = 'api.riotgames.com'
     const encodedQuery = encodeURI(query)
-    const url = `
-      https://${PLATFORM_IDS[REGIONS_BACK[region]].toLowerCase()}.${base}/${prefix}${encodedQuery}
-    `
-    return url
+    const platformId = PLATFORM_IDS[REGIONS_BACK[region]].toLowerCase()
+    return `https://${platformId}.${base}/${prefix}${encodedQuery}`
   }
 
   /**

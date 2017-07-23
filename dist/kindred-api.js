@@ -978,8 +978,8 @@
         var prefix = 'lol/';
         var base = 'api.riotgames.com';
         var encodedQuery = encodeURI(query);
-        var url = '\n      https://' + platformIds[regions$1[region]].toLowerCase() + '.' + base + '/' + prefix + encodedQuery + '\n    ';
-        return url;
+        var platformId = platformIds[regions$1[region]].toLowerCase();
+        return 'https://' + platformId + '.' + base + '/' + prefix + encodedQuery;
       }
     }, {
       key: '_stringifyOptions',
