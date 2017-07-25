@@ -33,6 +33,8 @@ import prettifyStatusMessage from './helpers/prettify-status-message'
 import printResponseDebug from './helpers/print-response-debug'
 import shouldRetry from './helpers/should-retry'
 import validTTL from './helpers/valid-ttl'
+import getEpoch from './helpers/get-epoch'
+import checkIfDateParam from './helpers/check-if-date-param'
 
 import type {
   cacheGet,
@@ -581,7 +583,6 @@ class Kindred {
    */
   _stringifyOptions(options: any, endUrl: string): string {
     let stringifiedOpts = ''
-
     // Returns stringified opts with appended key-value pair.
     const appendKey = (str: string, key: string, value: string): string =>
       str + (str ? '&' : '') + `${key}=${value}`
@@ -592,6 +593,9 @@ class Kindred {
           stringifiedOpts = appendKey(stringifiedOpts, key, value)
         }
       } else {
+        if (checkIfDateParam(key)) {
+          options[key] = getEpoch(options[key])
+        }
         stringifiedOpts = appendKey(stringifiedOpts, key, options[key])
       }
     }
