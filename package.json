@@ -7,7 +7,7 @@
   "scripts": {
     "go": "yarn lint && yarn build && yarn minify && babel test.js -o test-compiled.js && node test-compiled.js",
     "prepare": "yarn build && yarn minify",
-    "test": "cd src && flow --show-all-errors && cd - && ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --compilers js:babel-core/register test/**/*.js",
+    "test": "cd src && flow --show-all-errors && cd - && ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- --compilers js:babel-core/register \"test/**/*.js\"",
     "flow": "cd src && flow --show-all-errors && cd -",
     "lint": "node make eslint",
     "build": "node make build",
