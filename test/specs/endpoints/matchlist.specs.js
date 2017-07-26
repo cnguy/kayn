@@ -5,6 +5,8 @@ var expect = chai.expect,
   should = chai.should,
   assert = chai.assert
 
+var has = require('lodash.has')
+
 require('dotenv').config()
 
 var init = require('../../../utils/init')
@@ -58,6 +60,28 @@ describe('Matchlist', function () {
               })
           })
 
+          it('should get right queue filter with region and options', function (done) {
+            k
+              .Matchlist.get({ id, options: {
+                queue: 440
+              }, region: 'na' }, function testCB(err, data) {
+                expect(err).to.be.null
+                expect(data).to.not.be.undefined
+                data.matches.map(match => expect(match.queue).to.equal(440))
+                done()
+              })
+          })
+
+          it('should return 404 with garbage queue filter with region and options', function (done) {
+            const options = { queue: 9999 }
+            function testCB(err, data) {
+              expect(err).to.equal(404)
+              expect(data).to.be.undefined
+              done()
+            }
+            k.Matchlist.get({ id, options, region: 'na' }, testCB)
+          })
+
           it('should be a successful call with region', function (done) {
             k
               .Matchlist.get({ id, region: 'na' }, function testCB(err, data) {
@@ -87,6 +111,27 @@ describe('Matchlist', function () {
               })
           })
 
+          it('should get right queue filter with region and options', function (done) {
+            k.Matchlist.get({ id, options: {
+              queue: 420
+            }, region: 'na' })
+              .then(data => {
+                data.matches.map(match => expect(match.queue).to.equal(420))
+                done()
+              })
+          })
+
+          it('should return 404 with garbage queue filter with region and options', function (done) {
+            const options = { queue: 9999 }
+            const check404 = err => {
+              expect(err).to.equal(404)
+              done()
+            }
+            k.Matchlist.get({ id, options, region: 'na' })
+             .then(data => { throw new Error() })
+             .catch(check404)
+          })
+
           it('should be a successful call with region', function (done) {
             k
               .Matchlist.get({ id, region: 'na' })
@@ -107,12 +152,63 @@ describe('Matchlist', function () {
               done()
             })
           })
+
+          it('should get right queue filter with region and options', function (done) {
+            k.Matchlist.get({ name, options: {
+              queue: 440
+            }, region: 'na' }, function testCB(err, data) {
+              expect(err).to.be.null
+              expect(data).to.not.be.undefined
+              data.matches.map(match => expect(match.queue).to.equal(440))
+              done()
+            })
+          })
+
+          it('should return 404 with garbage queue filter with region and options', function (done) {
+            const options = { queue: 9999 }
+            function testCB(err, data) {
+              expect(err).to.equal(404)
+              expect(data).to.be.undefined
+              done()
+            }
+            k.Matchlist.get({ name, options, region: 'na' }, testCB)
+          })
         })
 
         describe('through promise', function () {
           it('should be a successful call', function (done) {
             k
               .Matchlist.get({ name })
+              .then(data => {
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+
+          it('should get right queue filter with region and options', function (done) {
+            k.Matchlist.get({ name, options: {
+              queue: 420
+            }, region: 'na' })
+              .then(data => {
+                data.matches.map(match => expect(match.queue).to.equal(420))
+                done()
+              })
+          })
+
+          it('should return 404 with garbage queue filter with region and options', function (done) {
+            const options = { queue: 9999 }
+            const check404 = err => {
+              expect(err).to.equal(404)
+              done()
+            }
+            k.Matchlist.get({ name, options, region: 'na' })
+             .then(data => { throw new Error() })
+             .catch(check404)
+          })
+
+          it('should be a successful call with region', function (done) {
+            k
+              .Matchlist.get({ name, region: 'na' })
               .then(data => {
                 expect(data).to.not.be.undefined
                 done()
@@ -130,6 +226,28 @@ describe('Matchlist', function () {
               done()
             })
           })
+
+          it('should get right queue filter with region and options', function (done) {
+            k
+              .Matchlist.get({ accId, options: {
+                queue: 440
+              }, region: 'na' }, function testCB(err, data) {
+                expect(err).to.be.null
+                expect(data).to.not.be.undefined
+                data.matches.map(match => expect(match.queue).to.equal(440))
+                done()
+              })
+          })
+
+          it('should return 404 with garbage queue filter with region and options', function (done) {
+            const options = { queue: 9999 }
+            function testCB(err, data) {
+              expect(err).to.equal(404)
+              expect(data).to.be.undefined
+              done()
+            }
+            k.Matchlist.get({ accId, options, region: 'na' }, testCB)
+          })
         })
 
         describe('through promise', function () {
@@ -140,6 +258,27 @@ describe('Matchlist', function () {
                 expect(data).to.not.be.undefined
                 done()
               })
+          })
+
+          it('should get right queue filter with region and options', function (done) {
+            k.Matchlist.get({ accId, options: {
+              queue: 420
+            }, region: 'na' })
+              .then(data => {
+                data.matches.map(match => expect(match.queue).to.equal(420))
+                done()
+              })
+          })
+
+          it('should return 404 with garbage queue filter with region and options', function (done) {
+            const options = { queue: 9999 }
+            const check404 = err => {
+              expect(err).to.equal(404)
+              done()
+            }
+            k.Matchlist.get({ accId, options, region: 'na' })
+             .then(data => { throw new Error() })
+             .catch(check404)
           })
         })
       })
@@ -190,6 +329,23 @@ describe('Matchlist', function () {
                   done()
                 })
             })
+
+            it('should get right queue filter with region and options', function (done) {
+              k.Matchlist.by.id(id, { queue: 440 }, 'na', function testCB(err, data) {
+                expect(err).to.be.null
+                expect(data).to.not.be.undefined
+                data.matches.map(match => expect(match.queue).to.equal(440))
+                done()
+              })
+            })
+
+            it('should return 404 with garbage queue filter with region and options', function (done) {
+              k.Matchlist.by.id(id, { queue: 9999 }, 'na', function testCB(err, data) {
+                expect(err).to.equal(404)
+                expect(data).to.be.undefined
+                done()
+              })
+            })
           })
 
           describe('through promise', function () {
@@ -198,6 +354,27 @@ describe('Matchlist', function () {
                 .Matchlist.by.id(id)
                 .then(data => {
                   expect(data).to.not.be.undefined
+                  done()
+                })
+            })
+
+            it('should get right queue filter with region and options', function (done) {
+              k.Matchlist.by.id(id, { queue: 440 }, 'na')
+                .then(data => {
+                  expect(err).to.be.null
+                  expect(data).to.not.be.undefined
+                  data.matches.map(match => expect(match.queue).to.equal(440))
+                  done()
+                })
+            })
+
+            it('should return 404 with garbage queue filter with region and options', function (done) {
+              k.Matchlist.by.id(id, { queue: 9999 }, 'na')
+                .then(data => {
+                  throw new Error()
+                })
+                .catch(err => {
+                  expect(err).to.equal(404)
                   done()
                 })
             })
@@ -245,6 +422,23 @@ describe('Matchlist', function () {
                   done()
                 })
             })
+
+            it('should get right queue filter with region and options', function (done) {
+              k.Matchlist.by.name(name, { queue: 440 }, 'na', function testCB(err, data) {
+                expect(err).to.be.null
+                expect(data).to.not.be.undefined
+                data.matches.map(match => expect(match.queue).to.equal(440))
+                done()
+              })
+            })
+
+            it('should return 404 with garbage queue filter with region and options', function (done) {
+              k.Matchlist.by.name(name, { queue: 9999 }, 'na', function testCB(err, data) {
+                expect(err).to.equal(404)
+                expect(data).to.be.undefined
+                done()
+              })
+            })
           })
 
           describe('through promise', function () {
@@ -253,6 +447,27 @@ describe('Matchlist', function () {
                 .Matchlist.by.name(name)
                 .then(data => {
                   expect(data).to.not.be.undefined
+                  done()
+                })
+            })
+
+            it('should get right queue filter with region and options', function (done) {
+              k.Matchlist.by.name(name, { queue: 440 }, 'na')
+                .then(data => {
+                  expect(err).to.be.null
+                  expect(data).to.not.be.undefined
+                  data.matches.map(match => expect(match.queue).to.equal(440))
+                  done()
+                })
+            })
+
+            it('should return 404 with garbage queue filter with region and options', function (done) {
+              k.Matchlist.by.name(name, { queue: 9999 }, 'na')
+                .then(data => {
+                  throw new Error()
+                })
+                .catch(err => {
+                  expect(err).to.equal(404)
                   done()
                 })
             })
@@ -300,6 +515,23 @@ describe('Matchlist', function () {
                   done()
                 })
             })
+
+            it('should get right queue filter with region and options', function (done) {
+              k.Matchlist.by.account(accId, { queue: 440 }, 'na', function testCB(err, data) {
+                expect(err).to.be.null
+                expect(data).to.not.be.undefined
+                data.matches.map(match => expect(match.queue).to.equal(440))
+                done()
+              })
+            })
+
+            it('should return 404 with garbage queue filter with region and options', function (done) {
+              k.Matchlist.by.account(accId, { queue: 9999 }, 'na', function testCB(err, data) {
+                expect(err).to.equal(404)
+                expect(data).to.be.undefined
+                done()
+              })
+            })
           })
 
           describe('through promise', function () {
@@ -308,6 +540,27 @@ describe('Matchlist', function () {
                 .Matchlist.by.account(accId)
                 .then(data => {
                   expect(data).to.not.be.undefined
+                  done()
+                })
+            })
+
+            it('should get right queue filter with region and options', function (done) {
+              k.Matchlist.by.account(accId, { queue: 440 }, 'na')
+                .then(data => {
+                  expect(err).to.be.null
+                  expect(data).to.not.be.undefined
+                  data.matches.map(match => expect(match.queue).to.equal(440))
+                  done()
+                })
+            })
+
+            it('should return 404 with garbage queue filter with region and options', function (done) {
+              k.Matchlist.by.account(accId, { queue: 9999 }, 'na')
+                .then(data => {
+                  throw new Error()
+                })
+                .catch(err => {
+                  expect(err).to.equal(404)
                   done()
                 })
             })
