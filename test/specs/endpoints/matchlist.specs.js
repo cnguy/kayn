@@ -5,7 +5,7 @@ var expect = chai.expect,
   should = chai.should,
   assert = chai.assert
 
-var has = require('lodash.has')
+import has from 'lodash.has'
 
 require('dotenv').config()
 
@@ -361,11 +361,11 @@ describe('Matchlist', function () {
             it('should get right queue filter with region and options', function (done) {
               k.Matchlist.by.id(id, { queue: 440 }, 'na')
                 .then(data => {
-                  expect(err).to.be.null
                   expect(data).to.not.be.undefined
                   data.matches.map(match => expect(match.queue).to.equal(440))
                   done()
                 })
+                .catch(err => { throw new Error() })
             })
 
             it('should return 404 with garbage queue filter with region and options', function (done) {
@@ -449,23 +449,22 @@ describe('Matchlist', function () {
                   expect(data).to.not.be.undefined
                   done()
                 })
+                .catch(err => { throw new Error(err) })
             })
 
             it('should get right queue filter with region and options', function (done) {
               k.Matchlist.by.name(name, { queue: 440 }, 'na')
                 .then(data => {
-                  expect(err).to.be.null
                   expect(data).to.not.be.undefined
                   data.matches.map(match => expect(match.queue).to.equal(440))
                   done()
                 })
+                .catch(err => { throw new Error(err) })
             })
 
             it('should return 404 with garbage queue filter with region and options', function (done) {
               k.Matchlist.by.name(name, { queue: 9999 }, 'na')
-                .then(data => {
-                  throw new Error()
-                })
+                .then(data => { throw new Error() })
                 .catch(err => {
                   expect(err).to.equal(404)
                   done()
@@ -542,23 +541,22 @@ describe('Matchlist', function () {
                   expect(data).to.not.be.undefined
                   done()
                 })
+                .catch(err => { throw new Error() })
             })
 
             it('should get right queue filter with region and options', function (done) {
               k.Matchlist.by.account(accId, { queue: 440 }, 'na')
                 .then(data => {
-                  expect(err).to.be.null
                   expect(data).to.not.be.undefined
                   data.matches.map(match => expect(match.queue).to.equal(440))
                   done()
                 })
+                .catch(err => { throw new Error(err) })
             })
 
             it('should return 404 with garbage queue filter with region and options', function (done) {
               k.Matchlist.by.account(accId, { queue: 9999 }, 'na')
-                .then(data => {
-                  throw new Error()
-                })
+                .then(data => { throw new Error() })
                 .catch(err => {
                   expect(err).to.equal(404)
                   done()
