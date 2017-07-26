@@ -1,16 +1,16 @@
 {
   "name": "kindred-api",
-  "version": "2.0.72",
+  "version": "2.0.73",
   "description": "Node.js League of Legends v3 API wrapper with built-in rate-limiting (enforced per region, burst/spread, follows retry headers, app/method rate-limiting), caching (in-memory, Redis), automatic retries, and parameter checking.",
   "main": "index.js",
   "jsnext:main": "src/index.js",
   "scripts": {
     "go": "yarn lint && yarn build && yarn minify && babel test.js -o test-compiled.js && node test-compiled.js",
     "prepare": "yarn build && yarn minify",
-    "test": "cd src && flow --show-all-errors && cd - && ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha \"test/**/*.js\"",
+    "test": "cd src && flow --show-all-errors && cd - && node_modules/.bin/babel-node ./node_modules/.bin/babel-istanbul cover ./node_modules/mocha/bin/_mocha --compilers js:babel-core/register \"test/**/*.js\"",
     "flow": "cd src && flow --show-all-errors && cd -",
     "lint": "node make eslint",
-    "build": "node make build",
+    "build": "node make build && node make minify",
     "watch": "node make watch",
     "minify": "node make minify",
     "default": "node make",
@@ -35,9 +35,13 @@
     "node.js riot api wrapper"
   ],
   "devDependencies": {
+    "babel-cli": "^6.24.1",
     "babel-core": "^6.21.0",
     "babel-eslint": "^7.2.3",
+    "babel-istanbul": "^0.12.2",
+    "babel-plugin-syntax-flow": "^6.18.0",
     "babel-plugin-transform-es2015-modules-umd": "^6.18.0",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-preset-es2015": "^6.18.0",
     "chai": "^3.5.0",
     "chokidar": "^1.6.1",
@@ -52,6 +56,7 @@
     "rollup-plugin-flow": "^1.1.1",
     "sinon": "^2.1.0",
     "sinon-chai": "^2.8.0",
+    "uglify-es": "mishoo/UglifyJS2#harmony",
     "uglify-js": "^2.7.5"
   },
   "author": "Chau Nguyen (http://chautnguyen.surge.com/)",

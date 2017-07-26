@@ -6,6 +6,25 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
+## [2.0.73](https://github.com/ChauTNguyen/kindred-api/tree/feature/add-js-date-handling) - Add JS date handling for beginTime and endTime.
+
+```javascript
+// passing in date string
+const opts1 = {
+  beginTime: 'Tue June 4 2017 19:34:33 GMT-0800 (PST)'
+}
+// passing in date object
+const opts2 = {
+  endTime: new Date(1493955273000)
+}
+// passing in unix
+const opts3 = {
+  beginTime: 1493955273000
+}
+const opts = opts1 // change this to test
+k.Matchlist.by.name('god tupo', opts, print)
+```
+
 ## [2.0.72](https://github.com/ChauTNguyen/kindred-api/tree/feature/remove-riot-official-deprecated) - Remove deprecated stuffs for July 24 deprecation.
 
 ## [2.0.71](https://github.com/ChauTNguyen/kindred-api/commit/ab0bff509168607c171af27ea3c63abd90b1ed55) - Fix spread/retryOptions/timeout initialization (doesn't need limits).

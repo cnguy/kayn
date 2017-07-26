@@ -564,6 +564,23 @@
     return Number.isInteger(ttl) && ttl > 0;
   };
 
+  var getEpoch = function getEpoch(time) {
+    if (typeof time === 'string') {
+      return new Date(0).setUTCMilliseconds(new Date(time));
+    }
+    if ((typeof time === 'undefined' ? 'undefined' : _typeof(time)) === 'object') {
+      return new Date(0).setUTCMilliseconds(time);
+    }
+    if (typeof time === 'number') {
+      return time;
+    }
+    return 0;
+  };
+
+  var check$2 = function check$2(tag) {
+    return tag === 'beginTime' || tag === 'endTime';
+  };
+
   var ERROR_THRESHOLD = 400;
   var SECOND = 1000;
 
@@ -1028,6 +1045,9 @@
                 }
               }
             } else {
+              if (check$2(key)) {
+                options[key] = getEpoch(options[key]);
+              }
               stringifiedOpts = appendKey(stringifiedOpts, key, options[key]);
             }
           }

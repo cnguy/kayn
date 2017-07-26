@@ -24,7 +24,7 @@ const FREE_TO_PLAY = 'freeToPlay' // boolean
 // MATCH-V3
   // MATCHLIST BY ACCOUNT
 const QUEUE = 'queue' // Set[int]
-const BEGIN_TIME = 'beginTime' // long
+const BEGIN_TIME = 'beginTime' // int
 const END_INDEX = 'endIndex' // int
 const SEASON = 'season' // Set[int]
 const CHAMPION = 'champion' // Set[int]
