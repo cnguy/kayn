@@ -365,7 +365,7 @@ describe('Matchlist', function () {
                   data.matches.map(match => expect(match.queue).to.equal(440))
                   done()
                 })
-                .catch(err => { throw new Error() })
+                .catch(err => { throw new Error(err) })
             })
 
             it('should return 404 with garbage queue filter with region and options', function (done) {
