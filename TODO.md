@@ -2,9 +2,9 @@
 ~ = in progress
 - [ ] Add header validation on first request of each rate limiter. ~
 - [x] Allow users to ignore timeout-related issues (greater than 500 requests generally). (set timeout)
-- [ ] Change `champListData` and `runeListData` style query params to `tags`.
+- [ x Change `champListData` and `runeListData` style query params to `tags`.
 - [x] Right now, passing incorrect options (query params) doesn't throw any errors. Adding this feature would help reduce incomplete data from typos.
-- [ ] Make promises retry more flexible (users can pass in time before retry, how many times they want it to keep going).
+- [x] Make promises retry more flexible (users can pass in time before retry, how many times they want it to keep going).
 - [x] ~~Comment my code extensively..~~ This is okay for now. :)
 - [ ] Fix highly inefficient tests. ~
 - [ ] Add extensive tests that cover important functionality such as rate limiting and options. Not sure how I should test this right now though. ~

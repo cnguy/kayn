@@ -6,6 +6,10 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
+## [2.0.74](https://github.com/ChauTNguyen/kindred-api/issues/22) - Fix impossible to set Redis config.
+
+Forgot about this!
+
 ## [2.0.73](https://github.com/ChauTNguyen/kindred-api/tree/feature/add-js-date-handling) - Add JS date handling for beginTime and endTime.
 
 ```javascript

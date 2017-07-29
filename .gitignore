@@ -24,3 +24,5 @@ test.md
 save.js
 
 dump.rdb
+tsconfig.json
+*.ts
