@@ -14,11 +14,11 @@ class RedisCache {
     port: number,
     keyPrefix: string
   }) {
-    const options = Object.assign({}, opts || {}, {
+    const options = Object.assign({
       host: '127.0.0.1',
       port: 6379,
       keyPrefix: 'kindredAPI-'
-    })
+    }, opts || {});
 
     this.client = redis.createClient(options.port, options.host)
     this.client.on('error', function (err) {
