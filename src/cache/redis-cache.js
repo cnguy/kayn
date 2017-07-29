@@ -18,7 +18,7 @@ class RedisCache {
       host: '127.0.0.1',
       port: 6379,
       keyPrefix: 'kindredAPI-'
-    }, opts || {});
+    }, opts || {})
 
     this.client = redis.createClient(options.port, options.host)
     this.client.on('error', function (err) {
