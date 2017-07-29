@@ -150,6 +150,20 @@ const production = new Kindred({
   spread: true, // setting spread to true will help prevent timeout/econreset errors
   timeout: 100000,
   cache: new RedisCache()
+}) // note, as of 2.0.74, you can no set your config like this:
+
+const nonDefaultRedis = new RedisCache({
+  host: '192.168.0.1',
+  port: '5005',
+  keyPrefix: 'helloWorld-',
+})
+
+const productionWithNonDefaultRedis = new Kindred({
+  key: 'myProductionRitoAPIKey',
+  limits: [[1500, 10], [90000, 600]],
+  spread: true,
+  timeout: 5000,
+  cache: nonDefaultRedis,
 })
 
 // these are mostly the core configuration options.
