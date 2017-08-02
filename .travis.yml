@@ -24,5 +24,3 @@ services:
 notifications:
   email:
     - chautnguyen96@gmail.com
-
-install: travis_wait 10000 mvn install

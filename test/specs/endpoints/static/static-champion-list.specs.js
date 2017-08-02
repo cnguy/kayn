@@ -20,7 +20,7 @@ const config = {
   region: 'kr'
 }
 
-describe('Static Champions', function () {
+describe.skip('Static Champions', function () {
   this.timeout(0)
 
   describe('get static champions list', function () {

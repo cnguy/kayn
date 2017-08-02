@@ -19,7 +19,7 @@ const config = {
   region: 'kr'
 }
 
-describe('Static Summoner Spell', function () {
+describe.skip('Static Summoner Spell', function () {
   this.timeout(0)
 
   describe('get static summoner spell', function () {

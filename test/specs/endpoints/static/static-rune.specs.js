@@ -19,7 +19,7 @@ const config = {
   region: 'kr'
 }
 
-describe('Static Rune', function () {
+describe.skip('Static Rune', function () {
   this.timeout(0)
 
   describe('get static rune', function () {

@@ -19,7 +19,7 @@ const config = {
   region: 'ru'
 }
 
-describe('Static Item', function () {
+describe.skip('Static Item', function () {
   this.timeout(0)
 
   describe('get static item', function () {

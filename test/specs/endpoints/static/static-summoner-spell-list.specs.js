@@ -17,7 +17,7 @@ const config = {
   region: 'kr'
 }
 
-describe('Static Summoner Spell List', function () {
+describe.skip('Static Summoner Spell List', function () {
   this.timeout(0)
 
   describe('get static champion list', function () {

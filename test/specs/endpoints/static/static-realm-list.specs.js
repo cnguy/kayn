@@ -13,7 +13,7 @@ const config = {
   region: 'kr'
 }
 
-describe('Static Realm List', function () {
+describe.skip('Static Realm List', function () {
   this.timeout(0)
 
   describe('get static realm data', function () {

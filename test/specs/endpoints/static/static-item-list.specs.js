@@ -16,7 +16,7 @@ const config = {
   region: 'na'
 }
 
-describe('Static Items', function () {
+describe.skip('Static Items', function () {
   this.timeout(0)
 
   describe('get static items list', function () {

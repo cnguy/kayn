@@ -19,7 +19,7 @@ const config = {
   region: 'kr'
 }
 
-describe('Static Mastery', function () {
+describe.skip('Static Mastery', function () {
   this.timeout(0)
 
   describe('get static mastery', function () {
