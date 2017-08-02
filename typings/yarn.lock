@@ -2,7 +2,13 @@
 # yarn lockfile v1
 
 
-"@types/node@^8.0.19":
+"@types/dotenv@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@types/dotenv/-/dotenv-4.0.0.tgz#bd458844cb82ada047fa87a475270ad55492d2d4"
+  dependencies:
+    "@types/node" "*"
+
+"@types/node@*", "@types/node@^8.0.19":
   version "8.0.19"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.19.tgz#e46e2b0243de7d03f15b26b45c59ebb84f657a4e"
 
@@ -467,9 +473,9 @@ kind-of@^3.0.2:
   dependencies:
     is-buffer "^1.1.5"
 
-kindred-api@^2.0.74:
-  version "2.0.74"
-  resolved "https://registry.yarnpkg.com/kindred-api/-/kindred-api-2.0.74.tgz#d2503006599d39eb857addb793baa69d24a494c1"
+kindred-api@^2.0.75:
+  version "2.0.75"
+  resolved "https://registry.yarnpkg.com/kindred-api/-/kindred-api-2.0.75.tgz#26ce8ffc6c0b78d6d263f6c5471ae7d194233af8"
   dependencies:
     chalk "2.0.1"
     dotenv "^4.0.0"

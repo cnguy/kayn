@@ -8,7 +8,6 @@
     "lint": "tslint index.d.ts"
   },
   "devDependencies": {
-    "@types/node": "^8.0.19",
     "ts-node": "^3.3.0",
     "tslint": "^5.5.0",
     "typescript": "^2.4.2"
@@ -17,6 +16,8 @@
     "todo": "the kindred dep below is just for testing, will remove in future"
   },
   "dependencies": {
-    "kindred-api": "^2.0.74"
+    "@types/dotenv": "^4.0.0",
+    "@types/node": "^8.0.19",
+    "kindred-api": "^2.0.75"
   }
 }
