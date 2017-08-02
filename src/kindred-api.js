@@ -751,7 +751,8 @@ class Kindred {
     region?: string,
     options?: any,
     cacheParams: any,
-    methodType?: string
+    methodType?: string,
+    staticReq?: boolean
   }, cb: callback) {
     const tryRequest = (iterations) => {
       return new Promise((resolve, reject) => {
