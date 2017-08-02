@@ -3,6 +3,7 @@
   "version": "2.0.74",
   "description": "Node.js League of Legends v3 API wrapper with built-in rate-limiting (enforced per region, burst/spread, follows retry headers, app/method rate-limiting), caching (in-memory, Redis), automatic retries, and parameter checking.",
   "main": "index.js",
+  "types": "./typings/index.d.ts",
   "jsnext:main": "src/index.js",
   "scripts": {
     "go": "yarn lint && yarn build && yarn minify && babel test.js -o test-compiled.js && node test-compiled.js",
