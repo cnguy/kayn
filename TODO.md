@@ -1,5 +1,6 @@
 # Task List
 ~ = in progress
+- [ ] Add self-adjusting limits? I feel like I can just hotfix this on demand though or user can add method limits on their own.
 - [ ] Add header validation on first request of each rate limiter. ~
 - [x] Allow users to ignore timeout-related issues (greater than 500 requests generally). (set timeout)
 - [ x Change `champListData` and `runeListData` style query params to `tags`.

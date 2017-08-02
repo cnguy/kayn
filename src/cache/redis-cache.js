@@ -4,7 +4,6 @@ const redis = require('redis')
 
 import type { callback } from '../constants/flow-types'
 
-
 class RedisCache {
   client: any
   prefix: string

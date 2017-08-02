@@ -23,7 +23,7 @@ const config = {
   region: 'kr'
 }
 
-describe('Static Champion', function () {
+describe.skip('Static Champion', function () {
   this.timeout(0)
 
   describe('get static champion', function () {

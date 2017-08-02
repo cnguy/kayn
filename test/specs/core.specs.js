@@ -271,14 +271,14 @@ describe('Core', function () {
           limits: LIMITS.DEV
         })
 
+        let num = 20
+
         function count(err, data) {
-          if (data)--num
+          if (data) --num
           if (num === 0) done()
         }
 
-        let num = 10
-
-        for (var i = 0; i < 10; ++i) {
+        for (var i = 0; i < 20; ++i) {
           k.Champion.list('na', count)
         }
       })
@@ -319,7 +319,7 @@ describe('Core', function () {
             limits: LIMITS.DEV
           })
 
-          let num = 10
+          let num = 20
 
           for (var i = 0; i < 20; ++i) {
             k.Champion.list('na')

@@ -13,7 +13,7 @@ const config = {
   region: 'kr'
 }
 
-describe('Static Map', function () {
+describe.skip('Static Map', function () {
   this.timeout(0)
 
   describe('get static map list', function () {

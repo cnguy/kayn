@@ -17,7 +17,7 @@ const config = {
   region: 'kr'
 }
 
-describe('Static Profile Icon List', function () {
+describe.skip('Static Profile Icon List', function () {
   this.timeout(0)
 
   describe('get static profile icon list', function () {

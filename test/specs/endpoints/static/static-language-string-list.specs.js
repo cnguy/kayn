@@ -16,7 +16,7 @@ const config = {
   region: 'kr'
 }
 
-describe('Static Language Strings', function () {
+describe.skip('Static Language Strings', function () {
   this.timeout(0)
 
   describe('get static language strings list', function () {

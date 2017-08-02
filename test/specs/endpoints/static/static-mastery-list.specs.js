@@ -16,7 +16,7 @@ const config = {
   region: 'kr'
 }
 
-describe('Static Mastery List', function () {
+describe.skip('Static Mastery List', function () {
   this.timeout(0)
 
   describe('get static mastery list', function () {

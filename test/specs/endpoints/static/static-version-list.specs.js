@@ -13,7 +13,7 @@ const config = {
   region: 'kr'
 }
 
-describe('Static Version List', function () {
+describe.skip('Static Version List', function () {
   this.timeout(0)
 
   describe('get static version data', function () {

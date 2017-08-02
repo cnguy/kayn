@@ -13,7 +13,7 @@ const config = {
   region: 'kr'
 }
 
-describe('Static Language', function () {
+describe.skip('Static Language', function () {
   this.timeout(0)
 
   describe('get static language list', function () {
