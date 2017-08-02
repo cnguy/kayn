@@ -6,6 +6,34 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
+## [2.0.75]() - Add static method rate limiting.
+Defaults are
+1 req/10s
+60 reqs/60minutes
+
+Note that method limits are changable.
+
+The static methods take in two rate limits (so we use an array), while the other methods simply just takes in one rate limit because they don't have an hourly limit (they only have per 10s limit).
+
+In case if Riot changes their limits again, you can always configure the method rate limits like below (as long as it fits the format at least, if Riot adds more limits to get summoner by name for example, it would need to be an array. however, the code itself only supports [per 10, per 60m]. Better for me to just hotfix tbh.)
+
+```javascript
+var k = new _kindredApi.Kindred({
+  key: PROD_KEY,
+  limits: _kindredApi.LIMITS.PROD,
+  spread: true,
+  timeout: 5000,
+  debug: debug,
+  showHeaders: true,
+  methodLimits: {
+      [_kindredApi.METHOD_TYPES.RETRIEVE_CHAMPION_BY_ID]: [0.5, 10], // array, [0] = per 10s, [1] = per hour
+      [_kindredApi.METHOD_TYPES.GET_SUMMONER_BY_NAME]: 1  // constant
+  }
+});
+```
+
+In a way, the configurations above allow you to adjust the spreading of the rate limiter by increasing it or decreasing it to your liking.
+
 ## [2.0.74](https://github.com/ChauTNguyen/kindred-api/issues/22) - Fix impossible to set Redis config.
 
 Forgot about this!

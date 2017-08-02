@@ -247,6 +247,24 @@
   var GET_SUMMONER_BY_NAME = SUMMONER + 'summoners/by-name/{summonerName}';
   var GET_SUMMONER_BY_ID = SUMMONER + 'summoners/{summonerId}';
 
+  var STATIC = LOL + 'static-data' + V3;
+  var RETRIEVE_CHAMPION_LIST = STATIC + 'champions';
+  var RETRIEVE_CHAMPION_BY_ID = STATIC + 'champions/{id}';
+  var RETRIEVE_ITEM_LIST = STATIC + 'items';
+  var RETRIEVE_ITEM_BY_ID = STATIC + 'items/{id}';
+  var RETRIEVE_LANGUAGE_STRINGS_DATA = STATIC + 'language-strings';
+  var RETRIEVE_SUPPORTED_LANGUAGES_DATA = STATIC + 'languages';
+  var RETRIEVE_MAP_DATA = STATIC + 'maps';
+  var RETRIEVE_MASTERIES = STATIC + 'masteries';
+  var RETRIEVE_MASTERY_BY_ID = STATIC + 'masteries/{id}';
+  var RETRIEVE_PROFILE_ICONS = STATIC + 'profile-icons';
+  var RETRIEVE_REALM_DATA = STATIC + 'realms';
+  var RETRIEVE_RUNE_LIST = STATIC + 'runes';
+  var RETRIEVE_RUNE_BY_ID = STATIC + 'runes/{id}';
+  var RETRIEVE_SUMMONER_SPELL_LIST = STATIC + 'summoner-spells';
+  var RETRIEVE_SUMMONER_SPELL_BY_ID = STATIC + 'summoner-spells/{id}';
+  var RETRIEVE_VERSIONS = STATIC + 'versions';
+
   var methodTypes = {
     LIST_CHAMPION_MASTERIES: LIST_CHAMPION_MASTERIES,
     GET_CHAMPION_MASTERY: GET_CHAMPION_MASTERY,
@@ -268,7 +286,24 @@
     LIST_FEATURED_GAMES: LIST_FEATURED_GAMES,
     GET_SUMMONER_BY_ACCOUNT_ID: GET_SUMMONER_BY_ACCOUNT_ID,
     GET_SUMMONER_BY_NAME: GET_SUMMONER_BY_NAME,
-    GET_SUMMONER_BY_ID: GET_SUMMONER_BY_ID
+    GET_SUMMONER_BY_ID: GET_SUMMONER_BY_ID,
+
+    RETRIEVE_CHAMPION_LIST: RETRIEVE_CHAMPION_LIST,
+    RETRIEVE_CHAMPION_BY_ID: RETRIEVE_CHAMPION_BY_ID,
+    RETRIEVE_ITEM_LIST: RETRIEVE_ITEM_LIST,
+    RETRIEVE_ITEM_BY_ID: RETRIEVE_ITEM_BY_ID,
+    RETRIEVE_LANGUAGE_STRINGS_DATA: RETRIEVE_LANGUAGE_STRINGS_DATA,
+    RETRIEVE_SUPPORTED_LANGUAGES_DATA: RETRIEVE_SUPPORTED_LANGUAGES_DATA,
+    RETRIEVE_MAP_DATA: RETRIEVE_MAP_DATA,
+    RETRIEVE_MASTERIES: RETRIEVE_MASTERIES,
+    RETRIEVE_MASTERY_BY_ID: RETRIEVE_MASTERY_BY_ID,
+    RETRIEVE_PROFILE_ICONS: RETRIEVE_PROFILE_ICONS,
+    RETRIEVE_REALM_DATA: RETRIEVE_REALM_DATA,
+    RETRIEVE_RUNE_LIST: RETRIEVE_RUNE_LIST,
+    RETRIEVE_RUNE_BY_ID: RETRIEVE_RUNE_BY_ID,
+    RETRIEVE_SUMMONER_SPELL_LIST: RETRIEVE_SUMMONER_SPELL_LIST,
+    RETRIEVE_SUMMONER_SPELL_BY_ID: RETRIEVE_SUMMONER_SPELL_BY_ID,
+    RETRIEVE_VERSIONS: RETRIEVE_VERSIONS
   };
 
   var platformIds = {
@@ -618,9 +653,9 @@
 
       this.key = key;
 
-      this.defaultRegion = check(defaultRegion) ? defaultRegion : '';
-
-      if (this.defaultRegion.length === 0) {
+      if (check(defaultRegion)) {
+        this.defaultRegion = defaultRegion;
+      } else {
         throw new Error(chalk.red('setRegion() by Kindred failed: ' + chalk.yellow(defaultRegion) + ' is an invalid region.') + '\n' + ('' + chalk.red('Try importing ' + chalk.yellow('require(\'kindred-api\').REGIONS') + ' and using one of those values instead.')));
       }
 
@@ -659,10 +694,19 @@
         Object.keys(regions).map(function (region) {
           var _this$methodLimits$re;
 
-          _this.methodLimits[regions[region]] = (_this$methodLimits$re = {}, _defineProperty(_this$methodLimits$re, methodTypes.LIST_CHAMPION_MASTERIES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_CHAMPION_MASTERY, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_TOTAL_CHAMPION_MASTERY_SCORE, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.LIST_CHAMPIONS, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_CHAMPION, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_CHALLENGER_LEAGUE, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_LEAGUES_IN_ALL_QUEUES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MASTER_LEAGUE, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_LEAGUE_POSITIONS_IN_ALL_QUEUES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MASTERY_PAGES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MATCH, new RateLimit(500, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MATCHLIST, new RateLimit(1000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_RECENT_MATCHLIST, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MATCH_TIMELINE, new RateLimit(500, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_RUNE_PAGES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_CURRENT_GAME, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.LIST_FEATURED_GAMES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_SHARD_STATUS, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_SUMMONER_BY_ACCOUNT_ID, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_SUMMONER_BY_ID, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_SUMMONER_BY_NAME, new RateLimit(20000, 10)), _this$methodLimits$re);
+          _this.methodLimits[regions[region]] = (_this$methodLimits$re = {}, _defineProperty(_this$methodLimits$re, methodTypes.LIST_CHAMPION_MASTERIES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_CHAMPION_MASTERY, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_TOTAL_CHAMPION_MASTERY_SCORE, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.LIST_CHAMPIONS, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_CHAMPION, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_CHALLENGER_LEAGUE, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_LEAGUES_IN_ALL_QUEUES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MASTER_LEAGUE, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_LEAGUE_POSITIONS_IN_ALL_QUEUES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MASTERY_PAGES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MATCH, new RateLimit(500, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MATCHLIST, new RateLimit(1000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_RECENT_MATCHLIST, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MATCH_TIMELINE, new RateLimit(500, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_RUNE_PAGES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_CURRENT_GAME, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.LIST_FEATURED_GAMES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_SHARD_STATUS, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_SUMMONER_BY_ACCOUNT_ID, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_SUMMONER_BY_ID, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_SUMMONER_BY_NAME, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_CHAMPION_LIST, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_CHAMPION_BY_ID, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_ITEM_LIST, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_ITEM_BY_ID, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_LANGUAGE_STRINGS_DATA, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_SUPPORTED_LANGUAGES_DATA, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_MAP_DATA, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_MASTERIES, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_MASTERY_BY_ID, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_PROFILE_ICONS, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_REALM_DATA, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_RUNE_LIST, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_RUNE_BY_ID, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_SUMMONER_SPELL_LIST, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_SUMMONER_SPELL_BY_ID, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_VERSIONS, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _this$methodLimits$re);
 
           Object.keys(_this.methodLimits[regions[region]]).map(function (key) {
-            return methodLimits ? methodLimits[key] ? _this.methodLimits[regions[region]][key] = new RateLimit(methodLimits[key], 10) : key : key;
+            if (methodLimits && methodLimits[key]) {
+              if (Array.isArray(methodLimits[key])) {
+                _this.methodLimits[regions[region]][key] = [new RateLimit(methodLimits[key][0], 60), new RateLimit(methodLimits[key][1], 3600)];
+              } else if (typeof methodLimits[key] === 'number') {
+                _this.methodLimits[regions[region]][key] = new RateLimit(methodLimits[key], 10);
+              } else {
+                throw new Error('invalid method limit');
+              }
+            }
+            return key;
           });
         });
 
@@ -967,10 +1011,16 @@
 
     _createClass(Kindred$1, [{
       key: 'canMakeRequest',
-      value: function canMakeRequest(region, methodType) {
+      value: function canMakeRequest(region, methodType, staticReq) {
         var spread = this.spread ? this.limits[region][2].requestAvailable() : true;
-        var methodLimit = this.methodLimits[region][methodType] ? this.methodLimits[region][methodType].requestAvailable() : false;
-        return this.limits[region][0].requestAvailable() && this.limits[region][1].requestAvailable() && spread && methodType ? methodLimit : true;
+
+        var methodLimitAvailable = false;
+        if (!staticReq) {
+          methodLimitAvailable = this.methodLimits[region][methodType].requestAvailable();
+        } else {
+          methodLimitAvailable = this.methodLimits[region][methodType][0].requestAvailable() && this.methodLimits[region][methodType][1].requestAvailable();
+        }
+        return this.limits[region][0].requestAvailable() && this.limits[region][1].requestAvailable() && spread && methodLimitAvailable;
       }
     }, {
       key: '_sanitizeName',
@@ -1000,6 +1050,9 @@
         var base = 'api.riotgames.com';
         var encodedQuery = encodeURI(query);
         var platformId = platformIds[regions$1[region]].toLowerCase();
+        if (!check(region)) {
+          throw new Error(chalk.red('setRegion() by Kindred failed: ' + chalk.yellow(region) + ' is an invalid region.') + '\n' + ('' + chalk.red('Try importing ' + chalk.yellow('require(\'kindred-api\').REGIONS') + ' and using one of those values instead.')));
+        }
         return 'https://' + platformId + '.' + base + '/' + prefix + encodedQuery;
       }
     }, {
@@ -1155,13 +1208,13 @@
         var endUrl = _ref2.endUrl,
             _ref2$region = _ref2.region,
             region = _ref2$region === undefined ? this.defaultRegion : _ref2$region,
-            _ref2$staticReq = _ref2.staticReq,
-            staticReq = _ref2$staticReq === undefined ? false : _ref2$staticReq,
             _ref2$options = _ref2.options,
             options = _ref2$options === undefined ? {} : _ref2$options,
             _ref2$cacheParams = _ref2.cacheParams,
             cacheParams = _ref2$cacheParams === undefined ? {} : _ref2$cacheParams,
-            methodType = _ref2.methodType;
+            methodType = _ref2.methodType,
+            _ref2$staticReq = _ref2.staticReq,
+            staticReq = _ref2$staticReq === undefined ? false : _ref2$staticReq;
 
         var tryRequest = function tryRequest(iterations) {
           return new Promise(function (resolve, reject) {
@@ -1183,12 +1236,14 @@
               } else {
                 if (_this2.limits) {
                   var self = _this2;(function sendRequest(callback, iterationsUntilError) {
-                    if (self.canMakeRequest(region, methodType)) {
-                      if (!staticReq) {
-                        self.limits[region][0].addRequest();
-                        self.limits[region][1].addRequest();
-                        if (self.spread) self.limits[region][2].addRequest();
-                        if (self.methodLimits[region][methodType]) self.methodLimits[region][methodType].addRequest();
+                    if (self.canMakeRequest(region, methodType, staticReq)) {
+                      self.limits[region][0].addRequest();
+                      self.limits[region][1].addRequest();
+                      if (self.spread) self.limits[region][2].addRequest();
+                      if (!staticReq && self.methodLimits[region][methodType]) self.methodLimits[region][methodType].addRequest();
+                      if (staticReq && self.methodLimits[region][methodType]) {
+                        self.methodLimits[region][methodType][0].addRequest();
+                        self.methodLimits[region][methodType][1].addRequest();
                       }
 
                       request({ url: fullUrl, timeout: self.timeout }, function (error, response, body) {
@@ -1345,7 +1400,8 @@
       value: function _staticRequest(_ref6, cb) {
         var endUrl = _ref6.endUrl,
             region = _ref6.region,
-            options = _ref6.options;
+            options = _ref6.options,
+            methodType = _ref6.methodType;
 
         return this._baseRequest({
           endUrl: services.STATIC_DATA + '/v' + versions.STATIC_DATA + '/' + endUrl,
@@ -1354,7 +1410,8 @@
           options: options,
           cacheParams: {
             ttl: this.CACHE_TIMERS.STATIC
-          }
+          },
+          methodType: methodType
         }, cb);
       }
     }, {
@@ -1461,9 +1518,11 @@
     }, {
       key: 'setRegion',
       value: function setRegion(region) {
-        this.defaultRegion = check(region) ? region : '';
-
-        if (this.defaultRegion.length === 0) throw new Error(chalk.red('setRegion() by Kindred failed: ' + chalk.yellow(region) + ' is an invalid region.') + '\n' + ('' + chalk.red('Try importing ' + chalk.yellow('require(\'kindred-api\').REGIONS') + ' and using one of those values instead.')));
+        if (check(region)) {
+          this.defaultRegion = region;
+        } else {
+          throw new Error(chalk.red('setRegion() by Kindred failed: ' + chalk.yellow(region) + ' is an invalid region.') + '\n' + ('' + chalk.red('Try importing ' + chalk.yellow('require(\'kindred-api\').REGIONS') + ' and using one of those values instead.')));
+        }
       }
     }, {
       key: 'getChamps',
@@ -1965,7 +2024,12 @@
           arguments[0] = undefined;
         }
 
-        return this._staticRequest({ endUrl: 'champions', region: region, options: options }, cb);
+        return this._staticRequest({
+          endUrl: 'champions',
+          region: region,
+          options: options,
+          methodType: methodTypes.RETRIEVE_CHAMPION_LIST
+        }, cb);
       }
     }, {
       key: 'getChampion',
@@ -1987,7 +2051,12 @@
           if (championId) {
             endUrl = championId.toString();
           }
-          return this._staticRequest({ endUrl: 'champions/' + endUrl, region: region, options: options }, cb);
+          return this._staticRequest({
+            endUrl: 'champions/' + endUrl,
+            region: region,
+            options: options,
+            methodType: methodTypes.RETRIEVE_CHAMPION_BY_ID
+          }, cb);
         } else {
           return this._logError(this.getChampion.name, 'required params ' + chalk.yellow('`id/championId` (int)') + ' not passed in');
         }
@@ -2008,7 +2077,12 @@
           arguments[0] = undefined;
         }
 
-        return this._staticRequest({ endUrl: 'items', region: region, options: options }, cb);
+        return this._staticRequest({
+          endUrl: 'items',
+          region: region,
+          options: options,
+          methodType: methodTypes.RETRIEVE_ITEM_LIST
+        }, cb);
       }
     }, {
       key: 'getItem',
@@ -2030,7 +2104,12 @@
           if (itemId) {
             endUrl = itemId.toString();
           }
-          return this._staticRequest({ endUrl: 'items/' + endUrl, region: region, options: options }, cb);
+          return this._staticRequest({
+            endUrl: 'items/' + endUrl,
+            region: region,
+            options: options,
+            methodType: methodTypes.RETRIEVE_ITEM_BY_ID
+          }, cb);
         } else {
           return this._logError(this.getItem.name, 'required params ' + chalk.yellow('`id/itemId` (int)') + ' not passed in');
         }
@@ -2051,7 +2130,12 @@
           arguments[0] = undefined;
         }
 
-        return this._staticRequest({ endUrl: 'language-strings', region: region, options: options }, cb);
+        return this._staticRequest({
+          endUrl: 'language-strings',
+          region: region,
+          options: options,
+          methodType: methodTypes.RETRIEVE_LANGUAGE_STRINGS_DATA
+        }, cb);
       }
     }, {
       key: 'getLanguages',
@@ -2066,7 +2150,11 @@
           arguments[0] = undefined;
         }
 
-        return this._staticRequest({ endUrl: 'languages', region: region }, cb);
+        return this._staticRequest({
+          endUrl: 'languages',
+          region: region,
+          methodType: methodTypes.RETRIEVE_SUPPORTED_LANGUAGES_DATA
+        }, cb);
       }
     }, {
       key: 'getMapData',
@@ -2084,7 +2172,12 @@
           arguments[0] = undefined;
         }
 
-        return this._staticRequest({ endUrl: 'maps', region: region, options: options }, cb);
+        return this._staticRequest({
+          endUrl: 'maps',
+          region: region,
+          options: options,
+          methodType: methodTypes.RETRIEVE_MAP_DATA
+        }, cb);
       }
     }, {
       key: 'getMasteryList',
@@ -2102,7 +2195,12 @@
           arguments[0] = undefined;
         }
 
-        return this._staticRequest({ endUrl: 'masteries', region: region, options: options }, cb);
+        return this._staticRequest({
+          endUrl: 'masteries',
+          region: region,
+          options: options,
+          methodType: methodTypes.RETRIEVE_MASTERIES
+        }, cb);
       }
     }, {
       key: 'getMastery',
@@ -2126,7 +2224,9 @@
           }
           return this._staticRequest({
             endUrl: 'masteries/' + endUrl,
-            region: region, options: options
+            region: region,
+            options: options,
+            methodType: methodTypes.RETRIEVE_MASTERY_BY_ID
           }, cb);
         } else {
           return this._logError(this.getMastery.name, 'required params ' + chalk.yellow('`id/masteryId` (int)') + ' not passed in');
@@ -2148,7 +2248,12 @@
           arguments[0] = undefined;
         }
 
-        return this._staticRequest({ endUrl: 'profile-icons', region: region, options: options }, cb);
+        return this._staticRequest({
+          endUrl: 'profile-icons',
+          region: region,
+          options: options,
+          methodType: methodTypes.RETRIEVE_PROFILE_ICONS
+        }, cb);
       }
     }, {
       key: 'getRealmData',
@@ -2163,7 +2268,11 @@
           arguments[0] = undefined;
         }
 
-        return this._staticRequest({ endUrl: 'realms', region: region }, cb);
+        return this._staticRequest({
+          endUrl: 'realms',
+          region: region,
+          methodType: methodTypes.RETRIEVE_REALM_DATA
+        }, cb);
       }
     }, {
       key: 'getRuneList',
@@ -2181,7 +2290,12 @@
           arguments[0] = undefined;
         }
 
-        return this._staticRequest({ endUrl: 'runes', region: region, options: options }, cb);
+        return this._staticRequest({
+          endUrl: 'runes',
+          region: region,
+          options: options,
+          methodType: methodTypes.RETRIEVE_RUNE_LIST
+        }, cb);
       }
     }, {
       key: 'getRune',
@@ -2203,7 +2317,12 @@
           if (runeId) {
             endUrl = runeId.toString();
           }
-          return this._staticRequest({ endUrl: 'runes/' + endUrl, region: region, options: options }, cb);
+          return this._staticRequest({
+            endUrl: 'runes/' + endUrl,
+            region: region,
+            options: options,
+            methodType: methodTypes.RETRIEVE_RUNE_BY_ID
+          }, cb);
         } else {
           return this._logError(this.getRune.name, 'required params ' + chalk.yellow('`id/runeId` (int)') + ' not passed in');
         }
@@ -2224,7 +2343,12 @@
           arguments[0] = undefined;
         }
 
-        return this._staticRequest({ endUrl: 'summoner-spells', region: region, options: options }, cb);
+        return this._staticRequest({
+          endUrl: 'summoner-spells',
+          region: region,
+          options: options,
+          methodType: methodTypes.RETRIEVE_SUMMONER_SPELL_LIST
+        }, cb);
       }
     }, {
       key: 'getSummonerSpell',
@@ -2252,7 +2376,9 @@
           }
           return this._staticRequest({
             endUrl: 'summoner-spells/' + endUrl,
-            region: region, options: options
+            region: region,
+            options: options,
+            methodType: methodTypes.RETRIEVE_SUMMONER_SPELL_BY_ID
           }, cb);
         } else {
           return this._logError(this.getSummonerSpell.name, 'required params ' + chalk.yellow('`id/spellId/summonerSpellId` (int)') + ' not passed in');
@@ -2272,7 +2398,12 @@
           arguments[0] = undefined;
         }
 
-        return this._staticRequest({ endUrl: 'versions', region: region, options: options }, cb);
+        return this._staticRequest({
+          endUrl: 'versions',
+          region: region,
+          options: options,
+          methodType: methodTypes.RETRIEVE_VERSIONS
+        }, cb);
       }
     }, {
       key: 'getShardStatus',

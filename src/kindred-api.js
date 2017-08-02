@@ -150,9 +150,9 @@ class Kindred {
 
     this.key = key
 
-    this.defaultRegion = checkValidRegion(defaultRegion) ? defaultRegion : ''
-
-    if (this.defaultRegion.length === 0) {
+    if (checkValidRegion(defaultRegion)) {
+      this.defaultRegion = defaultRegion
+    } else {
       throw new Error(
         `${chalk.red(`setRegion() by Kindred failed: ${chalk.yellow(defaultRegion)} is an invalid region.`)}\n`
         + `${(chalk.red(`Try importing ${chalk.yellow('require(\'kindred-api\').REGIONS')} and using one of those values instead.`))}`
@@ -211,13 +211,39 @@ class Kindred {
           [METHOD_TYPES.GET_SHARD_STATUS]: new RateLimit(20000, 10),
           [METHOD_TYPES.GET_SUMMONER_BY_ACCOUNT_ID]: new RateLimit(20000, 10),
           [METHOD_TYPES.GET_SUMMONER_BY_ID]: new RateLimit(20000, 10),
-          [METHOD_TYPES.GET_SUMMONER_BY_NAME]: new RateLimit(20000, 10)
+          [METHOD_TYPES.GET_SUMMONER_BY_NAME]: new RateLimit(20000, 10),
+          [METHOD_TYPES.RETRIEVE_CHAMPION_LIST]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
+          [METHOD_TYPES.RETRIEVE_CHAMPION_BY_ID]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
+          [METHOD_TYPES.RETRIEVE_ITEM_LIST]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
+          [METHOD_TYPES.RETRIEVE_ITEM_BY_ID]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
+          [METHOD_TYPES.RETRIEVE_LANGUAGE_STRINGS_DATA]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
+          [METHOD_TYPES.RETRIEVE_SUPPORTED_LANGUAGES_DATA]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
+          [METHOD_TYPES.RETRIEVE_MAP_DATA]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
+          [METHOD_TYPES.RETRIEVE_MASTERIES]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
+          [METHOD_TYPES.RETRIEVE_MASTERY_BY_ID]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
+          [METHOD_TYPES.RETRIEVE_PROFILE_ICONS]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
+          [METHOD_TYPES.RETRIEVE_REALM_DATA]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
+          [METHOD_TYPES.RETRIEVE_RUNE_LIST]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
+          [METHOD_TYPES.RETRIEVE_RUNE_BY_ID]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
+          [METHOD_TYPES.RETRIEVE_SUMMONER_SPELL_LIST]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
+          [METHOD_TYPES.RETRIEVE_SUMMONER_SPELL_BY_ID]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
+          [METHOD_TYPES.RETRIEVE_VERSIONS]: [new RateLimit(1, 60), new RateLimit(60, 3600)]
         }
 
-        Object.keys(this.methodLimits[REGIONS[region]]).map((key) =>
-          methodLimits ? methodLimits[key]
-              ? this.methodLimits[REGIONS[region]][key] = new RateLimit(methodLimits[key], 10)
-              : key : key)
+        // todo: clean up in future
+        // i'm just writing spaghetti code
+        Object.keys(this.methodLimits[REGIONS[region]]).map((key) => {
+          if (methodLimits && methodLimits[key]) {
+            if (Array.isArray(methodLimits[key])) {
+              this.methodLimits[REGIONS[region]][key] = [new RateLimit(methodLimits[key][0], 60), new RateLimit(methodLimits[key][1], 3600)]
+            } else if (typeof methodLimits[key] === 'number') {
+              this.methodLimits[REGIONS[region]][key] = new RateLimit(methodLimits[key], 10)
+            } else {
+              throw new Error('invalid method limit')
+            }
+          }
+          return key
+        })
       })
 
       // hack because retryOptions becomes undefined when returning
@@ -512,20 +538,28 @@ class Kindred {
    * Checks if client should use spread limiter or not as well.
    * @param {string} region some region string
    * @param {string} methodType the endpoint url
+   * @param {boolean} staticReq is this a static request
    * @returns {boolean} true if client can make a request
    */
-  canMakeRequest(region: string, methodType: string): boolean {
+  canMakeRequest(region: string, methodType: string, staticReq: boolean): boolean {
     const spread = this.spread
       ? this.limits[region][2].requestAvailable()
       : true
-    const methodLimit = this.methodLimits[region][methodType]
-      ? this.methodLimits[region][methodType].requestAvailable()
-      : false
+
+    let methodLimitAvailable = false
+    if (!staticReq) {
+      methodLimitAvailable = this.methodLimits[region][methodType].requestAvailable()
+    } else {
+      methodLimitAvailable = (
+        this.methodLimits[region][methodType][0].requestAvailable() &&
+        this.methodLimits[region][methodType][1].requestAvailable()
+      )
+    }
     return (
       this.limits[region][0].requestAvailable() &&
       this.limits[region][1].requestAvailable() &&
       spread &&
-      methodType ? methodLimit : true
+      methodLimitAvailable
     )
   }
 
@@ -577,6 +611,12 @@ class Kindred {
     const base = 'api.riotgames.com'
     const encodedQuery = encodeURI(query)
     const platformId = PLATFORM_IDS[REGIONS_BACK[region]].toLowerCase()
+    if (!checkValidRegion(region)) {
+      throw new Error(
+        `${chalk.red(`setRegion() by Kindred failed: ${chalk.yellow(region)} is an invalid region.`)}\n`
+        + `${(chalk.red(`Try importing ${chalk.yellow('require(\'kindred-api\').REGIONS')} and using one of those values instead.`))}`
+      )
+    }
     return `https://${platformId}.${base}/${prefix}${encodedQuery}`
   }
 
@@ -702,14 +742,13 @@ class Kindred {
   _baseRequest({
     endUrl,
     region = this.defaultRegion,
-    staticReq = false,
     options = {},
     cacheParams = {},
-    methodType
+    methodType,
+    staticReq = false
   }: {
     endUrl: string,
     region?: string,
-    staticReq?: boolean,
     options?: any,
     cacheParams: any,
     methodType?: string
@@ -737,14 +776,16 @@ class Kindred {
               var self = this
 
                 ; (function sendRequest(callback, iterationsUntilError) {
-                  if (self.canMakeRequest(region, (methodType: any))) {
-                    if (!staticReq) {
-                      self.limits[region][0].addRequest()
-                      self.limits[region][1].addRequest()
-                      if (self.spread)
-                        self.limits[region][2].addRequest()
-                      if (self.methodLimits[region][methodType])
-                        self.methodLimits[region][methodType].addRequest()
+                  if (self.canMakeRequest(region, (methodType: any), staticReq)) {
+                    self.limits[region][0].addRequest()
+                    self.limits[region][1].addRequest()
+                    if (self.spread)
+                      self.limits[region][2].addRequest()
+                    if (!staticReq && self.methodLimits[region][methodType])
+                      self.methodLimits[region][methodType].addRequest()
+                    if (staticReq && self.methodLimits[region][methodType]) {
+                      self.methodLimits[region][methodType][0].addRequest()
+                      self.methodLimits[region][methodType][1].addRequest()
                     }
 
                     request({ url: fullUrl, timeout: self.timeout }, (error, response, body) => {
@@ -910,11 +951,13 @@ class Kindred {
   _staticRequest({
     endUrl,
     region,
-    options
+    options,
+    methodType
   }: {
     endUrl: string,
     region?: string,
-    options?: any
+    options?: any,
+    methodType: string
   }, cb: callback) {
     return this._baseRequest({
       endUrl: `${SERVICES.STATIC_DATA}/v${VERSIONS.STATIC_DATA}/${endUrl}`,
@@ -923,7 +966,8 @@ class Kindred {
       options,
       cacheParams: {
         ttl: this.CACHE_TIMERS.STATIC
-      }
+      },
+      methodType
     }, cb)
   }
 
@@ -1052,13 +1096,14 @@ class Kindred {
   }
 
   setRegion(region: string) {
-    this.defaultRegion = checkValidRegion(region) ? region : ''
-
-    if (this.defaultRegion.length === 0)
+    if (checkValidRegion(region)) {
+      this.defaultRegion = region
+    } else {
       throw new Error(
         `${chalk.red(`setRegion() by Kindred failed: ${chalk.yellow(region)} is an invalid region.`)}\n`
         + `${(chalk.red(`Try importing ${chalk.yellow('require(\'kindred-api\').REGIONS')} and using one of those values instead.`))}`
       )
+    }
   }
 
   /* CHAMPION-V3 */
@@ -1524,7 +1569,12 @@ class Kindred {
       arguments[0] = undefined
     }
 
-    return this._staticRequest({ endUrl: 'champions', region, options }, cb)
+    return this._staticRequest({
+      endUrl: 'champions',
+      region,
+      options,
+      methodType: METHOD_TYPES.RETRIEVE_CHAMPION_LIST
+    }, cb)
   }
 
   getChampion({
@@ -1545,7 +1595,12 @@ class Kindred {
       if (championId) {
         endUrl = championId.toString()
       }
-      return this._staticRequest({ endUrl: `champions/${endUrl}`, region, options }, cb)
+      return this._staticRequest({
+        endUrl: `champions/${endUrl}`,
+        region,
+        options,
+        methodType: METHOD_TYPES.RETRIEVE_CHAMPION_BY_ID
+      }, cb)
     } else {
       return this._logError(
         this.getChampion.name,
@@ -1562,7 +1617,12 @@ class Kindred {
       arguments[0] = undefined
     }
 
-    return this._staticRequest({ endUrl: 'items', region, options }, cb)
+    return this._staticRequest({
+      endUrl: 'items',
+      region,
+      options,
+      methodType: METHOD_TYPES.RETRIEVE_ITEM_LIST
+    }, cb)
   }
 
   getItem({
@@ -1583,7 +1643,12 @@ class Kindred {
       if (itemId) {
         endUrl = itemId.toString()
       }
-      return this._staticRequest({ endUrl: `items/${endUrl}`, region, options }, cb)
+      return this._staticRequest({
+        endUrl: `items/${endUrl}`,
+        region,
+        options,
+        methodType: METHOD_TYPES.RETRIEVE_ITEM_BY_ID
+      }, cb)
     } else {
       return this._logError(
         this.getItem.name,
@@ -1600,7 +1665,12 @@ class Kindred {
       arguments[0] = undefined
     }
 
-    return this._staticRequest({ endUrl: 'language-strings', region, options }, cb)
+    return this._staticRequest({
+      endUrl: 'language-strings',
+      region,
+      options,
+      methodType: METHOD_TYPES.RETRIEVE_LANGUAGE_STRINGS_DATA
+    }, cb)
   }
 
   getLanguages({ region }: { region?: string } = {}, cb: callback) {
@@ -1609,7 +1679,11 @@ class Kindred {
       arguments[0] = undefined
     }
 
-    return this._staticRequest({ endUrl: 'languages', region }, cb)
+    return this._staticRequest({
+      endUrl: 'languages',
+      region,
+      methodType: METHOD_TYPES.RETRIEVE_SUPPORTED_LANGUAGES_DATA
+    }, cb)
   }
 
   getMapData({ region, options }: { region?: string, options?: any } = {}, cb: callback) {
@@ -1620,7 +1694,12 @@ class Kindred {
       arguments[0] = undefined
     }
 
-    return this._staticRequest({ endUrl: 'maps', region, options }, cb)
+    return this._staticRequest({
+      endUrl: 'maps',
+      region,
+      options,
+      methodType: METHOD_TYPES.RETRIEVE_MAP_DATA
+    }, cb)
   }
 
   getMasteryList({ region, options }: { region?: string, options?: any } = {}, cb: callback) {
@@ -1631,7 +1710,12 @@ class Kindred {
       arguments[0] = undefined
     }
 
-    return this._staticRequest({ endUrl: 'masteries', region, options }, cb)
+    return this._staticRequest({
+      endUrl: 'masteries',
+      region,
+      options,
+      methodType: METHOD_TYPES.RETRIEVE_MASTERIES
+    }, cb)
   }
 
   getMastery({
@@ -1654,7 +1738,9 @@ class Kindred {
       }
       return this._staticRequest({
         endUrl: `masteries/${endUrl}`,
-        region, options
+        region,
+        options,
+        methodType: METHOD_TYPES.RETRIEVE_MASTERY_BY_ID
       }, cb)
     } else {
       return this._logError(
@@ -1672,7 +1758,12 @@ class Kindred {
       arguments[0] = undefined
     }
 
-    return this._staticRequest({ endUrl: 'profile-icons', region, options }, cb)
+    return this._staticRequest({
+      endUrl: 'profile-icons',
+      region,
+      options,
+      methodType: METHOD_TYPES.RETRIEVE_PROFILE_ICONS
+    }, cb)
   }
 
   getRealmData({ region }: { region?: string } = {}, cb: callback) {
@@ -1681,7 +1772,11 @@ class Kindred {
       arguments[0] = undefined
     }
 
-    return this._staticRequest({ endUrl: 'realms', region }, cb)
+    return this._staticRequest({
+      endUrl: 'realms',
+      region,
+      methodType: METHOD_TYPES.RETRIEVE_REALM_DATA
+    }, cb)
   }
 
   getRuneList({ region, options }: { region?: string, options?: any } = {}, cb: callback) {
@@ -1692,7 +1787,12 @@ class Kindred {
       arguments[0] = undefined
     }
 
-    return this._staticRequest({ endUrl: 'runes', region, options }, cb)
+    return this._staticRequest({
+      endUrl: 'runes',
+      region,
+      options,
+      methodType: METHOD_TYPES.RETRIEVE_RUNE_LIST
+    }, cb)
   }
 
   getRune({
@@ -1713,7 +1813,12 @@ class Kindred {
       if (runeId) {
         endUrl = runeId.toString()
       }
-      return this._staticRequest({ endUrl: `runes/${endUrl}`, region, options }, cb)
+      return this._staticRequest({
+        endUrl: `runes/${endUrl}`,
+        region,
+        options,
+        methodType: METHOD_TYPES.RETRIEVE_RUNE_BY_ID
+      }, cb)
     } else {
       return this._logError(
         this.getRune.name,
@@ -1730,7 +1835,12 @@ class Kindred {
       arguments[0] = undefined
     }
 
-    return this._staticRequest({ endUrl: 'summoner-spells', region, options }, cb)
+    return this._staticRequest({
+      endUrl: 'summoner-spells',
+      region,
+      options,
+      methodType: METHOD_TYPES.RETRIEVE_SUMMONER_SPELL_LIST
+    }, cb)
   }
 
   getSummonerSpell({
@@ -1756,7 +1866,9 @@ class Kindred {
       }
       return this._staticRequest({
         endUrl: `summoner-spells/${endUrl}`,
-        region, options
+        region,
+        options,
+        methodType: METHOD_TYPES.RETRIEVE_SUMMONER_SPELL_BY_ID
       }, cb)
     } else {
       return this._logError(
@@ -1772,7 +1884,12 @@ class Kindred {
       arguments[0] = undefined
     }
 
-    return this._staticRequest({ endUrl: 'versions', region, options }, cb)
+    return this._staticRequest({
+      endUrl: 'versions',
+      region,
+      options,
+      methodType: METHOD_TYPES.RETRIEVE_VERSIONS
+    }, cb)
   }
 
   /* STATUS-V3 */
