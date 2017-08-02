@@ -205,7 +205,7 @@
     "prefer-const": true,
     "prefer-for-of": false,
     "prefer-function-over-method": false,
-    "prefer-method-signature": true,
+    "prefer-method-signature": false,
     "prefer-template": false,
     "prefer-type-cast": true,
     "strict-type-predicates": false,

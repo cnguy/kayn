@@ -15,12 +15,12 @@ declare module 'kindred-api' {
                 id?: number,
                 name?: string,
                 accountId?: number
-            }, cb?: Callback): Promise<any>,
+            }, cb?: Callback) => Promise<any>,
 
             by: {
-                id: (id: number, cb?: Callback): Promise<any>,
-                name: (name: string, cb?: Callback): Promise<any>,
-                account: (accountId: number, cb?: Callback): Promise<any>
+                id: (id: number, cb?: Callback) => Promise<any>,
+                name: (name: string, cb?: Callback) => Promise<any>,
+                account: (accountId: number, cb?: Callback) => Promise<any>
             }
         };
     }
