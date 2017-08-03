@@ -6,7 +6,11 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
-## [2.0.75]() - Add static method rate limiting.
+## [2.0.76]() - Remove static method rate limiting per 10s.
+
+Riot decided to remove the 1 request per 10 seconds limit after community backlash.
+
+## [2.0.75](https://github.com/ChauTNguyen/kindred-api/commit/5e58e2639fbb0d8aa254cc47ccb1c19d720eaf14) - Add static method rate limiting.
 Defaults are
 1 req/10s
 60 reqs/60minutes

@@ -212,31 +212,29 @@ class Kindred {
           [METHOD_TYPES.GET_SUMMONER_BY_ACCOUNT_ID]: new RateLimit(20000, 10),
           [METHOD_TYPES.GET_SUMMONER_BY_ID]: new RateLimit(20000, 10),
           [METHOD_TYPES.GET_SUMMONER_BY_NAME]: new RateLimit(20000, 10),
-          [METHOD_TYPES.RETRIEVE_CHAMPION_LIST]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
-          [METHOD_TYPES.RETRIEVE_CHAMPION_BY_ID]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
-          [METHOD_TYPES.RETRIEVE_ITEM_LIST]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
-          [METHOD_TYPES.RETRIEVE_ITEM_BY_ID]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
-          [METHOD_TYPES.RETRIEVE_LANGUAGE_STRINGS_DATA]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
-          [METHOD_TYPES.RETRIEVE_SUPPORTED_LANGUAGES_DATA]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
-          [METHOD_TYPES.RETRIEVE_MAP_DATA]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
-          [METHOD_TYPES.RETRIEVE_MASTERIES]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
-          [METHOD_TYPES.RETRIEVE_MASTERY_BY_ID]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
-          [METHOD_TYPES.RETRIEVE_PROFILE_ICONS]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
-          [METHOD_TYPES.RETRIEVE_REALM_DATA]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
-          [METHOD_TYPES.RETRIEVE_RUNE_LIST]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
-          [METHOD_TYPES.RETRIEVE_RUNE_BY_ID]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
-          [METHOD_TYPES.RETRIEVE_SUMMONER_SPELL_LIST]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
-          [METHOD_TYPES.RETRIEVE_SUMMONER_SPELL_BY_ID]: [new RateLimit(1, 60), new RateLimit(60, 3600)],
-          [METHOD_TYPES.RETRIEVE_VERSIONS]: [new RateLimit(1, 60), new RateLimit(60, 3600)]
+          [METHOD_TYPES.RETRIEVE_CHAMPION_LIST]: new RateLimit(10, 3600),
+          [METHOD_TYPES.RETRIEVE_CHAMPION_BY_ID]: new RateLimit(10, 3600),
+          [METHOD_TYPES.RETRIEVE_ITEM_LIST]: new RateLimit(10, 3600),
+          [METHOD_TYPES.RETRIEVE_ITEM_BY_ID]: new RateLimit(10, 3600),
+          [METHOD_TYPES.RETRIEVE_LANGUAGE_STRINGS_DATA]: new RateLimit(10, 3600),
+          [METHOD_TYPES.RETRIEVE_SUPPORTED_LANGUAGES_DATA]: new RateLimit(10, 3600),
+          [METHOD_TYPES.RETRIEVE_MAP_DATA]: new RateLimit(10, 3600),
+          [METHOD_TYPES.RETRIEVE_MASTERIES]: new RateLimit(10, 3600),
+          [METHOD_TYPES.RETRIEVE_MASTERY_BY_ID]: new RateLimit(10, 3600),
+          [METHOD_TYPES.RETRIEVE_PROFILE_ICONS]: new RateLimit(10, 3600),
+          [METHOD_TYPES.RETRIEVE_REALM_DATA]: new RateLimit(10, 3600),
+          [METHOD_TYPES.RETRIEVE_RUNE_LIST]: new RateLimit(10, 3600),
+          [METHOD_TYPES.RETRIEVE_RUNE_BY_ID]: new RateLimit(10, 3600),
+          [METHOD_TYPES.RETRIEVE_SUMMONER_SPELL_LIST]: new RateLimit(10, 3600),
+          [METHOD_TYPES.RETRIEVE_SUMMONER_SPELL_BY_ID]: new RateLimit(10, 3600),
+          [METHOD_TYPES.RETRIEVE_VERSIONS]: new RateLimit(10, 3600)
         }
 
         // todo: clean up in future
         // i'm just writing spaghetti code
         Object.keys(this.methodLimits[REGIONS[region]]).map((key) => {
           if (methodLimits && methodLimits[key]) {
-            if (Array.isArray(methodLimits[key])) {
-              this.methodLimits[REGIONS[region]][key] = [new RateLimit(methodLimits[key][0], 60), new RateLimit(methodLimits[key][1], 3600)]
-            } else if (typeof methodLimits[key] === 'number') {
+            if (typeof methodLimits[key] === 'number') {
               this.methodLimits[REGIONS[region]][key] = new RateLimit(methodLimits[key], 10)
             } else {
               throw new Error('invalid method limit')
@@ -538,23 +536,15 @@ class Kindred {
    * Checks if client should use spread limiter or not as well.
    * @param {string} region some region string
    * @param {string} methodType the endpoint url
-   * @param {boolean} staticReq is this a static request
    * @returns {boolean} true if client can make a request
    */
-  canMakeRequest(region: string, methodType: string, staticReq: boolean): boolean {
+  canMakeRequest(region: string, methodType: string): boolean {
     const spread = this.spread
       ? this.limits[region][2].requestAvailable()
       : true
 
-    let methodLimitAvailable = false
-    if (!staticReq) {
-      methodLimitAvailable = this.methodLimits[region][methodType].requestAvailable()
-    } else {
-      methodLimitAvailable = (
-        this.methodLimits[region][methodType][0].requestAvailable() &&
-        this.methodLimits[region][methodType][1].requestAvailable()
-      )
-    }
+    const methodLimitAvailable = this.methodLimits[region][methodType].requestAvailable()
+
     return (
       this.limits[region][0].requestAvailable() &&
       this.limits[region][1].requestAvailable() &&
@@ -777,17 +767,12 @@ class Kindred {
               var self = this
 
                 ; (function sendRequest(callback, iterationsUntilError) {
-                  if (self.canMakeRequest(region, (methodType: any), staticReq)) {
+                  if (self.canMakeRequest(region, (methodType: any))) {
                     self.limits[region][0].addRequest()
                     self.limits[region][1].addRequest()
                     if (self.spread)
                       self.limits[region][2].addRequest()
-                    if (!staticReq && self.methodLimits[region][methodType])
-                      self.methodLimits[region][methodType].addRequest()
-                    if (staticReq && self.methodLimits[region][methodType]) {
-                      self.methodLimits[region][methodType][0].addRequest()
-                      self.methodLimits[region][methodType][1].addRequest()
-                    }
+                    self.methodLimits[region][methodType].addRequest()
 
                     request({ url: fullUrl, timeout: self.timeout }, (error, response, body) => {
                       if (response && body) {
