@@ -9,6 +9,7 @@ Treat my versioning as if it is 0.x.y.
 ## [2.0.76]() - Remove static method rate limiting per 10s.
 
 Riot decided to remove the 1 request per 10 seconds limit after community backlash.
+The static method example below no longer works. It only takes a number. Furthermore, there is a bug as well: I have a hardcoded per 10s value. The code assumes that the method limit is per 10 seconds (because everything else is). Unfortunately, static data endpoints do not follow this rule. Avoid setting static data values -- I'll update the lib as Riot updates things.
 
 ## [2.0.75](https://github.com/ChauTNguyen/kindred-api/commit/5e58e2639fbb0d8aa254cc47ccb1c19d720eaf14) - Add static method rate limiting.
 Defaults are
