@@ -448,7 +448,7 @@ describe('Core', function () {
           limits: [[1, 1], [1, 1]]
         })
 
-        k.Static.Champion.list(function (err, data) {
+        k.Champion.list(function (err, data) {
           expect(console.log).to.have.been.called
           done()
         })
@@ -465,7 +465,7 @@ describe('Core', function () {
           showKey: false
         })
 
-        k.Static.Champion.list(function (err, data) {
+        k.Champion.list(function (err, data) {
           expect(console.log).to.have.been.called
           done()
         })
@@ -483,7 +483,7 @@ describe('Core', function () {
           showHeaders
         })
 
-        k.Static.Champion.list(function (err, data) {
+        k.Champion.list(function (err, data) {
           sinon.assert.calledThrice(console.log)
           done()
         })
@@ -501,7 +501,7 @@ describe('Core', function () {
           showHeaders
         })
 
-        k.Static.Champion.list(function (err, data) {
+        k.Champion.list(function (err, data) {
           sinon.assert.calledOnce(console.log)
           done()
         })
