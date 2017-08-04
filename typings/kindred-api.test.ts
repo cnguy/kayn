@@ -96,10 +96,18 @@ k.Summoner.by.name('Contractz', 'na')
 })()
 
 k.Champion.by.id(37, function (err, data) {
-    console.log(data) // we lose type data in callbacks atm
+    console.log(`Champion with id ${data.id} active?: ${data.active}`)
 })
 
 ;(async () => {
     const randomChampion2 = await k.Champion.by.id(37)
     console.log(randomChampion2.botEnabled)
+})()
+
+
+;(async () => {
+    const naShardData = await k.Status.get({ region: 'na' })
+    const krShardData = await k.Status.get({ region: 'kr' })
+    console.log('na:', naShardData)
+    console.log('kr:', krShardData)
 })()

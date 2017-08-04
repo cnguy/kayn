@@ -15,7 +15,7 @@ declare module 'kindred-api' {
                 playerId: number,
                 championId: number,
                 region?: Region
-            }, cb?: Callback) => Promise<ChampionMastery>
+            }, cb?: Callback<ChampionMastery>) => Promise<ChampionMastery>
 
             all: ({
                 id,
@@ -27,7 +27,7 @@ declare module 'kindred-api' {
                 name?: string,
                 accountId?: number,
                 region?: Region
-            }, cb?: Callback) => Promise<Array<ChampionMastery>>
+            }, cb?: Callback<Array<ChampionMastery>>) => Promise<Array<ChampionMastery>>
 
             totalScore: ({
                 id,
@@ -39,7 +39,7 @@ declare module 'kindred-api' {
                 name?: string,
                 accountId?: number,
                 region?: Region
-            }, cb?: Callback) => Promise<number>
+            }, cb?: Callback<number>) => Promise<number>
         }
 
         public Champion: {
@@ -51,11 +51,17 @@ declare module 'kindred-api' {
                 options?: {
                     freeToPlay?: boolean
                 }
-            }, cb?: Callback) => Promise<Champions>;
+            }, cb?: Callback<Champions>) => Promise<Champions>;
 
             by: {
-                id: (id: number, regionOrCallback?: Region | Callback, cb?: Callback) => Promise<Champion>
+                id: (id: number, regionOrCallback?: Region | Callback<Champion>, cb?: Callback<Champion>) => Promise<Champion>
             }
+        }
+
+        public Status: {
+            get: ({
+                region
+            }: { region?: Region }, cb?: Callback<ShardData>) => Promise<ShardData>;
         }
 
         public Summoner: {
@@ -69,17 +75,17 @@ declare module 'kindred-api' {
                 name?: string,
                 accountId?: number,
                 region?: Region
-            }, cb?: Callback) => Promise<Summoner>,
+            }, cb?: Callback<Summoner>) => Promise<Summoner>,
 
             by: {
-                id: (id: number, regionOrCallback?: Region | Callback, cb?: Callback) => Promise<Summoner>,
-                name: (name: string, regionOrCallback?: Region | Callback, cb?: Callback) => Promise<Summoner>,
-                account: (accountId: number, regionOrCallback?: Region | Callback, cb?: Callback) => Promise<Summoner>
+                id: (id: number, regionOrCallback?: Region | Callback<Summoner>, cb?: Callback<Summoner>) => Promise<Summoner>,
+                name: (name: string, regionOrCallback?: Region | Callback<Summoner>, cb?: Callback<Summoner>) => Promise<Summoner>,
+                account: (accountId: number, regionOrCallback?: Region | Callback<Summoner>, cb?: Callback<Summoner>) => Promise<Summoner>
             }
         };
     }
 
-    declare function print: Callback;
+    declare function print: Callback<any>;
     interface REGIONS {
         BRAZIL: Region;
         EUROPE: Region;
@@ -104,7 +110,7 @@ declare module 'kindred-api' {
 
     type Limits = (number[])[]; // bad type
 
-    type Callback = (err: any, data: any) => void;
+    type Callback<T> = (err: any, data: T) => void;
 
     class Summoner {
         public accountId: number;
@@ -138,5 +144,21 @@ declare module 'kindred-api' {
         public active: boolean;
         public freeToPlay: boolean;
         public id: number;
+    }
+    
+    class ShardData {
+        public name: string;
+        public region_tag: string;
+        public hostname: string;
+        public services: Array<Service>;
+        public slug: string; // TODO: improve
+        public locales: Array<string>; // TODO: improve
+    }
+
+    class Service {
+        public status: string;
+        public incidents: Array<any>; // TODO: improve
+        public name: string;
+        public slug: string;
     }
 }
