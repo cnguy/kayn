@@ -8,6 +8,12 @@ const key: string = process.env.KEY ? process.env.KEY as string : 'dummy'
 
 const k = new lolapi.Kindred({
     key,
+    limits: [[500, 10], [3000, 600]] as any, // allows automatic retries
+    retryOptions: {
+        auto: true, // necessary to overwrite automatic retries
+        numberOfRetriesBeforeBreak: 3
+    },
+    debug: true
     // limits: lolapi.LIMITS.PROD
 });
 
@@ -52,7 +58,7 @@ k.Summoner.get({ name: "Contractz" })
         let contractz = summoner
         printSummoner(contractz)
     })
-    .catch(err => console.log(err))
+    .catch(err => console.error(err))
 
 k.Summoner.get({ id: 32932398 }, lolapi.print)
 k.Summoner.get({ name: 'Contractz' })
@@ -63,12 +69,20 @@ k.Summoner.by.name('Contractz', lolapi.print)
 
 ;(async () => {
     console.log('async print')
-    const summoner = await k.Summoner.by.name('Contractz')
-    printSummoner(summoner)
+    try {
+        const summoner = await k.Summoner.by.name('Contractz')
+        printSummoner(summoner)
+    } catch (ex) {
+        console.error(ex)
+    }
 })()
 
 ;(async () => {
-    printIdsFromChampionMasteries(await k.ChampionMastery.all({ name: 'Contractz' }))
+    try {
+        printIdsFromChampionMasteries(await k.ChampionMastery.all({ name: 'Contractz' }))
+    } catch (ex) {
+        console.error(ex)
+    }
 })()
 
 k.ChampionMastery.all({ name: 'Contractz' })
@@ -83,31 +97,51 @@ k.ChampionMastery.get({ playerId: 32932398, championId: 79 })
 k.Summoner.by.name('Contractz', 'na')
 
 ;(async () => {
-    console.log(`Total score: ${await k.ChampionMastery.totalScore({ name: 'Contractz' })}`)
+    try {
+        console.log(`Total score: ${await k.ChampionMastery.totalScore({ name: 'Contractz' })}`)
+    } catch (ex) {
+        console.error(ex)
+    }
 })()
 
 ;(async () => {
-    const data = await k.Champion.all({}) // hax
-    const region = 'kr'
-    const options = { freeToPlay: true }
-    const dataWithOpts = await k.Champion.all({ region, options })
-    printIdsFromChampions(data)
-    printIdsFromChampions(dataWithOpts)
+    try {
+        const data = await k.Champion.all({}) // hax
+        const region = 'kr'
+        const options = { freeToPlay: true }
+        const dataWithOpts = await k.Champion.all({ region, options })
+        printIdsFromChampions(data)
+        printIdsFromChampions(dataWithOpts)
+    } catch (ex) {
+        console.error(ex)
+    }
 })()
 
 k.Champion.by.id(37, function (err, data) {
-    console.log(`Champion with id ${data.id} active?: ${data.active}`)
+    if (err) {
+        console.error('err:', err)
+    } else {
+        console.log(`Champion with id ${data.id} active?: ${data.active}`)
+    }
 })
 
 ;(async () => {
-    const randomChampion2 = await k.Champion.by.id(37)
-    console.log(randomChampion2.botEnabled)
+    try {
+        const randomChampion = await k.Champion.by.id(37)
+        console.log(randomChampion.id)
+    } catch (ex) {
+        console.error(ex)
+    }
 })()
 
 
 ;(async () => {
-    const naShardData = await k.Status.get({ region: 'na' })
-    const krShardData = await k.Status.get({ region: 'kr' })
-    console.log('na:', naShardData)
-    console.log('kr:', krShardData)
+    try {
+        const naShardData = await k.Status.get({ region: 'na' })
+        const krShardData = await k.Status.get({ region: 'kr' })
+        console.log('na:', naShardData)
+        console.log('kr:', krShardData)
+    } catch (ex) {
+        console.log(ex)
+    }
 })()

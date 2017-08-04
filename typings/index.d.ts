@@ -3,7 +3,9 @@ declare module 'kindred-api' {
         constructor({
             key,
             region,
-            limits
+            limits,
+            debug,
+            retryOptions
         }: KindredConstructor);
 
         public ChampionMastery: {
@@ -103,7 +105,12 @@ declare module 'kindred-api' {
     declare interface KindredConstructor {
         key: string,
         region?: Region,
-        limits?: Limits
+        limits?: Limits,
+        debug?: boolean,
+        retryOptions?: {
+            auto: boolean,
+            numberOfRetriesBeforeBreak: number
+        }
     };
 
     type Region = 'br' | 'eune' | 'euw' | 'kr' | 'lan' | 'las' | 'na' | 'oce' | 'ru' | 'tr' | 'jp';
