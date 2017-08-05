@@ -142,6 +142,37 @@ k.Champion.by.id(37, function (err, data) {
         console.log('na:', naShardData)
         console.log('kr:', krShardData)
     } catch (ex) {
-        console.log(ex)
+        console.error(ex)
     }
 })()
+
+;(async () => {
+    try {
+        const runesResp = await k.Runes.get({ name: 'Contractz' })
+        const pages: Array<lolapi.RunePage> = runesResp.pages
+        console.log(runesResp)
+        // get first page
+        if (pages.length > 0) {
+            const firstPage: lolapi.RunePage = pages[0]
+            console.log('runes of contractz\'s first page', firstPage.slots)
+        }
+    } catch (ex) {
+        console.error('runes pages error:', ex)
+    }
+})()
+
+k.Runes.by.name('Contractz', function (err, data) {
+    if (err) {
+        console.log('the error code is:', err)
+    } else {
+        console.log('is the first page the current page:', data.pages[0].current)
+    }
+})
+
+k.Masteries.by.name('Contractz', function (err, data) {
+    if (err as lolapi.StatusCode) { // just a number
+        console.error(err)
+    } else {
+        console.log('id of first mastery of first page:', data.pages[0].masteries[0].id)
+    }
+})

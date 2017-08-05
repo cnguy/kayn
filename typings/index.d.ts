@@ -5,6 +5,8 @@ declare module 'kindred-api' {
             region,
             limits,
             debug,
+            showKey,
+            showHeaders,
             retryOptions
         }: KindredConstructor);
 
@@ -60,6 +62,47 @@ declare module 'kindred-api' {
             }
         }
 
+        public Runes: {
+            get: ({
+                id,
+                name,
+                accountId,
+                region
+            }: {
+                id?: number,
+                name?: string,
+                accountId?: number,
+                region?: Region
+            }, cb?: Callback<RunesResp>) => Promise<RunesResp>;
+
+            by: {
+                id: (id: number, regionOrCallback?: Region | Callback<RunesResp>, cb?: Callback<RunesResp>) => Promise<RunesResp>;
+                name: (name: string, regionOrCallback?: Region | Callback<RunesResp>, cb?: Callback<RunesResp>) => Promise<RunesResp>;
+                accountId: (accountId: number, regionOrCallback?: Region | Callback<RunesResp>, cb?: Callback<RunesResp>) => Promise<RunesResp>;
+            }
+        }
+        
+        public Masteries: {
+            get: ({
+                id,
+                name,
+                accountId,
+                region
+            }: {
+                id?: number,
+                name?: string,
+                accountId?: number,
+                region?: Region
+            }, cb?: Callback<MasteriesResp>) => Promise<MasteriesResp>;
+
+            by: {
+                id: (id: number, regionOrCallback?: Region | Callback<MasteriesResp>, cb?: Callback<MasteriesResp>) => Promise<MasteriesResp>;
+                name: (name: string, regionOrCallback?: Region | Callback<MasteriesResp>, cb?: Callback<MasteriesResp>) => Promise<MasteriesResp>;
+                accountId: (accountId: number, regionOrCallback?: Region | Callback<MasteriesResp>, cb?: Callback<MasteriesResp>) => Promise<MasteriesResp>;
+            }
+        }
+        
+
         public Status: {
             get: ({
                 region
@@ -107,6 +150,8 @@ declare module 'kindred-api' {
         region?: Region,
         limits?: Limits,
         debug?: boolean,
+        showKey?: boolean,
+        showHeaders?: boolean,
         retryOptions?: {
             auto: boolean,
             numberOfRetriesBeforeBreak: number
@@ -116,8 +161,9 @@ declare module 'kindred-api' {
     type Region = 'br' | 'eune' | 'euw' | 'kr' | 'lan' | 'las' | 'na' | 'oce' | 'ru' | 'tr' | 'jp';
 
     type Limits = (number[])[]; // bad type
-
-    type Callback<T> = (err: any, data: T) => void;
+    type StatusCode = number
+    type KindredRequestError  = StatusCode | Error
+    type Callback<T> = (err: KindredRequestError, data: T) => void;
 
     class Summoner {
         public accountId: number;
@@ -167,5 +213,35 @@ declare module 'kindred-api' {
         public incidents: Array<any>; // TODO: improve
         public name: string;
         public slug: string;
+    }
+
+    class RunesResp {
+        public summonerId: number;
+        public pages: Array<RunePage>;
+    }
+
+    class RunePage {
+        public current: boolean;
+        public slots: Array<Rune>
+    }
+
+    interface Rune {
+        runeSlotId: number,
+        runeId: number
+    }
+
+     class MasteriesResp {
+        public summonerId: number;
+        public pages: Array<MasteryPage>;
+    }
+
+    class MasteryPage {
+        public current: boolean;
+        public masteries: Array<Mastery>
+    }
+
+    interface Mastery {
+        id: number,
+        rank: 0 | 1 | 2 | 3 | 4 | 5
     }
 }
