@@ -6,7 +6,31 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
-## [2.0.75]() - Add static method rate limiting.
+## [2.0.76](https://github.com/ChauTNguyen/kindred-api/commit/e41acf1179da08731622bcd23f2e5d61eafff97c) - Add forAccountId and forPlatformId to getMatch and Match.by.id.
+
+[Get match endpoint docs & examples](https://github.com/ChauTNguyen/kindred-api/wiki/MATCH-V3) have been updated.
+
+```
+RiotSchmick - 07/19/2017
+We now have a solution for the participant mirror match issue in match details. When you query the match details via /lol/match/v3/matches/{matchId}, you can now specify an optional query parameter 'forAccountId'. If specified, the participant that maps to the given accountId will be non-obfuscated. 
+For example:  https://oc1.api.riotgames.com/lol/match/v3/matches/180100577?forAccountId=200009481
+Returns  the participant detail: 
+{
+"participantId": 9,
+"player": {
+"platformId": "NA",
+"accountId": 32681423,
+"summonerName": "eQuinoXX",
+"summonerId": 224478,
+"currentPlatformId": "OC1",
+"currentAccountId": 200009481,
+"matchHistoryUri": "/v1/stats/player_history/NA/32681423",
+"profileIcon": 1667
+}
+}(edited)
+```
+
+## [2.0.75](https://github.com/ChauTNguyen/kindred-api/commit/5e58e2639fbb0d8aa254cc47ccb1c19d720eaf14) - Add static method rate limiting.
 Defaults are
 1 req/10s
 60 reqs/60minutes
