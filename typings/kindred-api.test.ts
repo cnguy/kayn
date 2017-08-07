@@ -281,3 +281,24 @@ k.Matchlist.by.name('Contractz', { queue: 30 })
 k.Matchlist.by.name('Contractz', { queue: QUEUE_TYPES.TEAM_BUILDER_RANKED_SOLO })
     .then(data => console.log('we can use the enum as well'))
     .catch(err => console.error(err))
+
+k.FeaturedGames.list()
+    .then(data => {
+        console.log('all match ids in featured games:', data.gameList.map(el => el.gameId))
+    })
+    .catch(err => console.log(err))
+
+k.FeaturedGames.list()
+    .then(data => {
+        let name = ''
+        if (data.gameList.length > 0) {
+            name = data.gameList[0].participants[0].summonerName
+        }
+        return k.Summoner.get({ name })
+    })
+    .then(({ name }) => k.CurrentGame.get({ name }))
+    .then(({ participants }) => {
+        const ids = participants.map(el => el.summonerId)
+        console.log(ids, 'are currently playing in this game')
+    })
+    .catch(err => console.error(err))

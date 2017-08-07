@@ -178,6 +178,24 @@ declare module 'kindred-api' {
             }, cb?: Callback<Matchlist>) => Promise<Matchlist>
         }
 
+        public CurrentGame: {
+            get: ({
+                id,
+                name,
+                accountId,
+                region
+            }: {
+                id?: number,
+                name?: string,
+                accountId?: number,
+                region?: Region
+            }, cb?: Callback<CurrentGameResp>) => Promise<CurrentGameResp>
+        }
+
+        public FeaturedGames: {
+            list: (region?: Region, cb?: Callback<FeaturedGamesResp>) => Promise<FeaturedGamesResp>
+        }
+
         public Status: {
             get: ({
                 region
@@ -621,6 +639,59 @@ declare module 'kindred-api' {
         public pages: Array<MasteryPage>;
     }
 
+    class FeaturedGamesResp {
+        public gameList: Array<{
+            gameId: number;
+            mapId: number;
+            gameMode: string;
+            gameType: string;
+            gameQueueConfigId: number;
+            participants: Array<{
+                teamId: number;
+                spell1Id: number;
+                spell2Id: number;
+                championId: number;
+                profileIconId: number;
+                summonerName: string;
+                bot: boolean;
+            }>,
+            clientRefreshInterval: number;
+        }>
+    }
+
+    class CurrentGameResp {
+        public gameId: number;
+        public mapId: number;
+        public gameMode: string;
+        public gameType: string;
+        public gameQueueConfigId: number;
+        public participants: Array<{
+            teamId: number;
+            spell1Id: number;
+            spell2Id: number;
+            championId: number;
+            profileIconId: number;
+            summonerName: string;
+            bot: boolean;
+            summonerId: number;
+            runes: Array<{
+                count: number;
+                runeId: number;
+            }>;
+            masteries: Array<{
+                rank: number;
+                masteryId: number;
+            }>;
+            observers: {
+                encryptionKey: string;
+            };
+            platformId: PlatformId;
+            bannedChampions: Array<any>;
+            gameStartTime: number;
+            gameLength: number;
+        }>;
+    }
+
     class MasteryPage {
         public current: boolean;
         public masteries: Array<Mastery>
@@ -632,6 +703,6 @@ declare module 'kindred-api' {
     }
 
     type OptsOrRegOrCb<T> = Object | Region | Callback<T>; // TODO: improve so that options have types for each endpoint
-    type OptsRegCb<A, B> = A| Region | Callback<B>;
+    type OptsRegCb<A, B> = A | Region | Callback<B>;
     type RegOrCb<T> = Region | Callback<T>
 }
