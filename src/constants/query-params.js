@@ -22,6 +22,9 @@ const FREE_TO_PLAY = 'freeToPlay' // boolean
 // STATUS-V3 NONE
 // MASTERIES-V3 NONE
 // MATCH-V3
+  // GET MATCH BY ID
+const FOR_ACCOUNT_ID = 'forAccountId'
+const FOR_PLATFORM_ID = 'forPlatformId'
   // MATCHLIST BY ACCOUNT
 const QUEUE = 'queue' // Set[int]
 const BEGIN_TIME = 'beginTime' // int
@@ -123,6 +126,11 @@ const queryParams = {
       LIST: [...VERSION_AND_LOCALE, DATA_BY_ID, SPELL_LIST_DATA],
       ONE: [...VERSION_AND_LOCALE, SPELL_DATA]
     }
+  },
+  MATCH: {
+    GET: [
+      FOR_ACCOUNT_ID, FOR_PLATFORM_ID
+    ]
   },
   MATCHLIST: {
     GET: [
