@@ -324,6 +324,9 @@
   var LOCALE = 'locale';
   var DATA_BY_ID = 'dataById';
   var FREE_TO_PLAY = 'freeToPlay';
+  var FOR_ACCOUNT_ID = 'forAccountId';
+  var FOR_PLATFORM_ID = 'forPlatformId';
+
   var QUEUE = 'queue';
   var BEGIN_TIME = 'beginTime';
   var END_INDEX = 'endIndex';
@@ -378,6 +381,9 @@
         LIST: [].concat(VERSION_AND_LOCALE, [DATA_BY_ID, SPELL_LIST_DATA]),
         ONE: [].concat(VERSION_AND_LOCALE, [SPELL_DATA])
       }
+    },
+    MATCH: {
+      GET: [FOR_ACCOUNT_ID, FOR_PLATFORM_ID]
     },
     MATCHLIST: {
       GET: [QUEUE, BEGIN_TIME, END_INDEX, SEASON, CHAMPION$1, BEGIN_INDEX, END_TIME]
@@ -2424,10 +2430,12 @@
         var _ref41 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref41.region,
             id = _ref41.id,
-            matchId = _ref41.matchId;
+            matchId = _ref41.matchId,
+            options = _ref41.options;
 
         var cb = arguments[1];
 
+        this._verifyOptions(options, queryParams.MATCH.GET);
         var endUrl = '';
         if (Number.isInteger(id || matchId)) {
           if (id) {
@@ -2439,6 +2447,7 @@
           return this._matchRequest({
             endUrl: 'matches/' + endUrl,
             region: region,
+            options: options,
             methodType: methodTypes.GET_MATCH
           }, cb);
         } else {
@@ -2964,15 +2973,26 @@
       }
     }, {
       key: 'getMatchById',
-      value: function getMatchById(id, region, cb) {
+      value: function getMatchById(id, options, region, cb) {
+        if (isFunction(options)) {
+          cb = options;
+          options = undefined_;
+        }
+
         if (isFunction(region)) {
           cb = region;
           region = undefined_;
         }
 
+        if (typeof options === 'string') {
+          region = options;
+          options = undefined_;
+        }
+
         return this.Match.get({
           region: region,
-          id: id
+          id: id,
+          options: options
         }, cb);
       }
     }, {

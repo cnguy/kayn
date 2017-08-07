@@ -1902,11 +1902,14 @@ class Kindred {
   /* MATCH-V3 */
   getMatch({
     region,
-    id, matchId
+    id, matchId,
+    options
   }: {
     region?: string,
-    id?: number, matchId?: number
+    id?: number, matchId?: number,
+    options?: Object
   } = {}, cb: callback) {
+    this._verifyOptions(options, QUERY_PARAMS.MATCH.GET)
     let endUrl = ''
     if (Number.isInteger(id || matchId)) {
       if (id) {
@@ -1918,6 +1921,7 @@ class Kindred {
       return this._matchRequest({
         endUrl: `matches/${endUrl}`,
         region,
+        options,
         methodType: METHOD_TYPES.GET_MATCH
       }, cb)
     } else {
@@ -2421,15 +2425,26 @@ class Kindred {
     }, cb)
   }
 
-  getMatchById(id: number, region: string, cb: callback) {
+  getMatchById(id: number, options: Object, region: string, cb: callback) {
+    if (isFunction(options)) {
+      cb = (options: any)
+      options = undefined_
+    }
+
     if (isFunction(region)) {
       cb = (region: any)
       region = undefined_
     }
 
+    if (typeof options === 'string') {
+      region = options
+      options = undefined_
+    }
+
     return this.Match.get({
       region,
-      id
+      id,
+      options
     }, cb)
   }
 
