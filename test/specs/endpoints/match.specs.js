@@ -34,6 +34,43 @@ describe('Match', function () {
             done()
           })
       })
+
+      it('should not throw with right options', function () {
+        assert.doesNotThrow(() =>
+          k.Match.get({
+            id: 2478544123,
+            options: {
+              forAccountId: 31643150,
+              forPlatformId: 'NA1'
+            }
+          })
+        , Error)
+      })
+
+      it('should be a successful call with options', function (done) {
+        k.Match.get({
+          id: 2478544123,
+          options: {
+            forAccountId: 31643150,
+            forPlatformId: 'NA1'
+          }
+        }).then(data => {
+          expect(data).to.not.be.undefined
+          done()
+        })
+      })
+
+      it('should throw with bad options', function () {
+        assert.throws(() => {
+          k.Match.get({
+            id: 2478544123,
+            options: {
+              forAccountID: 31643150,
+              forPlatformId: 'NA1'
+            }
+          })
+        }, Error)
+      })
     })
 
     describe('standard params', function () {
@@ -45,6 +82,26 @@ describe('Match', function () {
 
           it('should not throw on non-empty', function () {
             assert.doesNotThrow(() => k.Match.by.id(matchId), Error)
+          })
+
+          it('should not throw with right options', function () {
+            assert.doesNotThrow(() => k.Match.by.id(2392431795, { forAccountId: 123456 }), Error)
+          })
+
+          it('should be a successful call with options', function (done) {
+            const opts = { forAccountId: 123456, forPlatformId: 'NA1' }
+            k.Match.by.id(2392431795, opts, 'na')
+              .then(data => {
+                expect(data).to.not.be.undefined
+                done()
+              })
+          })
+
+          it('should throw with bad options', function () {
+            const badOpts1 = { foraccountId: 123456, forPlatformId: 'NA1' }
+            assert.throws(() => k.Match.by.id(2392431795, badOpts1, 'na'), Error)
+            const badOpts2 = { forAccountId: 123456, forPPlatformId: 'NA1' }
+            assert.throws(() => k.Match.by.id(2392431795, badOpts2, 'na'), Error)
           })
 
           describe('through callback', function () {

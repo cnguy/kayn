@@ -324,6 +324,9 @@
   var LOCALE = 'locale';
   var DATA_BY_ID = 'dataById';
   var FREE_TO_PLAY = 'freeToPlay';
+  var FOR_ACCOUNT_ID = 'forAccountId';
+  var FOR_PLATFORM_ID = 'forPlatformId';
+
   var QUEUE = 'queue';
   var BEGIN_TIME = 'beginTime';
   var END_INDEX = 'endIndex';
@@ -378,6 +381,9 @@
         LIST: [].concat(VERSION_AND_LOCALE, [DATA_BY_ID, SPELL_LIST_DATA]),
         ONE: [].concat(VERSION_AND_LOCALE, [SPELL_DATA])
       }
+    },
+    MATCH: {
+      GET: [FOR_ACCOUNT_ID, FOR_PLATFORM_ID]
     },
     MATCHLIST: {
       GET: [QUEUE, BEGIN_TIME, END_INDEX, SEASON, CHAMPION$1, BEGIN_INDEX, END_TIME]
@@ -694,13 +700,11 @@
         Object.keys(regions).map(function (region) {
           var _this$methodLimits$re;
 
-          _this.methodLimits[regions[region]] = (_this$methodLimits$re = {}, _defineProperty(_this$methodLimits$re, methodTypes.LIST_CHAMPION_MASTERIES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_CHAMPION_MASTERY, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_TOTAL_CHAMPION_MASTERY_SCORE, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.LIST_CHAMPIONS, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_CHAMPION, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_CHALLENGER_LEAGUE, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_LEAGUES_IN_ALL_QUEUES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MASTER_LEAGUE, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_LEAGUE_POSITIONS_IN_ALL_QUEUES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MASTERY_PAGES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MATCH, new RateLimit(500, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MATCHLIST, new RateLimit(1000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_RECENT_MATCHLIST, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MATCH_TIMELINE, new RateLimit(500, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_RUNE_PAGES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_CURRENT_GAME, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.LIST_FEATURED_GAMES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_SHARD_STATUS, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_SUMMONER_BY_ACCOUNT_ID, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_SUMMONER_BY_ID, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_SUMMONER_BY_NAME, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_CHAMPION_LIST, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_CHAMPION_BY_ID, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_ITEM_LIST, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_ITEM_BY_ID, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_LANGUAGE_STRINGS_DATA, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_SUPPORTED_LANGUAGES_DATA, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_MAP_DATA, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_MASTERIES, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_MASTERY_BY_ID, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_PROFILE_ICONS, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_REALM_DATA, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_RUNE_LIST, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_RUNE_BY_ID, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_SUMMONER_SPELL_LIST, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_SUMMONER_SPELL_BY_ID, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_VERSIONS, [new RateLimit(1, 60), new RateLimit(60, 3600)]), _this$methodLimits$re);
+          _this.methodLimits[regions[region]] = (_this$methodLimits$re = {}, _defineProperty(_this$methodLimits$re, methodTypes.LIST_CHAMPION_MASTERIES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_CHAMPION_MASTERY, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_TOTAL_CHAMPION_MASTERY_SCORE, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.LIST_CHAMPIONS, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_CHAMPION, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_CHALLENGER_LEAGUE, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_LEAGUES_IN_ALL_QUEUES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MASTER_LEAGUE, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_LEAGUE_POSITIONS_IN_ALL_QUEUES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MASTERY_PAGES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MATCH, new RateLimit(500, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MATCHLIST, new RateLimit(1000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_RECENT_MATCHLIST, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_MATCH_TIMELINE, new RateLimit(500, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_RUNE_PAGES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_CURRENT_GAME, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.LIST_FEATURED_GAMES, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_SHARD_STATUS, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_SUMMONER_BY_ACCOUNT_ID, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_SUMMONER_BY_ID, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.GET_SUMMONER_BY_NAME, new RateLimit(20000, 10)), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_CHAMPION_LIST, new RateLimit(10, 3600)), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_CHAMPION_BY_ID, new RateLimit(10, 3600)), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_ITEM_LIST, new RateLimit(10, 3600)), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_ITEM_BY_ID, new RateLimit(10, 3600)), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_LANGUAGE_STRINGS_DATA, new RateLimit(10, 3600)), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_SUPPORTED_LANGUAGES_DATA, new RateLimit(10, 3600)), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_MAP_DATA, new RateLimit(10, 3600)), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_MASTERIES, new RateLimit(10, 3600)), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_MASTERY_BY_ID, new RateLimit(10, 3600)), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_PROFILE_ICONS, new RateLimit(10, 3600)), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_REALM_DATA, new RateLimit(10, 3600)), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_RUNE_LIST, new RateLimit(10, 3600)), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_RUNE_BY_ID, new RateLimit(10, 3600)), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_SUMMONER_SPELL_LIST, new RateLimit(10, 3600)), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_SUMMONER_SPELL_BY_ID, new RateLimit(10, 3600)), _defineProperty(_this$methodLimits$re, methodTypes.RETRIEVE_VERSIONS, new RateLimit(10, 3600)), _this$methodLimits$re);
 
           Object.keys(_this.methodLimits[regions[region]]).map(function (key) {
             if (methodLimits && methodLimits[key]) {
-              if (Array.isArray(methodLimits[key])) {
-                _this.methodLimits[regions[region]][key] = [new RateLimit(methodLimits[key][0], 60), new RateLimit(methodLimits[key][1], 3600)];
-              } else if (typeof methodLimits[key] === 'number') {
+              if (typeof methodLimits[key] === 'number') {
                 _this.methodLimits[regions[region]][key] = new RateLimit(methodLimits[key], 10);
               } else {
                 throw new Error('invalid method limit');
@@ -1011,15 +1015,11 @@
 
     _createClass(Kindred$1, [{
       key: 'canMakeRequest',
-      value: function canMakeRequest(region, methodType, staticReq) {
+      value: function canMakeRequest(region, methodType) {
         var spread = this.spread ? this.limits[region][2].requestAvailable() : true;
 
-        var methodLimitAvailable = false;
-        if (!staticReq) {
-          methodLimitAvailable = this.methodLimits[region][methodType].requestAvailable();
-        } else {
-          methodLimitAvailable = this.methodLimits[region][methodType][0].requestAvailable() && this.methodLimits[region][methodType][1].requestAvailable();
-        }
+        var methodLimitAvailable = this.methodLimits[region][methodType].requestAvailable();
+
         return this.limits[region][0].requestAvailable() && this.limits[region][1].requestAvailable() && spread && methodLimitAvailable;
       }
     }, {
@@ -1236,15 +1236,11 @@
               } else {
                 if (_this2.limits) {
                   var self = _this2;(function sendRequest(callback, iterationsUntilError) {
-                    if (self.canMakeRequest(region, methodType, staticReq)) {
+                    if (self.canMakeRequest(region, methodType)) {
                       self.limits[region][0].addRequest();
                       self.limits[region][1].addRequest();
                       if (self.spread) self.limits[region][2].addRequest();
-                      if (!staticReq && self.methodLimits[region][methodType]) self.methodLimits[region][methodType].addRequest();
-                      if (staticReq && self.methodLimits[region][methodType]) {
-                        self.methodLimits[region][methodType][0].addRequest();
-                        self.methodLimits[region][methodType][1].addRequest();
-                      }
+                      self.methodLimits[region][methodType].addRequest();
 
                       request({ url: fullUrl, timeout: self.timeout }, function (error, response, body) {
                         if (response && body) {
@@ -2434,10 +2430,12 @@
         var _ref41 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
             region = _ref41.region,
             id = _ref41.id,
-            matchId = _ref41.matchId;
+            matchId = _ref41.matchId,
+            options = _ref41.options;
 
         var cb = arguments[1];
 
+        this._verifyOptions(options, queryParams.MATCH.GET);
         var endUrl = '';
         if (Number.isInteger(id || matchId)) {
           if (id) {
@@ -2449,6 +2447,7 @@
           return this._matchRequest({
             endUrl: 'matches/' + endUrl,
             region: region,
+            options: options,
             methodType: methodTypes.GET_MATCH
           }, cb);
         } else {
@@ -2974,15 +2973,26 @@
       }
     }, {
       key: 'getMatchById',
-      value: function getMatchById(id, region, cb) {
+      value: function getMatchById(id, options, region, cb) {
+        if (isFunction(options)) {
+          cb = options;
+          options = undefined_;
+        }
+
         if (isFunction(region)) {
           cb = region;
           region = undefined_;
         }
 
+        if (typeof options === 'string') {
+          region = options;
+          options = undefined_;
+        }
+
         return this.Match.get({
           region: region,
-          id: id
+          id: id,
+          options: options
         }, cb);
       }
     }, {
