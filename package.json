@@ -9,7 +9,7 @@
     "go": "yarn lint && yarn build && yarn minify && babel test.js -o test-compiled.js && node test-compiled.js",
     "prepare": "yarn build && yarn minify",
     "test": "yarn prepare && yarn test-only",
-    "test-only": "cd src && flow --show-all-errors && cd - && node_modules/.bin/babel-node ./node_modules/.bin/babel-istanbul cover ./node_modules/mocha/bin/_mocha --compilers js:babel-core/register \"test/**/*.js\"",
+    "test-only": "cd src && flow --show-all-errors && cd - && node_modules/.bin/babel-node ./node_modules/.bin/babel-istanbul cover ./node_modules/mocha/bin/_mocha --compilers js:babel-core/register \"test/**/*.js\" && sleep 100 && cd typings && yarn start && cd -",
     "flow": "cd src && flow --show-all-errors && cd -",
     "lint": "node make eslint",
     "build": "node make build && node make minify",

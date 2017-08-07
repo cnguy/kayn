@@ -2,13 +2,19 @@
 /// <reference path="./node_modules/@types/node/index.d.ts" />
 
 import * as lolapi from 'kindred-api';
-require('dotenv').config({ path: '../.env' })
-// const REGIONS = lolapi.REGIONS;
-const key: string = process.env.KEY ? process.env.KEY as string : 'dummy'
+try {
+    require('dotenv').config({ path: '../.env' })
+} catch (ex) {
+    console.log('ignore')
+}
+
+const REGIONS = lolapi.REGIONS;
+const QUEUE_STRINGS = lolapi.QUEUE_STRINGS;
+const key: string = process.env.KEY_TO_RATE_LIMIT ? process.env.KEY_TO_RATE_LIMIT as string : 'dummy'
 
 const k = new lolapi.Kindred({
     key,
-    limits: [[500, 10], [3000, 600]] as any, // allows automatic retries
+    limits: [[20, 1], [100, 120]] as any, // allows automatic retries
     retryOptions: {
         auto: true, // necessary to overwrite automatic retries
         numberOfRetriesBeforeBreak: 3
@@ -175,4 +181,31 @@ k.Masteries.by.name('Contractz', function (err, data) {
     } else {
         console.log('id of first mastery of first page:', data.pages[0].masteries[0].id)
     }
+})
+
+k.League.challengers({ queue: 'RANKED_SOLO_5x5' })
+    .then(data => {
+        console.log('challenger player objects:', data.entries)
+    })
+    .catch(err => console.error(err))
+
+k.League.challengers({ queue: QUEUE_STRINGS.RANKED_FLEX_SR }, function (err, data) {
+    console.log('the name of the league is: ', data.name)
+})
+
+k.League.masters({ queue: QUEUE_STRINGS.RANKED_SOLO_5x5 }, function (err, data) {
+    console.log('the name of the league is: ', data.name)
+})
+
+k.League.Challenger.list(QUEUE_STRINGS.RANKED_FLEX_SR, REGIONS.BRAZIL, function (err, data) {
+    console.log('i used to be in the list all the time')
+})
+
+k.League.get({ name: 'Contractz' }, function (err, leagues) {
+    console.log('Conctractz\'s leagues', leagues)
+})
+
+k.League.positions({ name: 'Contractz' }, function (err, positions) {
+    const allRanks = positions.map((el) => el.leagueName)
+    console.log(allRanks)
 })

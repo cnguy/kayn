@@ -62,6 +62,56 @@ declare module 'kindred-api' {
             }
         }
 
+        public League: {
+            get: ({
+                id,
+                name,
+                accountId,
+                region
+            }: {
+                id?: number,
+                name?: string,
+                accountId?: number,
+                region?: Region
+            }, cb?: Callback<Array<AnyLeague>>) => Promise<Array<AnyLeague>>;
+
+            positions: ({
+                id,
+                name,
+                accountId,
+                region
+            }: {
+                id?: number,
+                name?: string,
+                accountId?: number,
+                region?: Region
+            }, cb?: Callback<Array<LeaguePosition>>) => Promise<Array<LeaguePosition>>;
+
+            Challenger: {
+                list: (queue: QueueString, regionOrCallback?: Region | Callback<ChallengerLeague>, cb?: Callback<ChallengerLeague>) => Promise<ChallengerLeague>;
+            }
+
+            Master: {
+                list: (queue: QueueString, regionOrCallback?: Region | Callback<MasterLeague>, cb?: Callback<MasterLeague>) => Promise<MasterLeague>;
+            }
+
+            challengers: ({
+                queue,
+                region
+            }: {
+                queue: QueueString,
+                region?: Region
+            }, cb?: Callback<ChallengerLeague>) => Promise<ChallengerLeague>;
+
+            masters: ({
+                queue,
+                region
+            }: {
+                queue: QueueString,
+                region?: Region
+            }, cb?: Callback<MasterLeague>) => Promise<MasterLeague>;
+        }
+
         public Runes: {
             get: ({
                 id,
@@ -101,7 +151,6 @@ declare module 'kindred-api' {
                 accountId: (accountId: number, regionOrCallback?: Region | Callback<MasteriesResp>, cb?: Callback<MasteriesResp>) => Promise<MasteriesResp>;
             }
         }
-        
 
         public Status: {
             get: ({
@@ -131,18 +180,23 @@ declare module 'kindred-api' {
     }
 
     declare function print: Callback<any>;
-    interface REGIONS {
-        BRAZIL: Region;
-        EUROPE: Region;
-        EUROPE_WEST: Region;
-        KOREA: Region;
-        LATIN_AMERICAN_NORTH: Region;
-        LATIN_AMERICA_SOUTH: Region;
-        NORTH_AMERICA: Region;
-        OCEANIA: Region;
-        RUSSIA: Region;
-        TURKEY: Region;
-        JAPAN: Region;
+    declare enum REGIONS {
+        BRAZIL = 'br',
+        EUROPE = 'eune',
+        EUROPE_WEST = 'euw',
+        KOREA = 'kr',
+        LATIN_AMERICA_NORTH = 'lan',
+        LATIN_AMERICA_SOUTH = 'las',
+        NORTH_AMERICA = 'na',
+        OCEANIA = 'oce',
+        RUSSIA = 'ru',
+        TURKEY = 'tr',
+        JAPAN = 'jp'
+    }
+    declare enum QUEUE_STRINGS {
+        RANKED_SOLO_5x5 = 'RANKED_SOLO_5x5',
+        RANKED_FLEX_SR = 'RANKED_FLEX_SR',
+        RANKED_FLEX_TT = 'RANKED_FLEX_TT'
     }
 
     declare interface KindredConstructor {
@@ -197,6 +251,99 @@ declare module 'kindred-api' {
         public active: boolean;
         public freeToPlay: boolean;
         public id: number;
+    }
+
+    type QueueString = 'RANKED_SOLO_5x5' | 'RANKED_FLEX_SR' | 'RANKED_FLEX_TT'
+
+    class ChallengerLeague {
+        public name: string;
+        public tier: "CHALLENGER";
+        public queue: QueueString;
+        public entries: Array<ChallengerLeagueEntry>;
+    }
+
+    class MasterLeague {
+        public name: string;
+        public tier: "MASTER";
+        public queue: QueueString;
+        public entries: Array<MasterLeagueEntry>;
+    }
+
+    type Tier = "BRONZE" | "SILVER" | "GOLD" | "PLATINUM" | "DIAMOND" | "MASTER" | "CHALLENGER";
+    type Rank = "V" | "IV" | "III" | "II" | "I";
+
+    interface AnyLeague {
+        public name: string;
+        public tier: Tier;
+        public queue: QueueString;
+        public entries: Array<AnyLeagueEntry>;
+    }
+
+    interface ChallengerLeagueEntry {
+        playerOrTeamId: number;
+        playerOrTeamName: string;
+        leaguePoints: number;
+        rank: "I";
+        wins: number;
+        losses: number;
+        veteran: boolean;
+        inactive: boolean;
+        freshBlood: boolean;
+        hotStreak: boolean;
+    }
+
+    interface MasterLeagueEntry {
+        playerOrTeamId: number;
+        playerOrTeamName: string;
+        leaguePoints: number;
+        rank: "I";
+        wins: number;
+        losses: number;
+        veteran: boolean;
+        inactive: boolean;
+        freshBlood: boolean;
+        hotStreak: boolean;
+        miniSeries?: {
+            target: number,
+            wins: number,
+            losses: number,
+            progress: string
+        }
+    }
+
+    interface AnyLeagueEntry {
+        playerOrTeamId: number;
+        playerOrTeamName: string;
+        leaguePoints: number;
+        rank: Rank;
+        wins: number;
+        losses: number;
+        veteran: boolean;
+        inactive: boolean;
+        freshBlood: boolean;
+        hotStreak: boolean;
+        miniSeries?: {
+            target: number,
+            wins: number,
+            losses: number,
+            progress: string
+        };
+    }
+
+    interface LeaguePosition {
+        queueType: QueueString,
+        hotStreak: boolean,
+        wins: number,
+        veteran: boolean,
+        losses: number,
+        playerOrTeamId: number,
+        tier: Tier,
+        playerOrTeamName: string,
+        inactive: boolean,
+        rank: Rank,
+        freshBlood: boolean,
+        leagueName: string,
+        leaguePoints: number
     }
     
     class ShardData {
