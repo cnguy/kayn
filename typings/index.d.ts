@@ -154,15 +154,15 @@ declare module 'kindred-api' {
 
         public Match: {
             by: {
-                id: (id: number, optionsOrRegionOrCallback?: OptsOrRegOrCb<Match>, regOrCb?: RegOrCb<Match>, cb?: Callback<Match>) => Promise<Match>
+                id: (id: number, optionsOrRegionOrCallback?: OptsOrRegOrCb<Match>, regionOrCallback?: RegOrCb<Match>, cb?: Callback<Match>) => Promise<Match>
             }
         }
 
         public Matchlist: {
             by: {
-                id: (id: number, optionsOrRegion?: OptsOrRegOrCb<Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
-                name: (name: string, optionsOrRegion?: OptsOrRegOrCb<Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
-                account: (account: number, optionsOrRegion?: OptsOrRegOrCb<Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
+                id: (id: number, optionsOrRegionOrCallback?: OptsOrRegOrCb<Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
+                name: (name: string, optionsOrRegionOrCallback?: OptsOrRegOrCb<Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
+                account: (account: number, optionsOrRegionOrCallback?: OptsOrRegOrCb<Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
             };
 
             recent: ({
