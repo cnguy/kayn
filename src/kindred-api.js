@@ -2895,6 +2895,7 @@ export default {
   QUEUE_TYPES,
   REGIONS,
   TIME_CONSTANTS,
+  PLATFORM_IDS,
   QuickStart,
   print,
   // Caches

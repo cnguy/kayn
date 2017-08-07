@@ -11,6 +11,9 @@ try {
 const REGIONS = lolapi.REGIONS;
 const QUEUE_STRINGS = lolapi.QUEUE_STRINGS;
 const QUEUE_TYPES = lolapi.QUEUE_TYPES;
+const PLATFORM_IDS = lolapi.PLATFORM_IDS;
+const InMemoryCache = lolapi.InMemoryCache;
+const RedisCache = lolapi.RedisCache;
 const key: string = process.env.KEY ? process.env.KEY as string : 'dummy'
 
 const k = new lolapi.Kindred({
@@ -21,6 +24,10 @@ const k = new lolapi.Kindred({
         numberOfRetriesBeforeBreak: 3
     },
     debug: true,
+    cache: new RedisCache({
+        port: 3000,
+        keyPrefix: 'heythere'
+    })
     // showHeaders: true
     // limits: lolapi.LIMITS.PROD
 });
@@ -289,11 +296,10 @@ k.FeaturedGames.list()
     .catch(err => console.log(err))
 
 k.FeaturedGames.list()
-    .then(data => {
-        let name = ''
-        if (data.gameList.length > 0) {
-            name = data.gameList[0].participants[0].summonerName
-        }
+    .then(({ gameList }) => {
+        const name = gameList.length > 0
+            ? gameList[0].participants[0].summonerName
+            : ''
         return k.Summoner.get({ name })
     })
     .then(({ name }) => k.CurrentGame.get({ name }))
@@ -301,4 +307,24 @@ k.FeaturedGames.list()
         const ids = participants.map(el => el.summonerId)
         console.log(ids, 'are currently playing in this game')
     })
+    .catch(err => console.error(err))
+
+const matchOpts = {
+    forPlatformId: "NA1",
+    forAccountId: 12346
+}
+
+k.Match.by.id(2392431795, matchOpts, "na", function (err, data) {
+    if (err) {
+        console.error(err)
+    } else {
+        console.log(`account ids of match 2392431795: ${data.participantIdentities.map(el => el.player.accountId)}`)
+    }
+})
+
+k.Match.Timeline.by.id(2392431795)
+    .then((data: any) => console.log(data))
+
+k.Summoner.by.name('Contractz')
+    .then(data => k.Summoner.by.name('Contractz'))
     .catch(err => console.error(err))

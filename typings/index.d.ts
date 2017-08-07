@@ -1,4 +1,5 @@
 declare module 'kindred-api' {
+    // Still missing a lot of configs, Match Timeline endpoint, and Static endpoints
     class Kindred {
         constructor({
             key,
@@ -7,7 +8,8 @@ declare module 'kindred-api' {
             debug,
             showKey,
             showHeaders,
-            retryOptions
+            retryOptions,
+            cache
         }: KindredConstructor);
 
         public ChampionMastery: {
@@ -154,15 +156,24 @@ declare module 'kindred-api' {
 
         public Match: {
             by: {
-                id: (id: number, optionsOrRegionOrCallback?: OptsOrRegOrCb<Match>, regionOrCallback?: RegOrCb<Match>, cb?: Callback<Match>) => Promise<Match>
+                id: (id: number, optionsOrRegionOrCallback?: OptsOrRegOrCb<{
+                    forAccountId?: number,
+                    forPlatformId?: PlatformId
+                }, Match>, regionOrCallback?: RegOrCb<Match>, cb?: Callback<Match>) => Promise<Match>
+            }
+
+            Timeline: {
+                by: {
+                    id: any
+                }
             }
         }
 
         public Matchlist: {
             by: {
-                id: (id: number, optionsOrRegionOrCallback?: OptsRegCb<{ queue: number}, Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
-                name: (name: string, optionsOrRegionOrCallback?: OptsRegCb<{ queue: number}, Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
-                account: (account: number, optionsOrRegionOrCallback?: OptsRegCb<{ queue: number}, Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
+                id: (id: number, optionsOrRegionOrCallback?: OptsOrRegOrCb<{ queue: number}, Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
+                name: (name: string, optionsOrRegionOrCallback?: OptsOrRegOrCb<{ queue: number}, Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
+                account: (account: number, optionsOrRegionOrCallback?: OptsOrRegOrCb<{ queue: number}, Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
             };
 
             recent: ({
@@ -195,6 +206,8 @@ declare module 'kindred-api' {
         public FeaturedGames: {
             list: (region?: Region, cb?: Callback<FeaturedGamesResp>) => Promise<FeaturedGamesResp>
         }
+
+        public Static: any
 
         public Status: {
             get: ({
@@ -289,6 +302,32 @@ declare module 'kindred-api' {
         DEV = any,
         PROD = any
     }
+    declare enum PLATFORM_IDS {
+        BRAZIL = 'BR1',
+        EUROPE = 'EUN1',
+        EUROPE_WEST = 'EUW1',
+        KOREA = 'KR',
+        LATIN_AMERICA_NORTH = 'LA1',
+        LATIN_AMERICA_SOUTH = 'LA2',
+        NORTH_AMERICA = 'NA1',
+        NORTH_AMERICA_OLD = 'NA',
+        OCEANIA = 'OC1',
+        RUSSIA = 'RU',
+        TURKEY = 'TR1',
+        JAPAN = 'JP1'
+    }
+
+    class InMemoryCache {
+        constructor() {}
+    }
+
+    class RedisCache {
+        constructor(opts?: {
+            host?: string,
+            port?: number,
+            keyPrefix?: string,
+        }) {}
+    }
 
     declare interface KindredConstructor {
         key: string,
@@ -300,11 +339,12 @@ declare module 'kindred-api' {
         retryOptions?: {
             auto: boolean,
             numberOfRetriesBeforeBreak: number
-        }
+        },
+        cache: any
     };
 
     type Region = 'br' | 'eune' | 'euw' | 'kr' | 'lan' | 'las' | 'na' | 'oce' | 'ru' | 'tr' | 'jp';
-    type PlatformId = "BR1" | "EUN1" | "EUW1" | "JP1" | "KR" | "LA1" | "LA2" | "NA1" | "NA" | "OC1" | "TR1" | "RU" | "PBE1"
+    type PlatformId = "BR1" | "EUN1" | "EUW1" | "JP1" | "KR" | "LA1" | "LA2" | "NA1" | "NA" | "OC1" | "TR1" | "RU" | "PBE1" | string // TODO: fix
 
     type Limits = (number[])[]; // bad type
     type StatusCode = number
@@ -702,7 +742,6 @@ declare module 'kindred-api' {
         rank: 0 | 1 | 2 | 3 | 4 | 5
     }
 
-    type OptsOrRegOrCb<T> = Object | Region | Callback<T>; // TODO: improve so that options have types for each endpoint
-    type OptsRegCb<A, B> = A | Region | Callback<B>;
+    type OptsOrRegOrCb<A, B> = A | Region | Callback<B>;
     type RegOrCb<T> = Region | Callback<T>
 }

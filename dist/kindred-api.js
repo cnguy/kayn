@@ -314,6 +314,7 @@
     LATIN_AMERICA_NORTH: 'LA1',
     LATIN_AMERICA_SOUTH: 'LA2',
     NORTH_AMERICA: 'NA1',
+    NORTH_AMERICA_OLD: 'NA',
     OCEANIA: 'OC1',
     RUSSIA: 'RU',
     TURKEY: 'TR1',
@@ -3468,6 +3469,7 @@
     QUEUE_TYPES: queueTypes,
     REGIONS: regions,
     TIME_CONSTANTS: cacheTimers,
+    PLATFORM_IDS: platformIds,
     QuickStart: QuickStart,
     print: print,
 
