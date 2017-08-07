@@ -12,7 +12,7 @@ class RateLimit {
     this.allowedRequests = allowedRequests
     this.seconds = seconds
     this.madeRequests = new Deque()
-    this.buffer = this.seconds * 50
+    this.buffer = this.seconds * 55
   }
 
   _reload(): void {

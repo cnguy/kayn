@@ -190,11 +190,19 @@ k.League.challengers({ queue: 'RANKED_SOLO_5x5' })
     .catch(err => console.error(err))
 
 k.League.challengers({ queue: QUEUE_STRINGS.RANKED_FLEX_SR }, function (err, data) {
-    console.log('the name of the league is: ', data.name)
+    if (err) {
+        console.error(err)
+    } else {
+        console.log('the name of the league is: ', data.name)
+    }
 })
 
 k.League.masters({ queue: QUEUE_STRINGS.RANKED_SOLO_5x5 }, function (err, data) {
-    console.log('the name of the league is: ', data.name)
+    if (err) {
+        console.error(err)
+    } else {
+        console.log('the name of the league is: ', data.name)
+    }
 })
 
 k.Challenger.list(QUEUE_STRINGS.RANKED_FLEX_SR, REGIONS.BRAZIL, function (err, data) {
@@ -202,12 +210,20 @@ k.Challenger.list(QUEUE_STRINGS.RANKED_FLEX_SR, REGIONS.BRAZIL, function (err, d
 })
 
 k.League.get({ name: 'Contractz' }, function (err, leagues) {
-    console.log('Contractz\'s leagues', leagues)
+    if (err) {
+        console.error(err)
+    } else {
+        console.log('Contractz\'s leagues', leagues)
+    }
 })
 
 k.League.positions({ name: 'Contractz' }, function (err, positions) {
-    const allRanks = positions.map((el) => el.leagueName)
-    console.log(allRanks)
+    if (err) {
+        console.error(err)
+    } else {
+        const allRanks = positions.map((el) => el.leagueName)
+        console.log(allRanks)
+    }
 })
 
 k.Match.by.id(2392431795)
@@ -228,6 +244,7 @@ k.Summoner.get({ name: 'Contractz' })
         championIds.map(el => {
             k.Champion.by.id(el)
                 .then(champion => console.log(champion.botEnabled))
+                .catch(err => console.error(err))
         })
     })
     .catch(err => console.error(err))
