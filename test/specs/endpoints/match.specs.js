@@ -99,9 +99,9 @@ describe('Match', function () {
 
           it('should throw with bad options', function () {
             const badOpts1 = { foraccountId: 123456, forPlatformId: 'NA1' }
-            assert.throws(() => k.Match.by.id(2392431795, badOpts1, 'na', _kindredApi.print), Error)
+            assert.throws(() => k.Match.by.id(2392431795, badOpts1, 'na'), Error)
             const badOpts2 = { forAccountId: 123456, forPPlatformId: 'NA1' }
-            assert.throws(() => k.Match.by.id(2392431795, badOpts2, 'na', _kindredApi.print), Error)
+            assert.throws(() => k.Match.by.id(2392431795, badOpts2, 'na'), Error)
           })
 
           describe('through callback', function () {
