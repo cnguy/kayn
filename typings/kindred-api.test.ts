@@ -74,7 +74,6 @@ k.Summoner.get({ name: 'Contractz' })
 k.Summoner.by.name('Contractz', lolapi.print)
 
 ;(async () => {
-    console.log('async print')
     try {
         const summoner = await k.Summoner.by.name('Contractz')
         printSummoner(summoner)
@@ -197,12 +196,12 @@ k.League.masters({ queue: QUEUE_STRINGS.RANKED_SOLO_5x5 }, function (err, data) 
     console.log('the name of the league is: ', data.name)
 })
 
-k.League.Challenger.list(QUEUE_STRINGS.RANKED_FLEX_SR, REGIONS.BRAZIL, function (err, data) {
+k.Challenger.list(QUEUE_STRINGS.RANKED_FLEX_SR, REGIONS.BRAZIL, function (err, data) {
     console.log('i used to be in the list all the time')
 })
 
 k.League.get({ name: 'Contractz' }, function (err, leagues) {
-    console.log('Conctractz\'s leagues', leagues)
+    console.log('Contractz\'s leagues', leagues)
 })
 
 k.League.positions({ name: 'Contractz' }, function (err, positions) {

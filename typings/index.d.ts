@@ -87,14 +87,6 @@ declare module 'kindred-api' {
                 region?: Region
             }, cb?: Callback<Array<LeaguePosition>>) => Promise<Array<LeaguePosition>>;
 
-            Challenger: {
-                list: (queue: QueueString, regionOrCallback?: Region | Callback<ChallengerLeague>, cb?: Callback<ChallengerLeague>) => Promise<ChallengerLeague>;
-            }
-
-            Master: {
-                list: (queue: QueueString, regionOrCallback?: Region | Callback<MasterLeague>, cb?: Callback<MasterLeague>) => Promise<MasterLeague>;
-            }
-
             challengers: ({
                 queue,
                 region
@@ -110,6 +102,14 @@ declare module 'kindred-api' {
                 queue: QueueString,
                 region?: Region
             }, cb?: Callback<MasterLeague>) => Promise<MasterLeague>;
+        }
+
+        public Challenger: {
+            list: (queue: QueueString, regionOrCallback?: Region | Callback<ChallengerLeague>, cb?: Callback<ChallengerLeague>) => Promise<ChallengerLeague>;
+        }
+
+        public Master: {
+            list: (queue: QueueString, regionOrCallback?: Region | Callback<MasterLeague>, cb?: Callback<MasterLeague>) => Promise<MasterLeague>;
         }
 
         public Runes: {
