@@ -10,17 +10,17 @@ try {
 
 const REGIONS = lolapi.REGIONS;
 const QUEUE_STRINGS = lolapi.QUEUE_STRINGS;
-const key: string = process.env.KEY_TO_RATE_LIMIT ? process.env.KEY_TO_RATE_LIMIT as string : 'dummy'
+const key: string = process.env.KEY ? process.env.KEY as string : 'dummy'
 
 const k = new lolapi.Kindred({
     key,
-    limits: [[20, 1], [100, 120]] as any, // allows automatic retries
+    limits: lolapi.LIMITS.PROD as any, // allows automatic retries
     retryOptions: {
         auto: true, // necessary to overwrite automatic retries
         numberOfRetriesBeforeBreak: 3
     },
     debug: true,
-    showHeaders: true
+    // showHeaders: true
     // limits: lolapi.LIMITS.PROD
 });
 
@@ -252,3 +252,20 @@ k.Summoner.get({ name: 'Contractz' })
 k.Matchlist.recent({ name: 'Contractz' })
     .then(matchlist => console.log(matchlist.matches[0].lane))
     .catch(err => console.error(err))
+
+let count = 21
+console.time('done')
+console.time('done2')
+for (let i = 0; i < 21; ++i)
+    k.Summoner.get({ name: 'Contractz' }, function (err, data) {
+        if (err) {
+            console.error(err)
+        } else {
+            if (--count === 1) {
+                console.timeEnd('done')
+            }
+            if (count === 0) {
+                console.timeEnd('done2')
+            }
+        }
+    })

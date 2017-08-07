@@ -224,6 +224,10 @@ declare module 'kindred-api' {
         RANKED_FLEX_SR = 'RANKED_FLEX_SR',
         RANKED_FLEX_TT = 'RANKED_FLEX_TT'
     }
+    declare enum LIMITS {
+        DEV = any,
+        PROD = any
+    }
 
     declare interface KindredConstructor {
         key: string,
