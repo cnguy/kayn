@@ -340,7 +340,7 @@ declare module 'kindred-api' {
             auto: boolean,
             numberOfRetriesBeforeBreak: number
         },
-        cache: any
+        cache?: any
     };
 
     type Region = 'br' | 'eune' | 'euw' | 'kr' | 'lan' | 'las' | 'na' | 'oce' | 'ru' | 'tr' | 'jp';
