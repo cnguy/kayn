@@ -19,7 +19,8 @@ const k = new lolapi.Kindred({
         auto: true, // necessary to overwrite automatic retries
         numberOfRetriesBeforeBreak: 3
     },
-    debug: true
+    debug: true,
+    showHeaders: true
     // limits: lolapi.LIMITS.PROD
 });
 
@@ -208,3 +209,29 @@ k.League.positions({ name: 'Contractz' }, function (err, positions) {
     const allRanks = positions.map((el) => el.leagueName)
     console.log(allRanks)
 })
+
+k.Match.by.id(2392431795)
+    .then(data => {
+        console.log('did the first team win:', data.teams[0].win) // "Fail"
+        console.log(data.participants[0].championId) // 67
+    })
+    .catch(err => console.error(err))
+
+k.Summoner.get({ name: 'Contractz' })
+    .then(data => k.Matchlist.by.account(data.accountId, REGIONS.NORTH_AMERICA))
+    .then(data => {
+        const champions = data.matches.map(el => el.champion)
+        console.log(`champions played by Contractz: ${champions}`)
+        return champions
+    })
+    .then(championIds => {
+        championIds.map(el => {
+            k.Champion.by.id(el)
+                .then(champion => console.log(champion.botEnabled))
+        })
+    })
+    .catch(err => console.error(err))
+
+k.Matchlist.recent({ name: 'Contractz' })
+    .then(matchlist => console.log(matchlist.matches[0].lane))
+    .catch(err => console.error(err))

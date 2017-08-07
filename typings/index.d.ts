@@ -152,6 +152,32 @@ declare module 'kindred-api' {
             }
         }
 
+        public Match: {
+            by: {
+                id: (id: number, optionsOrRegionOrCallback?: OptsOrRegOrCb<Match>, regOrCb?: RegOrCb<Match>, cb?: Callback<Match>) => Promise<Match>
+            }
+        }
+
+        public Matchlist: {
+            by: {
+                id: (id: number, optionsOrRegion?: OptsOrRegOrCb<Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
+                name: (name: string, optionsOrRegion?: OptsOrRegOrCb<Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
+                account: (account: number, optionsOrRegion?: OptsOrRegOrCb<Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
+            };
+
+            recent: ({
+                id,
+                name,
+                accountId,
+                region
+            }: {
+                id?: number,
+                name?: string,
+                accountId?: number,
+                region?: Region
+            }, cb?: Callback<Matchlist>) => Promise<Matchlist>
+        }
+
         public Status: {
             get: ({
                 region
@@ -213,6 +239,7 @@ declare module 'kindred-api' {
     };
 
     type Region = 'br' | 'eune' | 'euw' | 'kr' | 'lan' | 'las' | 'na' | 'oce' | 'ru' | 'tr' | 'jp';
+    type PlatformId = "BR1" | "EUN1" | "EUW1" | "JP1" | "KR" | "LA1" | "LA2" | "NA1" | "NA" | "OC1" | "TR1" | "RU" | "PBE1"
 
     type Limits = (number[])[]; // bad type
     type StatusCode = number
@@ -345,7 +372,172 @@ declare module 'kindred-api' {
         leagueName: string,
         leaguePoints: number
     }
-    
+
+    class Match {
+        public gameId: number;
+        public platformId: PlatformId;
+        public gameCreation: number;
+        public gameDuration: number;
+        public queueId: number; // TODO: improve
+        public mapId: number; // TODO: improve
+        public seasonId: number; // TODO: improve
+        public gameVersion: string;
+        public gameMode: string; // TODO: improve
+        public gameType: string; // TODO: improve
+        public teams: Array<Team>;
+        public participants: Array<Participant>;
+        public participantIdentities: Array<ParticipantIdentity>;
+    }
+
+    class Team {
+        public teamId: number;
+        public win: boolean;
+        public firstBlood: boolean;
+        public firstTower: boolean;
+        public firstInhibitor: boolean;
+        public firstBaron: boolean;
+        public firstDragon: boolean;
+        public firstRiftHerald: boolean;
+        public towerKills: number;
+        public inhibitorKills: number;
+        public baronKills: number;
+        public dragonKills: number;
+        public vilemawKills: number;
+        public riftHeraldKills: number;
+        public dominionVictoryScore: number;
+        public bans: Array<{
+            championId: number;
+            pickTurn: number;
+        }>;
+    }
+
+    class Participant {
+        public participantId: number;
+        public teamId: number;
+        public championId: number;
+        public spell1Id: number;
+        public spell2Id: number;
+        public masteries: Array<{
+            masteryId: number;
+            rank: number;
+        }>;
+        public runes: Array<{
+            runeId: number;
+            rank: number;
+        }>;
+        public highestAchievedSeasonTier: string;
+        public stats: {
+            participantId: number;
+            win: boolean;
+            item0: number;
+            item1: number;
+            item2: number;
+            item3: number;
+            item4: number;
+            item5: number;
+            item6: number;
+            kills: number;
+            deaths: number;
+            assists: number;
+            largestKillingSpree: number;
+            largestMultiKill: number;
+            killingSprees: number;
+            longestTimeSpentLiving: number;
+            doubleKills: number;
+            tripleKills: number;
+            quadraKills: number;
+            pentaKills: number;
+            unrealKills: number;
+            totalDamageDealt: number;
+            magicDamageDealt: number;
+            physicalDamageDealt: number;
+            trueDamageDealt: number;
+            largestCriticalStrike: number;
+            totalDamageDealtToChampions: number;
+            magicDamageDealtToChampions: number;
+            physicalDamageDealtToChampions: number;
+            trueDamageDealtToChampions: number;
+            totalHeal: number;
+            totalUnitsHealed: number;
+            damageSelfMitigated: number;
+            damageDealtToObjectives: number;
+            damageDealtToTurrets: number;
+            visionScore: number;
+            timeCCingOthers: number;
+            totalDamageTkaen: number;
+            magicalDamageTaken: number;
+            physicalDamageTaken: number;
+            trueDamageTaken: number;
+            goldEarned: number;
+            goldSpent: number;
+            turretKills: number;
+            inhibitorKills: number;
+            totalMinionsKilled: number;
+            neutralMinionsKilled: number;
+            neutralMinionsKilledTeamJungle: number;
+            neutralMinionsKilledEnemyJungle: number;
+            totalTimeCrowdControlDealt: number;
+            champLevel: number;
+            visionWardsBoughtInGame: number;
+            sightWardsBoughtInGame: number;
+            wardsPlaced: number;
+            wardsKilled: number;
+            firstBloodKill: boolean;
+            firstBloodAssist: boolean;
+            firstTowerKill: boolean;
+            firstTowerAssist: boolean;
+            combatPlayerScore: number;
+            objectivePlayerScore: number;
+            totalPlayerScore: number;
+            totalScoreRank: number;
+        };
+        timeline: {
+            participantId: number;
+            creepsPerMinDeltas: Deltas;
+            xpPerMinDeltas: Deltas;
+            goldPerMinDeltas: Deltas;
+            csDiffPerMinDeltas: Deltas;
+            xpDiffPerMinDeltas: Deltas;
+            damageTakenPerMinDeltas: Deltas;
+            damageTakenDiffPerMinDeltas: Deltas;
+            role: string; // TODO: improve
+            lane: string; // TODO: improve
+        }
+    }
+
+    interface Deltas {
+        "10-20": number;
+        "0-10": number;
+    }
+
+    class ParticipantIdentity {
+        public participantId: number;
+        public player: {
+            platformId: PlatformId;
+            accountId: number;
+            summonerName: string;
+            summonerId: number;
+            currentPlatformId: string;
+            currentAccountId: number;
+            matchHistoryUri: string;
+            profileIcon: number;
+        }
+    }
+
+    class Matchlist {
+        public matches: Array<{
+            lane: string; // TODO: improve
+            gameId: number; // TODO: improve
+            champion: number; // TODO: improve
+            platformid: PlatformId;
+            timestamp: number;
+            queue: number; // TODO: improve
+            role: string; // TODO: improve
+            season: number; // TODO: improve
+        }>
+    }
+
+
     class ShardData {
         public name: string;
         public region_tag: string;
@@ -391,4 +583,7 @@ declare module 'kindred-api' {
         id: number,
         rank: 0 | 1 | 2 | 3 | 4 | 5
     }
+
+    type OptsOrRegOrCb<T> = Object | Region | Callback<T>; // TODO: improve so that options have types for each endpoint
+    type RegOrCb<T> = Region | Callback<T>
 }
