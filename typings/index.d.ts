@@ -160,9 +160,9 @@ declare module 'kindred-api' {
 
         public Matchlist: {
             by: {
-                id: (id: number, optionsOrRegionOrCallback?: OptsOrRegOrCb<Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
-                name: (name: string, optionsOrRegionOrCallback?: OptsOrRegOrCb<Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
-                account: (account: number, optionsOrRegionOrCallback?: OptsOrRegOrCb<Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
+                id: (id: number, optionsOrRegionOrCallback?: OptsRegCb<{ queue: number}, Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
+                name: (name: string, optionsOrRegionOrCallback?: OptsRegCb<{ queue: number}, Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
+                account: (account: number, optionsOrRegionOrCallback?: OptsRegCb<{ queue: number}, Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
             };
 
             recent: ({
@@ -218,6 +218,49 @@ declare module 'kindred-api' {
         RUSSIA = 'ru',
         TURKEY = 'tr',
         JAPAN = 'jp'
+    }
+    declare enum QUEUE_TYPES {
+        CUSTOM = 0,
+        NORMAL_3x3 = 8,
+        NORMAL_5x5_BLIND = 2,
+        NORMAL_5x5_DRAFT = 14,
+        RANKED_SOLO_5x5 = 4,
+        RANKED_FLEX_TT = 9,
+        RANKED_TEAM_5x5 = 42,
+        ODIN_5x5_BLIND = 16,
+        ODIN_5x5_DRAFT = 17,
+        BOT_ODIN_5x5 = 25,
+        BOT_5x5_INTRO = 31,
+        BOT_5x5_BEGINNER = 32,
+        BOT_5x5_INTERMEDIATE = 33,
+        BOT_TT_3x3 = 52,
+        GROUP_FINDER_5x5 = 61,
+        ARAM_5x5 = 65,
+        ONEFORALL_5x5 = 70,
+        FIRSTBLOOD_1x1 = 72,
+        FIRSTBLOOD_2x2 = 73,
+        SR_6x6 = 75,
+        URF_5x5 = 76,
+        ONEFORALL_MIRRORMODE_5x5 = 78,
+        BOT_URF_5x5 = 83,
+        NIGHTMARE_BOT_5x5_RANK1 = 91,
+        NIGHTMARE_BOT_5x5_RANK2 = 92,
+        NIGHTMARE_BOT_5x5_RANK5 = 93,
+        ASCENSION_5x5 = 96,
+        HEXAKILL = 98,
+        BILGEWATER_ARAM_5x5 = 100,
+        KING_PORO_5x5 = 300,
+        COUNTER_PICK = 310,
+        BILGEWATER_5x5 = 313,
+        SIEGE = 315,
+        DEFINITELY_NOT_DOMINION_5x5 = 317,
+        ARURF_5X5 = 318,
+        ARSR_5x5 = 325,
+        TEAM_BUILDER_DRAFT_UNRANKED_5x5 = 400,
+        TEAM_BUILDER_RANKED_SOLO = 420,
+        RANKED_FLEX_SR = 440,
+        ASSASSINATE_5x5 = 600,
+        DARKSTAR_3x3 = 610
     }
     declare enum QUEUE_STRINGS {
         RANKED_SOLO_5x5 = 'RANKED_SOLO_5x5',
@@ -589,5 +632,6 @@ declare module 'kindred-api' {
     }
 
     type OptsOrRegOrCb<T> = Object | Region | Callback<T>; // TODO: improve so that options have types for each endpoint
+    type OptsRegCb<A, B> = A| Region | Callback<B>;
     type RegOrCb<T> = Region | Callback<T>
 }

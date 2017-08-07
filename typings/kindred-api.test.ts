@@ -10,6 +10,7 @@ try {
 
 const REGIONS = lolapi.REGIONS;
 const QUEUE_STRINGS = lolapi.QUEUE_STRINGS;
+const QUEUE_TYPES = lolapi.QUEUE_TYPES;
 const key: string = process.env.KEY ? process.env.KEY as string : 'dummy'
 
 const k = new lolapi.Kindred({
@@ -269,3 +270,14 @@ for (let i = 0; i < 21; ++i)
             }
         }
     })
+
+k.Matchlist.by.name('Contractz', { queue: 30 })
+    .then(data => {
+        console.log('types for query parameters objects!')
+        console.log('queue must be a number. queue must be passed in if {} is declared.')
+    })
+    .catch(err => console.error(err))
+
+k.Matchlist.by.name('Contractz', { queue: QUEUE_TYPES.TEAM_BUILDER_RANKED_SOLO })
+    .then(data => console.log('we can use the enum as well'))
+    .catch(err => console.error(err))
