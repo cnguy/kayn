@@ -10,7 +10,7 @@ Treat my versioning as if it is 0.x.y.
 
 Queue was the only one in the option types.
 
-## [2.0.79](https://github.com/ChauTNguyen/kindred-api/commit/479c3b34d703ffa36ba554909c590eab2bb81a61) - Quickfix Masteries by account id methods
+## [2.0.79](https://github.com/ChauTNguyen/kindred-api/commit/479c3b34d703ffa36ba554909c590eab2bb81a61) - Quickfix Masteries by account id methods.
 
 by.accountId -> by.account
 
