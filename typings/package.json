@@ -17,7 +17,6 @@
   },
   "dependencies": {
     "@types/dotenv": "^4.0.0",
-    "@types/node": "^8.0.19",
-    "kindred-api": "^2.0.77"
+    "@types/node": "^8.0.19"
   }
 }

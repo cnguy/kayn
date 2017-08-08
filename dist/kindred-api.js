@@ -193,7 +193,6 @@
     MATCH: cacheTimers.MONTH,
     MATCHLIST: cacheTimers.HOUR,
     RUNES_MASTERIES: cacheTimers.WEEK,
-    SPECTATOR: cacheTimers.NONE,
     SUMMONER: cacheTimers.DAY,
     TOURNAMENT_STUB: cacheTimers.HOUR,
     TOURNAMENT: cacheTimers.HOUR };
@@ -1383,11 +1382,12 @@
             region = _ref5.region,
             methodType = _ref5.methodType;
 
+        var ttl = methodType === methodTypes.GET_CURRENT_GAME ? this.CACHE_TIMERS.CURRENT_GAME : this.CACHE_TIMERS.FEATURED_GAMES;
         return this._baseRequest({
           endUrl: services.SPECTATOR + '/v' + versions.SPECTATOR + '/' + endUrl,
           region: region,
           cacheParams: {
-            ttl: this.CACHE_TIMERS.SPECTATOR
+            ttl: ttl
           },
           methodType: methodType
         }, cb);
