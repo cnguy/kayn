@@ -924,11 +924,14 @@ class Kindred {
     region?: string,
     methodType: string
   }, cb: callback) {
+    const ttl = methodType === METHOD_TYPES.GET_CURRENT_GAME
+      ? this.CACHE_TIMERS.CURRENT_GAME
+      : this.CACHE_TIMERS.FEATURED_GAMES
     return this._baseRequest({
       endUrl: `${SERVICES.SPECTATOR}/v${VERSIONS.SPECTATOR}/${endUrl}`,
       region,
       cacheParams: {
-        ttl: this.CACHE_TIMERS.SPECTATOR
+        ttl
       },
       methodType
     }, cb)

@@ -12,22 +12,24 @@ const REGIONS = lolapi.REGIONS;
 const QUEUE_STRINGS = lolapi.QUEUE_STRINGS;
 const QUEUE_TYPES = lolapi.QUEUE_TYPES;
 const PLATFORM_IDS = lolapi.PLATFORM_IDS;
+const TIME_CONSTANTS = lolapi.TIME_CONSTANTS;
 const InMemoryCache = lolapi.InMemoryCache;
 const RedisCache = lolapi.RedisCache;
 const key: string = process.env.KEY ? process.env.KEY as string : 'dummy'
 
 const k = new lolapi.Kindred({
     key,
-    limits: lolapi.LIMITS.PROD as any, // allows automatic retries
+    limits: lolapi.LIMITS.PROD as any, // use as any for now
     retryOptions: {
         auto: true, // necessary to overwrite automatic retries
         numberOfRetriesBeforeBreak: 3
     },
     debug: true,
-    cache: new RedisCache({
-        port: 3000,
-        keyPrefix: 'heythere'
-    })
+    cache: new RedisCache({}),
+    cacheTTL: {
+        MATCH: TIME_CONSTANTS.SHORT
+    },
+    showKey: false
     // showHeaders: true
     // limits: lolapi.LIMITS.PROD
 });
@@ -322,9 +324,41 @@ k.Match.by.id(2392431795, matchOpts, "na", function (err, data) {
     }
 })
 
-k.Match.Timeline.by.id(2392431795)
-    .then((data: any) => console.log(data))
 
 k.Summoner.by.name('Contractz')
     .then(data => k.Summoner.by.name('Contractz'))
+    .catch(err => console.error(err))
+
+k.Match.Timeline.by.id(2392431795)
+    .then((data: any) => console.log(data))
+k.Match.Timeline.by.id(2392431795)
+    .then(timeline => {
+        const events = timeline.frames
+            .map(frame => frame.events.map(event => event))
+            .reduce((prev, next) => prev.concat(next), [])
+        console.log(`all events: ${events}`, events.length)
+    })
+    .catch(err => console.error(err))
+
+// Static endpoints return values do not have types and will not for 2.0.78
+k.Static.Champion.list({ tags: ['tags'] })
+
+k.Static.Item.list(REGIONS.BRAZIL)
+    .then(data => console.log(Object.keys(data)))
+    .catch(err => console.error(err))
+
+k.Static.Item.by.id(3903, { tags: 'all' })
+    .then(data => console.log(data))
+    .catch(err => console.error(err))
+
+k.Static.LanguageString.list({ version: '6.9.1' })
+    .then(data => console.log(data))
+    .catch(err => console.error(err))
+
+k.Static.Language.list(REGIONS.BRAZIL)
+    .then(data => console.log(data))
+    .catch(err => console.error(err))
+
+k.Static.Version.list(REGIONS.NORTH_AMERICA)
+    .then(data => console.log(data))
     .catch(err => console.error(err))

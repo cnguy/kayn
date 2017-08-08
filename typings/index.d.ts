@@ -3,13 +3,16 @@ declare module 'kindred-api' {
     class Kindred {
         constructor({
             key,
-            region,
+            defaultRegion,
             limits,
             debug,
             showKey,
             showHeaders,
             retryOptions,
-            cache
+            cache,
+            timeout,
+            spread,
+            cacheTTL
         }: KindredConstructor);
 
         public ChampionMastery: {
@@ -164,8 +167,16 @@ declare module 'kindred-api' {
 
             Timeline: {
                 by: {
-                    id: any
+                    id: (id: number, regionOrCallback?: RegOrCb<MatchTimeline>, cb?: Callback<MatchTimeline>) => Promise<MatchTimeline>,
                 }
+                
+                get: ({
+                    id,
+                    region
+                }: {
+                    id: number,
+                    region?: Region
+                }, cb?: Callback<MatchTimeline>) => Promise<MatchTimeline>
             }
         }
 
@@ -207,7 +218,122 @@ declare module 'kindred-api' {
             list: (region?: Region, cb?: Callback<FeaturedGamesResp>) => Promise<FeaturedGamesResp>
         }
 
-        public Static: any
+        public Static: {
+            Champion: {
+                list: (optionsOrRegionOrCallback?: OptsOrRegOrCb<{
+                    locale?: string, // TODO: improve
+                    version?: string,
+                    tags?: Array<StaticChampionListTag> | StaticChampionListTag,
+                    dataById?: boolean
+                }, any>, cb?: Callback<any>) => Promise<any>;
+
+                by: {
+                    id: (id: number, optionsOrRegionOrCallback?: OptsOrRegOrCb<{
+                        locale?: string, // TODO: improve,
+                        verion?: string,
+                        tags?: Array<StaticChampionByIdTag> | StaticChampionByIdTag,
+                    }, any>, regionOrCallback?: RegOrCb<any>, cb?: Callback<any>) => Promise<any>;
+                }
+            },
+
+            Item: {
+                list: (optionsOrRegionOrCallback?: OptsOrRegOrCb<{
+                    locale?: string, // TODO: improve
+                    version?: string,
+                    tags?: Array<StaticItemListTag> | StaticItemListTag
+                }, any>, regionOrCallback?: RegOrCb<any>, cb?: Callback<any>) => Promise<any>;
+
+                by: {
+                    id: (id: number, optionsOrRegionOrCallback?: OptsOrRegOrCb<{
+                        locale?: string, // TODO: improve
+                        version?: string,
+                        tags?: Array<StaticItemByIdTag> | StaticItemByIdTag
+                    }, any>, regionOrCallback?: RegOrCb<any>, cb?: Callback<any>) => Promise<any>;
+                }
+            }
+
+            LanguageString: {
+                list: (optionsOrRegionOrCallback?: OptsOrRegOrCb<{
+                    locale?: string,
+                    version?: string
+                }, any>, regionOrCallback?: RegOrCb<any>, cb?: Callback<any>) => Promise<any>
+            }
+
+            Language: {
+                list: (regionOrCallback?: RegOrCb<any>, cb?: Callback<any>) => Promise<any>
+            }
+
+            Map: {
+                list: (optionsOrRegionOrCallback?: OptsOrRegOrCb<{
+                    locale?: string,
+                    version?: string
+                }, any>, regionOrCallback?: RegOrCb<any>, cb?: Callback<any>) => Promise<any>
+            }
+
+            Mastery: {
+                list: (optionsOrRegionOrCallback?: OptsOrRegOrCb<{
+                    locale?: string,
+                    version?: string,
+                    tags?: Array<StaticMasteryListTag> | StaticMasteryListTag
+                }, any>, regionOrCallback?: RegOrCb<any>, cb?: Callback<any>) => Promise<any>
+
+                by: {
+                    id: (id: number, optionsOrRegionOrCallback?: OptsOrRegOrCb<{
+                        locale?: string, // TODO: improve
+                        version?: string,
+                        tags?: Array<StaticMasteryByIdTag> | StaticMasteryByIdTag
+                    }, any>, regionOrCallback?: RegOrCb<any>, cb?: Callback<any>) => Promise<any>;
+                }
+            }
+
+            ProfileIcons: {
+                list: (optionsOrRegionOrCallback?: OptsOrRegOrCb<{
+                    locale?: string,
+                    version?: string,
+                }, any>, regionOrCallback?: RegOrCb<any>, cb?: Callback<any>) => Promise<any>
+            }
+
+            Realm: {
+                list: (regionOrCallback?: RegOrCb<any>, cb?: Callback<any>) => Promise<any>
+            }
+
+            Rune: {
+                list: (optionsOrRegionOrCallback?: OptsOrRegOrCb<{
+                    locale?: string,
+                    version?: string,
+                    tags?: Array<StaticRuneListTag> | StaticRuneListTag
+                }, any>, regionOrCallback?: RegOrCb<any>, cb?: Callback<any>) => Promise<any>
+
+                by: {
+                    id: (id: number, optionsOrRegionOrCallback?: OptsOrRegOrCb<{
+                        locale?: string, // TODO: improve
+                        version?: string,
+                        tags?: Array<StaticRuneByIdTag> | StaticRuneByIdTag
+                    }, any>, regionOrCallback?: RegOrCb<any>, cb?: Callback<any>) => Promise<any>;
+                }
+            }
+
+            SummonerSpell: {
+                list: (optionsOrRegionOrCallback?: OptsOrRegOrCb<{
+                    locale?: string, // TODO: improve
+                    version?: string,
+                    tags?: Array<StaticSummonerSpellListTag> | StaticSummonerSpellListTag,
+                    dataById?: boolean
+                }, any>, cb?: Callback<any>) => Promise<any>;
+
+                by: {
+                    id: (id: number, optionsOrRegionOrCallback?: OptsOrRegOrCb<{
+                        locale?: string, // TODO: improve,
+                        verion?: string,
+                        tags?: Array<StaticSummonerSpellByIdTag> | StaticSummonerSpellByIdTag,
+                    }, any>, regionOrCallback?: RegOrCb<any>, cb?: Callback<any>) => Promise<any>;
+                }
+            }
+
+            Version: {
+                list: (regionOrCallback?: RegOrCb<any>, cb?: Callback<any>) => Promise<any>
+            }
+        }
 
         public Status: {
             get: ({
@@ -316,6 +442,19 @@ declare module 'kindred-api' {
         TURKEY = 'TR1',
         JAPAN = 'JP1'
     }
+    declare enum TIME_CONSTANTS {
+        MONTH = 2592000,
+        WEEK = 604800,
+        DAY = 846400,
+        SIX_HOURS = 21600,
+        THREE_HOURS = 10800,
+        TWO_HOURS = 7200,
+        HOUR = 3600,
+        THIRTY_MINUTES = 1800,
+        SHORT = 600, // 10 minutes
+        NONE = 0,
+    }
+
 
     class InMemoryCache {
         constructor() {}
@@ -331,7 +470,7 @@ declare module 'kindred-api' {
 
     declare interface KindredConstructor {
         key: string,
-        region?: Region,
+        defaultRegion?: Region,
         limits?: Limits,
         debug?: boolean,
         showKey?: boolean,
@@ -340,11 +479,26 @@ declare module 'kindred-api' {
             auto: boolean,
             numberOfRetriesBeforeBreak: number
         },
-        cache?: any
+        cache?: any,
+        timeout?: number,
+        spread?: boolean,
+        cacheTTL?: {
+            CHAMPION?: number,
+            CHAMPION_MASTERY?: number,
+            CURRENT_GAME?: number,
+            FEATURED_GAMES?: number,
+            GAME?: number,
+            LEAGUE?: number,
+            STATIC?: number,
+            STATUS?: number,
+            MATCH?: number,
+            MATCHLIST?: number,
+            RUNES_MASTERIES?: number,
+        }
     };
 
     type Region = 'br' | 'eune' | 'euw' | 'kr' | 'lan' | 'las' | 'na' | 'oce' | 'ru' | 'tr' | 'jp';
-    type PlatformId = "BR1" | "EUN1" | "EUW1" | "JP1" | "KR" | "LA1" | "LA2" | "NA1" | "NA" | "OC1" | "TR1" | "RU" | "PBE1" | string // TODO: fix
+    type PlatformId = "BR1" | "EUN1" | "EUW1" | "JP1" | "KR" | "LA1" | "LA2" | "NA1" | "NA" | "OC1" | "TR1" | "RU" | "PBE1"
 
     type Limits = (number[])[]; // bad type
     type StatusCode = number
@@ -628,6 +782,155 @@ declare module 'kindred-api' {
             profileIcon: number;
         }
     }
+    
+    class MatchTimeline {
+        public frames: Array<Frame>;
+        public frameInterval: number;
+    }
+
+    class Frame {
+        participantFrames: {
+            1: {
+                participantId: number,
+                position: { x: number, y: number },
+                currentGold: number,
+                totalGold: number,
+                level: number,
+                xp: number,
+                minionsKilled: number,
+                jungleMinionsKilled: number,
+                dominionScore: number,
+                teamScore: number,
+            },
+            2: {
+                participantId: number,
+                position: { x: number, y: number },
+                currentGold: number,
+                totalGold: number,
+                level: number,
+                xp: number,
+                minionsKilled: number,
+                jungleMinionsKilled: number,
+                dominionScore: number,
+                teamScore: number,
+            },
+            3: {
+                participantId: number,
+                position: { x: number, y: number },
+                currentGold: number,
+                totalGold: number,
+                level: number,
+                xp: number,
+                minionsKilled: number,
+                jungleMinionsKilled: number,
+                dominionScore: number,
+                teamScore: number,
+            },
+            4: {
+                participantId: number,
+                position: { x: number, y: number },
+                currentGold: number,
+                totalGold: number,
+                level: number,
+                xp: number,
+                minionsKilled: number,
+                jungleMinionsKilled: number,
+                dominionScore: number,
+                teamScore: number,
+            },
+            5: {
+                participantId: number,
+                position: { x: number, y: number },
+                currentGold: number,
+                totalGold: number,
+                level: number,
+                xp: number,
+                minionsKilled: number,
+                jungleMinionsKilled: number,
+                dominionScore: number,
+                teamScore: number,
+            },
+            6: {
+                participantId: number,
+                position: { x: number, y: number },
+                currentGold: number,
+                totalGold: number,
+                level: number,
+                xp: number,
+                minionsKilled: number,
+                jungleMinionsKilled: number,
+                dominionScore: number,
+                teamScore: number,
+            },
+            7: {
+                participantId: number,
+                position: { x: number, y: number },
+                currentGold: number,
+                totalGold: number,
+                level: number,
+                xp: number,
+                minionsKilled: number,
+                jungleMinionsKilled: number,
+                dominionScore: number,
+                teamScore: number,
+            },
+            8: {
+                participantId: number,
+                position: { x: number, y: number },
+                currentGold: number,
+                totalGold: number,
+                level: number,
+                xp: number,
+                minionsKilled: number,
+                jungleMinionsKilled: number,
+                dominionScore: number,
+                teamScore: number,
+            },
+            9: {
+                participantId: number,
+                position: { x: number, y: number },
+                currentGold: number,
+                totalGold: number,
+                level: number,
+                xp: number,
+                minionsKilled: number,
+                jungleMinionsKilled: number,
+                dominionScore: number,
+                teamScore: number,
+            },
+            10: {
+                participantId: number,
+                position: { x: number, y: number },
+                currentGold: number,
+                totalGold: number,
+                level: number,
+                xp: number,
+                minionsKilled: number,
+                jungleMinionsKilled: number,
+                dominionScore: number,
+                teamScore: number,
+            }
+        };
+        public events: Array<{
+            type: string,
+            timestamp: number,
+            levelUpType?: string,
+            participantId?: number,
+            wardType?: number,
+            creatorId?: number,
+            itemId?: number,
+            skillSlot?: number,
+            position?: { x: number, y: number },
+            killerId?: number,
+            victimId?: number,
+            assistingParticipantIds?: Array<number>,
+            buildingType?: string,
+            laneType?: string,
+            towerType?: string,
+            teamId?: number,
+        }>;
+        public timestamp: number;
+    }
 
     class Matchlist {
         public matches: Array<{
@@ -641,7 +944,6 @@ declare module 'kindred-api' {
             season: number; // TODO: improve
         }>
     }
-
 
     class ShardData {
         public name: string;
@@ -741,6 +1043,19 @@ declare module 'kindred-api' {
         id: number,
         rank: 0 | 1 | 2 | 3 | 4 | 5
     }
+
+    type StaticChampionListTag = "all" | "allytips" | "blurb" | "enemytips" | "format" | "image" | "info" | "keys" | "lore" | "partype" | "passive" | "recommened" | "skins" | "spells" | "stats" |"tags"
+    type StaticChampionByIdTag = "all" | "allytips" | "blurb" | "enemytips" | "image" | "info" | "lore" | "partype" | "passive" | "recommended" | "skins" | "spells" | "stats" | "tags"
+    type StaticItemListTag = "all" | "colloq" | "consumeOnFull" | "consumed" | "depth" | "effect" | "from" | "gold" | "groups" | "hideFromAll" | "image" | "inStore" | "into" | "maps" | "requiredChampion" | "sanitizedDescription" | "specialRecipe" | "stacks" | "stats" | "tags" | "tree"
+    type StaticItemByIdTag = "all" | "colloq" | "consumeOnFull" | "consumed" | "depth" | "effect" | "from" | "gold" | "hideFromAll" | "image" | "inStore" | "into" | "maps" | "requiredChampion" | "sanitizedDescription" | "specialRecipe" | "stacks" | "stats" | "tags"
+    type StaticMasteryListTag = "all" | "image" | "masteryTree" | "prereq" | "ranks" | "sanitizedDescription" | "tree"
+    type StaticMasteryByIdTag = "all" | "image" | "masteryTree" | "prereq" | "ranks" | "sanitizedDescription"
+    
+
+    type StaticRuneListTag = "all" | "image" | "sanitizedDescription" | "stats" | "tags" 
+    type StaticRuneByIdTag = "all" | "image" | "sanitizedDescription" | "stats" | "tags"
+    type StaticSummonerSpellListTag = "all" | "cooldown" | "cooldownBurn" | "cost" | "costBurn" | "costType" | "effect" | "effectBurn" | "image" | "key" | "leveltip" | "maxrank" | "modes" | "range" | "rangeBurn" | "resource" | "sanitizedDescription" | "sanitizedTooltip" | "tooltip" | "vars"
+    type StaticSummonerSpellByIdTag = "all" | "cooldown" | "cooldownBurn" | "cost" | "costBurn" | "costType" | "effect" | "effectBurn" | "image" | "key" | "leveltip" | "maxrank" | "modes" | "range" | "rangeBurn" | "resource" | "sanitizedDescription" | "sanitizedTooltip" | "tooltip" | "vars"
 
     type OptsOrRegOrCb<A, B> = A | Region | Callback<B>;
     type RegOrCb<T> = Region | Callback<T>

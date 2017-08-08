@@ -27,12 +27,12 @@ Node.js League of Legends v3 API wrapper with built-in rate-limiting (enforced p
     * **Retries** on 429 and >= 500 **until all calls are successful**.
     * **Follows and respects retry headers**.
 * Built-in **parameter checks** so you can hopefully refer to documentation less! :)
-    * Checks type of parameters (id, name, account id).
-    * Checks if you're not passing valid query parameters!
+    * Checks type of function parameters (id, name, account id, queue, etc) when running. Using TypeScript will allow you to catch this without the need to run the program though.
+    * Checks if you're not passing valid query parameters! Object query parameter types are not checked though (unless you're using TypeScript).
 * Built-in **caching** (in-memory and Redis).
     * **Customized expiration timers**. You can set a timer for each endpoint type. Refer to [Caching](https://github.com/ChauTNguyen/kindred-api/wiki/Caching) for more info.
 * Designed to be simple but convenient. For example, you can call an exclusively by-id endpoint (such as grabbing the runes of a player) **with just the summoner name**.
-* Tons of config (showing debug, configurable number of retries, turning off auto-retry, changing method rate limits, etcetc). Check out [Initialization](https://github.com/ChauTNguyen/kindred-api/wiki/Initialization) for all configs.
+* **Tons of config** (showing debug, configurable number of retries, turning off auto-retry, changing method rate limits, etcetc). Check out [Initialization](https://github.com/ChauTNguyen/kindred-api/wiki/Initialization) for all configs.
 
 # Introduction
 

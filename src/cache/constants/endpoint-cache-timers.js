@@ -13,7 +13,6 @@ const endpointCacheTimers: {
   MATCH: number,
   MATCHLIST: number,
   RUNES_MASTERIES: number,
-  SPECTATOR: number,
   SUMMONER: number,
   TOURNAMENT_STUB: number,
   TOURNAMENT: number,
@@ -29,7 +28,6 @@ const endpointCacheTimers: {
   MATCH: cacheTimers.MONTH,
   MATCHLIST: cacheTimers.HOUR,
   RUNES_MASTERIES: cacheTimers.WEEK,
-  SPECTATOR: cacheTimers.NONE,
   SUMMONER: cacheTimers.DAY,
   TOURNAMENT_STUB: cacheTimers.HOUR, // TODO: ??
   TOURNAMENT: cacheTimers.HOUR // TODO: ??
