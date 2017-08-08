@@ -6,6 +6,10 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
+## [2.0.79]() - Quickfix Masteries by account id methods
+
+by.accountId -> by.account
+
 ## [2.0.78](https://github.com/ChauTNguyen/kindred-api/tree/feature/add-ts-typings) - Add TS module declaration file.
 
 [It's still a WIP, but I'm releasing it for now](https://github.com/ChauTNguyen/kindred-api/tree/master/typings).

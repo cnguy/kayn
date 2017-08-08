@@ -133,7 +133,7 @@ declare module 'kindred-api' {
             by: {
                 id: (id: number, regionOrCallback?: Region | Callback<RunesResp>, cb?: Callback<RunesResp>) => Promise<RunesResp>;
                 name: (name: string, regionOrCallback?: Region | Callback<RunesResp>, cb?: Callback<RunesResp>) => Promise<RunesResp>;
-                accountId: (accountId: number, regionOrCallback?: Region | Callback<RunesResp>, cb?: Callback<RunesResp>) => Promise<RunesResp>;
+                account: (accountId: number, regionOrCallback?: Region | Callback<RunesResp>, cb?: Callback<RunesResp>) => Promise<RunesResp>;
             }
         }
         
@@ -153,7 +153,7 @@ declare module 'kindred-api' {
             by: {
                 id: (id: number, regionOrCallback?: Region | Callback<MasteriesResp>, cb?: Callback<MasteriesResp>) => Promise<MasteriesResp>;
                 name: (name: string, regionOrCallback?: Region | Callback<MasteriesResp>, cb?: Callback<MasteriesResp>) => Promise<MasteriesResp>;
-                accountId: (accountId: number, regionOrCallback?: Region | Callback<MasteriesResp>, cb?: Callback<MasteriesResp>) => Promise<MasteriesResp>;
+                account: (accountId: number, regionOrCallback?: Region | Callback<MasteriesResp>, cb?: Callback<MasteriesResp>) => Promise<MasteriesResp>;
             }
         }
 
