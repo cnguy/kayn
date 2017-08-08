@@ -182,9 +182,9 @@ declare module 'kindred-api' {
 
         public Matchlist: {
             by: {
-                id: (id: number, optionsOrRegionOrCallback?: OptsOrRegOrCb<{ queue: number}, Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
-                name: (name: string, optionsOrRegionOrCallback?: OptsOrRegOrCb<{ queue: number}, Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
-                account: (account: number, optionsOrRegionOrCallback?: OptsOrRegOrCb<{ queue: number}, Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
+                id: (id: number, optionsOrRegionOrCallback?: OptsOrRegOrCb<{ queue?: number, beginTime?: number | Date, endIndex?: number, season?: number, champion?: number, beginIndex?: number, endTime?: number | Date }, Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
+                name: (name: string, optionsOrRegionOrCallback?: OptsOrRegOrCb<{ queue?: number, beginTime?: number | Date, endIndex?: number, season?: number, champion?: number, beginIndex?: number, endTime?: number | Date }, Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
+                account: (account: number, optionsOrRegionOrCallback?: OptsOrRegOrCb<{ queue?: number, beginTime?: number | Date, endIndex?: number, season?: number, champion?: number, beginIndex?: number, endTime?: number | Date }, Matchlist>, regionOrCallback?: RegOrCb<Matchlist>, cb?: Callback<Matchlist>) => Promise<Matchlist>;
             };
 
             recent: ({
