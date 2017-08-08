@@ -84,7 +84,6 @@ class Kindred {
     MATCH: number,
     MATCHLIST: number,
     RUNES_MASTERIES: number,
-    SPECTATOR: number,
     SUMMONER: number,
     TOURNAMENT_STUB: number,
     TOURNAMENT: number
@@ -664,7 +663,6 @@ class Kindred {
     MATCH: number,
     MATCHLIST: number,
     RUNES_MASTERIES: number,
-    SPECTATOR: number,
     SUMMONER: number,
     TOURNAMENT_STUB: number,
     TOURNAMENT: number
@@ -679,7 +677,6 @@ class Kindred {
     MATCH: number,
     MATCHLIST: number,
     RUNES_MASTERIES: number,
-    SPECTATOR: number,
     SUMMONER: number,
     TOURNAMENT_STUB: number,
     TOURNAMENT: number

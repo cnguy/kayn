@@ -324,17 +324,18 @@ k.Match.by.id(2392431795, matchOpts, "na", function (err, data) {
     }
 })
 
-
 k.Summoner.by.name('Contractz')
     .then(data => k.Summoner.by.name('Contractz'))
     .catch(err => console.error(err))
 
 k.Match.Timeline.by.id(2392431795)
-    .then((data: any) => console.log(data))
+    .then(data => console.log(data))
+    .catch(err => console.error(err))
+
 k.Match.Timeline.by.id(2392431795)
     .then(timeline => {
         const events = timeline.frames
-            .map(frame => frame.events.map(event => event))
+            .map(frame => frame.events)
             .reduce((prev, next) => prev.concat(next), [])
         console.log(`all events: ${events}`, events.length)
     })
