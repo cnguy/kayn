@@ -312,7 +312,7 @@ k.FeaturedGames.list()
     .catch(err => console.error(err))
 
 const matchOpts = {
-    forPlatformId: "NA1",
+    forPlatformId: PLATFORM_IDS.NORTH_AMERICA,
     forAccountId: 12346
 }
 
