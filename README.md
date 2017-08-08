@@ -33,6 +33,7 @@ Node.js League of Legends v3 API wrapper with built-in rate-limiting (enforced p
     * **Customized expiration timers**. You can set a timer for each endpoint type. Refer to [Caching](https://github.com/ChauTNguyen/kindred-api/wiki/Caching) for more info.
 * Designed to be simple but convenient. For example, you can call an exclusively by-id endpoint (such as grabbing the runes of a player) **with just the summoner name**.
 * **Tons of config** (showing debug, configurable number of retries, turning off auto-retry, changing method rate limits, etcetc). Check out [Initialization](https://github.com/ChauTNguyen/kindred-api/wiki/Initialization) for all configs.
+* **Supports Typescript**; Just simply install kindred-api and the types should be automatically handled. Check out examples [here](https://github.com/ChauTNguyen/kindred-api/tree/master/typings). The code and types are still messy (there is a lot of duplicate code), and static endpoint methods do not return objects with types yet unfortunately. I will fix all of these issues over time.
 
 # Introduction
 

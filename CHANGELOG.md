@@ -6,6 +6,12 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
+## [2.0.78](https://github.com/ChauTNguyen/kindred-api/tree/feature/add-ts-typings) - Add TS module declaration file.
+
+[It's still a WIP, but I'm releasing it for now](https://github.com/ChauTNguyen/kindred-api/tree/master/typings).
+
+Static endpoints work, but do not have types for return values unfortunately. Some of these are too long! I plan to add them over time though.
+
 ## [2.0.77](https://github.com/ChauTNguyen/kindred-api/commit/e41acf1179da08731622bcd23f2e5d61eafff97c) - Add forAccountId and forPlatformId to getMatch and Match.by.id.
 
 The branch for this is [2.0.76](https://github.com/ChauTNguyen/kindred-api/tree/rel/2.0.76) due to a mistake. The real rel/2.0.76 was a hotfix instead of a rel branch.
