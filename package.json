@@ -1,6 +1,6 @@
 {
   "name": "kindred-api",
-  "version": "2.0.80",
+  "version": "2.0.81",
   "description": "Node.js League of Legends v3 API wrapper with built-in rate-limiting (enforced per region, burst/spread, follows retry headers, app/method rate-limiting), caching (in-memory, Redis), automatic retries, and parameter checking.",
   "main": "index.js",
   "types": "./typings/index.d.ts",

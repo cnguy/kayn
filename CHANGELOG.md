@@ -6,7 +6,17 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
-## [2.0.80]() - Fix TS matchlist typings.
+## [2.0.81]() - Readjust champion/masteries/runes method limits.
+
+```
+now 200 requests / 1 minute
+==============================
+champion-v3 endpoints
+masteries-v3 endpoints
+runes-v3 endpoints
+```
+
+## [2.0.80](https://github.com/ChauTNguyen/kindred-api/commit/6ab533998ba0ab38547916ac7abc68db4edb055a) - Fix TS matchlist typings.
 
 Queue was the only one in the option types.
 
