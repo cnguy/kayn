@@ -6,7 +6,11 @@ Treat my versioning as if it is 0.x.y.
 
 [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md) to view future changes.
 
-## [2.0.82]() - Readjust champion/masteries/runes method limits -- should actually be 400 req / 1 min.
+## [2.0.83]() - Readjust champion/masteries/runes method limits to 200 reqs a minute again.
+
+It's tough to follow changes sometimes...
+
+## [2.0.82](https://github.com/ChauTNguyen/kindred-api/commit/a7c3de8fb6031667eb2b553b15ac8a6edf5ee05b) - Readjust champion/masteries/runes method limits -- should actually be 400 req / 1 min.
 
 ## [2.0.81](https://github.com/ChauTNguyen/kindred-api/commit/22a3f0065a67c5a65f1682c7d455483ada5a59e1) - Readjust champion/masteries/runes method limits.
 
