@@ -151,7 +151,7 @@ const production = new Kindred({
   spread: true, // setting spread to true will help prevent timeout/econreset errors
   timeout: 100000,
   cache: new RedisCache()
-}) // note, as of 2.0.74, you can no set your config like this:
+}) // note, as of 2.0.74, you can now set your config like this:
 
 const nonDefaultRedis = new RedisCache({
   host: '192.168.0.1',
