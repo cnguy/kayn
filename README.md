@@ -476,12 +476,12 @@ It'd be cool if we could do something like this [library](https://github.com/Nit
 
 ## [~~Burst rate limiter would not work well for production.~~ (FIXED 2.0.39)](https://github.com/ChauTNguyen/kindred-api/commit/8089717995d42ae2b222b18c57f79c0fb8e11a27)
 
-Good explanation by Matviy##4429 in #RiotAPIDevCommunity
+### Good explanation by Matviy#4429 in #RiotAPIDevCommunity on Discord
 
-```
-The issue with the "burst and stop" method is that the API queues all incoming requests and can only process them so fast. If the requests get stale in the queue (few seconds), then the API won't even try processing them and will just return an error 500 instead.
-You'll see this if you burst more than a few hundred requests or so at once, a couple will go through, and then suddenly you'll get a few hundred 500 errors all at once
-```
+
+> The issue with the "burst and stop" method is that the API queues all incoming requests and can only process them so fast. If the requests get stale in the queue (few seconds), then the API won't even try processing them and will just return an error 500 instead.
+> You'll see this if you burst more than a few hundred requests or so at once, a couple will go through, and then suddenly you'll get a few hundred 500 errors all at once
+
 
 This is now in the [TODO](https://github.com/ChauTNguyen/kindred-api/blob/master/TODO.md).
 
