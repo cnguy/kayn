@@ -41,7 +41,7 @@ async function main() {
     const api = require('unnamed-for-now')(/* optional key */)(apiLimits).withConfig(config)
 
     try {
-        const summoner = await api.Match.by.name('Contractz').region('na')
+        const summoner = await api.Summoner.by.name('Contractz').region('na')
         const matchlist = await api.Matchlist
             .by.accountID(summoner.accountId)
             .query({ queue: QUEUES.RANKED_SOLO_5x5 })
@@ -56,7 +56,7 @@ async function main() {
         // API methods return promises
         // To use callbacks, call the end() method
         const print = (err, data) => console.log(err, data)
-        api.Match.by.name('pYang').end(print)
+        api.Summoner.by.name('pYang').end(print)
     } catch (error) {
         console.error(error)
     }
@@ -83,7 +83,7 @@ I imagine the new API will make it more easy and fun to use as well.
 
 Core features first
 * All basic endpoints (no tournament, DDragon for now)
-* Decent rate limiter that follows Riot Games LoL API rules
+* Decent rate limiter that follows Riot Games LoL API rules (I might use Colorfulstan's rate limiter to save time early, if his is good, I might just straight up use it. seems nice!)
 * Useful config
 * Cache support
 * Core tests

@@ -22,5 +22,6 @@ test.js
 test-compiled.js
 test.md
 save.js
+example.babel.js
 
 dump.rdb
