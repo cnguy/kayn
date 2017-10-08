@@ -6,7 +6,10 @@ const print = val => console.log(val);
 const main = async () => {
   const res1 = await kayn.Summoner.by
     .name('Faker')
+    // temporary queries, Summoner should not be able
+    // to use this
     .query({ hi: 'there' })
+    .query({ boo: 'yeah' })
     .region('kr');
   console.log(res1.id);
 
@@ -14,6 +17,8 @@ const main = async () => {
     .name()
     .region('kr')
     .query({ hi: 'there' });
+
+  console.log('res2:', res2);
 
   kayn.Summoner.by
     .name()
