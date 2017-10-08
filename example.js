@@ -1,5 +1,5 @@
 require('babel-polyfill');
-const kayn = require('./dist')()([{ count: 20, per: 1 }]);
+const kayn = require('./dist')();
 
 const print = val => console.log(val);
 
@@ -9,6 +9,7 @@ const main = async () => {
     .query({ hi: 'there' })
     .region('kr');
   console.log(res1.id);
+
   const res2 = await kayn.Summoner.by
     .name()
     .region('kr')

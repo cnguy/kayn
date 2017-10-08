@@ -20,6 +20,8 @@
   },
   "dependencies": {
     "dotenv": "^4.0.0",
+    "request": "^2.83.0",
+    "riot-ratelimiter": "^0.0.7",
     "superagent": "^3.6.3"
   }
 }
