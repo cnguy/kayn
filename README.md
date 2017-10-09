@@ -16,18 +16,6 @@ This is subject to change, but the end result should look something like this.
 
 ```javascript
 async function main() {
-    // These two limits will be the default limit
-    const appLimits = [
-        {
-            count: 20,
-            per: 1,
-        },
-        {
-            count: 100,
-            per: 120,
-        }
-    ]
-
     const config = {
         debug: true
         // and a lot of other configuration stuffs
@@ -38,7 +26,7 @@ async function main() {
     // appLimits are mandatory
     // withConfig is optional
     // Remember: this is subject to change! I'm still "designing"
-    const api = require('unnamed-for-now')(/* optional key */)(apiLimits).withConfig(config)
+    const api = require('unnamed-for-now')(/* optional key */).withConfig(config)
 
     try {
         const summoner = await api.Summoner.by.name('Contractz').region('na')

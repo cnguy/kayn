@@ -49,6 +49,19 @@ const main = async () => {
     .region('kr')
     .then(print)
     .catch(print);
+
+  kayn.Summoner.by
+    .id(211093172309217093132)
+    .then(print)
+    .catch(err => console.log('wat'));
+
+  kayn.Summoner.by
+    .name('Contractz')
+    .then(summoner =>
+      kayn.Matchlist.by.accountID(summoner.accountId).query({ queue: 420 }),
+    )
+    .then(matchlist => console.log('here is the matchlist:', matchlist))
+    .catch(print);
 };
 
 main();
