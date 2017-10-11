@@ -1,5 +1,5 @@
 require('babel-polyfill');
-const kayn = require('./dist')();
+const kayn = require('./')();
 const recipes = require('./recipes');
 
 const print = val => console.log(val);
