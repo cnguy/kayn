@@ -1,0 +1,1 @@
+Here are some examples of common use cases. Submit a PR if you can think of anything else!

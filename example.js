@@ -1,5 +1,6 @@
 require('babel-polyfill');
 const kayn = require('./dist')();
+const recipes = require('./recipes');
 
 const print = val => console.log(val);
 
@@ -81,28 +82,23 @@ const main = async () => {
   }
   */
 
+  /*
   kayn.ChampionMastery.total(118341).callback((err, res) => {
     console.log(err, res);
   });
 
   kayn.Summoner.by
     .name('Contractz')
-    .region('na')
-    .callback(async (err, res) => {
-      if (res) {
-        const championIDs = [1, 2, 3, 50];
-        const cmGetter = kayn.ChampionMastery.get(res.id);
-        const mapper = async id => await cmGetter(id);
-        const championMasteries = await Promise.all(championIDs.map(mapper));
-        console.log(championMasteries);
-      }
-    });
-
-  kayn.Summoner.by
-    .name('Contractz')
     .then(({ id }) => kayn.ChampionMastery.list(id))
     .then(list => console.log(list.length))
     .catch(print);
+    */
+
+  //  kayn.Champion.list().callback((err, data) => console.log(err, data));
+
+  // recipes.grabSpecificChampionScores(kayn);
+  // recipes.grabMatchesByChampionsFromRankedMatchlist(kayn);
+  recipes.sortChallengerLeagueByNumberOfWins(kayn);
 };
 
 main();
