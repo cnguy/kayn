@@ -1,1 +1,1 @@
-Here are some examples of common use cases. Submit a PR if you can think of anything else!
+This directory can contain either common use cases (which can then be abstracted to actual library functions) or a demonstration of a specific task to show how one can compose a bunch of functions.

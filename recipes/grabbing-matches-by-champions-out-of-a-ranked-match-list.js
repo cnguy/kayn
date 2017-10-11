@@ -12,8 +12,8 @@ const main = async kayn => {
   // Note that the grabbing of a matchlist is currently limited by pagination.
   // This API request only returns the first list. An enhanced version of this method
   // will probably be included in the enhancer (which will be part of this library) called Rhaast.
-  const matchlistDTO = await kayn.Match
-    .list(summoner.accountId)
+  const matchlistDTO = await kayn.Matchlist.by
+    .accountID(summoner.accountId)
     .region('na')
     .query(config);
 
