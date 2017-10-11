@@ -195,6 +195,22 @@ Master.list(queueName: string)
 LeaguePositions.by.summonerID(summonerID: int)
 
 /* LOL-STATIC-DATA-V3 */
+Static.Champion.list()
+Static.Champion.get(championID)
+Static.Item.list()
+Static.Item.get(itemID)
+Static.LanguageString.list()
+Static.Language.list()
+Static.Map.list()
+Static.Mastery.list()
+Static.Mastery.get(masteryID)
+Static.ProfileIcon.list()
+Static.Realm.list()
+Static.Rune.list()
+Static.Rune.get(runeID)
+Static.SummonerSpell.list()
+Static.SummonerSpell.get(summonerSpelID)
+Static.Version.list()
 
 /* LOL-STATUS-V3 */
 Status.get()
