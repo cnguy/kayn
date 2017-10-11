@@ -105,7 +105,7 @@ Extras
 
 `list`: to list out something (e.g. a list of champions, a list of challengers, etc).
 
-`by.xxx`: `by.name`, `by.accountID`, `by.id` (summonerID) is everywhere necessary (e.g. Matchlist.by.accountID, Summoner.by.name, Summoner.by.id). I have not added extra methods like Matchlist.by.name yet. This naming makes the request parameter guessable.
+`by.xxx`: `by.summonerName`, `by.accountID`, `by.summonerID` is everywhere necessary (e.g. `Matchlist.by.accountID`, `Runes.by.summonerID`). It's explicit for `Matchlist`, `Masteries`, etc to make the call much more clear. However, the `Summoner` namespace simply uses `name`, `id`, and `accountID`. I have not added extra methods like `Matchlist.by.summonerName` yet. This naming makes the request parameter guessable.
 
 ## Setting the Region of a Request
 
@@ -117,7 +117,7 @@ kayn.Summoner.by.name('Faker').region('kr')
 
 ## Adding Query Parameters to a Request
 
-Append `.query(key->value)` to a call to add a query. A query is just a regular JavaScript object. Therefore, you can either chain multiple query parameters at once, or pass in a whole blob.
+Append `.query(key->value)` to a call to add a query. A query is just a regular JavaScript object. Therefore, you can either chain multiple query parameters together, or pass in a whole blob at once.
 
 ```javascript
 const config = {
@@ -128,7 +128,7 @@ const config = {
 
 kayn.Matchlist.by.accountID(accountID).query(config)
 
-kayn.Match.by.accountID(accountID)
+kayn.Matchlist.by.accountID(accountID)
     .query({ season: 7 })
     .query({ champion: 67 })
     .query({ queue: 420 })
@@ -176,6 +176,8 @@ This is all (both endpoints & methods) in the same order as in the official docs
 
 Note that the API is not fully consistent. I wanted the API to be readable & easy-to-use-without-documentation, but still be somewhat terse, and so exceptions had to be made for now.
 
+Also note that there is not a one-to-one mapping between namespaces/methods & the official endpoints/resources -- This API somewhat mirrors `kindred-api` in that I separated some resources to make it more convenient for the user (`Matchlist`, `CurrentGame`, and `FeaturedGames` are some examples of this, as `Matchlist` actually belongs to `Match`, and `CurrentGame` and `FeaturedGames` both belong to `Spectator`).
+
 ```javascript
 /* CHAMPION-MASTERY-V3 */
 ChampionMastery.list(summonerID: int)
@@ -188,9 +190,9 @@ Champion.get(championID: int)
 
 /* LEAGUE-V3 */
 Challenger.list(queueName: string)
-Leagues.by.id(summonerID: int)
+Leagues.by.summonerID(summonerID: int)
 Master.list(queueName: string)
-LeaguePositions.by.id(summonerID: int)
+LeaguePositions.by.summonerID(summonerID: int)
 
 /* LOL-STATIC-DATA-V3 */
 
@@ -198,7 +200,7 @@ LeaguePositions.by.id(summonerID: int)
 Status.get()
 
 /* MASTERIES-V3 */
-Masteries.by.id(summonerID: int)
+Masteries.by.summonerID(summonerID: int)
 
 /* MATCH-V3 */
 Match.get(matchID: int)
@@ -206,10 +208,10 @@ Matchlist.by.accountID(accountID: int)
 Match.timeline(matchID: int)
 
 /* RUNES-V3 */
-Runes.by.id(summonerID: int)
+Runes.by.summonerID(summonerID: int)
 
 /* SPECTATOR-V3 */
-CurrentGame.by.id(summonerID: int)
+CurrentGame.by.summonerID(summonerID: int)
 FeaturedGames.list()
 
 /* SUMMONER-V3 */

@@ -6,12 +6,17 @@ const main = async kayn => {
   const challengerRunes = await Promise.all(
     entries
       .slice()
-      .map(async player => await kayn.Runes.by.id(player.playerOrTeamId)),
+      .map(
+        async player => await kayn.Runes.by.summonerID(player.playerOrTeamId),
+      ),
   );
   const challengerMasteries = await Promise.all(
     entries
       .slice()
-      .map(async player => await kayn.Masteries.by.id(player.playerOrTeamId)),
+      .map(
+        async player =>
+          await kayn.Masteries.by.summonerID(player.playerOrTeamId),
+      ),
   );
   console.log(challengerRunes);
   console.log();
