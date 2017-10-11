@@ -10,8 +10,8 @@ const main = async () => {
   recipes.sortChallengerLeagueByNumberOfWins(kayn);
   recipes.grabMatchesByChampionsFromRankedMatchlist(kayn);
   recipes.grabRunesAndMasteriesOfChallengerPlayers(kayn);
-  */
   recipes.grabCurrentGameInfoOfFeaturedGamesList(kayn);
+  */
 };
 
 main();

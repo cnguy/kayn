@@ -4,9 +4,11 @@
 const main = async kayn => {
   const { gameList } = await kayn.FeaturedGames.list();
   if (gameList.length > 0) {
-      const { id } = await kayn.Summoner.by.name(gameList[0].participants[0].name)
-      const currentGameInfo = await kayn.CurrentGame.by.id(id)
-      console.log(currentGameInfo)
+    const { id } = await kayn.Summoner.by.name(
+      gameList[0].participants[0].name,
+    );
+    const currentGameInfo = await kayn.CurrentGame.by.id(id);
+    console.log(currentGameInfo);
   }
 };
 

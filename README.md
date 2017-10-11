@@ -136,19 +136,27 @@ kayn.Match.by.accountID(accountID)
 
 ## Promises
 
-All `kayn` methods have promise support, but *do not* return promises.
+All `kayn` methods support promises. 
 
 ```javascript
 const promise = kayn.Summoner.by.name('Contractz')
-promise.then(data => console.log(data)) // throws undefined error!
+promise
+    .then(data => console.log(data))
+    .catch(err => console.error(err))
 ```
 
-`kayn` methods are `thenable`, however. `then` & `catch` have to be called in the same line.
+### Await
+
+Naturally, you can `await` any method as long as you have not called `.callback`.
 
 ```javascript
-kayn.Summoner.by.name('Contractz')
-    .then(data => console.log(data))
-    .catch(error => console.error(error))
+const main = async () => {
+    try {
+        const summoner = await kayn.Summoner.by.name('Contractz')
+    } catch (ex) {
+        console.error(ex)
+    }
+}
 ```
 
 ## Callbacks
