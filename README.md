@@ -1,5 +1,11 @@
 An elegant way of querying League of Legend's API.
 
+
+
+
+
+
+
 Wiki is not updated. It currently is documentation about the old `kindred-api`.
 
 # Table of Contents:
@@ -233,12 +239,16 @@ const kayn = Kayn(/* optional key */)({
 // requestOptions and the (empty) cacheOptions will be used 
 
 const main = async () => {
-    const summoner = await kayn.Summoner.by.name('Contractz').region(REGIONS.NORTH_AMERICA);
-    const test = await kayn.Summoner.by.id(summoner.id);
-    const matchlistDTO = await kayn.Matchlist.by.accountID(summoner.accountId).query({ season: 9 });
-    const runePagesDTO = await kayn.Runes.by.summonerID(summoner.id);
+  const summoner = await kayn.Summoner.by
+    .name('Contractz')
+    .region(REGIONS.NORTH_AMERICA);
+  const test = await kayn.Summoner.by.id(summoner.id);
+  const matchlistDTO = await kayn.Matchlist.by
+    .accountID(summoner.accountId)
+    .query({ season: 9 });
+  const runePagesDTO = await kayn.Runes.by.summonerID(summoner.id);
 
-    console.log(summoner, matchlistDTO, runePagesDTO);
+  console.log(summoner, test, matchlistDTO, runePagesDTO);
 }
 
 main();
