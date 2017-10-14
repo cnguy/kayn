@@ -1,97 +1,50 @@
-An elegant way of querying the League of Legend's API.
+An elegant way of querying League of Legend's API.
+
+Wiki is not updated. It currently is documentation about the old `kindred-api`.
+
+# Table of Contents:
+* [Why](#why)
+* [Features](#features)
+* [Planned Features](#planned-features)
+* [Current API](#current-api)
+    * [Request Naming Conventions](#request-naming-conventions)
+    * [Setting the Region of a Request](#setting-the-region-of-a-request)
+    * [Adding Query Parameters to a Request](#adding-query-parameters-to-a-request)
+    * [Promises](#promises)
+    * [Await](#await)
+    * [Callbacks](#callbacks)
+    * [High-level Overview of API](#high-level-overview-of-api)
+* [Quickstart](#quickstart)
+* [Caching](#caching)
+* [Bugs](#bugs)
+* [Changelog](#changelog)
+* [Disclaimer](#disclaimer)
 
 # Why
 
-So I decided to come back to rewrite this whole library (unfortunately) since the code really bothered me, and I have a lot of time now (I quit work).
+So I decided to come back to rewrite this `kindred-api` (API looks the same, but trust me your old code will not remotely work) since the code really bothered me, and I have a lot of time now (I quit work). Better code => more likely to not ditch it later.
 
-# Goals:
-
-## Different name (kindred-api is an awful name)
-
-Different name, back to 0.0.2 (0.0.1 is for name). The 2.X.X always bothered me anyways.
-
-## Elegant API
-
-I'm probably going to use chainable methods. To add a region or query parameters to a call, I envision that you will be able to chain a region() or query() call. Default region will be used if there is no appended region call of course.
-
-This is subject to change, but the end result should look something like this.
-
-```javascript
-async function main() {
-    const config = {
-        debug: true
-        // and a lot of other configuration stuffs
-        // that was previously available in kindred-api
-    }
-    
-    // Key is by default process.env.RIOT_LOL_API_KEY
-    // appLimits are mandatory
-    // withConfig is optional
-    // Remember: this is subject to change! I'm still "designing"
-    const api = require('unnamed-for-now')(/* optional key */).withConfig(config)
-
-    try {
-        const summoner = await api.Summoner.by.name('Contractz').region('na')
-        const matchlist = await api.Matchlist
-            .by.accountID(summoner.accountId)
-            .query({ queue: QUEUES.RANKED_SOLO_5x5 })
-            .query({ champion: [81, 429] })
-            .query({ season: 8 })
-            // The query calls can be batched into
-            // one single query call as well
-            // .query({ key: value, key: value, key: value })
-            .region('na')
-        console.log(matchlist)
-
-        // API methods return promises
-        // To use callbacks, call the end() method
-        const print = (err, data) => console.log(err, data)
-        api.Summoner.by.name('pYang').callback(print)
-    } catch (error) {
-        console.error(error)
-    }
-}
-```
-
-## Better code
-
-Code was really bad, and there were tons of things that were in places that they did not need to be.
-
-To check it out yourself (it's obvious what is bad), go download the final version.
+Final `kindred-api` relase is @ v2.0.83.
 
 ```yarn add kindred-api``` (v2.0.83)
 
-## Stay fun to use
+# Features
 
-It should have some of the features that made `kindred-api` fun, such as
-* customizability
-* the simple debugging for examining your requests
+* [Rate limiting](https://github.com/Colorfulstan/RiotRateLimiter-node) 
+* All regular endpoints implemented
+* Basic caching (in memory cache, redis cache)
+* API works with both callbacks & promises
 
-I imagine the new API will make it more easy and fun to use as well.
+# Planned Features
 
-# Estimated Time of Completion: 1-2 months
+## Features with established versions 
 
-Core features first
-* All basic endpoints (no tournament, DDragon for now)
-* Decent rate limiter that follows Riot Games LoL API rules (I might use Colorfulstan's rate limiter to save time early, if his is good, I might just straight up use it. seems nice!)
-* Useful config
-* Cache support
-* Core tests
+0.1.0 TypeScript / Parameter & Query Parameter Checks
 
-0.0.1 is for reserving name
+## Whenever
 
-0.0.2 (the real 0.0.1 lol) will probably be endpoints/rate limiter (need to write request/retry as well)/promise&callbacks.
-
-0.1.0 will be all the `kindred-api` config plus debugging prints
-
-0.2.0 will be TypeScript support
-
-0.3.0 will be parameter/query parameter checks
-
-Extras
-* TypeScript
-* Parameter / query checks (I love query checks, but I'm delaying this) for typeless JS
-* A lot of useful helpers for common patterns as they arise
+* Tournament
+* DDragon
 
 # Current API
 
@@ -182,7 +135,7 @@ Also note that there is not a one-to-one mapping between namespaces/methods & th
 /* CHAMPION-MASTERY-V3 */
 ChampionMastery.list(summonerID: int)
 ChampionMastery.get(summonerID: int)(championID: int)
-ChampionMastery.total(summonerID: int)
+ChampionMastery.totalScore(summonerID: int)
 
 /* CHAMPION-V3 */
 Champion.list()
@@ -201,11 +154,11 @@ Static.Item.list()
 Static.Item.get(itemID)
 Static.LanguageString.list()
 Static.Language.list()
-Static.Map.list()
+Static.Map.get()
 Static.Mastery.list()
 Static.Mastery.get(masteryID)
 Static.ProfileIcon.list()
-Static.Realm.list()
+Static.Realm.get()
 Static.Rune.list()
 Static.Rune.get(runeID)
 Static.SummonerSpell.list()
@@ -235,3 +188,125 @@ Summoner.by.name(summonerName: string)
 Summoner.by.id(summonerID: int)
 Summoner.by.accountID(accountID: int)
 ```
+
+# Quickstart
+
+```sh
+# .env
+RIOT_LOL_API_KEY=<key>
+```
+
+```javascript
+import {
+    Kayn,
+    REGIONS,
+    METHOD_NAMES,
+    BasicJSCache,
+    RedisCache,
+} from 'kayn';
+
+const kayn = Kayn(/* optional key */)({
+  region: 'na',
+  debugOptions: {
+    isEnabled: true,
+    showKey: false,
+  },
+  requestOptions: {
+    shouldRetry: true,
+    numberOfRetriesBeforeAbort: 3,
+    delayBeforeRetry: 1000,
+  },
+  cacheOptions: {
+    cache: null,
+    ttls: {}, 
+  },
+});
+
+// above are the default configs
+// if you pass in a config,
+// the rest of the top-level config will be used
+// ex: if you pass in just debugOptions to disable it,
+// requestOptions and the (empty) cacheOptions will be used 
+
+const main = async () => {
+    const summoner = await kayn.Summoner.by.name('Contractz').region(REGIONS.NORTH_AMERICA);
+    const test = await kayn.Summoner.by.id(summoner.id);
+    const matchlistDTO = await kayn.Matchlist.by.accountID(summoner.accountId).query({ season: 9 });
+    const runePagesDTO = await kayn.Runes.by.summonerID(summoner.id);
+
+    console.log(summoner, matchlistDTO, runePagesDTO);
+}
+
+main();
+```
+
+# Caching
+
+To cache, firstly create some Cache that has a get/set function, and then pass it to `cacheOptions.cache`.
+
+`ttls` are method ttls. This part is pretty inconvenient right now. Suggestions are welcome.
+
+```javascript
+import {
+    Kayn,
+    REGIONS,
+    METHOD_NAMES,
+    BasicJSCache,
+    RedisCache,
+} from 'kayn';
+
+const kayn = Kayn(/* optional key */)({
+  region: 'na',
+  debugOptions: {
+    isEnabled: true,
+    showKey: false,
+  },
+  requestOptions: {
+    shouldRetry: true,
+    numberOfRetriesBeforeAbort: 3,
+    delayBeforeRetry: 1000,
+  },
+  cacheOptions: {
+    cache: new BasicJSCache(),
+    ttls: {
+        [METHOD_NAMES.SUMMONER.GET_BY_SUMMONER_NAME]: 1000, // ms
+    },
+  },
+});
+
+kayn.Summoner.by.name('Contractz').then(() => kayn.Summoner.by.name('Contractz'));
+
+/*
+200 @ https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/Contractz
+CACHE HIT @ https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/Contractz
+*/
+```
+
+# Bugs
+
+Feel free to make an issue (bug, typos, questions, suggestions, whatever) or pull request to fix an issue. Just remember to run `prettier` (via `yarn lint`).
+
+Currently, there are no tests. A lot of the code has already been tested in `kindred-api`, and due to the fact that this libary now relies on a 3rd party rate limiter, it has become much less time consuming to test the API. Also, due to the new `Request` interface (using `superagent`'s API), I no longer have to spend time testing various functions and their various parameters.
+
+Tests will be added regardless though over time.
+
+Expect a few bugs here and there because I rapidly rewrote this (it wasn't hard to using the `Request` class I made).
+
+Package commands:
+
+* `yarn lint`
+for `prettier` (will add `eslint` to `prettier` soon)
+* `yarn example`
+to run the various files in `./examples`
+* `yarn build`
+to build. `yarn example` runs this command
+* `yarn test`
+does not exist atm
+
+# Changelog
+
+Check the releases/tags of this repository.
+
+# Disclaimer
+
+`kayn` isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.
