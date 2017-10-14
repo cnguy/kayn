@@ -24,7 +24,11 @@ Wiki is not updated. It currently is documentation about the old `kindred-api`.
 
 So I decided to come back to rewrite this `kindred-api` (API looks the same, but trust me your old code will not remotely work) since the code really bothered me, and I have a lot of time now (I quit work). Better code => more likely to not ditch it later.
 
-Final `kindred-api` relase is @ v2.0.83.
+kayn can be downloaded through:
+
+```yarn add kayn```
+
+Final `kindred-api` release is @ v2.0.83.
 
 ```yarn add kindred-api``` (v2.0.83)
 
