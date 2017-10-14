@@ -10,8 +10,11 @@ Wiki is not updated. It currently is documentation about the old `kindred-api`.
 
 # Table of Contents:
 * [Why](#why)
+* [Documentation](#documentation)
+* [Installation](#installation)
 * [Features](#features)
 * [Planned Features](#planned-features)
+* [Basic Usage](#basic-usage)
 * [Current API](#current-api)
     * [Request Naming Conventions](#request-naming-conventions)
     * [Setting the Region of a Request](#setting-the-region-of-a-request)
@@ -20,7 +23,6 @@ Wiki is not updated. It currently is documentation about the old `kindred-api`.
     * [Await](#await)
     * [Callbacks](#callbacks)
     * [High-level Overview of API](#high-level-overview-of-api)
-* [Quickstart](#quickstart)
 * [Caching](#caching)
 * [Bugs](#bugs)
 * [Changelog](#changelog)
@@ -30,13 +32,15 @@ Wiki is not updated. It currently is documentation about the old `kindred-api`.
 
 So I decided to come back to rewrite this `kindred-api` (API looks the same, but trust me your old code will not remotely work) since the code really bothered me, and I have a lot of time now (I quit work). Better code => more likely to not ditch it later.
 
-kayn can be downloaded through:
+# Documentation
 
-```yarn add kayn```
+No official documentation yet. The current wiki is the wiki for `kindred-api`. I'll generate docs automatically through JSDocs very soon.
 
-Final `kindred-api` release is @ v2.0.83.
+# Installation
 
-```yarn add kindred-api``` (v2.0.83)
+```sh
+yarn add kayn
+```
 
 # Features
 
@@ -55,6 +59,63 @@ Final `kindred-api` release is @ v2.0.83.
 
 * Tournament
 * DDragon
+
+# Basic Usage 
+
+```sh
+# .env
+RIOT_LOL_API_KEY=<key>
+```
+
+```javascript
+import {
+    Kayn,
+    REGIONS,
+    METHOD_NAMES,
+    BasicJSCache,
+    RedisCache,
+} from 'kayn';
+
+const kayn = Kayn(/* optional key */)({
+  region: 'na',
+  debugOptions: {
+    isEnabled: true,
+    showKey: false,
+  },
+  requestOptions: {
+    shouldRetry: true,
+    numberOfRetriesBeforeAbort: 3,
+    delayBeforeRetry: 1000,
+  },
+  cacheOptions: {
+    cache: null,
+    ttls: {}, 
+  },
+});
+
+// above are the default configs
+// if you pass in a config,
+// the rest of the top-level config will be used
+// ex: if you pass in just debugOptions to disable it,
+// requestOptions and the (empty) cacheOptions will be used 
+
+const main = async () => {
+  const summoner = await kayn.Summoner.by
+    .name('Contractz')
+    .region(REGIONS.NORTH_AMERICA);
+  const test = await kayn.Summoner.by.id(summoner.id);
+  const matchlistDTO = await kayn.Matchlist.by
+    .accountID(summoner.accountId)
+    .query({ season: 9 });
+  const runePagesDTO = await kayn.Runes.by.summonerID(summoner.id);
+
+  console.log(summoner, test, matchlistDTO, runePagesDTO);
+}
+
+main();
+```
+
+Check `example.js` and the files in the `recipes` directory (they're more just random composition of functions lol) for more usage.
 
 # Current API
 
@@ -198,63 +259,6 @@ Summoner.by.name(summonerName: string)
 Summoner.by.id(summonerID: int)
 Summoner.by.accountID(accountID: int)
 ```
-
-# Quickstart
-
-```sh
-# .env
-RIOT_LOL_API_KEY=<key>
-```
-
-```javascript
-import {
-    Kayn,
-    REGIONS,
-    METHOD_NAMES,
-    BasicJSCache,
-    RedisCache,
-} from 'kayn';
-
-const kayn = Kayn(/* optional key */)({
-  region: 'na',
-  debugOptions: {
-    isEnabled: true,
-    showKey: false,
-  },
-  requestOptions: {
-    shouldRetry: true,
-    numberOfRetriesBeforeAbort: 3,
-    delayBeforeRetry: 1000,
-  },
-  cacheOptions: {
-    cache: null,
-    ttls: {}, 
-  },
-});
-
-// above are the default configs
-// if you pass in a config,
-// the rest of the top-level config will be used
-// ex: if you pass in just debugOptions to disable it,
-// requestOptions and the (empty) cacheOptions will be used 
-
-const main = async () => {
-  const summoner = await kayn.Summoner.by
-    .name('Contractz')
-    .region(REGIONS.NORTH_AMERICA);
-  const test = await kayn.Summoner.by.id(summoner.id);
-  const matchlistDTO = await kayn.Matchlist.by
-    .accountID(summoner.accountId)
-    .query({ season: 9 });
-  const runePagesDTO = await kayn.Runes.by.summonerID(summoner.id);
-
-  console.log(summoner, test, matchlistDTO, runePagesDTO);
-}
-
-main();
-```
-
-Check `example.js` and the files in the `recipes` directory (they're more just random composition of functions lol) for more usage.
 
 # Caching
 
