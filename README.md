@@ -254,6 +254,8 @@ const main = async () => {
 main();
 ```
 
+Check `example.js` and the files in the `recipes` directory (they're more just random composition of functions lol) for more usage.
+
 # Caching
 
 To cache, firstly create some Cache that has a get/set function, and then pass it to `cacheOptions.cache`.
