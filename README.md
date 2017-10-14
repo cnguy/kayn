@@ -119,7 +119,7 @@ Check `example.js` and the files in the `recipes` directory (they're more just r
 
 # Current API
 
-`kayn` methods do not take `region`, `query`, or `callback` arguments like in `kindred-api` and other libraries. As of now, the maximum amount of arguments a `kayn` method can take is around 2 -- Most stop at 1. You'll see why later below.
+`kayn` methods do not take `region`, `query`, or `callback` arguments like in `kindred-api` and other libraries. As of now, the maximum amount of arguments a `kayn` method can take is 1, with one exception (ChampionMastery.get, which takes 2). You'll see why later below.
 
 `kayn`'s api is reliant on regions instead of platform ids. Regions are transformed to platform ids within the code wherever necessary.
 
@@ -169,7 +169,7 @@ promise
     .catch(err => console.error(err))
 ```
 
-### Await
+## Await
 
 Naturally, you can `await` any method as long as you have not called `.callback`.
 
@@ -220,20 +220,20 @@ LeaguePositions.by.summonerID(summonerID: int)
 
 /* LOL-STATIC-DATA-V3 */
 Static.Champion.list()
-Static.Champion.get(championID)
+Static.Champion.get(championID: int)
 Static.Item.list()
-Static.Item.get(itemID)
+Static.Item.get(itemID: int)
 Static.LanguageString.list()
 Static.Language.list()
 Static.Map.get()
 Static.Mastery.list()
-Static.Mastery.get(masteryID)
+Static.Mastery.get(masteryID: int)
 Static.ProfileIcon.list()
 Static.Realm.get()
 Static.Rune.list()
-Static.Rune.get(runeID)
+Static.Rune.get(runeID: int)
 Static.SummonerSpell.list()
-Static.SummonerSpell.get(summonerSpelID)
+Static.SummonerSpell.get(summonerSpellID: int)
 Static.Version.list()
 
 /* LOL-STATUS-V3 */
