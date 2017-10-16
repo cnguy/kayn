@@ -217,6 +217,7 @@ Champion.get(championID: int)
 /* LEAGUE-V3 */
 Challenger.list(queueName: string)
 Leagues.by.summonerID(summonerID: int)
+League.by.id(leagueID: int)
 Master.list(queueName: string)
 LeaguePositions.by.summonerID(summonerID: int)
 
@@ -247,6 +248,7 @@ Masteries.by.summonerID(summonerID: int)
 /* MATCH-V3 */
 Match.get(matchID: int)
 Matchlist.by.accountID(accountID: int)
+Matchlist.Recent.by.accountID(accountID: int)
 Match.timeline(matchID: int)
 
 /* RUNES-V3 */
