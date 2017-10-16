@@ -34,7 +34,9 @@ So I decided to come back to rewrite this `kindred-api` (API looks the same, but
 
 # Documentation
 
-No official documentation yet. The current wiki is the wiki for `kindred-api`. I'll generate docs automatically through JSDocs very soon.
+Still under construction!
+
+ESDoc -http://kayn.surge.sh/
 
 # Installation
 
