@@ -41,6 +41,72 @@ declare class Kayn {
             list: () => KaynRequest<any>;
             get: (championID: number) => KaynRequest<any>;
         }
+        Item: {
+            list: () => KaynRequest<any>;
+            get: (itemID: number) => KaynRequest<any>;
+        }
+        LanguageString: {
+            list: () => KaynRequest<any>;
+        }
+        Language: {
+            list: () => KaynRequest<any>;
+        }
+        Map: {
+            get: () => KaynRequest<any>;
+        }
+        Mastery: {
+            list: () => KaynRequest<any>;
+            get: (masteryID: number) => KaynRequest<any>;
+        }
+        ProfileIcon: {
+            list: () => KaynRequest<any>;
+        }
+        Realm: {
+            get: () => KaynRequest<any>;
+        }
+        Rune: {
+            list: () => KaynRequest<any>;
+            get: (runeID: number) => KaynRequest<any>;
+        }
+        SummonerSpell: {
+            list: () => KaynRequest<any>;
+            get: (summonerSpellID: number) => KaynRequest<any>;
+        }
+        Version: {
+            list: () => KaynRequest<any>;
+        }
+    }
+
+    public Status: {
+        get: () => KaynRequest<any>;
+    }
+
+    public Masteries: {
+        by: {
+            summonerID: (summonerID: number) => KaynRequest<any>;
+        }
+    }
+
+    public Match: {
+        get: (matchID: number) => KaynRequest<any>;
+        timeline: (matchID: number) => KaynRequest<any>;
+    }
+
+    public Matchlist: {
+        by: {
+            accountID: (accountID: number) => KaynRequest<any>;
+        }
+        Recent: {
+            by: {
+                accountID: (accountID: number) => KaynRequest<any>;
+            }
+        }
+    }
+
+    public Runes: {
+        by: {
+            summonerID: (summonerID: number) => KaynRequest<any>;
+        }
     }
 
     public Summoner: {
