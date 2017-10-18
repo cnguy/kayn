@@ -25,6 +25,7 @@ Wiki is not updated. It currently is documentation about the old `kindred-api`.
     * [Callbacks](#callbacks)
     * [High-level Overview of API](#high-level-overview-of-api)
 * [Caching](#caching)
+* [TypeScript](#typescript)
 * [Bugs](#bugs)
 * [Changelog](#changelog)
 * [Disclaimer](#disclaimer)
@@ -51,12 +52,9 @@ yarn add kayn
 * All regular endpoints implemented
 * Basic caching (in memory cache, redis cache)
 * API works with both callbacks & promises
+* Basic TypeScript support (WIP)
 
 # Planned Features
-
-## Features with established versions 
-
-0.1.0 TypeScript / Parameter & Query Parameter Checks
 
 ## Whenever
 
@@ -321,6 +319,17 @@ CACHE HIT @ https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/Cont
 */
 ```
 
+# TypeScript
+
+TypeScript support should automatically be integrated upon requiring this module.
+
+source: [index.d.ts](https://github.com/cnguy/kayn/blob/master/typings/index.d.ts)
+
+This will be improved over time.
+
+`any`'s should be removed
+enums gotta get fixed
+
 # Bugs
 
 Feel free to make an issue (bug, typos, questions, suggestions, whatever) or pull request to fix an issue. Just remember to run `prettier` (via `yarn lint`).
@@ -344,7 +353,7 @@ does not exist atm
 
 # Changelog
 
-Check the releases/tags of this repository.
+Go to [CHANGELOG.md](https://github.com/cnguy/kayn/blob/master/CHANGELOG.md).
 
 # Disclaimer
 
