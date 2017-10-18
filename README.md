@@ -1,7 +1,8 @@
-An elegant way of querying League of Legend's API.
+An elegant way of querying League of Legend's API. `kayn` is a reimplementation of `kindred-api`.
 
+[![NPM](https://nodei.co/npm/kayn.png)](https://nodei.co/npm/kayn/)
 
-
+[![dependencies Status](https://david-dm.org/cnguy/kayn/status.svg)](https://david-dm.org/cnguy/kayn)
 
 
 
@@ -270,6 +271,10 @@ To cache, firstly create some Cache that has a get/set function, and then pass i
 
 `ttls` are method ttls. This part is pretty inconvenient right now. Suggestions are welcome.
 
+Current caches:
+* basic in-memory cache 
+* Redis cache
+
 ```javascript
 import {
     Kayn,
@@ -278,6 +283,16 @@ import {
     BasicJSCache,
     RedisCache,
 } from 'kayn';
+
+const redisCache = new RedisCache({
+  host: 'localhost',
+  port: 5000,
+  keyPrefix: 'kayn',
+})
+
+const basicCache = new BasicCache();
+
+const myCache = redisCache; // or basicCache
 
 const kayn = Kayn(/* optional key */)({
   region: 'na',
@@ -291,7 +306,7 @@ const kayn = Kayn(/* optional key */)({
     delayBeforeRetry: 1000,
   },
   cacheOptions: {
-    cache: new BasicJSCache(),
+    cache: myCache,
     ttls: {
         [METHOD_NAMES.SUMMONER.GET_BY_SUMMONER_NAME]: 1000, // ms
     },
