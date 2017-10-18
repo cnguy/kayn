@@ -9,7 +9,9 @@ const RedisCache = lolapi.RedisCache;
 const METHOD_NAMES = lolapi.METHOD_NAMES;
 const BasicJSCache = lolapi.BasicJSCache;
 
-const kayn = init('123')({});
+const kayn = init('123')({
+    region: 'na'
+});
 kayn.Summoner.by.name("test").callback((p1, p2) => console.log("hey world"))
 console.log("Hello")
 kayn.Summoner.by.name("test")
