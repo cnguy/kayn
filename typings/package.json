@@ -1,0 +1,22 @@
+{
+    "name": "@types/kindred",
+    "version": "0.0.1",
+    "main": "index.js",
+    "license": "MIT",
+    "scripts": {
+      "start": "ts-node Kayn.test.ts",
+      "lint": "tslint index.d.ts"
+    },
+    "devDependencies": {
+      "ts-node": "^3.3.0",
+      "tslint": "^5.5.0",
+      "typescript": "^2.4.2"
+    },
+    "_comment": {
+      "todo": "the kindred dep below is just for testing, will remove in future"
+    },
+    "dependencies": {
+      "@types/dotenv": "^4.0.0",
+      "@types/node": "^8.0.19"
+    }
+  }
