@@ -8,7 +8,7 @@
     "lint": "prettier --single-quote --list-different --trailing-comma all --write \"./**/*.js\"",
     "docs": "./node_modules/.bin/esdoc ./lib/**/*.js"
   },
-  "repository": "https://github.com/cnguy/kindred-api.git",
+  "repository": "https://github.com/cnguy/kayn.git",
   "author": "Chau Nguyen <chautnguyen96@gmail.com>",
   "license": "MIT",
   "devDependencies": {
