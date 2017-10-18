@@ -8,13 +8,13 @@
     "lint": "prettier --single-quote --list-different --trailing-comma all --write \"./**/*.js\"",
     "docs": "./node_modules/.bin/esdoc ./lib/**/*.js"
   },
-  "repository": "https://github.com/cnguy/kindred-api.git",
+  "repository": "https://github.com/cnguy/kayn.git",
   "author": "Chau Nguyen <chautnguyen96@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-plugin-module-resolver": "^2.7.1",
-    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-stage-3": "^6.24.1",
     "esdoc": "^1.0.3",
     "esdoc-standard-plugin": "^1.0.0",
@@ -26,6 +26,6 @@
     "dotenv": "^4.0.0",
     "redis": "^2.8.0",
     "request": "^2.83.0",
-    "riot-ratelimiter": "^0.0.7"
+    "riot-ratelimiter": "^0.0.9"
   }
 }
