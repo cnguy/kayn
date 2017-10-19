@@ -22,7 +22,7 @@ declare class Kayn {
 
     public League: {
         by: {
-            id: (leagueID: number) => KaynRequest<any>;
+            uuid: (leagueUUID: string) => KaynRequest<any>;
         }
     }
 

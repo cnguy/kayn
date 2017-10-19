@@ -1,3 +1,6 @@
+# 0.2.7
+* This isn't backward compatible, but it's fine. `League.by.id` has been changed to `League.by.uuid`. Now takes a string instead of an int of course.
+
 # 0.2.6
 * Minor TypeScript fixes
 

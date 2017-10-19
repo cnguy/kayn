@@ -15,7 +15,8 @@ const kayn = init('123')({
 kayn.Summoner.by.name("test").callback((p1, p2) => console.log("hey world"))
 console.log("Hello")
 kayn.Summoner.by.name("test")
-.then(data => data.accountId)
+.then(({ accountId }) => console.log(accountId))
+kayn.League.by.uuid("1a3cc7ff-9b40-3927-b646-8d777e97148a")
 
 const main = async () => {
     const summoner = await kayn.Summoner.by.name("Contractz");

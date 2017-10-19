@@ -216,7 +216,7 @@ Champion.get(championID: int)
 /* LEAGUE-V3 */
 Challenger.list(queueName: string)
 Leagues.by.summonerID(summonerID: int)
-League.by.id(leagueID: int)
+League.by.uuid(leagueUUID: string)
 Master.list(queueName: string)
 LeaguePositions.by.summonerID(summonerID: int)
 
