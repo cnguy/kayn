@@ -1,3 +1,6 @@
+# 0.2.6
+* Minor TypeScript fixes
+
 # 0.2.5
 * Add basic TypeScript support
 
