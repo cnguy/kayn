@@ -128,11 +128,10 @@ type Summoner = {
 }
 
 declare class KaynRequest<T> {
-    constructor(config: any, serviceName: serviceName, endpoint: endpoint, methodName: methodName, httpMethodType: httpMethodType);
     region(region: region): KaynRequest<T>;
     query(query: Object): KaynRequest<T>;
-    then(resolve: (data: T) => void, reject?: any): void;
-    catch(callback: callback<T>): void;
+    then(resolve: (data: T) => void, reject?: (err: any) => void): KaynRequest<T>;
+    catch(callback: (err: any) => void): void;
     callback(callback: callback<T>): void;
 }
 
@@ -160,7 +159,7 @@ type region = string;
 type queueName = string;
 
 declare module 'kayn' {
-    export function Kayn(key: string): (config: KaynConfig) => Kayn;
+    export function Kayn(key?: string): (config: KaynConfig) => Kayn;
 
     class BasicJSCache {
         constructor();
