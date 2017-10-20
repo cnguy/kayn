@@ -6,7 +6,9 @@
     "example": "yarn build && babel ./example.js -o ./example.babel.js && node example.babel.js",
     "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
     "lint": "prettier --single-quote --list-different --trailing-comma all --write \"./**/*.js\"",
-    "docs": "./node_modules/.bin/esdoc ./lib/**/*.js"
+    "docs": "./node_modules/.bin/esdoc ./lib/**/*.js",
+    "test": "yarn build && yarn test-only",
+    "test-only": "node_modules/.bin/babel-node ./node_modules/.bin/babel-istanbul cover ./node_modules/mocha/bin/_mocha --compilers js:babel-core/register \"test/**/*.js\""
   },
   "types": "./typings/index.d.ts",
   "repository": "https://github.com/cnguy/kayn.git",
@@ -14,11 +16,15 @@
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-istanbul": "^0.12.2",
     "babel-plugin-module-resolver": "^2.7.1",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-3": "^6.24.1",
+    "chai": "^4.1.2",
     "esdoc": "^1.0.3",
     "esdoc-standard-plugin": "^1.0.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^4.0.1",
     "prettier": "^1.7.4",
     "rimraf": "^2.6.2"
   },

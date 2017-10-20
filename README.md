@@ -2,6 +2,8 @@ An elegant way of querying League of Legend's API. `kayn` is a reimplementation 
 
 [![NPM](https://nodei.co/npm/kayn.png)](https://nodei.co/npm/kayn/)
 
+[![Build Status](https://travis-ci.org/cnguy/kayn.svg?branch=master)](https://travis-ci.org/cnguy/kayn)
+[![codecov](https://codecov.io/gh/cnguy/kayn/branch/master/graph/badge.svg)](https://codecov.io/gh/cnguy/kayn)
 [![dependencies Status](https://david-dm.org/cnguy/kayn/status.svg)](https://david-dm.org/cnguy/kayn)
 
 
