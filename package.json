@@ -5,7 +5,8 @@
   "scripts": {
     "example": "yarn build && babel ./example.js -o ./example.babel.js && node example.babel.js",
     "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
-    "lint": "prettier --single-quote --list-different --trailing-comma all --write \"./**/*.js\"",
+    "lint": "prettier --single-quote --list-different --trailing-comma all --write \"./lib/**/*.js\"",
+    "lint-test": "prettier --single-quote --list-different --trailing-comma all --write \"./test/**/*.js\"",
     "docs": "./node_modules/.bin/esdoc ./lib/**/*.js",
     "test": "yarn build && yarn test-only",
     "test-only": "node_modules/.bin/babel-node ./node_modules/.bin/babel-istanbul cover ./node_modules/mocha/bin/_mocha --compilers js:babel-core/register \"test/**/*.js\""
