@@ -23,4 +23,4 @@ services:
 
 notifications:
   email:
-- chautnguyen96@gmail.com
+    - chautnguyen96@gmail.com
