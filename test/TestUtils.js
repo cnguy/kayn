@@ -1,7 +1,7 @@
 const {
   Kayn,
   REGIONS,
-  METHOD_TYPES,
+  METHOD_NAMES,
   BasicJSCache,
   RedisCache,
 } = require('../');
@@ -12,12 +12,30 @@ const kayn = Kayn()({
   },
 });
 
-module.exports = {
-  getKaynInstance: {
+const defaultConfig = {
+  region: 'na',
+  debugOptions: {
+    isEnabled: true,
+    showKey: false,
+  },
+  requestOptions: {
+    shouldRetry: true,
+    numberOfRetriesBeforeAbort: 3,
+    delayBeforeRetry: 1000,
+  },
+  cacheOptions: {
+    cache: null,
+    ttls: {},
+  },
+};
+
+export default {
+  kaynInstance: {
     kayn,
     REGIONS,
-    METHOD_TYPES,
+    METHOD_NAMES,
     BasicJSCache,
     RedisCache,
   },
+  defaultConfig,
 };
