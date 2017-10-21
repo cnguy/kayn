@@ -4,7 +4,7 @@ const {
   METHOD_NAMES,
   BasicJSCache,
   RedisCache,
-} = require('../');
+} = require('../lib');
 
 const kayn = Kayn()({
   debugOptions: {

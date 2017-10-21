@@ -4,7 +4,7 @@ import TestUtils from '../../TestUtils';
 const { kaynInstance, defaultConfig } = TestUtils;
 
 const { kayn, REGIONS, METHOD_TYPES } = kaynInstance;
-import SummonerEndpoint from '../../../dist/lib/Endpoints/SummonerEndpoint';
+import SummonerEndpoint from '../../../lib/Endpoints/SummonerEndpoint';
 import mocks from '../../mocks';
 
 describe('SummonerEndpoint', function() {
