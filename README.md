@@ -72,11 +72,11 @@ RIOT_LOL_API_KEY=<key>
 
 ```javascript
 import {
-    Kayn,
-    REGIONS,
-    METHOD_NAMES,
-    BasicJSCache,
-    RedisCache,
+  Kayn,
+  REGIONS,
+  METHOD_NAMES,
+  BasicJSCache,
+  RedisCache,
 } from 'kayn';
 
 const kayn = Kayn(/* optional key */)({
