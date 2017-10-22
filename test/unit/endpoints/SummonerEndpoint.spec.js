@@ -18,11 +18,39 @@ describe('SummonerEndpoint', function() {
     it('should have the correct payload #1', function() {
       const { payload } = this.Summoner.by.name(mocks.summoner.Contractz.name);
       expect(payload).to.deep.equal({
-          method: 'GET',
-          serviceName: 'summoner',
-          endpoint: 'summoners/by-name/Contractz',
-          query: [],
-          region: '',
+        method: 'GET',
+        serviceName: 'summoner',
+        endpoint: `summoners/by-name/${mocks.summoner.Contractz.name}`,
+        query: [],
+        region: '',
+      });
+    });
+  });
+
+  describe('.by.id', function() {
+    it('should have the correct payload #2', function() {
+      const { payload } = this.Summoner.by.id(mocks.summoner.Contractz.id);
+      expect(payload).to.deep.equal({
+        method: 'GET',
+        serviceName: 'summoner',
+        endpoint: `summoners/${mocks.summoner.Contractz.id}`,
+        query: [],
+        region: '',
+      });
+    });
+  });
+
+  describe('.by.accountID', function() {
+    it('should have the correct payload #3', function() {
+      const { payload } = this.Summoner.by.accountID(
+        mocks.summoner.Contractz.accountId,
+      );
+      expect(payload).to.deep.equal({
+        method: 'GET',
+        serviceName: 'summoner',
+        endpoint: `summoners/by-account/${mocks.summoner.Contractz.accountId}`,
+        query: [],
+        region: '',
       });
     });
   });

@@ -22,11 +22,14 @@ const print = val => console.log(val);
 const printBoth = (err, data) => console.log(err, data);
 
 const main = async () => {
+  /*
   recipes.grabSpecificChampionScores(kayn);
   recipes.sortChallengerLeagueByNumberOfWins(kayn);
   recipes.grabMatchesByChampionsFromRankedMatchlist(kayn);
   recipes.grabCurrentGameInfoOfFeaturedGamesList(kayn);
   recipes.grabRunesAndMasteriesOfChallengerPlayers(kayn);
+  */
+  kayn.Summoner.by.name('Contractz').callback(console.log)
 };
 
 main();
