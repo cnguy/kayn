@@ -17,7 +17,7 @@ Wiki is not updated. It currently is documentation about the old `kindred-api`.
 * [Installation](#installation)
 * [Features](#features)
 * [Planned Features](#planned-features)
-* [Basic Usage / How to Initailize](#basic-usage)
+* [Basic Usage / How to Initialize](#basic-usage)
 * [Current API](#current-api)
     * [Request Naming Conventions](#request-naming-conventions)
     * [Setting the Region of a Request](#setting-the-region-of-a-request)
@@ -68,8 +68,7 @@ yarn add kayn
 When you import the Kayn class,
 
 ```javascript
-import { Kayn } from 'kayn';
-// const { Kayn } = require('kayn');
+const { Kayn } = require('kayn');
 ```
 
 you're actually importing the `init` function.
@@ -90,13 +89,13 @@ RIOT_LOL_API_KEY=<key>
 Using this is preferable as you generally don't commit `.env` files to GitHub.
 
 ```javascript
-import {
+const {
   Kayn,
   REGIONS,
   METHOD_NAMES,
   BasicJSCache,
   RedisCache,
-} from 'kayn';
+} = require('kayn');
 
 // to initialize Kayn without a .env file
 // const Kayn = Kayn('mykey')()
@@ -104,7 +103,7 @@ import {
 // init exports a second function
 // that takes in an optional config
 
-const kayn = Kayn(/* optional key */)({
+const kayn = Kayn('my-optional-key')({
   region: 'na',
   debugOptions: {
     isEnabled: true,
@@ -127,20 +126,57 @@ const kayn = Kayn(/* optional key */)({
 // ex: if you pass in just debugOptions to disable it,
 // requestOptions and the (empty) cacheOptions will be used 
 
-const main = async () => {
-  const summoner = await kayn.Summoner.by
+  kayn.Summoner.by
     .name('Contractz')
-    .region(REGIONS.NORTH_AMERICA);
-  const test = await kayn.Summoner.by.id(summoner.id);
-  const matchlistDTO = await kayn.Matchlist.by
-    .accountID(summoner.accountId)
-    .query({ season: 9 });
-  const runePagesDTO = await kayn.Runes.by.summonerID(summoner.id);
+    .region('na') // if this is not appended, default region is used
+    .callback(function(err, summoner) {
+      if (err) {
+        console.log('could not get summoner');
+      } else {
+        console.log('got the summoner data');
+        console.log('will try to get number of matches');
+        kayn.Matchlist.by
+          .accountID(summoner.accountId)
+          .region('na')
+          .query({ season: 9 })
+          .query({ champion: 67 })
+          .callback(function(err, matchlistDTO) {
+            if (err) {
+              console.log('matchlist error');
+            } else {
+              console.log('callback style meh');
+              console.log(
+                'number of matches callback style:',
+                matchlistDTO.matches.length,
+              );
+            }
+          });
+      }
+    });
 
-  console.log(summoner, test, matchlistDTO, runePagesDTO);
-}
+  kayn.Summoner.by
+    .name('Contractz')
+    .region(REGIONS.NORTH_AMERICA)
+    .then(summoner => {
+      return kayn.Matchlist.by
+        .accountID(summoner.accountId)
+        .query({ season: 9 });
+    })
+    .then(matchlistDTO => {
+      console.log('number of matches:', matchlistDTO.matches.length);
+    })
+    .catch(err => console.error(err));
 
-main();
+  kayn.Summoner.by
+    .name('Contractz')
+    .then(summoner => {
+      return kayn.Runes.by.summonerID(summoner.id);
+    })
+    .then(runes => {
+      console.log('number of rune pages:', runes.pages.length);
+    })
+    .catch(err => console.error('runes error'));
+
 ```
 
 Check `example.js` and the files in the `recipes` directory (they're more just random composition of functions lol) for more usage.
@@ -161,7 +197,7 @@ Check `example.js` and the files in the `recipes` directory (they're more just r
 
 ## Setting the Region of a Request
 
-Append `.region(regionAbbr)` to a call to set the region.
+Append `.region(regionAbbr)` to a call to set the region. If no region is appended, then we use the default region which is `na` or whatever the user passed in.
 
 ```javascript
 kayn.Summoner.by.name('Faker').region('kr')

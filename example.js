@@ -29,7 +29,6 @@ const main = async () => {
   recipes.grabCurrentGameInfoOfFeaturedGamesList(kayn);
   recipes.grabRunesAndMasteriesOfChallengerPlayers(kayn);
   */
-  kayn.Summoner.by.name('Contractz').callback(console.log)
 };
 
 main();
