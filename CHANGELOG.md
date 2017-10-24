@@ -1,3 +1,13 @@
+# 0.3.0
+* Add burst functionality
+
+```javascript
+requestOptions: {
+    shouldRetry: true,
+    burst: true,
+}
+```
+
 # 0.2.9
 * Encode Summoner.by.name values
 
