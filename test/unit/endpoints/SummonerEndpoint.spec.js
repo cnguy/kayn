@@ -34,7 +34,7 @@ describe('SummonerEndpoint', function() {
   });
 
   describe('.by.id', function() {
-    it('should have the correct payload #2', function() {
+    it('should have the correct payload #1', function() {
       const { payload } = this.Summoner.by.id(mocks.summoner.Contractz.id);
       expect(payload).to.deep.equal({
         method: 'GET',
@@ -47,7 +47,7 @@ describe('SummonerEndpoint', function() {
   });
 
   describe('.by.accountID', function() {
-    it('should have the correct payload #3', function() {
+    it('should have the correct payload #1', function() {
       const { payload } = this.Summoner.by.accountID(
         mocks.summoner.Contractz.accountId,
       );
