@@ -64,6 +64,18 @@ describe('Request', function() {
     ]);
   });
 
+  it('should throw if query is passed non-object', function() {
+    const request = new Request(
+      defaultConfig,
+      'summoner',
+      'by-name/chaullenger',
+      'abc',
+    );
+    expect(() => request.query('notLikeThis')).to.throw();
+    expect(() => request.query(3)).to.throw();
+    expect(() => request.query(() => 'abc')).to.throw();
+  });
+
   it('should set region correctly', function() {
     const request = new Request(
       defaultConfig,
@@ -85,5 +97,15 @@ describe('Request', function() {
     request.region('na');
     expect(request.payload.region).to.equal('na');
     expect(() => request.region('kr')).to.throw();
+  });
+
+  it('should throw on bad region', function() {
+    const request = new Request(
+      defaultConfig,
+      'summoner',
+      'by-name/chaullenger',
+      'abc',
+    );
+    expect(() => request.region('abcdefgjijklmnopqrstuvwxyz')).to.throw();
   });
 });
