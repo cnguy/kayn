@@ -7,7 +7,7 @@ const { kayn, REGIONS, METHOD_TYPES } = kaynInstance;
 import MatchlistEndpoint from '../../../../lib/Endpoints/MatchEndpoint/MatchlistEndpoint';
 import mocks from '../../../mocks';
 
-describe('SummonerEndpoint', function() {
+describe('MatchlistEndpoint', function() {
   this.timeout(0);
 
   beforeEach(function() {

@@ -25,6 +25,12 @@ describe('SummonerEndpoint', function() {
         region: '',
       });
     });
+
+    it('should encode the summoner name', function() {
+      const { payload } = this.Summoner.by.name(mocks.summoner.ShouldEncode);
+      const { endpoint } = payload;
+      expect(endpoint).to.equal('summoners/by-name/%5Bobject%20Object%5D');
+    });
   });
 
   describe('.by.id', function() {

@@ -8,6 +8,14 @@ module.exports = {
       revisionDate: 1504250270000,
       summonerLevel: 30,
     },
+    ShouldEncode: {
+      id: 66929247,
+      accountId: 228269359,
+      name: 'Jòéy',
+      profileIconId: 3006,
+      revisionDate: 1508791486000,
+      summonerLevel: 30,
+    },
   },
   match: {
     id: 1234567,
