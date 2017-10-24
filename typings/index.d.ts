@@ -151,7 +151,9 @@ interface KaynConfig {
         shouldRetry?: boolean;
         numberOfRetriesBeforeAbort?: number;
         delayBeforeRetry?: number;
-    }
+        burst?: boolean,
+    },
+    cacheOptions: any,
 }
 type httpMethodType = string;
   

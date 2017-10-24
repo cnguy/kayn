@@ -17,7 +17,7 @@ Wiki is not updated. It currently is documentation about the old `kindred-api`.
 * [Installation](#installation)
 * [Features](#features)
 * [Planned Features](#planned-features)
-* [Basic Usage / How to Initialize](#basic-usage)
+* [Basic Usage / Initialization / Configuration](#basic-usage)
 * [Current API](#current-api)
     * [Request Naming Conventions](#request-naming-conventions)
     * [Setting the Region of a Request](#setting-the-region-of-a-request)
@@ -104,6 +104,12 @@ const {
 // that takes in an optional config
 
 const kayn = Kayn('my-optional-key')({
+  // DEFAULT CONFIG
+  // if you pass in a config,
+  // the rest of the top-level config will be merged
+  // into your config.
+  // ex: if you pass in just debugOptions to disable it,
+  // requestOptions and the (empty) cacheOptions will be used 
   region: 'na',
   debugOptions: {
     isEnabled: true,
@@ -113,6 +119,7 @@ const kayn = Kayn('my-optional-key')({
     shouldRetry: true,
     numberOfRetriesBeforeAbort: 3,
     delayBeforeRetry: 1000,
+    burst: false,
   },
   cacheOptions: {
     cache: null,
@@ -120,12 +127,7 @@ const kayn = Kayn('my-optional-key')({
   },
 });
 
-// above are the default configs
-// if you pass in a config,
-// the rest of the top-level config will be used
-// ex: if you pass in just debugOptions to disable it,
-// requestOptions and the (empty) cacheOptions will be used 
-
+// callback style is meh
   kayn.Summoner.by
     .name('Contractz')
     .region('na') // if this is not appended, default region is used
@@ -176,7 +178,12 @@ const kayn = Kayn('my-optional-key')({
       console.log('number of rune pages:', runes.pages.length);
     })
     .catch(err => console.error('runes error'));
-
+  
+  const main = async () => {
+    const summoner = await kayn.Summoner.by.name('Contractz');
+    const matchlistDTO = await kayn.Matchlist.by.summonerID(summoner.id);
+    console.log(summoner, matchlistDTO);
+  }
 ```
 
 Check `example.js` and the files in the `recipes` directory (they're more just random composition of functions lol) for more usage.
