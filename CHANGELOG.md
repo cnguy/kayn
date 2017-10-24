@@ -1,3 +1,6 @@
+# 0.2.9
+* Encode Summoner.by.name values
+
 # 0.2.8
 * Fix the TypeScript METHOD_NAMES export
 
