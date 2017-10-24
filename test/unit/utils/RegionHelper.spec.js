@@ -6,7 +6,7 @@ const { asPlatformID, isValidRegion } = RegionHelper;
 describe('RegionHelper', function() {
   describe('asPlatformID', function() {
     it('should return respective platform ID', function() {
-      expect(asPlatformID('na')).to.equal('NA1');
+      expect(asPlatformID('na')).to.equal('na1');
     });
   });
 
