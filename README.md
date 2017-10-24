@@ -17,7 +17,7 @@ Wiki is not updated. It currently is documentation about the old `kindred-api`.
 * [Installation](#installation)
 * [Features](#features)
 * [Planned Features](#planned-features)
-* [Basic Usage](#basic-usage)
+* [Basic Usage / How to Initailize](#basic-usage)
 * [Current API](#current-api)
     * [Request Naming Conventions](#request-naming-conventions)
     * [Setting the Region of a Request](#setting-the-region-of-a-request)
@@ -63,12 +63,31 @@ yarn add kayn
 * Tournament
 * DDragon
 
-# Basic Usage 
+# Basic Usage
+
+When you import the Kayn class,
+
+```javascript
+import { Kayn } from 'kayn';
+// const { Kayn } = require('kayn');
+```
+
+you're actually importing the `init` function.
+
+```javascript
+const init = key => config => {
+  return new Kayn(key, config);
+};
+```
+
+This means you don't have to construct the object using `new`. Furthermore, `init` will automatically look for a `.env` file that has the key-value pair below:
 
 ```sh
 # .env
 RIOT_LOL_API_KEY=<key>
 ```
+
+Using this is preferable as you generally don't commit `.env` files to GitHub.
 
 ```javascript
 import {
@@ -78,6 +97,12 @@ import {
   BasicJSCache,
   RedisCache,
 } from 'kayn';
+
+// to initialize Kayn without a .env file
+// const Kayn = Kayn('mykey')()
+// notice the second parentheses is mandatory because
+// init exports a second function
+// that takes in an optional config
 
 const kayn = Kayn(/* optional key */)({
   region: 'na',
