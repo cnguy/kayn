@@ -1,4 +1,6 @@
 declare class Kayn {
+    flushCache(cb?: callback<"OK">): void;
+
     public ChampionMastery: {
         list: (summonerID: number) => KaynRequest<any>;
         get: (summonerID: number) => (championID: number) => KaynRequest<any>;

@@ -387,6 +387,21 @@ kayn.Summoner.by.name('Contractz').then(() => kayn.Summoner.by.name('Contractz')
 200 @ https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/Contractz
 CACHE HIT @ https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/Contractz
 */
+
+```
+
+## Flushing the Cache
+
+```javascript
+// BasicJSCache O(1)
+// synchronous
+kayn.flushCache();
+
+// RedisCache O(N)
+// asynchronous, requires callback
+kayn.flushCache(function (err, ok) {
+  console.log(ok === "OK");
+});
 ```
 
 # TypeScript

@@ -14,8 +14,8 @@ const kayn = Kayn(/* optional key */)({
     burst: true,
   },
   cacheOptions: {
-    cache: null,
-    ttls: {},
+    cache: new RedisCache(),
+    ttls: { [METHOD_NAMES.SUMMONER.GET_BY_SUMMONER_NAME]: 1000 },
   },
 });
 
@@ -30,21 +30,6 @@ const main = async () => {
   recipes.grabCurrentGameInfoOfFeaturedGamesList(kayn);
   recipes.grabRunesAndMasteriesOfChallengerPlayers(kayn);
   */
-  kayn.Summoner.by.name('imaqtpie').then( data => {
-    kayn.ChampionMastery.list(data.id).then( () => {});
-    kayn.ChampionMastery.totalScore(data.id).then( () => {});
-    kayn.LeaguePositions.by.summonerID(data.id).then( () => {});
-    kayn.Matchlist.by.accountID(data.accountId).query({ queue: [420, 440, 470], season: 9, endIndex: 1 }).then( data => {
-        data.matches.forEach( match => {
-            kayn.Match.get(match.gameId).then( () => { });
-        });
-    });
-    kayn.Matchlist.by.accountID(data.accountId).query({ endIndex: 5 }).then( data => {
-        data.matches.forEach( match => {
-            kayn.Match.get(match.gameId).then( () => {});
-        });
-    });
-});
 };
 
 main();

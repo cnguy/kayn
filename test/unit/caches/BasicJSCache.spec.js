@@ -55,7 +55,7 @@ describe('BasicJSCache', function() {
     }, 1000);
   });
 
-  it('flushAll() should reset cache', function() {
+  it('flushCache() should reset cache', function() {
     const cache = new BasicJSCache();
     const key = 'kayn-key-etc';
     const ttl = 3000;

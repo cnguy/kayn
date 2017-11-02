@@ -1,3 +1,7 @@
+# 0.4.0
+* FIXED RedisCache [option Option] bug (setex).
+* Add flushCache, check README#Caching
+
 # 0.3.0
 * Add burst functionality
 

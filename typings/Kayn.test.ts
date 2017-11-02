@@ -21,3 +21,7 @@ kayn.League.by.uuid("1a3cc7ff-9b40-3927-b646-8d777e97148a")
 const main = async () => {
     const summoner = await kayn.Summoner.by.name("Contractz");
 }
+
+kayn.flushCache(function (err, data) {
+
+})
