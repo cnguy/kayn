@@ -2,7 +2,6 @@ import { expect, should, assert } from 'chai';
 
 import RedisCache from '../../../lib/Caches/RedisCache';
 
-const cache = new RedisCache();
 const LOCALHOST_ADDR = '127.0.0.1';
 
 describe('RedisCache', function() {
@@ -28,17 +27,18 @@ describe('RedisCache', function() {
   });
 
   it('set & get should work', function() {
+    const redis = new RedisCache();
     const key = 'kayn-key-etc';
     const ttl = 3000;
     const data = { cached: 'value' };
-    cache.set(
+    redis.set(
       {
         key,
         ttl,
       },
       data,
     );
-    cache.get({ key }, (err, cached) => {
+    redis.get({ key }, (err, cached) => {
       expect(err).to.be.null;
       expect(cached).to.not.be.null;
       expect(cached).to.deep.equal(data);
@@ -46,18 +46,20 @@ describe('RedisCache', function() {
   });
 
   it('get should fail if data does not exist', function() {
+    const redis = new RedisCache();
     const key = 'hey-guys';
-    cache.get({ key }, (err, cached) => {
+    redis.get({ key }, (err, cached) => {
       expect(err).to.not.be.null;
       expect(cached).to.be.null;
     });
   });
 
   it('set & get should fail after expired timer', function() {
+    const redis = new RedisCache();
     const key = 'kayn-key-etc';
     const ttl = 100;
     const data = { cached: 'value' };
-    cache.set(
+    redis.set(
       {
         key,
         ttl,
@@ -65,7 +67,7 @@ describe('RedisCache', function() {
       data,
     );
     setTimeout(() => {
-      cache.get({ key }, (err, cached) => {
+      redis.get({ key }, (err, cached) => {
         expect(err).to.not.be.null;
         expect(cached).to.be.null;
       });
@@ -73,14 +75,15 @@ describe('RedisCache', function() {
   });
 
   it('flushCache() should reset cache', function(done) {
+    const redis = new RedisCache();
     const key = 'kayn-key-etc';
     const ttl = 3000;
     const data = { cached: 'value' };
-    cache.set({ key, ttl }, data);
-    cache.get({ key }, (err, cached) => {
+    redis.set({ key, ttl }, data);
+    redis.get({ key }, (err, cached) => {
       expect(err).to.be.null;
       expect(cached).to.not.be.null;
-      cache.flushCache(function(err, succeeded) {
+      redis.flushCache(function(err, succeeded) {
         expect(err).to.be.null;
         expect(succeeded).to.equal('OK');
         done();

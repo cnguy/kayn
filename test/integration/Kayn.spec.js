@@ -4,6 +4,7 @@ import { BasicJSCache, RedisCache, Kayn } from '../../lib/Kayn';
 
 describe('Kayn', function() {
   this.timeout(0);
+
   describe('Caching', function() {
     it('BasicJSCache', function() {
       const kayn = Kayn('1234')({
