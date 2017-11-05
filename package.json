@@ -34,6 +34,6 @@
     "dotenv": "^4.0.0",
     "redis": "^2.8.0",
     "request": "^2.83.0",
-    "riot-ratelimiter": "^0.0.9"
+    "riot-ratelimiter": "^0.1.1"
   }
 }

@@ -2472,9 +2472,9 @@ rimraf@2, rimraf@^2.5.1, rimraf@^2.6.1, rimraf@^2.6.2:
   dependencies:
     glob "^7.0.5"
 
-riot-ratelimiter@^0.0.9:
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/riot-ratelimiter/-/riot-ratelimiter-0.0.9.tgz#69eac67a9f1fb25d4b4082d3f1e281d9ef5ed8c9"
+riot-ratelimiter@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/riot-ratelimiter/-/riot-ratelimiter-0.1.1.tgz#b8fa0903c0e93d546c8ea98129ce8d091707fecd"
   dependencies:
     bluebird "~3.5.0"
     request-promise "~4.2.1"
