@@ -396,12 +396,32 @@ CACHE HIT @ https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/Cont
 // BasicJSCache O(1)
 // synchronous
 kayn.flushCache();
+// this has been turned into a promise so that it can be chained.
+// still can just be called normally though.
+// the `data` parameter returns "OK" just like in the RedisCache.
+async1
+  .then(() => kayn.flushCache())
+  .then(console.log) // prints OK always. there's no way to get an error.
+  .catch(console.err);
 
 // RedisCache O(N)
-// asynchronous, requires callback
+// asynchronous
 kayn.flushCache(function (err, ok) {
   console.log(ok === "OK");
 });
+
+const flush = async () => {
+  try {
+    await kayn.flushCache(); // returns "OK", but not really necessary to store.
+  } catch (exception) {
+    console.log(exception);
+  }
+}
+
+async1
+  .then(() => async2())
+  .then(() => kayn.flushCache())
+  .catch(console.log);
 ```
 
 # TypeScript
