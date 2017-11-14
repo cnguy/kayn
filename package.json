@@ -3,10 +3,11 @@
   "version": "0.4.1",
   "main": "index.js",
   "scripts": {
-    "example": "yarn build && babel ./example.js -o ./example.babel.js && node example.babel.js",
+    "example": "yarn lint-example; yarn build && babel ./example.js -o ./example.babel.js && node example.babel.js",
     "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
-    "lint": "prettier --single-quote --list-different --trailing-comma all --write \"./lib/**/*.js\"",
-    "lint-test": "prettier --single-quote --list-different --trailing-comma all --write \"./test/**/*.js\"",
+    "lint": "prettier --single-quote --list-different --trailing-comma all --tab-width 4 --write \"./lib/**/*.js\"",
+    "lint-example": "prettier --single-quote --list-different --trailing-comma all --tab-width 4 --write example.js",
+    "lint-test": "prettier --single-quote --list-different --trailing-comma all --tab-width 4 --write \"./test/**/*.js\"",
     "docs": "./node_modules/.bin/esdoc ./lib/**/*.js",
     "test": "yarn build && yarn lint; yarn lint-test; yarn test-only",
     "test-only": "node_modules/.bin/babel-node ./node_modules/.bin/babel-istanbul cover ./node_modules/mocha/bin/_mocha -- --require babel-register \"test/**/*.spec.js\""

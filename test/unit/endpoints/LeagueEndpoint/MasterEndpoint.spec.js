@@ -8,22 +8,22 @@ import MasterEndpoint from '../../../../lib/Endpoints/LeagueEndpoint/MasterEndpo
 import mocks from '../../../mocks';
 
 describe('MasterEndpoint', function() {
-  this.timeout(0);
+    this.timeout(0);
 
-  beforeEach(function() {
-    this.Master = new MasterEndpoint(defaultConfig);
-  });
-
-  describe('.list', function() {
-    it('should have the correct payload #1', function() {
-      const { payload } = this.Master.list('RANKED_SOLO_5x5');
-      expect(payload).to.deep.equal({
-        method: 'GET',
-        serviceName: 'league',
-        endpoint: 'masterleagues/by-queue/RANKED_SOLO_5x5',
-        query: [],
-        region: '',
-      });
+    beforeEach(function() {
+        this.Master = new MasterEndpoint(defaultConfig);
     });
-  });
+
+    describe('.list', function() {
+        it('should have the correct payload #1', function() {
+            const { payload } = this.Master.list('RANKED_SOLO_5x5');
+            expect(payload).to.deep.equal({
+                method: 'GET',
+                serviceName: 'league',
+                endpoint: 'masterleagues/by-queue/RANKED_SOLO_5x5',
+                query: [],
+                region: '',
+            });
+        });
+    });
 });

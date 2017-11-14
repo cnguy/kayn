@@ -8,23 +8,25 @@ import LeaguePositionsEndpoint from '../../../../lib/Endpoints/LeagueEndpoint/Le
 import mocks from '../../../mocks';
 
 describe('LeaguePositionsEndpoint', function() {
-  this.timeout(0);
+    this.timeout(0);
 
-  beforeEach(function() {
-    this.LeaguePositions = new LeaguePositionsEndpoint(defaultConfig);
-  });
-
-  describe('.by.summonerID', function() {
-    it('should have the correct payload #1', function() {
-      const { Contractz } = mocks.summoner;
-      const { payload } = this.LeaguePositions.by.summonerID(Contractz.id);
-      expect(payload).to.deep.equal({
-        method: 'GET',
-        serviceName: 'league',
-        endpoint: `positions/by-summoner/${Contractz.id}`,
-        query: [],
-        region: '',
-      });
+    beforeEach(function() {
+        this.LeaguePositions = new LeaguePositionsEndpoint(defaultConfig);
     });
-  });
+
+    describe('.by.summonerID', function() {
+        it('should have the correct payload #1', function() {
+            const { Contractz } = mocks.summoner;
+            const { payload } = this.LeaguePositions.by.summonerID(
+                Contractz.id,
+            );
+            expect(payload).to.deep.equal({
+                method: 'GET',
+                serviceName: 'league',
+                endpoint: `positions/by-summoner/${Contractz.id}`,
+                query: [],
+                region: '',
+            });
+        });
+    });
 });

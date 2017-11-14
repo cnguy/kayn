@@ -16,7 +16,6 @@ Wiki is not updated. It currently is documentation about the old `kindred-api`.
 * [Documentation](#documentation)
 * [Installation](#installation)
 * [Features](#features)
-* [Planned Features](#planned-features)
 * [Basic Usage / Initialization / Configuration](#basic-usage)
 * [Current API](#current-api)
     * [Request Naming Conventions](#request-naming-conventions)
@@ -46,6 +45,7 @@ ESDoc -http://kayn.surge.sh/
 
 ```sh
 yarn add kayn
+# or npm -i kayn --save
 ```
 
 # Features
@@ -55,13 +55,6 @@ yarn add kayn
 * Basic caching (in memory cache, redis cache)
 * API works with both callbacks & promises
 * Basic TypeScript support (WIP)
-
-# Planned Features
-
-## Whenever
-
-* Tournament
-* DDragon
 
 # Basic Usage
 
@@ -127,63 +120,52 @@ const kayn = Kayn('my-optional-key')({
   },
 });
 
-// callback style is meh
-  kayn.Summoner.by
-    .name('Contractz')
-    .region('na') // if this is not appended, default region is used
-    .callback(function(err, summoner) {
-      if (err) {
-        console.log('could not get summoner');
-      } else {
-        console.log('got the summoner data');
-        console.log('will try to get number of matches');
-        kayn.Matchlist.by
-          .accountID(summoner.accountId)
-          .region('na')
-          .query({ season: 9 })
-          .query({ champion: 67 })
-          .callback(function(err, matchlistDTO) {
-            if (err) {
-              console.log('matchlist error');
-            } else {
-              console.log('callback style meh');
-              console.log(
-                'number of matches callback style:',
-                matchlistDTO.matches.length,
-              );
-            }
-          });
-      }
-    });
-
-  kayn.Summoner.by
-    .name('Contractz')
-    .region(REGIONS.NORTH_AMERICA)
-    .then(summoner => {
-      return kayn.Matchlist.by
+kayn.Summoner.by
+  .name('Contractz')
+  .region(REGIONS.NORTH_AMERICA)
+  .callback(function(err, summoner) {
+    if (summoner) {
+      const mlConfig = {
+        season: 9,
+        champion: 67,
+      };
+      kayn.Matchlist.by
         .accountID(summoner.accountId)
-        .query({ season: 9 });
-    })
-    .then(matchlistDTO => {
-      console.log('number of matches:', matchlistDTO.matches.length);
-    })
-    .catch(err => console.error(err));
+        .region(REGIONS.NORTH_AMERICA)
+        .query(mlConfig)
+        .callback(function(err, matchlistDTO) {
+          const str = 'number of matches: ';
+          console.log(str + matchlistDTO.matches.length);
+        });
+    }
+  });
 
-  kayn.Summoner.by
-    .name('Contractz')
-    .then(summoner => {
-      return kayn.Runes.by.summonerID(summoner.id);
-    })
-    .then(runes => {
-      console.log('number of rune pages:', runes.pages.length);
-    })
-    .catch(err => console.error('runes error'));
-  
-  const main = async () => {
-    const summoner = await kayn.Summoner.by.name('Contractz');
-    const matchlistDTO = await kayn.Matchlist.by.summonerID(summoner.id);
-    console.log(summoner, matchlistDTO);
-  }
+kayn.Summoner.by
+  .name('Contractz')
+  .region(REGIONS.NORTH_AMERICA)
+  .then(summoner =>
+    kayn.Matchlist.by
+      .accountID(summoner.accountId)
+      .query({ season: 9 })
+      .query({ champion: 67 }),
+  )
+  .then(matchlistDTO => {
+    console.log('number of matches:', matchlistDTO.matches.length);
+  })
+  .catch(err => console.error(err));
+
+const main = async () => {
+  const summoner = await kayn.Summoner.by.name('Contractz');
+  const config = {
+    season: 9,
+    champion: 67,
+  };
+  const matchlistDTO = await kayn.Matchlist.by
+    .accountID(summoner.accountId)
+    .query(config);
+  console.log('number of matches:', matchlistDTO.matches.length);
+}
+main();
 ```
 
 Check `example.js` and the files in the `recipes` directory (they're more just random composition of functions lol) for more usage.
