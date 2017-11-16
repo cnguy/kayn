@@ -58,6 +58,8 @@ yarn add kayn
 
 # Basic Usage
 
+To see what endpoints are implemented, check out the  [High-level Overview of API](#high-level-overview-of-api).
+
 When you import the Kayn class,
 
 ```javascript
@@ -122,6 +124,9 @@ const kayn = Kayn('my-optional-key')({
 
 kayn.Summoner.by
   .name('Contractz')
+  // If this region call is not appended,
+  // the region specified in your config is used,
+  // or 'na' is used because of the default config.
   .region(REGIONS.NORTH_AMERICA)
   .callback(function(err, summoner) {
     if (summoner) {
