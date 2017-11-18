@@ -1,3 +1,9 @@
+# 0.4.2
+* Promisify flushCache.
+
+# 0.4.1
+* Update `riot-ratelimiter` dependency.
+
 # 0.4.0
 * FIXED RedisCache [option Option] bug (setex).
 * Add flushCache, check README#Caching
