@@ -16,6 +16,7 @@ Wiki is not updated. It currently is documentation about the old `kindred-api`.
 * [Documentation](#documentation)
 * [Installation](#installation)
 * [Features](#features)
+* [Coverage](#coverage)
 * [Basic Usage / Initialization / Configuration](#basic-usage)
 * [Current API](#current-api)
     * [Request Naming Conventions](#request-naming-conventions)
@@ -55,6 +56,63 @@ yarn add kayn
 * Basic caching (in memory cache, redis cache)
 * API works with both callbacks & promises
 * Basic TypeScript support (WIP)
+
+# Coverage
+
+## CHAMPION-MASTERY-V3
+- [x] `Get all champion mastery entries sorted by number of champion points descending,`
+- [x] `Get a champion mastery by player ID and champion ID.`
+- [x] `Get a player's total champion mastery score, which is the sum of individual champion mastery levels.`
+
+## CHAMPION-V3
+- [x] `Retrieve all champions.`
+- [x] `Retrieve champion by ID.`
+
+## LEAGUE-V3
+- [x] - `Get the challenger league for given queue.`
+- [x] - `Get leagues in all queues for a given summoner ID.` (Riot plans to deprecate this by January)
+- [x] - `Get league with given ID, including inactive entries.`
+- [x] - `Get the master league for given queue.`
+- [x] - `Get league positions in all queues for given summoner ID.`
+
+## LOL-STATIC-DATA-V3
+- [x] - `Retrieves champion list.`
+- [x] - `Retrieves champion by ID.`
+- [x] - `Retrieves item list.`
+- [x] - `Retrieves item by ID.`
+- [x] - `Retrieve language strings data.`
+- [x] - `Retrieve supported languages data.`
+- [x] - `Retrieve map data.`
+- [x] - `Retrieves mastery list.`
+- [x] - `Retrieves mastery item by ID.`
+- [x] - `Retrieve profile icons.`
+- [x] - `Retrieve realm data.`
+- [x] - `Retrieves rune list.`
+- [x] - `Retrieves rune by ID.`
+- [x] - `Retrieves summoner spell list.`
+- [x] - `Retrieves summoner spell by ID.`
+- [x] - `Retrieve version data.`
+
+## LOL-STATUS-V3
+- [x] - `Get League of Legends status for the given shard.`
+
+## MASTERIES-V3
+- [x] - `Get mastery pages for a given summoner ID.`
+
+## MATCH-V3
+- [x] - `Get match by match ID.`
+- [x] - `Get matchlist for games played on given account ID and platform ID and filtered using given filter parameters, if any.`
+- [x] - `Get matchlist for last 20 matches played on given account ID and platform ID.`
+- [x] - `Get match timeline by match ID.`
+- [ ] - `Get match IDs by tournament code.`
+- [ ] - `Get match by match ID and tournament code.`
+
+## RUNES-V3
+- [x] - `Get rune pages for a given summoner ID.`
+
+## SPECTATOR-V3
+- [x] - `Get current game information for the given summoner ID.`
+- [x] - `Get list of featured games.`
 
 # Basic Usage
 
