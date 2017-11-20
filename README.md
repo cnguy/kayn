@@ -114,6 +114,25 @@ yarn add kayn
 - [x] - `Get current game information for the given summoner ID.`
 - [x] - `Get list of featured games.`
 
+## SUMMONER-V3
+- [x] - `Get a summoner by account ID.`
+- [x] - `Get a summoner by summoner name.`
+- [x] - `Get a summoner by summoner ID.`
+
+## TOURNAMENT-STUB-V3
+- [ ] - `Create a mock tournament code for the given tournament.`
+- [ ] - `Gets a mock list of lobby events by tournament code.`
+- [ ] - `Creates a mock tournament provider and return its ID.`
+- [ ] - `Creates a mock tournament and return its ID.`
+
+## TOURNAMENT-V3
+- [ ] - `Create a tournament code for the given tournament.`
+- [ ] - `Update the pick type, map, spectator type, or allowed summoners for a code.`
+- [ ] - `Returns the tournament code DTO associated with a tournament code string.`
+- [ ] - `Gets a list of lobby events by tournament code.`
+- [ ] - `Creates a tournament provider and return its ID.`
+- [ ] - `Creates a tournament and return its ID.`
+
 # Basic Usage
 
 To see what endpoints are implemented, check out the  [High-level Overview of API](#high-level-overview-of-api).
