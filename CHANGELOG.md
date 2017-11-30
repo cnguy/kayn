@@ -1,3 +1,9 @@
+# 0.4.5
+* Fix tests broken in 0.4.3 via DEEP merge. This makes the config always explicit as well. Read the commit message for more information.
+
+# 0.4.4
+* Skipped by accident. X)
+
 # 0.4.3
 * Add basic config validation
 
