@@ -1,3 +1,8 @@
+# 0.4.3
+* Add basic config validation
+
+config.cache isn't checked, but everything else in the config is checked via [superstruct](https://github.com/ianstormtaylor/superstruct).
+
 # 0.4.2
 * Promisify flushCache.
 
