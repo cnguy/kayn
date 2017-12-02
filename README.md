@@ -369,17 +369,11 @@ Static.Version.list()
 /* LOL-STATUS-V3 */
 Status.get()
 
-/* MASTERIES-V3 */
-Masteries.by.summonerID(summonerID: int)
-
 /* MATCH-V3 */
 Match.get(matchID: int)
 Matchlist.by.accountID(accountID: int)
 Matchlist.Recent.by.accountID(accountID: int)
 Match.timeline(matchID: int)
-
-/* RUNES-V3 */
-Runes.by.summonerID(summonerID: int)
 
 /* SPECTATOR-V3 */
 CurrentGame.by.summonerID(summonerID: int)
@@ -389,6 +383,9 @@ FeaturedGames.list()
 Summoner.by.name(summonerName: string)
 Summoner.by.id(summonerID: int)
 Summoner.by.accountID(accountID: int)
+
+/* THIRD-PARTY-CODE-V3 */
+ThirdPartyCode.by.summonerID(summonerID: int)
 ```
 
 # Caching

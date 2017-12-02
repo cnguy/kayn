@@ -1,3 +1,7 @@
+# 0.5.0
+* Remove Runes/Masteries endpoints
+* Add [Third Party Code endpoint](https://developer.riotgames.com/api-methods/#third-party-code-v3/GET_getThirdPartyCodeBySummonerId)
+
 # 0.4.5
 * Fix tests broken in 0.4.3 via DEEP merge. This makes the config always explicit as well. Read the commit message for more information.
 
