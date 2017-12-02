@@ -96,9 +96,6 @@ yarn add kayn
 ## LOL-STATUS-V3
 - [x] - `Get League of Legends status for the given shard.`
 
-## MASTERIES-V3
-- [x] - `Get mastery pages for a given summoner ID.`
-
 ## MATCH-V3
 - [x] - `Get match by match ID.`
 - [x] - `Get matchlist for games played on given account ID and platform ID and filtered using given filter parameters, if any.`
@@ -106,9 +103,6 @@ yarn add kayn
 - [x] - `Get match timeline by match ID.`
 - [ ] - `Get match IDs by tournament code.`
 - [ ] - `Get match by match ID and tournament code.`
-
-## RUNES-V3
-- [x] - `Get rune pages for a given summoner ID.`
 
 ## SPECTATOR-V3
 - [x] - `Get current game information for the given summoner ID.`

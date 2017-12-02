@@ -83,12 +83,6 @@ declare class Kayn {
         get: () => KaynRequest<any>;
     }
 
-    public Masteries: {
-        by: {
-            summonerID: (summonerID: number) => KaynRequest<any>;
-        }
-    }
-
     public Match: {
         get: (matchID: number) => KaynRequest<any>;
         timeline: (matchID: number) => KaynRequest<any>;
@@ -102,12 +96,6 @@ declare class Kayn {
             by: {
                 accountID: (accountID: number) => KaynRequest<any>;
             }
-        }
-    }
-
-    public Runes: {
-        by: {
-            summonerID: (summonerID: number) => KaynRequest<any>;
         }
     }
 
