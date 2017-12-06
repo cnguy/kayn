@@ -66,10 +66,6 @@ declare class Kayn {
         Realm: {
             get: () => KaynRequest<any>;
         }
-        Rune: {
-            list: () => KaynRequest<any>;
-            get: (runeID: number) => KaynRequest<any>;
-        }
         SummonerSpell: {
             list: () => KaynRequest<any>;
             get: (summonerSpellID: number) => KaynRequest<any>;
@@ -104,6 +100,12 @@ declare class Kayn {
             name: (name: string) => KaynRequest<Summoner>,
             id: (id: number) => KaynRequest<Summoner>,
             accountID: (accountID: number) => KaynRequest<Summoner>,
+        }
+    }
+
+    public ThirdPartyCode: {
+        by: {
+            summonerID: (id: number) => KaynRequest<string>,
         }
     }
 }
@@ -223,20 +225,11 @@ declare module 'kayn' {
             const GET_SHARD_DATA = 'LOL_STATUS.GET_SHARD_DATA'
         }
 
-        namespace MASTERIES {
-            const GET_MASTERY_PAGES_BY_SUMMONER_ID =
-              'MASTERIES.GET_MASTERY_PAGES_BY_SUMMONER_ID'
-        }
-
         namespace MATCH {
             const GET_MATCH = 'MATCH.GET_MATCH'
             const GET_MATCHLIST = 'MATCH.GET_MATCHLIST'
             const GET_RECENT_MATCHLIST = 'MATCH.GET_RECENT_MATCHLIST'
             const GET_MATCH_TIMELINE = 'MATCH.GET_MATCH_TIMELINE'
-        }
-
-        namespace RUNES {
-            const GET_RUNE_PAGES_BY_SUMMONER_ID = 'RUNES.GET_RUNE_PAGES_BY_SUMMONER_ID'
         }
 
         namespace SPECTATOR {
