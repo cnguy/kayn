@@ -23,4 +23,15 @@ module.exports = {
     league: {
         uuid: '1a3cc7ff-9b40-3927-b646-8d777e97148a',
     },
+    urls: {
+        withKey:
+            'https://api.riotgames.com/lol/v3/blahblahblah?api_key=whatever',
+        withoutKey: 'https://api.riotgames.com/lol/v3/blahblahblah',
+    },
+    options: {
+        none: {},
+        single: { name: 'Contractz' },
+        multiple: { name: 'poz', rank: 'challenger' },
+        multipleEncoded: { name: 'Tést', rank: 'óh no' },
+    },
 };
