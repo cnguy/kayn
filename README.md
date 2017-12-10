@@ -515,6 +515,8 @@ does not exist atm
 
 Go to [CHANGELOG.md](https://github.com/cnguy/kayn/blob/master/CHANGELOG.md).
 
+While this library is pre-1.0.0, breaking changes may be made, but will be documented and will generally not be drastic.
+
 # Disclaimer
 
 `kayn` isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.
