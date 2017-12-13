@@ -36,6 +36,7 @@
     "lodash.merge": "^4.6.0",
     "redis": "^2.8.0",
     "request": "^2.83.0",
+    "riot-lol-api": "^4.2.9",
     "riot-ratelimiter": "^0.1.1",
     "superstruct": "^0.2.0"
   }
