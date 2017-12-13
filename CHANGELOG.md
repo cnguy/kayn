@@ -1,3 +1,6 @@
+# 0.5.2
+* Fixed `undefined` Redis setex() error when users did not pass in a TTL for a method and called that method. `kayn` should simply not attempt to cache if the ttl is not > 0.
+
 # 0.5.1
 * Add ThirdPartyCode to TypeScript and remove Runes
 
