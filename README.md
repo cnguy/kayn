@@ -128,6 +128,7 @@ yarn add kayn
 If you're interested in what I have built using this library, here's a small web application I made, along with the original reddit post.
 
 One Tricks:
+* site: http://onetricks.net
 * reddit link: https://www.reddit.com/r/leagueoflegends/comments/5x1c5c/hi_i_made_a_small_website_to_compile_a_list_of/
 * src: https://github.com/cnguy/OneTricks
 
