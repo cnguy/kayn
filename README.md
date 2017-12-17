@@ -1,4 +1,4 @@
-An elegant way of querying League of Legend's API. `kayn` is a reimplementation of `kindred-api`.
+A small library to work with Riot's League of Legend's API.
 
 [![NPM](https://nodei.co/npm/kayn.png)](https://nodei.co/npm/kayn/)
 
@@ -12,10 +12,10 @@ An elegant way of querying League of Legend's API. `kayn` is a reimplementation 
 Wiki is not updated. It currently is documentation about the old `kindred-api`.
 
 # Table of Contents:
-* [Why](#why)
 * [Documentation](#documentation)
 * [Installation](#installation)
 * [Features](#features)
+* [My Project](#my-project)
 * [Coverage](#coverage)
 * [Basic Usage / Initialization / Configuration](#basic-usage)
 * [Current API](#current-api)
@@ -31,10 +31,6 @@ Wiki is not updated. It currently is documentation about the old `kindred-api`.
 * [Bugs](#bugs)
 * [Changelog](#changelog)
 * [Disclaimer](#disclaimer)
-
-# Why
-
-So I decided to come back to rewrite this `kindred-api` (API looks the same, but trust me your old code will not remotely work) since the code really bothered me, and I have a lot of time now (I quit work). Better code => more likely to not ditch it later.
 
 # Documentation
 
@@ -127,6 +123,14 @@ yarn add kayn
 - [ ] - `Creates a tournament provider and return its ID.`
 - [ ] - `Creates a tournament and return its ID.`
 
+# My Project
+
+If you're interested in what I have built using this library, here's a small web application I made, along with the original reddit post.
+
+One Tricks:
+* reddit link: https://www.reddit.com/r/leagueoflegends/comments/5x1c5c/hi_i_made_a_small_website_to_compile_a_list_of/
+* src: https://github.com/cnguy/OneTricks
+
 # Basic Usage
 
 To see what endpoints are implemented, check out the  [High-level Overview of API](#high-level-overview-of-api).
@@ -164,10 +168,7 @@ const {
 } = require('kayn');
 
 // to initialize Kayn without a .env file
-// const Kayn = Kayn('mykey')()
-// notice the second parentheses is mandatory because
-// init exports a second function
-// that takes in an optional config
+// const Kayn = Kayn('RGAPI-mykey')({ optional: 'config' })
 
 const kayn = Kayn('my-optional-key')({
   // DEFAULT CONFIG
@@ -176,7 +177,7 @@ const kayn = Kayn('my-optional-key')({
   // into your config.
   // ex: if you pass in just debugOptions to disable it,
   // requestOptions and the (empty) cacheOptions will be used 
-  region: 'na',
+  region: 'na', // default region
   debugOptions: {
     isEnabled: true,
     showKey: false,
@@ -481,24 +482,13 @@ async1
 
 # TypeScript
 
-TypeScript support should automatically be integrated upon requiring this module.
+Basic TypeScript support should automatically be integrated upon requiring this module.
 
 source: [index.d.ts](https://github.com/cnguy/kayn/blob/master/typings/index.d.ts)
-
-This will be improved over time.
-
-`any`'s should be removed
-enums gotta get fixed
 
 # Bugs
 
 Feel free to make an issue (bug, typos, questions, suggestions, whatever) or pull request to fix an issue. Just remember to run `prettier` (via `yarn lint`).
-
-Currently, there are no tests. A lot of the code has already been tested in `kindred-api`, and due to the fact that this libary now relies on a 3rd party rate limiter, it has become much less time consuming to test the API. Also, due to the new `Request` interface (using `superagent`'s API), I no longer have to spend time testing various functions and their various parameters.
-
-Tests will be added regardless though over time.
-
-Expect a few bugs here and there because I rapidly rewrote this (it wasn't hard to using the `Request` class I made).
 
 Package commands:
 
@@ -509,13 +499,12 @@ to run the various files in `./examples`
 * `yarn build`
 to build. `yarn example` runs this command
 * `yarn test`
-does not exist atm
 
 # Changelog
 
 Go to [CHANGELOG.md](https://github.com/cnguy/kayn/blob/master/CHANGELOG.md).
 
-While this library is pre-1.0.0, breaking changes may be made, but will be documented and will generally not be drastic.
+As long this library is pre-1.0.0, breaking changes may be made, but will be documented and will generally not be drastic. Upon 1.0.0, SemVer will be followed strictly.
 
 # Disclaimer
 
