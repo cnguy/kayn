@@ -132,6 +132,11 @@ One Tricks:
 * reddit link: https://www.reddit.com/r/leagueoflegends/comments/5x1c5c/hi_i_made_a_small_website_to_compile_a_list_of/
 * src: https://github.com/cnguy/OneTricks
 
+Here are the requests stats for anyone interested.
+
+Note that my requests stats are a bit inflated because I've experimented with different season data, and also forgot to cache getMatchlist calls early on.
+
+![Alt text](/_pictures/number_of_requests.png?raw=true "onetricks.net")
 # Basic Usage
 
 To see what endpoints are implemented, check out the  [High-level Overview of API](#high-level-overview-of-api).
