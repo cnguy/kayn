@@ -31,7 +31,6 @@
     "rimraf": "^2.6.2"
   },
   "dependencies": {
-    "babel-polyfill": "^6.26.0",
     "dotenv": "^4.0.0",
     "lodash.merge": "^4.6.0",
     "redis": "^2.8.0",

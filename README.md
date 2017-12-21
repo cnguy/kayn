@@ -40,6 +40,8 @@ ESDoc -http://kayn.surge.sh/
 
 # Installation
 
+`kayn` expects a node version of >= 7.6 for default async/await support.
+
 ```sh
 yarn add kayn
 # or npm -i kayn --save
