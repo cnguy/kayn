@@ -1,3 +1,7 @@
+# 0.5.3 (BREAKING?)
+* Remove babel-polyfill, forcing users to use node with default async/await support (which might be recommended anyways?). I pretty much just have 1 async/await line, but who knows when I'll have more, so might as well get this fixed now.
+* Upgrade riotratelimiter-node.
+
 # 0.5.2
 * Fixed `undefined` Redis setex() error when users did not pass in a TTL for a method and called that method. `kayn` should simply not attempt to cache if the ttl is not > 0.
 
