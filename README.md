@@ -26,6 +26,7 @@ Wiki is not updated. It currently is documentation about the old `kindred-api`.
     * [Await](#await)
     * [Callbacks](#callbacks)
     * [High-level Overview of API](#high-level-overview-of-api)
+* [Debugging](#debugging)
 * [Caching](#caching)
 * [TypeScript](#typescript)
 * [Bugs](#bugs)
@@ -395,6 +396,39 @@ Summoner.by.accountID(accountID: int)
 
 /* THIRD-PARTY-CODE-V3 */
 ThirdPartyCode.by.summonerID(summonerID: int)
+```
+
+# Debugging
+
+`kayn` now uses [debug](https://www.npmjs.com/package/debug) for all logging purposes.
+
+Here are the current namespaces:
+
+kayn
+  * init
+  * request
+    * incoming
+      * success
+      * error
+    * outgoing
+  * cache
+    * set
+    * get
+
+To enable debugging, firstly make sure `config.debugOptions.isEnabled` is `true`. Then, run your program with the desired DEBUG environment variables.
+
+For example, if you wish to only see the request errors (404, 420, 503, 500, etc), run
+
+```sh
+DEBUG=kayn:request:incoming:error <command>
+# DEBUG=kayn:*:error works too.
+```
+
+where command runs your script/server/whatever (`npm run start`, `yarn start`, `node index.js`).
+
+To enable all loggers, simply do
+```sh
+DEBUG=kayn:* <command>
 ```
 
 # Caching

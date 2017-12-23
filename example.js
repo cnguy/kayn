@@ -36,6 +36,11 @@ const main = async () => {
         kayn.Summoner.by.name('KidKaito'),
         kayn.Summoner.by.name('hide in bush').region(REGIONS.KOREA),
     ]);
+    try {
+        await kayn.Summoner.by.name('boiueayfodsfhsaoifhdsaf');
+    } catch (ex) {
+        // pass
+    }
     /*
     try {
         return await kayn.Match.get(63506234);
