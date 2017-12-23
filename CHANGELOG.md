@@ -1,3 +1,6 @@
+# 0.6.4
+* Add `debug` for proper logging.
+
 # 0.5.3 (BREAKING?)
 * Remove babel-polyfill, forcing users to use node with default async/await support (which might be recommended anyways?). I pretty much just have 1 async/await line, but who knows when I'll have more, so might as well get this fixed now.
 * Upgrade riotratelimiter-node.
