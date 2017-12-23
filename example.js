@@ -30,9 +30,12 @@ const main = async () => {
         console.log(ex);
     }
     const summoner = await kayn.Summoner.by.name('pyang');*/
-    await kayn.Summoner.by.name('pyang');
-    for (let i = 0; i < 100; ++i)
-        kayn.Summoner.by.name('pyang').then(data => data);
+    await Promise.all([
+        kayn.Summoner.by.name('pyang'),
+        kayn.Summoner.by.name('Contractz'),
+        kayn.Summoner.by.name('KidKaito'),
+        kayn.Summoner.by.name('hide in bush').region(REGIONS.KOREA),
+    ]);
     /*
     try {
         return await kayn.Match.get(63506234);
