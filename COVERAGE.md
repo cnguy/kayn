@@ -1,7 +1,7 @@
-* [ENDPOINTS](#ENDPOINTS)
-* [METHODS](#METHODS)
+* [Endpoints](#endpoints)
+* [kayn Methods](#methods)
 
-# ENDPOINTS
+# Endpoints 
 
 ## CHAMPION-MASTERY-V3
 - [x] `Get all champion mastery entries sorted by number of champion points descending,`
@@ -71,7 +71,7 @@
 - [ ] - `Creates a tournament provider and return its ID.`
 - [ ] - `Creates a tournament and return its ID.`
 
-# METHODS
+# Methods 
 
 ```javascript
 /* CHAMPION-MASTERY-V3 */
