@@ -15,11 +15,11 @@ A small library to work with Riot's League of Legend's API.
 
 # Features
 
-## Rate limiting
+## Rate Limiting
 
 Handled by [riot-ratelimiter](https://github.com/Colorfulstan/RiotRateLimiter-node).
 
-## Most endpoints covered
+## Most Endpoints Covered
 
 Check out [COVERAGE.md](https://github.com/cnguy/kayn/blob/master/COVERAGE.md) to see the League of Legends API endpoints side-by-side with `kayn`'s methods.
 
@@ -29,7 +29,7 @@ Currently supports a basic JS cache (for simple scripts) and Redis for anything 
 
 ## Compatible with Callbacks, Promises, Async / Await
 
-## Basic TypeScript support
+## Basic TypeScript Support
 
 Works immediately upon installation.
 
