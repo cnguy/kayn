@@ -6,432 +6,169 @@ A small library to work with Riot's League of Legend's API.
 [![codecov](https://codecov.io/gh/cnguy/kayn/branch/master/graph/badge.svg)](https://codecov.io/gh/cnguy/kayn)
 [![dependencies Status](https://david-dm.org/cnguy/kayn/status.svg)](https://david-dm.org/cnguy/kayn)
 
-
-
-
-Wiki is not updated. It currently is documentation about the old `kindred-api`.
-
 # Table of Contents:
-* [Documentation](#documentation)
-* [Installation](#installation)
 * [Features](#features)
+* [Installation & Usage](#installation-and-usage)
+* [Configuration](#configuration)
 * [My Project](#my-project)
-* [Coverage](#coverage)
-* [Basic Usage / Initialization / Configuration](#basic-usage)
-* [Current API](#current-api)
-    * [Request Naming Conventions](#request-naming-conventions)
-    * [Setting the Region of a Request](#setting-the-region-of-a-request)
-    * [Adding Query Parameters to a Request](#adding-query-parameters-to-a-request)
-    * [Promises](#promises)
-    * [Await](#await)
-    * [Callbacks](#callbacks)
-    * [High-level Overview of API](#high-level-overview-of-api)
-* [Debugging](#debugging)
-* [Caching](#caching)
-* [TypeScript](#typescript)
-* [Bugs](#bugs)
-* [Changelog](#changelog)
-* [Disclaimer](#disclaimer)
-
-# Documentation
-
-Still under construction!
-
-ESDoc -http://kayn.surge.sh/
-
-# Installation
-
-`kayn` expects a node version of >= 7.6 for default async/await support.
-
-```sh
-yarn add kayn
-# or npm -i kayn --save
-```
+* [Bugs / Changelog / Disclaimer](#bugs)
 
 # Features
 
-* [Rate limiting](https://github.com/Colorfulstan/RiotRateLimiter-node) 
-* All regular endpoints implemented
-* Basic caching (in memory cache, redis cache)
-* API works with both callbacks & promises
-* Basic TypeScript support (WIP)
+## Rate limiting
 
-# Coverage
+Handled by [riot-ratelimiter](https://github.com/Colorfulstan/RiotRateLimiter-node).
 
-## CHAMPION-MASTERY-V3
-- [x] `Get all champion mastery entries sorted by number of champion points descending,`
-- [x] `Get a champion mastery by player ID and champion ID.`
-- [x] `Get a player's total champion mastery score, which is the sum of individual champion mastery levels.`
+## Most endpoints covered
 
-## CHAMPION-V3
-- [x] `Retrieve all champions.`
-- [x] `Retrieve champion by ID.`
+Check out [COVERAGE.md](https://github.com/cnguy/kayn/blob/master/COVERAGE.md) to see the League of Legends API endpoints side-by-side with `kayn`'s methods.
 
-## LEAGUE-V3
-- [x] - `Get the challenger league for given queue.`
-- [x] - `Get leagues in all queues for a given summoner ID.` (Riot plans to deprecate this by January)
-- [x] - `Get league with given ID, including inactive entries.`
-- [x] - `Get the master league for given queue.`
-- [x] - `Get league positions in all queues for given summoner ID.`
+## Caching
 
-## LOL-STATIC-DATA-V3
-- [x] - `Retrieves champion list.`
-- [x] - `Retrieves champion by ID.`
-- [x] - `Retrieves item list.`
-- [x] - `Retrieves item by ID.`
-- [x] - `Retrieve language strings data.`
-- [x] - `Retrieve supported languages data.`
-- [x] - `Retrieve map data.`
-- [x] - `Retrieves mastery list.`
-- [x] - `Retrieves mastery item by ID.`
-- [x] - `Retrieve profile icons.`
-- [x] - `Retrieve realm data.`
-- [x] - `Retrieves rune list.`
-- [x] - `Retrieves rune by ID.`
-- [x] - `Retrieves summoner spell list.`
-- [x] - `Retrieves summoner spell by ID.`
-- [x] - `Retrieve version data.`
+Currently supports a basic JS cache (for simple scripts) and Redis for anything more complicated.
 
-## LOL-STATUS-V3
-- [x] - `Get League of Legends status for the given shard.`
+## Compatible with Callbacks, Promises, Async / Await
 
-## MATCH-V3
-- [x] - `Get match by match ID.`
-- [x] - `Get matchlist for games played on given account ID and platform ID and filtered using given filter parameters, if any.`
-- [x] - `Get matchlist for last 20 matches played on given account ID and platform ID.`
-- [x] - `Get match timeline by match ID.`
-- [ ] - `Get match IDs by tournament code.`
-- [ ] - `Get match by match ID and tournament code.`
+## Basic TypeScript support
 
-## SPECTATOR-V3
-- [x] - `Get current game information for the given summoner ID.`
-- [x] - `Get list of featured games.`
+Works immediately upon installation.
 
-## SUMMONER-V3
-- [x] - `Get a summoner by account ID.`
-- [x] - `Get a summoner by summoner name.`
-- [x] - `Get a summoner by summoner ID.`
+# Installation and Usage
 
-## TOURNAMENT-STUB-V3
-- [ ] - `Create a mock tournament code for the given tournament.`
-- [ ] - `Gets a mock list of lobby events by tournament code.`
-- [ ] - `Creates a mock tournament provider and return its ID.`
-- [ ] - `Creates a mock tournament and return its ID.`
+The minimum required [Node.js version is v7.6.0](https://nodejs.org/en/blog/release/v7.6.0/) for native async/await support (there's only a mere line in the codebase, though).
 
-## TOURNAMENT-V3
-- [ ] - `Create a tournament code for the given tournament.`
-- [ ] - `Update the pick type, map, spectator type, or allowed summoners for a code.`
-- [ ] - `Returns the tournament code DTO associated with a tournament code string.`
-- [ ] - `Gets a list of lobby events by tournament code.`
-- [ ] - `Creates a tournament provider and return its ID.`
-- [ ] - `Creates a tournament and return its ID.`
-
-# My Project
-
-If you're interested in what I have built using this library, here's a small web application I made, along with the original reddit post.
-
-One Tricks:
-* site: http://onetricks.net
-* reddit link: https://www.reddit.com/r/leagueoflegends/comments/5x1c5c/hi_i_made_a_small_website_to_compile_a_list_of/
-* src: https://github.com/cnguy/OneTricks
-
-Here are the requests stats for anyone interested.
-
-Note that my requests stats are a bit inflated because I've experimented with different season data, and also forgot to cache getMatchlist calls early on.
-
-![Alt text](/_pictures/number_of_requests.png?raw=true "onetricks.net")
-# Basic Usage
-
-To see what endpoints are implemented, check out the  [High-level Overview of API](#high-level-overview-of-api).
-
-When you import the Kayn class,
-
-```javascript
-const { Kayn } = require('kayn');
-```
-
-you're actually importing the `init` function.
-
-```javascript
-const init = key => config => {
-  return new Kayn(key, config);
-};
-```
-
-This means you don't have to construct the object using `new`. Furthermore, `init` will automatically look for a `.env` file that has the key-value pair below:
+## npm
 
 ```sh
-# .env
-RIOT_LOL_API_KEY=<key>
+npm i --save kayn
 ```
 
-Using this is preferable as you generally don't commit `.env` files to GitHub.
+## yarn
+
+```sh
+yarn add kayn
+```
+
+### Quick Setup with [Default Config](https://github.com/cnguy/kayn/blob/master/lib/KaynConfig.js)
 
 ```javascript
-const {
-  Kayn,
-  REGIONS,
-  METHOD_NAMES,
-  BasicJSCache,
-  RedisCache,
-} = require('kayn');
+const { Kayn, REGIONS } = require('kayn')
+const kayn = Kayn('RGAPI-my-api-key')(/*{
+    region: REGIONS.NORTH_AMERICA,
+    debugOptions: {
+        isEnabled: true,
+        showKey: false,
+        loggers: {},
+    },
+    requestOptions: {
+        shouldRetry: true,
+        numberOfRetriesBeforeAbort: 3,
+        delayBeforeRetry: 1000,
+        burst: false,
+    },
+    cacheOptions: {
+        cache: null,
+        ttls: {},
+    },
+}*/)
+```
 
-// to initialize Kayn without a .env file
-// const Kayn = Kayn('RGAPI-mykey')({ optional: 'config' })
+**Note: Any config passed in is deeply merged with the default config.**
 
-const kayn = Kayn('my-optional-key')({
-  // DEFAULT CONFIG
-  // if you pass in a config,
-  // the rest of the top-level config will be merged
-  // into your config.
-  // ex: if you pass in just debugOptions to disable it,
-  // requestOptions and the (empty) cacheOptions will be used 
-  region: 'na', // default region
-  debugOptions: {
-    isEnabled: true,
-    showKey: false,
-  },
-  requestOptions: {
-    shouldRetry: true,
-    numberOfRetriesBeforeAbort: 3,
-    delayBeforeRetry: 1000,
-    burst: false,
-  },
-  cacheOptions: {
-    cache: null,
-    ttls: {}, 
-  },
-});
+### Environment Variables
 
-kayn.Summoner.by
-  .name('Contractz')
-  // If this region call is not appended,
-  // the region specified in your config is used,
-  // or 'na' is used because of the default config.
-  .region(REGIONS.NORTH_AMERICA)
-  .callback(function(err, summoner) {
-    if (summoner) {
-      const mlConfig = {
-        season: 9,
+```javascript
+const kayn = Kayn(/* process.env.RIOT_LOL_API_KEY */)(myConfig)
+```
+
+Although it is possible to manually pass in the API key, it is preferable to store the key in a secret file (which should not be committed).
+
+This allows `kayn` to be constructed like in the above code.
+
+```sh
+# filename: .env
+RIOT_LOL_API_KEY=RGAPI-my-api-key
+```
+
+### Callbacks
+
+```javascript
+kayn.Summoner.by.name('Contractz').callback(function(err, summoner) {
+    // do something
+})
+```
+
+### Promises
+
+```javascript
+kayn.Summoner.by.name('Contractz')
+    .then(summoner => doSomething(summoner))
+    .catch(error => console.error(error))
+```
+
+### Async / Await
+
+```javascript
+const main = async () => {
+    const ctz = await kayn.Summoner.by.name('Contractz')
+}
+```
+
+### Region 
+
+This forces a request to target a specific region instead of the default region set in `kayn`'s config.
+
+```javascript
+kayn.Summoner.by.name('hide on bush')
+    .region(REGIONS.KOREA)
+    .callback(function(error, summoner) {
+        doSomething(summoner)
+    })
+```
+
+### Query Parameters
+
+```javascript
+kayn.Matchlist.by.accountID(3440481)
+    .region(REGIONS.KOREA)
+    .query({
         champion: 67,
-      };
-      kayn.Matchlist.by
-        .accountID(summoner.accountId)
-        .region(REGIONS.NORTH_AMERICA)
-        .query(mlConfig)
-        .callback(function(err, matchlistDTO) {
-          const str = 'number of matches: ';
-          console.log(str + matchlistDTO.matches.length);
-        });
-    }
-  });
-
-kayn.Summoner.by
-  .name('Contractz')
-  .region(REGIONS.NORTH_AMERICA)
-  .then(summoner =>
-    kayn.Matchlist.by
-      .accountID(summoner.accountId)
-      .query({ season: 9 })
-      .query({ champion: 67 }),
-  )
-  .then(matchlistDTO => {
-    console.log('number of matches:', matchlistDTO.matches.length);
-  })
-  .catch(err => console.error(err));
-
-const main = async () => {
-  const summoner = await kayn.Summoner.by.name('Contractz');
-  const config = {
-    season: 9,
-    champion: 67,
-  };
-  const matchlistDTO = await kayn.Matchlist.by
-    .accountID(summoner.accountId)
-    .query(config);
-  console.log('number of matches:', matchlistDTO.matches.length);
-}
-main();
+        season: 9,
+    })
+    .callback(function(err, matchlist) {
+        console.log(matchlist.matches.length)
+    })
 ```
 
-Check `example.js` and the files in the `recipes` directory (they're more just random composition of functions lol) for more usage.
+### Documentation
 
-# Current API
+The auto-generated ESDoc documentation can be found [here](http://kayn.surge.sh).
 
-`kayn` methods do not take `region`, `query`, or `callback` arguments like in `kindred-api` and other libraries. As of now, the maximum amount of arguments a `kayn` method can take is 1, with one exception (ChampionMastery.get, which takes 2). You'll see why later below.
+# Configuration
 
-`kayn`'s api is reliant on regions instead of platform ids. Regions are transformed to platform ids within the code wherever necessary.
+## Request Options
 
-## Request Naming Conventions 
+### numberOfRetriesBeforeAbort
 
-`get`: to target and grab something specific, where the parameters are also easy to guess (Match.get would be grabbing a match via its match id). However, runes/matchlist take different arguments (summoner id vs account id), and so they use the `by.xxx` naming below.
+Default: 3 attempts.
 
-`list`: to list out something (e.g. a list of champions, a list of challengers, etc).
+### delayBeforeRetry
 
-`by.xxx`: `by.summonerName`, `by.accountID`, `by.summonerID` is everywhere necessary (e.g. `Matchlist.by.accountID`, `Runes.by.summonerID`). It's explicit for `Matchlist`, `Masteries`, etc to make the call much more clear. However, the `Summoner` namespace simply uses `name`, `id`, and `accountID`. I have not added extra methods like `Matchlist.by.summonerName` yet. This naming makes the request parameter guessable.
+Default: 1000 ms (1 second).
 
-## Setting the Region of a Request
+This option will be scrapped in the future in favor for more flexibility (linear, exponential, random, etc).
 
-Append `.region(regionAbbr)` to a call to set the region. If no region is appended, then we use the default region which is `na` or whatever the user passed in.
+### burst
 
-```javascript
-kayn.Summoner.by.name('Faker').region('kr')
-```
+Default: false.
 
-## Adding Query Parameters to a Request
+Disabled by default in favor of `spread`.
 
-Append `.query(key->value)` to a call to add a query. A query is just a regular JavaScript object. Therefore, you can either chain multiple query parameters together, or pass in a whole blob at once.
+`true` => `riotratelimiter` will use its burst strategy.
 
-```javascript
-const config = {
-    season: 7,
-    champion: 67,
-    queue: 420,
-}
+`false` => `riotratelimiter` will use its spread strategy.
 
-kayn.Matchlist.by.accountID(accountID).query(config)
-
-kayn.Matchlist.by.accountID(accountID)
-    .query({ season: 7 })
-    .query({ champion: 67 })
-    .query({ queue: 420 })
-```
-
-## Promises
-
-All `kayn` methods support promises. 
-
-```javascript
-const promise = kayn.Summoner.by.name('Contractz')
-promise
-    .then(data => console.log(data))
-    .catch(err => console.error(err))
-```
-
-## Await
-
-Naturally, you can `await` any method as long as you have not called `.callback`.
-
-```javascript
-const main = async () => {
-    try {
-        const summoner = await kayn.Summoner.by.name('Contractz')
-    } catch (ex) {
-        console.error(ex)
-    }
-}
-```
-
-## Callbacks
-
-This is simply a renaming of `superagent`'s `end` method. As stated before, `kayn` methods do not have callback parameters.
-
-However, passing in callbacks is still trivial. This is similar to how `region` and `query` are set as well (thanks `superagent`).
-
-```javascript
-const printBoth = (err, data) => console.log(err, data)
-kayn.Summoner.by.name('Contractz').callback(printBoth)
-```
-
-## High-level Overview of API
-
-This is all (both endpoints & methods) in the same order as in the official docs.
-
-Note that the API is not fully consistent. I wanted the API to be readable & easy-to-use-without-documentation, but still be somewhat terse, and so exceptions had to be made for now.
-
-Also note that there is not a one-to-one mapping between namespaces/methods & the official endpoints/resources -- This API somewhat mirrors `kindred-api` in that I separated some resources to make it more convenient for the user (`Matchlist`, `CurrentGame`, and `FeaturedGames` are some examples of this, as `Matchlist` actually belongs to `Match`, and `CurrentGame` and `FeaturedGames` both belong to `Spectator`).
-
-```javascript
-/* CHAMPION-MASTERY-V3 */
-ChampionMastery.list(summonerID: int)
-ChampionMastery.get(summonerID: int)(championID: int)
-ChampionMastery.totalScore(summonerID: int)
-
-/* CHAMPION-V3 */
-Champion.list()
-Champion.get(championID: int)
-
-/* LEAGUE-V3 */
-Challenger.list(queueName: string)
-Leagues.by.summonerID(summonerID: int)
-League.by.uuid(leagueUUID: string)
-Master.list(queueName: string)
-LeaguePositions.by.summonerID(summonerID: int)
-
-/* LOL-STATIC-DATA-V3 */
-Static.Champion.list()
-Static.Champion.get(championID: int)
-Static.Item.list()
-Static.Item.get(itemID: int)
-Static.LanguageString.list()
-Static.Language.list()
-Static.Map.get()
-Static.Mastery.list()
-Static.Mastery.get(masteryID: int)
-Static.ProfileIcon.list()
-Static.Realm.get()
-Static.Rune.list()
-Static.Rune.get(runeID: int)
-Static.SummonerSpell.list()
-Static.SummonerSpell.get(summonerSpellID: int)
-Static.Version.list()
-
-/* LOL-STATUS-V3 */
-Status.get()
-
-/* MATCH-V3 */
-Match.get(matchID: int)
-Matchlist.by.accountID(accountID: int)
-Matchlist.Recent.by.accountID(accountID: int)
-Match.timeline(matchID: int)
-
-/* SPECTATOR-V3 */
-CurrentGame.by.summonerID(summonerID: int)
-FeaturedGames.list()
-
-/* SUMMONER-V3 */
-Summoner.by.name(summonerName: string)
-Summoner.by.id(summonerID: int)
-Summoner.by.accountID(accountID: int)
-
-/* THIRD-PARTY-CODE-V3 */
-ThirdPartyCode.by.summonerID(summonerID: int)
-```
-
-# Debugging
-
-`kayn` now uses [debug](https://www.npmjs.com/package/debug) for all logging purposes.
-
-Here are the current namespaces:
-
-kayn
-  * init
-  * request
-    * incoming
-      * success
-      * error
-    * outgoing
-  * cache
-    * set
-    * get
-
-To enable debugging, firstly make sure `config.debugOptions.isEnabled` is `true`. Then, run your program with the desired DEBUG environment variables.
-
-For example, if you wish to only see the request errors (404, 420, 503, 500, etc), run
-
-```sh
-DEBUG=kayn:request:incoming:error <command>
-# DEBUG=kayn:*:error works too.
-```
-
-where command runs your script/server/whatever (`npm run start`, `yarn start`, `node index.js`).
-
-To enable all loggers, simply do
-```sh
-DEBUG=kayn:* <command>
-```
-
-# Caching
+## Cache Options
 
 To cache, firstly create some Cache that has a get/set function, and then pass it to `cacheOptions.cache`.
 
@@ -442,53 +179,48 @@ Current caches:
 * Redis cache
 
 ```javascript
-import {
-    Kayn,
-    REGIONS,
-    METHOD_NAMES,
-    BasicJSCache,
-    RedisCache,
-} from 'kayn';
+import { Kayn, REGIONS, METHOD_NAMES, BasicJSCache, RedisCache } from 'kayn'
 
 const redisCache = new RedisCache({
-  host: 'localhost',
-  port: 5000,
-  keyPrefix: 'kayn',
+    host: 'localhost',
+    port: 5000,
+    keyPrefix: 'kayn',
 })
 
-const basicCache = new BasicCache();
+const basicCache = new BasicCache()
 
-const myCache = redisCache; // or basicCache
+const myCache = redisCache // or basicCache
 
 const kayn = Kayn(/* optional key */)({
-  region: 'na',
-  debugOptions: {
-    isEnabled: true,
-    showKey: false,
-  },
-  requestOptions: {
-    shouldRetry: true,
-    numberOfRetriesBeforeAbort: 3,
-    delayBeforeRetry: 1000,
-  },
-  cacheOptions: {
-    cache: myCache,
-    ttls: {
-        [METHOD_NAMES.SUMMONER.GET_BY_SUMMONER_NAME]: 1000, // ms
+    region: 'na',
+    debugOptions: {
+        isEnabled: true,
+        showKey: false,
     },
-  },
-});
+    requestOptions: {
+        shouldRetry: true,
+        numberOfRetriesBeforeAbort: 3,
+        delayBeforeRetry: 1000,
+    },
+    cacheOptions: {
+        cache: myCache,
+        ttls: {
+            [METHOD_NAMES.SUMMONER.GET_BY_SUMMONER_NAME]: 1000, // ms
+        },
+    },
+})
 
-kayn.Summoner.by.name('Contractz').then(() => kayn.Summoner.by.name('Contractz'));
+kayn.Summoner.by
+    .name('Contractz')
+    .then(() => kayn.Summoner.by.name('Contractz'))
 
 /*
 200 @ https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/Contractz
 CACHE HIT @ https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/Contractz
 */
-
 ```
 
-## Flushing the Cache
+### Flushing the Cache
 
 ```javascript
 // BasicJSCache O(1)
@@ -521,12 +253,59 @@ async1
   .then(() => kayn.flushCache())
   .catch(console.log);
 ```
+## Debug Options
 
-# TypeScript
+### showKey
 
-Basic TypeScript support should automatically be integrated upon requiring this module.
+When logging, URLs printed out on the screen will also have the API key query string attached to it, allowing the user to conveniently inspect the response if necessary.
 
-source: [index.d.ts](https://github.com/cnguy/kayn/blob/master/typings/index.d.ts)
+### loggers 
+
+`kayn` now uses [debug](https://www.npmjs.com/package/debug) for all logging purposes.
+
+Here are the current namespaces:
+
+kayn
+  * init
+  * request
+    * incoming
+      * success
+      * error
+    * outgoing
+  * cache
+    * set
+    * get
+
+To enable debugging, firstly make sure `config.debugOptions.isEnabled` is `true`. Then, run your program with the desired DEBUG environment variables.
+
+For example, if you wish to only see the request errors (404, 420, 503, 500, etc), run:
+
+```sh
+DEBUG=kayn:request:incoming:error <command>
+# DEBUG=kayn:*:error works too.
+```
+
+...where command runs the script/server/whatever (`npm run start`, `yarn start`, `node index.js`).
+
+To enable all loggers, simply run: 
+```sh
+DEBUG=kayn:* <command>
+```
+
+# My Project
+
+If you're interested in what I have built using this library, here's a small web application I made, along with the original reddit post.
+
+One Tricks:
+* site: http://onetricks.net
+* reddit link: https://www.reddit.com/r/leagueoflegends/comments/5x1c5c/hi_i_made_a_small_website_to_compile_a_list_of/
+* src: https://github.com/cnguy/OneTricks
+
+Here are the requests stats for anyone interested.
+
+Note that my requests stats are a bit inflated because I've experimented with different season data, and also forgot to cache getMatchlist calls early on.
+
+![Alt text](/_pictures/number_of_requests.png?raw=true "onetricks.net")
 
 # Bugs
 
@@ -544,7 +323,7 @@ to build. `yarn example` runs this command
 
 # Changelog
 
-Go to [CHANGELOG.md](https://github.com/cnguy/kayn/blob/master/CHANGELOG.md).
+[CHANGELOG.md](https://github.com/cnguy/kayn/blob/master/CHANGELOG.md).
 
 As long this library is pre-1.0.0, breaking changes may be made, but will be documented and will generally not be drastic. Upon 1.0.0, SemVer will be followed strictly.
 
