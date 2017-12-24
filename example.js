@@ -1,4 +1,4 @@
-import { Kayn, REGIONS, METHOD_NAMES, BasicJSCache, RedisCache } from 'kayn';
+import { Kayn, REGIONS, METHOD_NAMES, BasicJSCache, RedisCache } from './';
 
 const redisCache = new RedisCache({
     host: 'localhost',
@@ -6,7 +6,7 @@ const redisCache = new RedisCache({
     keyPrefix: 'kayn',
 });
 
-const basicCache = new BasicCache();
+const basicCache = new BasicJSCache();
 
 const myCache = redisCache; // or basicCache
 

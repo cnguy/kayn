@@ -187,7 +187,7 @@ const redisCache = new RedisCache({
     keyPrefix: 'kayn',
 })
 
-const basicCache = new BasicCache()
+const basicCache = new BasicJSCache()
 
 const myCache = redisCache // or basicCache
 
