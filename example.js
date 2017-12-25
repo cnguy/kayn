@@ -34,12 +34,14 @@ const kayn = Kayn(/* optional key */)({
 const main = async () => {
     const region = REGIONS.NORTH_AMERICA;
     const callbackURL = 'https://github.com/cnguy/kayn';
-    const providerID = await kayn.TournamentStub.registerProviderData(
+    const providerID = await kayn.Tournament.registerProviderData(
         region,
         callbackURL,
     );
-    const tournamentID = await kayn.TournamentStub.register(providerID /*, optional name */);
-    const lobbyEvents = await kayn.TournamentStub.lobbyEvents(tournamentID);
+    const tournamentID = await kayn.Tournament.register(
+        providerID /*, optional name */,
+    );
+    const lobbyEvents = await kayn.Tournament.lobbyEvents(tournamentID);
     console.log(lobbyEvents);
 };
 
