@@ -1,14 +1,16 @@
 import { Kayn, REGIONS, METHOD_NAMES, BasicJSCache, RedisCache } from './';
 
+/*
 const redisCache = new RedisCache({
     host: 'localhost',
     port: 5000,
     keyPrefix: 'kayn',
 });
+*/
 
 const basicCache = new BasicJSCache();
 
-const myCache = redisCache; // or basicCache
+const myCache = basicCache; // or basicCache
 
 const kayn = Kayn(/* optional key */)({
     region: 'na',
@@ -29,11 +31,16 @@ const kayn = Kayn(/* optional key */)({
     },
 });
 
-kayn.Summoner.by
-    .name('Contractz')
-    .then(() => kayn.Summoner.by.name('Contractz'));
+const main = async () => {
+    const region = REGIONS.NORTH_AMERICA;
+    const callbackURL = 'https://github.com/cnguy/kayn';
+    const providerID = await kayn.TournamentStub.registerProviderData(
+        region,
+        callbackURL,
+    );
+    const tournamentID = await kayn.TournamentStub.register(providerID /*, optional name */);
+    const lobbyEvents = await kayn.TournamentStub.lobbyEvents(tournamentID);
+    console.log(lobbyEvents);
+};
 
-/*
-200 @ https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/Contractz
-CACHE HIT @ https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/Contractz
-*/
+main();
