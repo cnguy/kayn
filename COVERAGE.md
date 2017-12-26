@@ -3,6 +3,8 @@
 
 # Endpoints 
 
+Everything should be in the same order as in the official docs.
+
 ## CHAMPION-MASTERY-V3
 - [x] `Get all champion mastery entries sorted by number of champion points descending,`
 - [x] `Get a champion mastery by player ID and champion ID.`
@@ -58,18 +60,18 @@
 - [x] - `Get a summoner by summoner ID.`
 
 ## TOURNAMENT-STUB-V3
-- [ ] - `Create a mock tournament code for the given tournament.`
-- [ ] - `Gets a mock list of lobby events by tournament code.`
-- [ ] - `Creates a mock tournament provider and return its ID.`
-- [ ] - `Creates a mock tournament and return its ID.`
+- [x] - `Create a mock tournament code for the given tournament.`
+- [x] - `Gets a mock list of lobby events by tournament code.`
+- [x] - `Creates a mock tournament provider and return its ID.`
+- [x] - `Creates a mock tournament and return its ID.`
 
 ## TOURNAMENT-V3
-- [ ] - `Create a tournament code for the given tournament.`
-- [ ] - `Update the pick type, map, spectator type, or allowed summoners for a code.`
-- [ ] - `Returns the tournament code DTO associated with a tournament code string.`
-- [ ] - `Gets a list of lobby events by tournament code.`
-- [ ] - `Creates a tournament provider and return its ID.`
-- [ ] - `Creates a tournament and return its ID.`
+- [x] - `Create a tournament code for the given tournament.`
+- [x] - `Update the pick type, map, spectator type, or allowed summoners for a code.`
+- [x] - `Returns the tournament code DTO associated with a tournament code string.`
+- [x] - `Gets a list of lobby events by tournament code.`
+- [x] - `Creates a tournament provider and return its ID.`
+- [x] - `Creates a tournament and return its ID.`
 
 # Methods 
 
@@ -128,4 +130,18 @@ Summoner.by.accountID(accountID: int)
 
 /* THIRD-PARTY-CODE-V3 */
 ThirdPartyCode.by.summonerID(summonerID: int)
+
+/* TOURNAMENT-STUB-V3 */
+TournamentStub.create(tournamentID: number, body: object)
+TournamentStub.lobbyEvents(tournamentCode: string)
+TournamentStub.registerProviderData(region: string, callbackURL: string)
+TournamentStub.register(providerID: number, name: string?)
+
+/* TOURNAMENT-V3 */
+Tournament.create(tournamentID: number, body: object)
+Tournament.update(tournamentCode: string, body: object)
+Tournament.get(tournamentCode: string)
+Tournament.lobbyEvents(tournamentCode: string)
+Tournament.registerProviderData(region: string, callbackURL: string)
+TournamentStub.register(providerID: number, name: string?)
 ```
