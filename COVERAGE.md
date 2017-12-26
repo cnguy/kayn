@@ -132,13 +132,13 @@ Summoner.by.accountID(accountID: int)
 ThirdPartyCode.by.summonerID(summonerID: int)
 
 /* TOURNAMENT-STUB-V3 */
-TournamentStub.create(tournamentID: number, body: object)
+TournamentStub.create(tournamentID: number, body: object?)
 TournamentStub.lobbyEvents(tournamentCode: string)
 TournamentStub.registerProviderData(region: string, callbackURL: string)
 TournamentStub.register(providerID: number, name: string?)
 
 /* TOURNAMENT-V3 */
-Tournament.create(tournamentID: number, body: object)
+Tournament.create(tournamentID: number, body: object?)
 Tournament.update(tournamentCode: string, body: object)
 Tournament.get(tournamentCode: string)
 Tournament.lobbyEvents(tournamentCode: string)
