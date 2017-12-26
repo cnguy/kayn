@@ -24,9 +24,12 @@ describe('ChampionMasteryEndpoint', function() {
             expect(payload).to.deep.equal({
                 method: 'GET',
                 serviceName: 'champion-mastery',
-                endpoint: `champion-masteries/by-summoner/${Contractz.id}/by-champion/${championID}`,
+                endpoint: `champion-masteries/by-summoner/${
+                    Contractz.id
+                }/by-champion/${championID}`,
                 query: [],
                 region: '',
+                isTournament: false,
             });
         });
     });

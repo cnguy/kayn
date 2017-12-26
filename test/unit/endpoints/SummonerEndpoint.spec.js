@@ -25,6 +25,7 @@ describe('SummonerEndpoint', function() {
                 endpoint: `summoners/by-name/${mocks.summoner.Contractz.name}`,
                 query: [],
                 region: '',
+                isTournament: false,
             });
         });
 
@@ -50,6 +51,7 @@ describe('SummonerEndpoint', function() {
                 endpoint: `summoners/${mocks.summoner.Contractz.id}`,
                 query: [],
                 region: '',
+                isTournament: false,
             });
         });
     });
@@ -62,10 +64,12 @@ describe('SummonerEndpoint', function() {
             expect(payload).to.deep.equal({
                 method: 'GET',
                 serviceName: 'summoner',
-                endpoint: `summoners/by-account/${mocks.summoner.Contractz
-                    .accountId}`,
+                endpoint: `summoners/by-account/${
+                    mocks.summoner.Contractz.accountId
+                }`,
                 query: [],
                 region: '',
+                isTournament: false,
             });
         });
     });

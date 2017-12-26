@@ -26,6 +26,7 @@ describe('LeaguePositionsEndpoint', function() {
                 endpoint: `positions/by-summoner/${Contractz.id}`,
                 query: [],
                 region: '',
+                isTournament: false,
             });
         });
     });

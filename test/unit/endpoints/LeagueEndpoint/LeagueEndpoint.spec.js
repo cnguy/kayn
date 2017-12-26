@@ -23,6 +23,7 @@ describe('LeagueEndpoint', function() {
                 endpoint: `leagues/${mocks.league.uuid}`,
                 query: [],
                 region: '',
+                isTournament: false,
             });
         });
     });

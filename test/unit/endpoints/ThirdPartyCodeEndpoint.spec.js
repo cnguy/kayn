@@ -22,10 +22,12 @@ describe('ThirdPartyCodeEndpoint', function() {
             expect(payload).to.deep.equal({
                 method: 'GET',
                 serviceName: 'platform',
-                endpoint: `third-party-code/by-summoner/${mocks.summoner
-                    .Contractz.id}`,
+                endpoint: `third-party-code/by-summoner/${
+                    mocks.summoner.Contractz.id
+                }`,
                 query: [],
                 region: '',
+                isTournament: false,
             });
         });
     });

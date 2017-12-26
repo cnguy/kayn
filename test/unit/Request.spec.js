@@ -22,6 +22,7 @@ describe('Request', function() {
             endpoint: 'by-name/chaullenger',
             query: [],
             region: '',
+            isTournament: false,
         });
     });
 
@@ -32,6 +33,9 @@ describe('Request', function() {
             'by-name/chaullenger',
             'abc',
             'POST',
+            null,
+            { hello: 'world' },
+            true,
         );
         const { config, methodName, payload } = request;
         expect(config).to.deep.equal(defaultConfig);
@@ -42,6 +46,33 @@ describe('Request', function() {
             endpoint: 'by-name/chaullenger',
             query: [],
             region: '',
+            body: { hello: 'world' },
+            isTournament: true,
+        });
+    });
+
+    it('should initialize correctly #3', function() {
+        const request = new Request(
+            defaultConfig,
+            'summoner',
+            'by-name/chaullenger',
+            'abc',
+            'PUT',
+            null,
+            { hello: 'world' },
+            true,
+        );
+        const { config, methodName, payload } = request;
+        expect(config).to.deep.equal(defaultConfig);
+        expect(methodName).to.deep.equal('abc');
+        expect(payload).to.deep.equal({
+            method: 'PUT',
+            serviceName: 'summoner',
+            endpoint: 'by-name/chaullenger',
+            query: [],
+            region: '',
+            body: { hello: 'world' },
+            isTournament: true,
         });
     });
 

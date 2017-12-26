@@ -23,6 +23,7 @@ describe('MasterEndpoint', function() {
                 endpoint: 'masterleagues/by-queue/RANKED_SOLO_5x5',
                 query: [],
                 region: '',
+                isTournament: false,
             });
         });
     });

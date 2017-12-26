@@ -22,10 +22,12 @@ describe('MatchlistEndpoint', function() {
             expect(payload).to.deep.equal({
                 method: 'GET',
                 serviceName: 'match',
-                endpoint: `matchlists/by-account/${mocks.summoner.Contractz
-                    .accountId}`,
+                endpoint: `matchlists/by-account/${
+                    mocks.summoner.Contractz.accountId
+                }`,
                 query: [],
                 region: '',
+                isTournament: false,
             });
         });
     });
@@ -42,6 +44,7 @@ describe('MatchlistEndpoint', function() {
                 endpoint: `matchlists/by-account/${Contractz.accountId}/recent`,
                 query: [],
                 region: '',
+                isTournament: false,
             });
         });
     });

@@ -24,6 +24,7 @@ describe('LeaguesEndpoint', function() {
                 endpoint: `leagues/by-summoner/${Contractz.id}`,
                 query: [],
                 region: '',
+                isTournament: false,
             });
         });
     });

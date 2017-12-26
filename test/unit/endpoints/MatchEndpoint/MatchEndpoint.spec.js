@@ -24,6 +24,7 @@ describe('MatchEndpoint', function() {
                 endpoint: `matches/${id}`,
                 query: [],
                 region: '',
+                isTournament: false,
             });
         });
     });
@@ -38,6 +39,7 @@ describe('MatchEndpoint', function() {
                 endpoint: `timelines/by-match/${id}`,
                 query: [],
                 region: '',
+                isTournament: false,
             });
         });
     });

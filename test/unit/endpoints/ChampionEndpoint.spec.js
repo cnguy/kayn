@@ -24,6 +24,7 @@ describe('ChampionEndpoint', function() {
                 endpoint: `champions/${championID}`,
                 query: [],
                 region: '',
+                isTournament: false,
             });
         });
     });

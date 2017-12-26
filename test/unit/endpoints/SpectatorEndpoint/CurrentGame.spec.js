@@ -24,6 +24,7 @@ describe('CurrentGameEndpoint', function() {
                 endpoint: `active-games/by-summoner/${Contractz.id}`,
                 query: [],
                 region: '',
+                isTournament: false,
             });
         });
     });

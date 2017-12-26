@@ -23,6 +23,7 @@ describe('ChallengerEndpoint', function() {
                 endpoint: 'challengerleagues/by-queue/RANKED_SOLO_5x5',
                 query: [],
                 region: '',
+                isTournament: false,
             });
         });
     });

@@ -23,6 +23,7 @@ describe('FeaturedGamesEndpoint', function() {
                 endpoint: 'featured-games',
                 query: [],
                 region: '',
+                isTournament: false,
             });
         });
     });

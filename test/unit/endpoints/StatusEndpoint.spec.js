@@ -23,6 +23,7 @@ describe('StatusEndpoint', function() {
                 endpoint: 'shard-data',
                 query: [],
                 region: '',
+                isTournament: false,
             });
         });
     });
