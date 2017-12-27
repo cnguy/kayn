@@ -1,4 +1,4 @@
-# 0.8.6
+# 0.7.7
 * Add Match tournament related methods (Match.Tournament.get and Match.Tournament.listMatchIDs).
 
 # 0.7.6
