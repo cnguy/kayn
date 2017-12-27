@@ -1,10 +1,13 @@
+# 0.8.6
+* Add Match tournament related methods (Match.Tournament.get and Match.Tournament.listMatchIDs).
+
 # 0.7.6
 * Add tournament endpoints.
 * Add logging config on init.
 * Make logging outcoming requests more explicit (e.g. [GET], [POST]).
 
 # BETA: 0.7.5 / 0.7.4 
-* Bad tournament endpoint implementations
+* Bad tournament endpoint implementations.
 
 # 0.6.4
 * Add `debug` for proper logging.

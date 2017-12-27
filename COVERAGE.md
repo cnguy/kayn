@@ -47,8 +47,8 @@ Everything should be in the same order as in the official docs.
 - [x] - `Get matchlist for games played on given account ID and platform ID and filtered using given filter parameters, if any.`
 - [x] - `Get matchlist for last 20 matches played on given account ID and platform ID.`
 - [x] - `Get match timeline by match ID.`
-- [ ] - `Get match IDs by tournament code.`
-- [ ] - `Get match by match ID and tournament code.`
+- [x] - `Get match IDs by tournament code.`
+- [x] - `Get match by match ID and tournament code.`
 
 ## SPECTATOR-V3
 - [x] - `Get current game information for the given summoner ID.`
@@ -118,6 +118,8 @@ Match.get(matchID: int)
 Matchlist.by.accountID(accountID: int)
 Matchlist.Recent.by.accountID(accountID: int)
 Match.timeline(matchID: int)
+Match.Tournament.listMatchIDs(tournamentCode: string)
+Match.Tournament.get(matchID: int, tournamentCode: string)
 
 /* SPECTATOR-V3 */
 CurrentGame.by.summonerID(summonerID: int)

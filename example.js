@@ -32,7 +32,12 @@ const kayn = Kayn(/* optional key */)({
 });
 
 const main = async () => {
-    await kayn.Summoner.by.name('Contractz');
+    try {
+        await kayn.Match.Tournament.listMatchIDs('12345');
+        await kayn.Match.Tournament.get(12345, '21345');
+    } catch (ex) {
+        console.log(ex);
+    }
 };
 
 main();

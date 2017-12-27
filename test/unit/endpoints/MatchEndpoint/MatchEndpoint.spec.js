@@ -43,4 +43,34 @@ describe('MatchEndpoint', function() {
             });
         });
     });
+
+    describe('Tournament', function() {
+        describe('.listMatchIDs', function() {
+            it('should have the correct payload #1', function() {
+                const { payload } = this.Match.Tournament.listMatchIDs('12345');
+                expect(payload).to.deep.equal({
+                    method: 'GET',
+                    serviceName: 'match',
+                    endpoint: 'matches/by-tournament-code/12345/ids',
+                    query: [],
+                    region: '',
+                    isTournament: false,
+                });
+            });
+        });
+
+        describe('.get', function() {
+            it('should have the correct payload #1', function() {
+                const { payload } = this.Match.Tournament.get(12345, '12345');
+                expect(payload).to.deep.equal({
+                    method: 'GET',
+                    serviceName: 'match',
+                    endpoint: 'matches/12345/by-tournament-code/12345',
+                    query: [],
+                    region: '',
+                    isTournament: false,
+                });
+            });
+        });
+    });
 });
