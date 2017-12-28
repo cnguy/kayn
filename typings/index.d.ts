@@ -1,107 +1,112 @@
-import * as kayn from './dtos'
+import * as dtos from './dtos'
 
 declare class Kayn {
     flushCache(cb?: callback<"OK">): Promise<"OK">;
 
     public ChampionMastery: {
-        list: (summonerID: number) => KaynRequest<any>;
-        get: (summonerID: number) => (championID: number) => KaynRequest<any>;
-        totalScore: (summonerID: number) => KaynRequest<any>;
+        list: (summonerID: number) => KaynRequest<dtos.ChampionMasteryV3ChampionMasteryDTO[]>;
+        get: (summonerID: number) => (championID: number) => KaynRequest<dtos.ChampionMasteryV3ChampionMasteryDTO>;
+        totalScore: (summonerID: number) => KaynRequest<number>;
     }
 
     public Champion: {
-        list: () => KaynRequest<any>;
-        get: (summonerID: number) => KaynRequest<any>;
+        list: () => KaynRequest<dtos.ChampionV3ChampionListDto>;
+        get: (summonerID: number) => KaynRequest<dtos.ChampionV3ChampionDto>;
     }
 
     public Challenger: {
-        list: (queueName: queueName) => KaynRequest<any>;
+        list: (queueName: queueName) => KaynRequest<dtos.LeagueV3LeagueListDTO>;
     }
     
     public Leagues: {
         by: {
-            summonerID: (summonerID: number) => KaynRequest<any>;
+            summonerID: (summonerID: number) => KaynRequest<dtos.LeagueV3LeagueListDTO[]>;
         }
     }
 
     public League: {
         by: {
-            uuid: (leagueUUID: string) => KaynRequest<any>;
+            uuid: (leagueUUID: string) => KaynRequest<dtos.LeagueV3LeagueListDTO>;
         }
     }
 
     public Master: {
-        list: (queueName: queueName) => KaynRequest<any>;
+        list: (queueName: queueName) => KaynRequest<dtos.LeagueV3LeagueListDTO>;
     }
 
     public LeaguePositions: {
         by: {
-            summonerID: (summonerID: number) => KaynRequest<any>;
+            summonerID: (summonerID: number) => KaynRequest<dtos.LeagueV3LeaguePositionDTO[]>;
         }
     }
 
     public Static: {
         Champion: {
-            list: () => KaynRequest<any>;
-            get: (championID: number) => KaynRequest<any>;
+            list: () => KaynRequest<dtos.LolStaticDataV3ChampionListDto>;
+            get: (championID: number) => KaynRequest<dtos.LolStaticDataV3ChampionDto>;
         }
         Item: {
-            list: () => KaynRequest<any>;
-            get: (itemID: number) => KaynRequest<any>;
+            list: () => KaynRequest<dtos.LolStaticDataV3ItemListDto>;
+            get: (itemID: number) => KaynRequest<dtos.LolStaticDataV3ItemDto>;
         }
         LanguageString: {
-            list: () => KaynRequest<any>;
+            list: () => KaynRequest<dtos.LolStaticDataV3LanguageStringsDto>;
         }
         Language: {
-            list: () => KaynRequest<any>;
+            list: () => KaynRequest<string[]>;
         }
         Map: {
-            get: () => KaynRequest<any>;
+            get: () => KaynRequest<dtos.LolStaticDataV3MapDataDto>;
         }
         Mastery: {
-            list: () => KaynRequest<any>;
-            get: (masteryID: number) => KaynRequest<any>;
+            list: () => KaynRequest<dtos.LolStaticDataV3MasteryListDto>;
+            get: (masteryID: number) => KaynRequest<dtos.LolStaticDataV3MasteryDto>;
         }
         ProfileIcon: {
-            list: () => KaynRequest<any>;
+            list: () => KaynRequest<dtos.LolStaticDataV3ProfileIconDataDto>;
         }
         Realm: {
-            get: () => KaynRequest<any>;
+            get: () => KaynRequest<dtos.LolStaticDataV3RealmDto>;
         }
         SummonerSpell: {
-            list: () => KaynRequest<any>;
-            get: (summonerSpellID: number) => KaynRequest<any>;
+            list: () => KaynRequest<dtos.LolStaticDataV3SummonerSpellListDto>;
+            get: (summonerSpellID: number) => KaynRequest<dtos.LolStaticDataV3SummonerSpellDto>;
         }
         Version: {
-            list: () => KaynRequest<any>;
+            list: () => KaynRequest<string[]>;
         }
     }
 
     public Status: {
-        get: () => KaynRequest<any>;
+        get: () => KaynRequest<dtos.LolStatusV3ShardStatus>;
     }
 
     public Match: {
-        get: (matchID: number) => KaynRequest<any>;
-        timeline: (matchID: number) => KaynRequest<any>;
+        get: (matchID: number) => KaynRequest<dtos.MatchV3MatchDto>;
+        timeline: (matchID: number) => KaynRequest<dtos.MatchV3MatchTimelineDto>;
+
+        Tournament: {
+            listMatchIDs: (tournamentCode: string) => KaynRequest<number[]>,
+            get: (matchID: number, tournamentCode: string) => KaynRequest<dtos.MatchV3MatchDto>,
+        }
     }
 
     public Matchlist: {
         by: {
-            accountID: (accountID: number) => KaynRequest<any>;
+            accountID: (accountID: number) => KaynRequest<dtos.MatchV3MatchlistDto>;
         }
         Recent: {
             by: {
-                accountID: (accountID: number) => KaynRequest<any>;
+                accountID: (accountID: number) => KaynRequest<dtos.MatchV3MatchlistDto>;
             }
         }
     }
 
     public Summoner: {
         by: {
-            name: (name: string) => KaynRequest<Summoner>,
-            id: (id: number) => KaynRequest<Summoner>,
-            accountID: (accountID: number) => KaynRequest<Summoner>,
+            name: (name: string) => KaynRequest<dtos.SummonerV3SummonerDTO>,
+            id: (id: number) => KaynRequest<dtos.SummonerV3SummonerDTO>,
+            accountID: (accountID: number) => KaynRequest<dtos.SummonerV3SummonerDTO>,
         }
     }
 
@@ -109,6 +114,22 @@ declare class Kayn {
         by: {
             summonerID: (id: number) => KaynRequest<string>,
         }
+    }
+
+    public TournamentStub: {
+        create: (tournamentID: number, body?: dtos.TournamentStubV3TournamentCodeParameters) => KaynRequest<string[]>,
+        lobbyEvents: (tournamentCode: string) => KaynRequest<dtos.TournamentStubV3LobbyEventDTOWrapper>,
+        registerProviderData: (region: string, callbackURL: string) => KaynRequest<number>,
+        register: (providerID: number, name?: string) => KaynRequest<number>,
+    }
+
+    public Tournament: {
+        create: (tournamentID: number, body?: dtos.TournamentV3TournamentCodeParameters) => KaynRequest<string[]>,
+        update: (tournamentCode: string, body: dtos.TournamentV3TournamentCodeUpdateParameters) => KaynRequest<void>,
+        get: (tournamentCode: string) => KaynRequest<dtos.TournamentV3TournamentCodeDTO>,
+        lobbyEvents: (tournamentCode: string) => KaynRequest<dtos.TournamentV3LobbyEventDTOWrapper>,
+        registerProviderData: (region: string, callbackURL: string) => KaynRequest<number>,
+        register: (providerID: number, name?: string) => KaynRequest<number>,
     }
 }
 
@@ -138,7 +159,7 @@ interface KaynConfig {
         delayBeforeRetry?: number;
         burst?: boolean,
     },
-    cacheOptions: any,
+    cacheOptions?: any,
 }
 type httpMethodType = string;
   

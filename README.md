@@ -17,9 +17,9 @@ A small library to work with Riot's League of Legend's API.
 
 ## Rate Limiting
 
-Handled by [riot-ratelimiter](https://github.com/Colorfulstan/RiotRateLimiter-node).
+Handled by [Colorfulstan](https://github.com/Colorfulstan)'s wonderful [riot-ratelimiter](https://github.com/Colorfulstan/RiotRateLimiter-node).
 
-## Most Endpoints Covered
+## All Endpoints Covered
 
 Check out [COVERAGE.md](https://github.com/cnguy/kayn/blob/master/COVERAGE.md) to see the League of Legends API endpoints side-by-side with `kayn`'s methods.
 
@@ -29,9 +29,11 @@ Currently supports a basic JS cache (for simple scripts) and Redis for anything 
 
 ## Compatible with Callbacks, Promises, Async / Await
 
-## Basic TypeScript Support
+## Good TypeScript Support
 
 Works immediately upon installation.
+
+As of v0.8.7 (once released), full DTO's are provided thanks to [MingweiSamuel](https://github.com/MingweiSamuel)'s [auto-updated Swagger JSON](https://github.com/MingweiSamuel/riotapi-schema).
 
 # Installation and Usage
 
