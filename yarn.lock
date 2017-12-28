@@ -905,9 +905,13 @@ commander@2.11.0:
   version "2.11.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.11.0.tgz#157152fd1e7a6c8d98a5b715cf376df928004563"
 
-commander@^2.11.0:
+commander@^2.11.0, commander@^2.12.2:
   version "2.12.2"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.12.2.tgz#0f5946c427ed9ec0d91a46bb9def53e54650e555"
+
+commandpost@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/commandpost/-/commandpost-1.2.1.tgz#2e9c4c7508b9dc704afefaa91cab92ee6054cc68"
 
 concat-map@0.0.1:
   version "0.0.1"
@@ -1078,6 +1082,18 @@ dotenv@^4.0.0:
 double-ended-queue@^2.1.0-0:
   version "2.1.0-0"
   resolved "https://registry.yarnpkg.com/double-ended-queue/-/double-ended-queue-2.1.0-0.tgz#103d3527fd31528f40188130c841efdd78264e5c"
+
+dtsgenerator@^0.9.6:
+  version "0.9.7"
+  resolved "https://registry.yarnpkg.com/dtsgenerator/-/dtsgenerator-0.9.7.tgz#88f910f522d9ee394d850e54d7dc3191c92be539"
+  dependencies:
+    commander "^2.12.2"
+    debug "^3.1.0"
+    glob "^7.1.2"
+    js-yaml "^3.10.0"
+    mkdirp "^0.5.1"
+    request "^2.83.0"
+    tslib "^1.8.1"
 
 ecc-jsbn@~0.1.1:
   version "0.1.1"
@@ -1766,7 +1782,7 @@ js-tokens@^3.0.0, js-tokens@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-3.0.2.tgz#9866df395102130e38f7f996bceb65443209c25b"
 
-js-yaml@3.x:
+js-yaml@3.x, js-yaml@^3.10.0:
   version "3.10.0"
   resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.10.0.tgz#2e78441646bd4682e963f22b6e92823c309c62dc"
   dependencies:
@@ -2708,6 +2724,14 @@ supports-color@^5.1.0:
   dependencies:
     has-flag "^2.0.0"
 
+sw2dts@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/sw2dts/-/sw2dts-2.5.0.tgz#235158aa292a15fc3a299ee96d7f4f9a29e8ce41"
+  dependencies:
+    commandpost "^1.2.1"
+    dtsgenerator "^0.9.6"
+    js-yaml "^3.10.0"
+
 "symbol-tree@>= 3.1.0 < 4.0.0":
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.2.tgz#ae27db38f660a7ae2e1c3b7d1bc290819b8519e6"
@@ -2754,6 +2778,10 @@ tr46@~0.0.1:
 trim-right@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/trim-right/-/trim-right-1.0.1.tgz#cb2e1203067e0c8de1f614094b9fe45704ea6003"
+
+tslib@^1.8.1:
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.8.1.tgz#6946af2d1d651a7b1863b531d6e5afa41aa44eac"
 
 tunnel-agent@^0.6.0:
   version "0.6.0"
