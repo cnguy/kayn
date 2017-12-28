@@ -1,5 +1,7 @@
+import * as kayn from './dtos'
+
 declare class Kayn {
-    flushCache(cb?: callback<"OK">): void;
+    flushCache(cb?: callback<"OK">): Promise<"OK">;
 
     public ChampionMastery: {
         list: (summonerID: number) => KaynRequest<any>;
@@ -108,15 +110,6 @@ declare class Kayn {
             summonerID: (id: number) => KaynRequest<string>,
         }
     }
-}
-
-type Summoner = {
-    id: number;
-    accountId: number;
-    name: string;
-    profileIconId: number;
-    revisionDate: number;
-    summonerLevel: number;
 }
 
 declare class KaynRequest<T> {

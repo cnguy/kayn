@@ -6,14 +6,9 @@ const path = require('path')
 const SWAGGER_URL = 'http://mingweisamuel.com/riotapi-schema/swaggerspec-2.0.json'
 const TS_FILE_PATH = path.join(__dirname, '..', 'typings', 'dtos.ts')
 
-const options = {
-    namespace: 'kayn',
-    withQuery: true,
-}
-
-request(SWAGGER_URL, function (err, res) {
+request(SWAGGER_URL, (err, res) => {
     if (res) {
-        sw2dts.convert(JSON.parse(res.body), options)
+        sw2dts.convert(JSON.parse(res.body))
             .then(data => {
                 fs.writeFileSync(TS_FILE_PATH, data);
             })
