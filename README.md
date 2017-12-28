@@ -33,7 +33,7 @@ Currently supports a basic JS cache (for simple scripts) and Redis for anything 
 
 Works immediately upon installation.
 
-As of v0.8.7 (once released), full DTO's are provided thanks to [MingweiSamuel](https://github.com/MingweiSamuel)'s [auto-updated Swagger JSON](https://github.com/MingweiSamuel/riotapi-schema).
+As of v0.8.0, full DTO's are provided thanks to [MingweiSamuel](https://github.com/MingweiSamuel)'s [auto-updated Swagger JSON](https://github.com/MingweiSamuel/riotapi-schema).
 
 # Installation and Usage
 

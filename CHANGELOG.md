@@ -1,3 +1,6 @@
+# 0.8.0
+* Add full DTOs using Swagger and Tournament-related methods.
+
 # 0.7.7
 * Add Match tournament related methods (Match.Tournament.get and Match.Tournament.listMatchIDs).
 
