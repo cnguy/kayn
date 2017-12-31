@@ -1,6 +1,6 @@
 import * as dtos from './dtos'
 
-declare class Kayn {
+declare class KaynClass {
     flushCache(cb?: callback<"OK">): Promise<"OK">;
 
     public ChampionMastery: {
@@ -167,7 +167,7 @@ type region = string;
 type queueName = string;
 
 declare module 'kayn' {
-    export function Kayn(key?: string): (config: KaynConfig) => Kayn;
+    export function Kayn(key?: string): (config?: KaynConfig) => KaynClass;
 
     class BasicJSCache {
         constructor();

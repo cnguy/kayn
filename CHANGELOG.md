@@ -1,3 +1,7 @@
+# 0.8.1
+* index.d.ts Kayn class => KaynClass to avoid duplicate name error
+* make config optional
+
 # 0.8.0
 * Add full DTOs using Swagger and Tournament-related methods.
 
