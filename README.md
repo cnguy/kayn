@@ -8,7 +8,7 @@ A small library to work with Riot's League of Legend's API.
 
 # Table of Contents:
 * [Features](#features)
-* [Methods](https://github.com/cnguy/kayn/blob/master/COVERAGE.md)
+* [Methods](#methods)
 * [Installation & Usage](#installation-and-usage)
 * [Configuration](#configuration)
 * [My Project](#my-project)
@@ -22,8 +22,6 @@ Handled by [Colorfulstan](https://github.com/Colorfulstan)'s wonderful [riot-rat
 
 ## All Endpoints Covered
 
-Check out [COVERAGE.md](https://github.com/cnguy/kayn/blob/master/COVERAGE.md) to see the League of Legends API endpoints side-by-side with `kayn`'s methods.
-
 ## Caching
 
 Currently supports a basic JS cache (for simple scripts) and Redis for anything more complicated.
@@ -35,6 +33,14 @@ Currently supports a basic JS cache (for simple scripts) and Redis for anything 
 Works immediately upon installation.
 
 As of v0.8.0, full DTO's are provided thanks to [MingweiSamuel](https://github.com/MingweiSamuel)'s [auto-updated Swagger JSON](https://github.com/MingweiSamuel/riotapi-schema).
+
+# Methods
+
+Check out [COVERAGE.md](https://github.com/cnguy/kayn/blob/master/COVERAGE.md) to see kayn's methods, as well as the endpoints covered.
+
+## Documentation
+
+The auto-generated ESDoc documentation can be found [here](http://kayn.surge.sh).
 
 # Installation and Usage
 
@@ -142,10 +148,6 @@ kayn.Matchlist.by.accountID(3440481)
         console.log(matchlist.matches.length)
     })
 ```
-
-### Documentation
-
-The auto-generated ESDoc documentation can be found [here](http://kayn.surge.sh).
 
 # Configuration
 
