@@ -8,6 +8,7 @@ A small library to work with Riot's League of Legend's API.
 
 # Table of Contents:
 * [Features](#features)
+* [Methods](https://github.com/cnguy/kayn/blob/master/COVERAGE.md)
 * [Installation & Usage](#installation-and-usage)
 * [Configuration](#configuration)
 * [My Project](#my-project)
