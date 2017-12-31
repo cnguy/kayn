@@ -1,4 +1,4 @@
-A small library to work with Riot's League of Legend's API.
+A small Node.js library to work with Riot's League of Legend's API.
 
 [![NPM](https://nodei.co/npm/kayn.png)](https://nodei.co/npm/kayn/)
 
@@ -28,7 +28,7 @@ Currently supports a basic JS cache (for simple scripts) and Redis for anything 
 
 ## Compatible with Callbacks, Promises, Async / Await
 
-## Good TypeScript Support
+## TypeScript Support
 
 Works immediately upon installation.
 
@@ -112,6 +112,7 @@ kayn.Summoner.by.name('Contractz').callback(function(err, summoner) {
 ```javascript
 kayn.Summoner.by.name('Contractz')
     .then(summoner => doSomething(summoner))
+    .then(console.log)
     .catch(error => console.error(error))
 ```
 
