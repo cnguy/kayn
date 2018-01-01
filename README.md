@@ -67,7 +67,7 @@ const kayn = Kayn('RGAPI-my-api-key')(/*{
     debugOptions: {
         isEnabled: true,
         showKey: false,
-        loggers: {},
+        loggers: {}, // No need to pass anything here. Read the #Configuration#DebugOptions section.
     },
     requestOptions: {
         shouldRetry: true,
