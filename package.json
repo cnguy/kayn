@@ -10,7 +10,8 @@
     "lint-test": "prettier --single-quote --list-different --trailing-comma all --tab-width 4 --write \"./test/**/*.js\"",
     "docs": "./node_modules/.bin/esdoc ./lib/**/*.js",
     "test": "yarn build && yarn lint; yarn lint-test; yarn test-only",
-    "test-only": "node_modules/.bin/babel-node ./node_modules/.bin/babel-istanbul cover ./node_modules/mocha/bin/_mocha -- --require babel-register \"test/**/*.spec.js\"",
+    "test-only": "node_modules/.bin/babel-node ./node_modules/.bin/babel-istanbul cover ./node_modules/mocha/bin/_mocha -- --require babel-register \"test/unit/**/*.spec.js\"",
+    "test-integration": "yarn build && yarn lint; yarn lint-test; ./node_modules/.bin/babel-istanbul cover ./node_modules/mocha/bin/_mocha -- --require babel-register \"test/integration/**/*.spec.js\"",
     "swagger": "node ./_scripts/generate_ts_from_swagger"
   },
   "types": "./typings/index.d.ts",
