@@ -1,6 +1,6 @@
 Here lies the integration tests that can be ran locally via `yarn test-integration`.
 
-Try not to simply just compare objects via deep equal. This will be costly to maintain and is unnecessary.
+If the responses are likely to change, try not to simply just test via deep equal. This will be costly to maintain and is unnecessary.
 
 Instead, try to test values that don't change often or are still easily testable.
 
