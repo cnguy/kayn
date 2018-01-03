@@ -9,6 +9,7 @@ const {
 const kayn = Kayn()({
     debugOptions: {
         isEnabled: true,
+        showKey: true,
     },
 });
 
