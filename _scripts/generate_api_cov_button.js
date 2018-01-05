@@ -19,12 +19,13 @@ request(SWAGGER_URL, async (err, res) => {
             await findInFiles.find(`\`${path}\``, ENDPOINTS_DIR_PATH, '.js')
         ))
         const value = results.reduce((total, curr) =>
-            Object.keys(curr).length === 1
-                ? total + 1
+            Object.keys(curr).length === 1 
+                ? total + curr[Object.keys(curr)[0]].count // TODO: Implement GET/POST/etc detection so this can be === 1. 
                 : total
         , 0)
         const percentage = roundToHundredths(value / results.length)
-        const badgePath = getBadgePath(percentage)
+        const readablePercentage = `${percentage * 100}%`
+        const badgePath = getBadgePath(readablePercentage)
 
         request
             .get(badgePath)
