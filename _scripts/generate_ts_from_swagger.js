@@ -1,9 +1,10 @@
-const request = require('request')
-const sw2dts = require('sw2dts')
-const fs = require('fs')
-const path = require('path')
+import request from 'request'
+const sw2dts = require('sw2dts');
+import fs from 'fs'
+import path from 'path'
 
-const SWAGGER_URL = 'http://mingweisamuel.com/riotapi-schema/swaggerspec-2.0.json'
+import SWAGGER_URL from './swagger_url'
+
 const TS_FILE_PATH = path.join(__dirname, '..', 'typings', 'dtos.ts')
 
 request(SWAGGER_URL, (err, res) => {
