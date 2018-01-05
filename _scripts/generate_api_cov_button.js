@@ -1,16 +1,26 @@
 import request from 'request'
 import findInFiles from 'find-in-files'
-import path from 'path';
-import fs from 'fs';
+import path from 'path'
+import fs from 'fs'
+import svgToPng from 'svg-to-png'
 
 import SWAGGER_URL from './swagger_url'
 
 const ENDPOINTS_DIR_PATH = path.join(__dirname, '..', 'lib', 'Endpoints')
-const API_COV_BTN_PATH = path.join(__dirname, '..', '_pictures', 'api_cov.svg')
+const PICTURES_PATH = path.join(__dirname, '..', '_pictures')
+const API_COV_SVG_BTN_PATH = path.join(PICTURES_PATH, 'api_cov.svg')
 
 const getBadgePath = percentage =>
     `https://img.shields.io/badge/API_coverage-${encodeURI(percentage)}-9C27B0.svg`
 const roundToHundredths = percentage => Math.round(100 * percentage) / 100
+
+const processSvg = async () => {
+    await svgToPng.convert(API_COV_SVG_BTN_PATH, PICTURES_PATH)
+    fs.unlink(API_COV_SVG_BTN_PATH, err => {
+        if (err) throw err
+        console.log('done')
+    })
+}
 
 request(SWAGGER_URL, async (err, res) => {
     if (res) {
@@ -29,7 +39,7 @@ request(SWAGGER_URL, async (err, res) => {
 
         request
             .get(badgePath)
-            .pipe(fs.createWriteStream(API_COV_BTN_PATH))
-            .on('close', () => console.log('done'))
+            .pipe(fs.createWriteStream(API_COV_SVG_BTN_PATH))
+            .on('close', processSvg)
     }
 })

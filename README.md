@@ -3,7 +3,7 @@ A small Node.js library to work with Riot's League of Legend's API.
 [![NPM](https://nodei.co/npm/kayn.png)](https://nodei.co/npm/kayn/)
 
 [![Build Status](https://travis-ci.org/cnguy/kayn.svg?branch=master)](https://travis-ci.org/cnguy/kayn)
-[![API Cov. Badge](/_pictures/api_cov.svg?raw=true "API Cov. Badge")](https://github.com/cnguy/kayn/blob/master/ENDPOINTS.md)
+[![API Cov. Badge](/_pictures/api_cov.png?raw=true "API Cov. Badge")](https://github.com/cnguy/kayn/blob/master/ENDPOINTS.md)
 [![codecov](https://codecov.io/gh/cnguy/kayn/branch/master/graph/badge.svg)](https://codecov.io/gh/cnguy/kayn)
 [![dependencies Status](https://david-dm.org/cnguy/kayn/status.svg)](https://david-dm.org/cnguy/kayn)
 
