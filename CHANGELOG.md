@@ -1,3 +1,7 @@
+# 0.8.2
+https://github.com/cnguy/kayn/pull/44
+* Add CurrentGame to index.d.ts
+
 # 0.8.1
 * index.d.ts Kayn class => KaynClass to avoid duplicate name error
 * make config optional
