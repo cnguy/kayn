@@ -18,6 +18,12 @@ declare class KaynClass {
         list: (queueName: queueName) => KaynRequest<dtos.LeagueV3LeagueListDTO>;
     }
     
+    public CurrentGame: {
+        by: {
+            summonerID: (summonerID: number) => KaynRequest<dtos.SpectatorV3CurrentGameInfo>;
+        }
+    }
+
     public Leagues: {
         by: {
             summonerID: (summonerID: number) => KaynRequest<dtos.LeagueV3LeagueListDTO[]>;
