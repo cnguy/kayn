@@ -5,9 +5,9 @@
   "scripts": {
     "example": "yarn lint-example; yarn build && babel ./example.js -o ./example.babel.js && node example.babel.js",
     "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
-    "lint": "prettier --single-quote --list-different --trailing-comma all --tab-width 4 --write \"./lib/**/*.js\"",
-    "lint-example": "prettier --single-quote --list-different --trailing-comma all --tab-width 4 --write example.js",
-    "lint-test": "prettier --single-quote --list-different --trailing-comma all --tab-width 4 --write \"./test/**/*.js\"",
+    "lint": "prettier --no-semi --single-quote --list-different --trailing-comma all --tab-width 4 --write \"./lib/**/*.js\"",
+    "lint-example": "prettier --no-semi --single-quote --list-different --trailing-comma all --tab-width 4 --write example.js",
+    "lint-test": "prettier --no-semi --single-quote --list-different --trailing-comma all --tab-width 4 --write \"./test/**/*.js\"",
     "docs": "./node_modules/.bin/esdoc ./lib/**/*.js",
     "test": "yarn build && yarn lint; yarn lint-test; yarn test-only",
     "test-only": "node_modules/.bin/babel-node ./node_modules/.bin/babel-istanbul cover ./node_modules/mocha/bin/_mocha -- --require babel-register \"test/unit/**/*.spec.js\"",
@@ -31,7 +31,7 @@
     "find-in-files": "^0.4.0",
     "istanbul": "^0.4.5",
     "mocha": "^4.0.1",
-    "prettier": "^1.7.4",
+    "prettier": "^1.10.2",
     "rimraf": "^2.6.2",
     "svg-to-png": "^3.1.2",
     "sw2dts": "^2.5.0"

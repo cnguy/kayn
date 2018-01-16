@@ -1,4 +1,4 @@
-import { Kayn, REGIONS, METHOD_NAMES, BasicJSCache, RedisCache } from './';
+import { Kayn, REGIONS, METHOD_NAMES, BasicJSCache, RedisCache } from './'
 
 /*
 const redisCache = new RedisCache({
@@ -8,9 +8,9 @@ const redisCache = new RedisCache({
 });
 */
 
-const basicCache = new BasicJSCache();
+const basicCache = new BasicJSCache()
 
-const myCache = basicCache; // or basicCache
+const myCache = basicCache // or basicCache
 
 const kayn = Kayn(/* optional key */)({
     region: 'na',
@@ -29,15 +29,15 @@ const kayn = Kayn(/* optional key */)({
             [METHOD_NAMES.SUMMONER.GET_BY_SUMMONER_NAME]: 1000, // ms
         },
     },
-});
+})
 
 const main = async () => {
     try {
-        await kayn.Match.Tournament.listMatchIDs('12345');
-        await kayn.Match.Tournament.get(12345, '21345');
+        await kayn.Match.Tournament.listMatchIDs('12345')
+        await kayn.Match.Tournament.get(12345, '21345')
     } catch (ex) {
-        console.log(ex);
+        console.log(ex)
     }
-};
+}
 
-main();
+main()

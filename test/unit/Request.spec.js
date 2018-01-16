@@ -1,9 +1,9 @@
-import { expect, should, assert } from 'chai';
+import { expect, should, assert } from 'chai'
 
-import Request from '../../lib/RequestClient/Request';
-import TestUtils from '../TestUtils';
+import Request from '../../lib/RequestClient/Request'
+import TestUtils from '../TestUtils'
 
-const { defaultConfig } = TestUtils;
+const { defaultConfig } = TestUtils
 
 describe('Request', function() {
     it('should initialize correctly #1', function() {
@@ -12,10 +12,10 @@ describe('Request', function() {
             'summoner',
             'by-name/chaullenger',
             'abc',
-        );
-        const { config, methodName, payload } = request;
-        expect(config).to.deep.equal(defaultConfig);
-        expect(methodName).to.deep.equal('abc');
+        )
+        const { config, methodName, payload } = request
+        expect(config).to.deep.equal(defaultConfig)
+        expect(methodName).to.deep.equal('abc')
         expect(payload).to.deep.equal({
             method: 'GET',
             serviceName: 'summoner',
@@ -23,8 +23,8 @@ describe('Request', function() {
             query: [],
             region: '',
             isTournament: false,
-        });
-    });
+        })
+    })
 
     it('should initialize correctly #2', function() {
         const request = new Request(
@@ -36,10 +36,10 @@ describe('Request', function() {
             null,
             { hello: 'world' },
             true,
-        );
-        const { config, methodName, payload } = request;
-        expect(config).to.deep.equal(defaultConfig);
-        expect(methodName).to.deep.equal('abc');
+        )
+        const { config, methodName, payload } = request
+        expect(config).to.deep.equal(defaultConfig)
+        expect(methodName).to.deep.equal('abc')
         expect(payload).to.deep.equal({
             method: 'POST',
             serviceName: 'summoner',
@@ -48,8 +48,8 @@ describe('Request', function() {
             region: '',
             body: { hello: 'world' },
             isTournament: true,
-        });
-    });
+        })
+    })
 
     it('should initialize correctly #3', function() {
         const request = new Request(
@@ -61,10 +61,10 @@ describe('Request', function() {
             null,
             { hello: 'world' },
             true,
-        );
-        const { config, methodName, payload } = request;
-        expect(config).to.deep.equal(defaultConfig);
-        expect(methodName).to.deep.equal('abc');
+        )
+        const { config, methodName, payload } = request
+        expect(config).to.deep.equal(defaultConfig)
+        expect(methodName).to.deep.equal('abc')
         expect(payload).to.deep.equal({
             method: 'PUT',
             serviceName: 'summoner',
@@ -73,8 +73,8 @@ describe('Request', function() {
             region: '',
             body: { hello: 'world' },
             isTournament: true,
-        });
-    });
+        })
+    })
 
     it('should add query parameters correctly', function() {
         const request = new Request(
@@ -82,18 +82,18 @@ describe('Request', function() {
             'summoner',
             'by-name/chaullenger',
             'abc',
-        );
-        request.query({ key: 'value' });
-        expect(request.payload.query).to.deep.equal([{ key: 'value' }]);
+        )
+        request.query({ key: 'value' })
+        expect(request.payload.query).to.deep.equal([{ key: 'value' }])
 
         // Ensure that query is appended, and does not
         // overwrite old query.
-        request.query({ key2: 'value2' });
+        request.query({ key2: 'value2' })
         expect(request.payload.query).to.deep.equal([
             { key: 'value' },
             { key2: 'value2' },
-        ]);
-    });
+        ])
+    })
 
     it('should throw if query is passed non-object', function() {
         const request = new Request(
@@ -101,11 +101,11 @@ describe('Request', function() {
             'summoner',
             'by-name/chaullenger',
             'abc',
-        );
-        expect(() => request.query('notLikeThis')).to.throw();
-        expect(() => request.query(3)).to.throw();
-        expect(() => request.query(() => 'abc')).to.throw();
-    });
+        )
+        expect(() => request.query('notLikeThis')).to.throw()
+        expect(() => request.query(3)).to.throw()
+        expect(() => request.query(() => 'abc')).to.throw()
+    })
 
     it('should set region correctly', function() {
         const request = new Request(
@@ -113,10 +113,10 @@ describe('Request', function() {
             'summoner',
             'by-name/chaullenger',
             'abc',
-        );
-        request.region('na');
-        expect(request.payload.region).to.equal('na');
-    });
+        )
+        request.region('na')
+        expect(request.payload.region).to.equal('na')
+    })
 
     it('should throw if region is set twice', function() {
         const request = new Request(
@@ -124,11 +124,11 @@ describe('Request', function() {
             'summoner',
             'by-name/chaullenger',
             'abc',
-        );
-        request.region('na');
-        expect(request.payload.region).to.equal('na');
-        expect(() => request.region('kr')).to.throw();
-    });
+        )
+        request.region('na')
+        expect(request.payload.region).to.equal('na')
+        expect(() => request.region('kr')).to.throw()
+    })
 
     it('should throw on bad region', function() {
         const request = new Request(
@@ -136,7 +136,7 @@ describe('Request', function() {
             'summoner',
             'by-name/chaullenger',
             'abc',
-        );
-        expect(() => request.region('abcdefgjijklmnopqrstuvwxyz')).to.throw();
-    });
-});
+        )
+        expect(() => request.region('abcdefgjijklmnopqrstuvwxyz')).to.throw()
+    })
+})

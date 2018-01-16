@@ -34,4 +34,4 @@ module.exports = {
         multiple: { name: 'poz', rank: 'challenger' },
         multipleEncoded: { name: 'Tést', rank: 'óh no' },
     },
-};
+}

@@ -4,14 +4,14 @@ const {
     METHOD_NAMES,
     BasicJSCache,
     RedisCache,
-} = require('../lib');
+} = require('../lib')
 
 const kayn = Kayn()({
     debugOptions: {
         isEnabled: true,
         showKey: true,
     },
-});
+})
 
 const defaultConfig = {
     region: 'na',
@@ -28,7 +28,7 @@ const defaultConfig = {
         cache: null,
         ttls: {},
     },
-};
+}
 
 export default {
     kaynInstance: {
@@ -39,4 +39,4 @@ export default {
         RedisCache,
     },
     defaultConfig,
-};
+}

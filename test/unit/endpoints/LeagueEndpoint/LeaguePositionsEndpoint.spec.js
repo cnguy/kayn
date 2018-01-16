@@ -1,25 +1,23 @@
-import { expect, should, assert } from 'chai';
+import { expect, should, assert } from 'chai'
 
-import TestUtils from '../../../TestUtils';
-const { kaynInstance, defaultConfig } = TestUtils;
+import TestUtils from '../../../TestUtils'
+const { kaynInstance, defaultConfig } = TestUtils
 
-const { kayn, REGIONS, METHOD_TYPES } = kaynInstance;
-import LeaguePositionsEndpoint from '../../../../lib/Endpoints/LeagueEndpoint/LeaguePositionsEndpoint';
-import mocks from '../../../mocks';
+const { kayn, REGIONS, METHOD_TYPES } = kaynInstance
+import LeaguePositionsEndpoint from '../../../../lib/Endpoints/LeagueEndpoint/LeaguePositionsEndpoint'
+import mocks from '../../../mocks'
 
 describe('LeaguePositionsEndpoint', function() {
-    this.timeout(0);
+    this.timeout(0)
 
     beforeEach(function() {
-        this.LeaguePositions = new LeaguePositionsEndpoint(defaultConfig);
-    });
+        this.LeaguePositions = new LeaguePositionsEndpoint(defaultConfig)
+    })
 
     describe('.by.summonerID', function() {
         it('should have the correct payload #1', function() {
-            const { Contractz } = mocks.summoner;
-            const { payload } = this.LeaguePositions.by.summonerID(
-                Contractz.id,
-            );
+            const { Contractz } = mocks.summoner
+            const { payload } = this.LeaguePositions.by.summonerID(Contractz.id)
             expect(payload).to.deep.equal({
                 method: 'GET',
                 serviceName: 'league',
@@ -27,7 +25,7 @@ describe('LeaguePositionsEndpoint', function() {
                 query: [],
                 region: '',
                 isTournament: false,
-            });
-        });
-    });
-});
+            })
+        })
+    })
+})
