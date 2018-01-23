@@ -1,3 +1,7 @@
+# 0.8.3
+
+* Update TypeScript definitions via `yarn swagger`. Basically, the Tournament Params for summoner ids/participants were removed and replaced with a simple number array.
+
 # 0.8.2
 https://github.com/cnguy/kayn/pull/44
 * Add CurrentGame to index.d.ts
