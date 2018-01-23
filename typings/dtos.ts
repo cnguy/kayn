@@ -27,7 +27,11 @@ export interface ChampionMasteryV3ChampionMasteryDTO {
      */
     championPointsUntilNextLevel?: number; // int64
     /**
-     * Number of points earned since current level has been achieved. Zero if player reached maximum champion level for this champion.
+     * The token earned for this champion to levelup.
+     */
+    tokensEarned?: number; // int32
+    /**
+     * Number of points earned since current level has been achieved.
      */
     championPointsSinceLastLevel?: number; // int64
     /**
@@ -1224,12 +1228,6 @@ export interface TournamentStubV3ProviderRegistrationParameters {
      */
     region?: "BR" | "EUNE" | "EUW" | "JP" | "LAN" | "LAS" | "NA" | "OCE" | "PBE" | "RU" | "TR";
 }
-export interface TournamentStubV3SummonerIdParams {
-    /**
-     * the tournament participants
-     */
-    participants?: number /* int64 */ [];
-}
 export interface TournamentStubV3TournamentCodeParameters {
     /**
      * The spectator type of the game.
@@ -1248,7 +1246,7 @@ export interface TournamentStubV3TournamentCodeParameters {
     /**
      * Optional list of participants in order to validate the players eligible to join the lobby. NOTE: We currently do not enforce participants at the team level, but rather the aggregate of teamOne and teamTwo. We may add the ability to enforce at the team level in the future.
      */
-    allowedSummonerIds?: TournamentStubV3SummonerIdParams;
+    allowedSummonerIds?: number /* int64 */ [];
     /**
      * The map type of the game.
      *              (Legal values:  SUMMONERS_RIFT,  TWISTED_TREELINE,  HOWLING_ABYSS)
@@ -1296,12 +1294,6 @@ export interface TournamentV3ProviderRegistrationParameters {
      *              (Legal values:  BR,  EUNE,  EUW,  JP,  LAN,  LAS,  NA,  OCE,  PBE,  RU,  TR)
      */
     region?: "BR" | "EUNE" | "EUW" | "JP" | "LAN" | "LAS" | "NA" | "OCE" | "PBE" | "RU" | "TR";
-}
-export interface TournamentV3SummonerIdParams {
-    /**
-     * the tournament participants
-     */
-    participants?: number /* int64 */ [];
 }
 export interface TournamentV3TournamentCodeDTO {
     /**
@@ -1373,7 +1365,7 @@ export interface TournamentV3TournamentCodeParameters {
     /**
      * Optional list of participants in order to validate the players eligible to join the lobby. NOTE: We currently do not enforce participants at the team level, but rather the aggregate of teamOne and teamTwo. We may add the ability to enforce at the team level in the future.
      */
-    allowedSummonerIds?: TournamentV3SummonerIdParams;
+    allowedSummonerIds?: number /* int64 */ [];
     /**
      * The map type of the game.
      *              (Legal values:  SUMMONERS_RIFT,  TWISTED_TREELINE,  HOWLING_ABYSS)
@@ -1396,9 +1388,9 @@ export interface TournamentV3TournamentCodeUpdateParameters {
      */
     pickType?: "BLIND_PICK" | "DRAFT_MODE" | "ALL_RANDOM" | "TOURNAMENT_DRAFT";
     /**
-     * Comma separated list of summoner Ids
+     * Optional list of participants in order to validate the players eligible to join the lobby. NOTE: We currently do not enforce participants at the team level, but rather the aggregate of teamOne and teamTwo. We may add the ability to enforce at the team level in the future.
      */
-    allowedParticipants?: string;
+    allowedSummonerIds?: number /* int64 */ [];
     /**
      * The map type
      *              (Legal values:  SUMMONERS_RIFT,  TWISTED_TREELINE,  HOWLING_ABYSS)
