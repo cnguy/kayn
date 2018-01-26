@@ -32,12 +32,18 @@ const kayn = Kayn(/* optional key */)({
 })
 
 const main = async () => {
-    try {
-        await kayn.Match.Tournament.listMatchIDs('12345')
-        await kayn.Match.Tournament.get(12345, '21345')
-    } catch (ex) {
-        console.log(ex)
-    }
+    const provider = await kayn.TournamentStub.registerProviderData(
+        REGIONS.NORTH_AMERICA,
+        'https://localhost/cb',
+    )
+    const tournament = await kayn.TournamentStub.register(provider, 'kappa')
+    const codes = await kayn.TournamentStub.create(tournament, {
+        mapType: 'SUMMONERS_RIFT',
+        metadata: 'Kappa',
+        pickType: 'TOURNAMENT_DRAFT',
+        spectatorType: 'NONE',
+        teamSize: 5,
+    }).query({ count: 5 })
 }
 
 main()

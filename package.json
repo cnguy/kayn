@@ -42,7 +42,7 @@
     "lodash.merge": "^4.6.0",
     "redis": "^2.8.0",
     "request": "^2.83.0",
-    "riot-ratelimiter": "git+https://github.com/cnguy/RiotRateLimiter-node",
+    "riot-ratelimiter-temp": "0.0.1",
     "superstruct": "^0.2.0",
     "supports-color": "^5.1.0"
   }

@@ -3728,9 +3728,9 @@ rimraf@2, rimraf@^2.2.6, rimraf@^2.5.1, rimraf@^2.6.1, rimraf@^2.6.2:
   dependencies:
     glob "^7.0.5"
 
-"riot-ratelimiter@git+https://github.com/cnguy/RiotRateLimiter-node":
-  version "0.1.3"
-  resolved "git+https://github.com/cnguy/RiotRateLimiter-node#8e3381d46b1a9fe283849a55549e8ada738e5aa5"
+riot-ratelimiter-temp@0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/riot-ratelimiter-temp/-/riot-ratelimiter-temp-0.0.1.tgz#9469f227907a102e4ca5b4c9da64d879292a9c83"
   dependencies:
     bluebird "~3.5.0"
     request-promise "~4.2.1"
