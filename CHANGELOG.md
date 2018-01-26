@@ -1,3 +1,7 @@
+# 0.8.4
+
+* Move riot-ratelimiter fork dependency from GitHub to npm for obvious reasons. This is temporary!! TournamentStub/Tournament requests shouldn't throw JSON errors anymore, and existing methods should still work.
+
 # 0.8.3
 
 * Update TypeScript definitions via `yarn swagger`. Basically, the Tournament Params for summoner ids/participants were removed and replaced with a simple number array.
