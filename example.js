@@ -30,10 +30,12 @@ const kayn = Kayn(/* optional key */)({
         },
     },
 })
+
 import matchlistExample from './examples/grabbing-all-the-match-dtos-of-a-player'
+import verifyExample from './examples/verifying-a-summoner'
 
 const main = async () => {
-    matchlistExample(kayn)
+    verifyExample(kayn)
 }
 
 main()
