@@ -5,9 +5,12 @@
   "scripts": {
     "example": "yarn lint-example; yarn build && babel ./example.js -o ./example.babel.js && node example.babel.js",
     "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
-    "lint": "prettier --no-semi --single-quote --list-different --trailing-comma all --tab-width 4 --write \"./lib/**/*.js\"",
+    "lint-src": "prettier --no-semi --single-quote --list-different --trailing-comma all --tab-width 4 --write \"./lib/**/*.js\"",
     "lint-example": "prettier --no-semi --single-quote --list-different --trailing-comma all --tab-width 4 --write example.js",
     "lint-test": "prettier --no-semi --single-quote --list-different --trailing-comma all --tab-width 4 --write \"./test/**/*.js\"",
+    "lint-examples": "prettier --no-semi --single-quote --list-different --trailing-comma all --tab-width 4 --write \"./examples/**/*.js\"",
+    "lint-scripts": "prettier --no-semi --single-quote --list-different --trailing-comma all --tab-width 4 --write \"./_scripts/**/*.js\"",
+    "lint": "yarn lint-src; yarn lint-example; yarn lint-test; yarn lint-examples; yarn lint-scripts;",
     "docs": "./node_modules/.bin/esdoc ./lib/**/*.js",
     "test": "yarn build && yarn lint; yarn lint-test; yarn test-only",
     "test-only": "node_modules/.bin/babel-node ./node_modules/.bin/babel-istanbul cover ./node_modules/mocha/bin/_mocha -- --require babel-register \"test/unit/**/*.spec.js\"",

@@ -16,7 +16,7 @@ const kayn = Kayn(/* optional key */)({
     region: 'na',
     debugOptions: {
         isEnabled: true,
-        showKey: false,
+        showKey: true,
     },
     requestOptions: {
         shouldRetry: true,
@@ -30,20 +30,10 @@ const kayn = Kayn(/* optional key */)({
         },
     },
 })
+import matchlistExample from './examples/grabbing-all-the-match-dtos-of-a-player'
 
 const main = async () => {
-    const provider = await kayn.TournamentStub.registerProviderData(
-        REGIONS.NORTH_AMERICA,
-        'https://localhost/cb',
-    )
-    const tournament = await kayn.TournamentStub.register(provider, 'kappa')
-    const codes = await kayn.TournamentStub.create(tournament, {
-        mapType: 'SUMMONERS_RIFT',
-        metadata: 'Kappa',
-        pickType: 'TOURNAMENT_DRAFT',
-        spectatorType: 'NONE',
-        teamSize: 5,
-    }).query({ count: 5 })
+    matchlistExample(kayn)
 }
 
 main()
