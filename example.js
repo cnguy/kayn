@@ -33,9 +33,11 @@ const kayn = Kayn(/* optional key */)({
 
 import matchlistExample from './examples/grabbing-all-the-match-dtos-of-a-player'
 import verifyExample from './examples/verifying-a-summoner'
+import tournamentStubCreateExample from './examples/tournament-stub-create'
 
 const main = async () => {
-    matchlistExample(kayn)
+    //    matchlistExample(kayn)
+    tournamentStubCreateExample(kayn)
 }
 
 main()
