@@ -35,7 +35,7 @@ import matchlistExample from './examples/grabbing-all-the-match-dtos-of-a-player
 import verifyExample from './examples/verifying-a-summoner'
 
 const main = async () => {
-    verifyExample(kayn)
+    matchlistExample(kayn)
 }
 
 main()

@@ -3,18 +3,19 @@
 
 // Destructures match object.
 const matchToGameId = ({ gameId }) => gameId
+
 // getFN is required because of this file structure where `kayn` isn't included.
 // mutationsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
-const getAllMatchIDs = async (matchlistDTO, summoner, getFn) => {
+const getAllMatchIDs = async (matchlistDTO, accountID, getFn) => {
     let restOfMatchIDs = []
     const { totalGames } = matchlistDTO
     console.log(`Total number of games to process: ${totalGames}`)
     if (totalGames > 100) {
-        for (let beginIndex = 0; beginIndex < totalGames; beginIndex += 100) {
+        for (let beginIndex = 100; beginIndex < totalGames; beginIndex += 100) {
             const endIndex = beginIndex + 100
-            const newIndexDTO = { beginIndex, endIndex }
+            const indexQuery = { beginIndex, endIndex }
             try {
-                const newMatchlistDTO = await getFn(summoner, newIndexDTO)
+                const newMatchlistDTO = await getFn(accountID, indexQuery)
                 restOfMatchIDs = restOfMatchIDs.concat(
                     newMatchlistDTO.matches.map(matchToGameId),
                 )
@@ -27,20 +28,20 @@ const getAllMatchIDs = async (matchlistDTO, summoner, getFn) => {
 }
 
 const main = async kayn => {
-    const getRankedMatchesForSummoner = async (summoner, indexObj) =>
+    const getRankedMatchesForSummoner = async (accountID, indexQuery) =>
         kayn.Matchlist.by
-            .accountID(summoner.accountId)
+            .accountID(accountID)
             .region('na')
             .query({ queue: 420, season: 9 })
-            .query(indexObj || {})
+            .query(indexQuery || {})
 
-    const summoner = await kayn.Summoner.by.name('Contractz')
+    const { accountId: accountID } = await kayn.Summoner.by.name('Contractz')
 
     // First DTO to get the total number of games.
-    const firstMatchlistDTO = await getRankedMatchesForSummoner(summoner)
+    const firstMatchlistDTO = await getRankedMatchesForSummoner(accountID)
     const matchIDs = await getAllMatchIDs(
         firstMatchlistDTO,
-        summoner,
+        accountID,
         getRankedMatchesForSummoner,
     )
 
