@@ -13,8 +13,7 @@ request(SWAGGER_URL, (err, res) => {
             .convert(JSON.parse(res.body))
             .then(data => {
                 fs.writeFileSync(TS_FILE_PATH, data)
+                console.log('done')
             })
-            .then(data => console.log('done'))
-            .catch(err => console.log(err))
     }
 })
