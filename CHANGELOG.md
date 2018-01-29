@@ -1,3 +1,7 @@
+# 0.8.5
+
+* Loggers should not show key unless showKey=true.
+
 # 0.8.4
 
 * Move riot-ratelimiter fork dependency from GitHub to npm for obvious reasons. This is temporary!! TournamentStub/Tournament requests shouldn't throw JSON errors anymore, and existing methods should still work.
@@ -8,11 +12,11 @@
 
 # 0.8.2
 https://github.com/cnguy/kayn/pull/44
-* Add CurrentGame to index.d.ts
+* Add CurrentGame to index.d.ts.
 
 # 0.8.1
-* index.d.ts Kayn class => KaynClass to avoid duplicate name error
-* make config optional
+* index.d.ts Kayn class => KaynClass to avoid duplicate name error.
+* make config optional.
 
 # 0.8.0
 * Add full DTOs using Swagger and Tournament-related methods.

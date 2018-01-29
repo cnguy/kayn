@@ -9,11 +9,9 @@ const TS_FILE_PATH = path.join(__dirname, '..', 'typings', 'dtos.ts')
 
 request(SWAGGER_URL, (err, res) => {
     if (res) {
-        sw2dts
-            .convert(JSON.parse(res.body))
-            .then(data => {
-                fs.writeFileSync(TS_FILE_PATH, data)
-                console.log('done')
-            })
+        sw2dts.convert(JSON.parse(res.body)).then(data => {
+            fs.writeFileSync(TS_FILE_PATH, data)
+            console.log('done')
+        })
     }
 })
