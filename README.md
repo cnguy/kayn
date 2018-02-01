@@ -152,7 +152,6 @@ kayn.Summoner.by.name('hide on bush')
     .regionNoThrow('kr524') // Same as above.
 ```
 
-
 ### Query Parameters
 
 ```javascript
