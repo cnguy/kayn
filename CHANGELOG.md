@@ -1,3 +1,7 @@
+# 0.8.6
+
+* Add `regionNoThrow` method. This is similar to `.region()` except it does not throw and simply falls back to default on error (.region() falls back in this manner too).
+
 # 0.8.5
 
 * Loggers should not show key unless showKey=true.

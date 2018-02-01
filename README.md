@@ -127,7 +127,7 @@ const main = async () => {
 
 ### Region 
 
-This forces a request to target a specific region instead of the default region set in `kayn`'s config.
+This forces a request to target a specific region instead of the default region set in `kayn`'s config. If `.region()` is not used, `kayn` will use the default region to make requests.
 
 ```javascript
 kayn.Summoner.by.name('hide on bush')
@@ -136,6 +136,22 @@ kayn.Summoner.by.name('hide on bush')
         doSomething(summoner)
     })
 ```
+
+#### Region without Throwing
+
+There is another utility method in case if you want to avoid handling exceptions caused by `.region()`. This method simply catches `.region()`'s exception, and so it will fall back to the default region as well.
+
+```javascript
+kayn.Summoner.by.name('hide on bush')
+    .regionNoThrow(null) // No error thrown. Uses default region.
+
+kayn.Summoner.by.name('hide on bush')
+    .regionNoThrow(3) // Same as above.
+
+kayn.Summoner.by.name('hide on bush')
+    .regionNoThrow('kr524') // Same as above.
+```
+
 
 ### Query Parameters
 

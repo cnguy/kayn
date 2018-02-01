@@ -139,4 +139,32 @@ describe('Request', function() {
         )
         expect(() => request.region('abcdefgjijklmnopqrstuvwxyz')).to.throw()
     })
+
+    describe('regionNoThrow', function() {
+        it('should not throw on bad region', function() {
+            const request = new Request(
+                defaultConfig,
+                'summoner',
+                'by-name/chaullenger',
+                'abc',
+            )
+            expect(() => request.regionNoThrow(null)).to.not.throw()
+            expect(() =>
+                request.regionNoThrow({ hello: 'world' }),
+            ).to.not.throw()
+        })
+
+        it('should fallback to default region', function() {
+            const request = new Request(
+                defaultConfig,
+                'summoner',
+                'by-name/chaullenger',
+                'abc',
+            )
+            expect(request.regionNoThrow(null).config.region).to.equal('na')
+            expect(
+                request.regionNoThrow({ hello: 'world' }).config.region,
+            ).to.equal('na')
+        })
+    })
 })
