@@ -6,7 +6,7 @@ const { kayn } = TestUtils.kaynInstance
 
 import challengerLeague from '../../fixtures/rest/league/challenger_league.json'
 
-describe('Challenger (integration)', function() {
+describe.skip('Challenger (integration)', function() {
     it('should work', async function() {
         const queue = 'RANKED_SOLO_5x5'
         const l = await kayn.Challenger.list(queue)
@@ -24,8 +24,8 @@ describe('Challenger (integration)', function() {
         try {
             const queue = 'chain'
             const l = await kayn.Challenger.list(queue)
-        } catch (code) {
-            expect(code).to.equal(400)
+        } catch ({ statusCode }) {
+            expect(statusCode).to.equal(400)
         }
     })
 })

@@ -166,6 +166,17 @@ kayn.Matchlist.by.accountID(3440481)
     })
 ```
 
+### Request Errors
+
+Errors as of v0.8.7 return the following error object:
+
+```javascript
+{
+    statusCode: 42, // some random number
+    url: '', // the debug URL that is used in logging as well
+}
+```
+
 # Configuration
 
 ## Request Options

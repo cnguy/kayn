@@ -139,15 +139,20 @@ declare class KaynClass {
     }
 }
 
+type KaynError = {
+    statusCode: number;
+    url: string;
+}
+
 declare class KaynRequest<T> {
     region(region: region): KaynRequest<T>;
     query(query: Object): KaynRequest<T>;
-    then(resolve: (data: T) => void, reject?: (err: any) => void): KaynRequest<T>;
-    catch(callback: (err: any) => void): void;
+    then(resolve: (data: T) => void, reject?: (err: KaynError) => void): KaynRequest<T>;
+    catch(callback: (err: KaynError) => void): void;
     callback(callback: callback<T>): void;
 }
 
-type callback<T> = (err: any, data: T) => void;
+type callback<T> = (err: KaynError, data: T) => void;
 
 // a lot of these are temp and will be improved in later releases.
 type serviceName = string;

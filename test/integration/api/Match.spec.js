@@ -7,7 +7,7 @@ const { kayn } = TestUtils.kaynInstance
 import match from '../../fixtures/rest/match/match.json'
 import koreaMatch from '../../fixtures/rest/match/match_korea.json'
 
-describe('Match (integration)', function() {
+describe.skip('Match (integration)', function() {
     this.timeout(10000)
 
     it('should work', async function() {

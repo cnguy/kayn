@@ -1,3 +1,44 @@
+# 0.8.7 (BREAKING, but simple)
+
+* An error object as shown below is now returned instead of a single number.
+
+```javascript
+{
+    statusCode: 42, // the error code
+    url: '', // the debug URL (works with and without showKey)
+}
+```
+
+More information will be provided in the future if there is demand. The URL is quite important for debugging if the users do not want to run debug commands and see other debugging information (even if namespaced very specifically), so I'm releasing this first.
+
+**Migration**
+
+This part is simple. If you're in an environment where destructuring is supported, simply destructure the parameter while renaming the parameter to `statusCode`.
+
+```javascript
+oldErrorHandler(myCode) { /* do something with code */ }
+
+// should become
+
+newErrorHandler({ statusCode }) { /* statusCode is same as the parameter in `oldErrorHandler` */ }
+
+// To then grab the URL for quick checking, you can then do:
+finalErrorHandler({ statusCode, url }) {}
+
+// Otherwise, if you can't destructure, just declare the variable you need at the top by accessing the object.
+myOldErrorHandler(error) {
+    const myErrorCodeNumber = error.statusCode
+    /*
+
+
+    a lot of code blahblahblah
+
+
+    */
+    const oldCodeThatHandlesError = doSomething(myErrorCodeNumber)
+}
+```
+
 # 0.8.6
 
 * Add `regionNoThrow` method. This is similar to `.region()` except it does not throw and simply falls back to default on error (.region() falls back in this manner too).

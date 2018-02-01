@@ -8,7 +8,7 @@ import simpleMatchlist from '../../fixtures/rest/match/matchlist_simple.json'
 import modifiedIndicesMatchlist from '../../fixtures/rest/match/matchlist_modified_indices.json'
 import modifiedTimesMatchlist from '../../fixtures/rest/match/matchlist_modified_times.json'
 
-describe('Matchlist (integration)', function() {
+describe.skip('Matchlist (integration)', function() {
     it('should work for simple ranked request', async function() {
         const queue = 420
         const ml = await kayn.Matchlist.by.accountID(47776491)
@@ -67,8 +67,8 @@ describe('Matchlist (integration)', function() {
             const ml = await kayn.Matchlist.by
                 .accountID(233871907)
                 .query(verySeparatedTimeConfig)
-        } catch (code) {
-            expect(code).to.equal(400)
+        } catch ({ statusCode }) {
+            expect(statusCode).to.equal(400)
         }
     })
 })

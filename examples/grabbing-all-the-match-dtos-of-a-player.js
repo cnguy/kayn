@@ -19,7 +19,7 @@ const getAllMatchIDs = async (matchlistDTO, accountID, getFn) => {
                 restOfMatchIDs = restOfMatchIDs.concat(
                     newMatchlistDTO.matches.map(matchToGameId),
                 )
-            } catch (statusCode) {
+            } catch ({ statusCode }) {
                 if (statusCode === 404) break
             }
         }

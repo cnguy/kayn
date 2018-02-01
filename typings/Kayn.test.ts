@@ -2,6 +2,8 @@
 /// <reference path="./node_modules/@types/node/index.d.ts" />
 
 import * as lolapi from 'kayn';
+import { STATUS_CODES } from 'http';
+import { KaynError } from './index';
 
 const REGIONS = lolapi.REGIONS;
 const init = lolapi.Kayn;
@@ -21,6 +23,19 @@ kayn.League.by.uuid("1a3cc7ff-9b40-3927-b646-8d777e97148a")
 const main = async () => {
     const summoner = await kayn.Summoner.by.name("Contractz");
     const leagues = await kayn.Leagues.by.summonerID(12345)
+
+    kayn.Summoner.by.name('Contractz').then(console.log).catch(({ statusCode }) => console.log(statusCode)) 
+    try {
+       await kayn.Summoner.by.name('Contractz') 
+    } catch (error) {
+       const kaynError: KaynError = error; 
+       console.log(kaynError.statusCode)
+    }
+
+    kayn.Summoner.by.name('whatever').callback(function (error, data) {
+       console.log(data) 
+       console.log(error.statusCode)
+    })
 }
 
 kayn.flushCache(function (err, data) {
