@@ -38,13 +38,12 @@ import tournamentStubCreateExample from './examples/tournament-stub-create'
 const main = async () => {
     //matchlistExample(kayn)
     //    tournamentStubCreateExample(kayn)
-    try {
-        await kayn.Summoner.by.name('dsafiuadsfgsaiodfhaofdsih')
-    } catch ({ statusCode, url, ...rest }) {
-        console.log('the status code:', typeof statusCode, statusCode)
-        console.log('the url:', typeof url, url)
-        console.log(rest)
-    }
+    kayn.Summoner.by
+        .name('5gak')
+        .region(REGIONS.KOREA)
+        .callback(function(error, summonerDTO) {
+            console.log(summonerDTO)
+        })
 }
 
 main()

@@ -15,7 +15,6 @@ Champion.get(championID: int)
 
 /* LEAGUE-V3 */
 Challenger.list(queueName: string)
-Leagues.by.summonerID(summonerID: int)
 League.by.uuid(leagueUUID: string)
 Master.list(queueName: string)
 LeaguePositions.by.summonerID(summonerID: int)
@@ -91,7 +90,6 @@ Everything should be in the same order as in the official docs.
 
 ## LEAGUE-V3
 - [x] - `Get the challenger league for given queue.`
-- [x] - `Get leagues in all queues for a given summoner ID.` (Riot plans to deprecate this by January)
 - [x] - `Get league with given ID, including inactive entries.`
 - [x] - `Get the master league for given queue.`
 - [x] - `Get league positions in all queues for given summoner ID.`
