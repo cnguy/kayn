@@ -34,16 +34,12 @@ const kayn = Kayn(/* optional key */)({
 import matchlistExample from './examples/grabbing-all-the-match-dtos-of-a-player'
 import verifyExample from './examples/verifying-a-summoner'
 import tournamentStubCreateExample from './examples/tournament-stub-create'
+import championMasteryExample from './examples/grabbing-specific-champion-scores'
+import sortChallengerExample from './examples/sort-challenger-league-by-number-of-wins'
+import currentGameExample from './examples/grabbing-curr-game-info-of-first-featured-games'
 
 const main = async () => {
-    //matchlistExample(kayn)
-    //    tournamentStubCreateExample(kayn)
-    kayn.Summoner.by
-        .name('5gak')
-        .region(REGIONS.KOREA)
-        .callback(function(error, summonerDTO) {
-            console.log(summonerDTO)
-        })
+    currentGameExample(kayn)
 }
 
 main()

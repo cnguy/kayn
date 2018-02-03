@@ -47,9 +47,7 @@ const main = async kayn => {
 
     // Now we have all the match ids!
     // Can batch process them now.
-    const matches = await Promise.all(
-        matchIDs.map(matchID => kayn.Match.get(matchID)),
-    )
+    const matches = await Promise.all(matchIDs.map(kayn.Match.get))
     console.log(matches)
     console.log(`${matches.length} matches processed.`)
 }
