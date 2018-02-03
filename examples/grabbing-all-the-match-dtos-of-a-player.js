@@ -7,23 +7,24 @@ const matchToGameId = ({ gameId }) => gameId
 // getFN is required because of this file structure where `kayn` isn't included.
 // mutationsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
 const getAllMatchIDs = async (matchlistDTO, accountID, getFn) => {
-    let restOfMatchIDs = []
     const { totalGames } = matchlistDTO
     console.log(`Total number of games to process: ${totalGames}`)
+
+    // Batch up calls together.
+    const apiCalls = []
     if (totalGames > 100) {
         for (let beginIndex = 100; beginIndex < totalGames; beginIndex += 100) {
             const endIndex = beginIndex + 100
             const indexQuery = { beginIndex, endIndex }
-            try {
-                const newMatchlistDTO = await getFn(accountID, indexQuery)
-                restOfMatchIDs = restOfMatchIDs.concat(
-                    newMatchlistDTO.matches.map(matchToGameId),
-                )
-            } catch ({ statusCode }) {
-                if (statusCode === 404) break
-            }
+            apiCalls.push(getFn(accountID, indexQuery))
         }
     }
+
+    const restOfMatchIDs = (await Promise.all(apiCalls))
+        .map(({ matches }) => matches)
+        .reduce((total, curr) => total.concat(curr), [])
+        .map(matchToGameId)
+
     return [...matchlistDTO.matches.map(matchToGameId), ...restOfMatchIDs]
 }
 

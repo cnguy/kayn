@@ -39,7 +39,7 @@ import sortChallengerExample from './examples/sort-challenger-league-by-number-o
 import currentGameExample from './examples/grabbing-curr-game-info-of-first-featured-games'
 
 const main = async () => {
-    currentGameExample(kayn)
+    await matchlistExample(kayn)
 }
 
 main()
