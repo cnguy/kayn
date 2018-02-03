@@ -24,12 +24,6 @@ declare class KaynClass {
         }
     }
 
-    public Leagues: {
-        by: {
-            summonerID: (summonerID: number) => KaynRequest<dtos.LeagueV3LeagueListDTO[]>;
-        }
-    }
-
     public League: {
         by: {
             uuid: (leagueUUID: string) => KaynRequest<dtos.LeagueV3LeagueListDTO>;
