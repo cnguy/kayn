@@ -1,6 +1,7 @@
-// Simple way to grab all the matches of a player. There might be a better way, but I can't remember
-// if totalGames is reliable, which is why I go for a 404 check on top of the index check.
+// Simple way to grab all the matches of a player.
 
+// Destructures matchlist object to matches.
+const matchlistToMatches = ({ matches }) => matches
 // Destructures match object.
 const matchToGameId = ({ gameId }) => gameId
 
@@ -20,12 +21,11 @@ const getAllMatchIDs = async (matchlistDTO, accountID, getFn) => {
         }
     }
 
-    const restOfMatchIDs = (await Promise.all(apiCalls))
-        .map(({ matches }) => matches)
+    return [matchlistDTO]
+        .concat(await Promise.all(apiCalls))
+        .map(matchlistToMatches)
         .reduce((total, curr) => total.concat(curr), [])
         .map(matchToGameId)
-
-    return [...matchlistDTO.matches.map(matchToGameId), ...restOfMatchIDs]
 }
 
 const main = async kayn => {
