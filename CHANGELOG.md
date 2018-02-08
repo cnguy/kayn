@@ -1,3 +1,7 @@
+# 0.8.8
+
+* Remove Leagues.by.summoner related code.
+
 # 0.8.7 (BREAKING, but simple)
 
 * An error object as shown below is now returned instead of a single number.
