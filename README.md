@@ -337,7 +337,7 @@ One Tricks:
 
 Here are the requests stats for anyone interested.
 
-Note that my requests stats are a bit inflated because I've experimented with different season data, and also forgot to cache getMatchlist calls early on.
+Note that my requests stats are inflated since I'm not really caching at the moment (lol).
 
 ![Alt text](/_pictures/number_of_requests.png?raw=true "onetricks.net")
 
