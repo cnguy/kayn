@@ -284,6 +284,7 @@ const flush = async () => {
 async1
   .then(() => async2())
   .then(() => kayn.flushCache())
+  .then(console.log)
   .catch(console.log);
 ```
 ## Debug Options
@@ -339,6 +340,8 @@ Here are the requests stats for anyone interested.
 Note that my requests stats are a bit inflated because I've experimented with different season data, and also forgot to cache getMatchlist calls early on.
 
 ![Alt text](/_pictures/number_of_requests.png?raw=true "onetricks.net")
+
+![Alt text](/_pictures/status_codes.png?raw=true "onetricks.net")
 
 # Bugs
 
