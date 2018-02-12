@@ -61,5 +61,28 @@ describe('Kayn', function() {
                 })
             })
         })
+
+        describe.only('TTLs', function() {
+            it('should set defaults', function() {
+                const kayn = Kayn('cacher')({
+                    cacheOptions: {
+                        cache: new BasicJSCache(),
+                        timeToLives: {
+                            useDefault: true,
+                        },
+                    },
+                })
+
+                expect(kayn.config.cacheOptions.ttls).to.deep.equal({})
+            })
+
+            it('should override defaults with specifics', function() {})
+
+            it('should override defaults with groups', function() {})
+
+            it('should override defaults and groups with specifics', function() {})
+
+            it('should have no ttls without default=true', function() {})
+        })
     })
 })
