@@ -7,6 +7,46 @@ A small Node.js library to work with Riot's League of Legend's API.
 [![codecov](https://codecov.io/gh/cnguy/kayn/branch/master/graph/badge.svg)](https://codecov.io/gh/cnguy/kayn)
 [![dependencies Status](https://david-dm.org/cnguy/kayn/status.svg)](https://david-dm.org/cnguy/kayn)
 
+# Quick Example
+
+Here's a quick example that shows callbacks, promises, query parameters, and the setting of regions.
+
+```javascript
+const Kayn = require('kayn').Kayn
+
+const apiKey = 'RGAPI'
+const optionalConfig = {}
+
+const kayn = Kayn(apiKey)(optionalConfig)
+
+kayn.Summoner.by.name('Contractz')
+    .region('na')
+    .callback(function (err, summoner) {
+        if (summoner) {
+           const accountID = summoner.accountId
+
+            kayn.Matchlist.by.accountID(accountID)
+                /* Note that region falls back to default if unused. */
+                .query({
+                    season: 11,
+                    champion: 67,
+                })
+                .then(matchlist => {
+                    console.log(matchlist.totalGames)
+                })
+                .catch(console.error)
+        } else {
+            console.log('Could not find the summoner!')
+        }
+    })
+
+/*
+    Intentionally mixing callbacks and promises here.
+    Note that I'm trying not to use ES6/7 features here.
+    They're used everywhere else though.
+*/
+```
+
 # Table of Contents:
 * [Features](#features)
 * [Methods](#methods)
