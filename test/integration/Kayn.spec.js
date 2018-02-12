@@ -73,6 +73,7 @@ describe('Kayn', function() {
                     },
                 })
 
+                console.log(kayn.config.cacheOptions)
                 expect(kayn.config.cacheOptions.ttls).to.deep.equal({})
             })
 
@@ -82,7 +83,23 @@ describe('Kayn', function() {
 
             it('should override defaults and groups with specifics', function() {})
 
-            it('should have no ttls without default=true', function() {})
+            it('should have no ttls without useDefault=true', function() {
+                const kayn = Kayn('123')({
+                    cacheOptions: {
+                        cache: new BasicJSCache(),
+                        timeToLives: {},
+                    },
+                })
+                expect(kayn.config.cacheOptions.ttls).to.deep.equal({})
+            })
+
+            describe('backwards-compatibility and to ensure `ttls` is the source of truth', function() {
+                it('should override defaults with old ttls prop', function() {})
+
+                it('should override defaults and groups with old ttls prop', function() {})
+
+                it('should override defaults, groups, and specifics with old ttls prop', function() {})
+            })
         })
     })
 })
