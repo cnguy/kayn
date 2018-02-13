@@ -2,6 +2,9 @@ import { expect, should, assert } from 'chai'
 
 import { BasicJSCache, RedisCache, Kayn } from '../../lib/Kayn'
 
+import DEFAULT_TTLS from '../../lib/Enums/default-ttls'
+import METHOD_NAMES from '../../lib/Enums/method-names'
+
 describe('Kayn', function() {
     this.timeout(0)
 
@@ -73,13 +76,36 @@ describe('Kayn', function() {
                     },
                 })
 
-                console.log(kayn.config.cacheOptions)
-                expect(kayn.config.cacheOptions.ttls).to.deep.equal({})
+                expect(kayn.config.cacheOptions.ttls).to.deep.equal(
+                    DEFAULT_TTLS,
+                )
             })
 
             it('should override defaults with specifics', function() {})
 
-            it('should override defaults with groups', function() {})
+            it('should override defaults with groups', function() {
+                const kayn = Kayn('123')({
+                    cacheOptions: {
+                        cache: new BasicJSCache(),
+                        timeToLives: {
+                            useDefault: true,
+                            byGroup: {
+                                STATIC: 3000,
+                            },
+                        },
+                    },
+                })
+
+                const finalObj = { ...DEFAULT_TTLS }
+                Object.keys(METHOD_NAMES.STATIC).map(key => {
+                    finalObj[key] =
+                        kayn.config.cacheOptions.timeToLives.byGroup.STATIC
+                })
+                expect(kayn.config.cacheOptions.ttls).to.deep.equal({
+                    ...DEFAULT_TTLS,
+                    ...finalObj,
+                })
+            })
 
             it('should override defaults and groups with specifics', function() {})
 

@@ -42,11 +42,11 @@
   "dependencies": {
     "debug": "^3.1.0",
     "dotenv": "^4.0.0",
+    "lodash.assign": "^4.2.0",
     "lodash.merge": "^4.6.0",
     "redis": "^2.8.0",
     "request": "^2.83.0",
     "riot-ratelimiter-temp": "0.0.1",
-    "superstruct": "^0.2.0",
     "supports-color": "^5.1.0"
   }
 }
