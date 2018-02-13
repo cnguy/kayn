@@ -98,7 +98,7 @@ describe('Kayn', function() {
 
                 const finalObj = { ...DEFAULT_TTLS }
                 Object.keys(METHOD_NAMES.STATIC).map(key => {
-                    finalObj[key] =
+                    finalObj[METHOD_NAMES.STATIC[key]] =
                         kayn.config.cacheOptions.timeToLives.byGroup.STATIC
                 })
                 expect(kayn.config.cacheOptions.ttls).to.deep.equal({
@@ -107,7 +107,34 @@ describe('Kayn', function() {
                 })
             })
 
-            it('should override defaults and groups with specifics', function() {})
+            it('should override defaults and groups with specifics', function() {
+                const kayn = Kayn('123')({
+                    cacheOptions: {
+                        cache: new BasicJSCache(),
+                        timeToLives: {
+                            useDefault: true,
+                            byGroup: {
+                                STATIC: 3000,
+                            },
+                            byMethod: {
+                                [METHOD_NAMES.STATIC.GET_CHAMPION_BY_ID]: 100,
+                                [METHOD_NAMES.SUMMONER.GET_BY_ACCOUNT_ID]: 100,
+                            },
+                        },
+                    },
+                })
+                const finalObj = { ...DEFAULT_TTLS }
+                Object.keys(METHOD_NAMES.STATIC).map(key => {
+                    finalObj[METHOD_NAMES.STATIC[key]] =
+                        kayn.config.cacheOptions.timeToLives.byGroup.STATIC
+                })
+                expect(kayn.config.cacheOptions.ttls).to.deep.equal({
+                    ...DEFAULT_TTLS,
+                    ...finalObj,
+                    ...{ [METHOD_NAMES.STATIC.GET_CHAMPION_BY_ID]: 100 },
+                    ...{ [METHOD_NAMES.SUMMONER.GET_BY_ACCOUNT_ID]: 100 },
+                })
+            })
 
             it('should have no ttls without useDefault=true', function() {
                 const kayn = Kayn('123')({
