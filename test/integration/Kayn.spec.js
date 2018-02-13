@@ -81,7 +81,25 @@ describe('Kayn', function() {
                 )
             })
 
-            it('should override defaults with specifics', function() {})
+            it('should override defaults with specifics', function() {
+                const kayn = Kayn('123')({
+                    cacheOptions: {
+                        cache: new BasicJSCache(),
+                        timeToLives: {
+                            useDefault: true,
+                            byMethod: {
+                                [METHOD_NAMES.SUMMONER
+                                    .GET_BY_ACCOUNT_ID]: 109999999990, // ms
+                            },
+                        },
+                    },
+                })
+
+                expect(kayn.config.cacheOptions.ttls).to.deep.equal({
+                    ...DEFAULT_TTLS,
+                    [METHOD_NAMES.SUMMONER.GET_BY_ACCOUNT_ID]: 109999999990,
+                })
+            })
 
             it('should override defaults with groups', function() {
                 const kayn = Kayn('123')({
