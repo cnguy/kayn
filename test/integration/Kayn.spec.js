@@ -165,11 +165,84 @@ describe('Kayn', function() {
             })
 
             describe('backwards-compatibility and to ensure `ttls` is the source of truth', function() {
-                it('should override defaults with old ttls prop', function() {})
+                it('should override defaults with old ttls prop', function() {
+                    const kayn = Kayn('123')({
+                        cacheOptions: {
+                            cache: new BasicJSCache(),
+                            timeToLives: { useDefault: true },
+                            ttls: {
+                                [METHOD_NAMES.SUMMONER
+                                    .GET_BY_SUMMONER_NAME]: 123456,
+                            },
+                        },
+                    })
+                    expect(kayn.config.cacheOptions.ttls).to.deep.equal({
+                        ...DEFAULT_TTLS,
+                        [METHOD_NAMES.SUMMONER.GET_BY_SUMMONER_NAME]: 123456,
+                    })
+                })
 
-                it('should override defaults and groups with old ttls prop', function() {})
+                it('should override defaults and groups with old ttls prop', function() {
+                    const kayn = Kayn('123')({
+                        cacheOptions: {
+                            cache: new BasicJSCache(),
+                            timeToLives: {
+                                useDefault: true,
+                                byGroup: {
+                                    STATIC: 9877665551,
+                                },
+                            },
+                            ttls: {
+                                [METHOD_NAMES.STATIC
+                                    .GET_CHAMPION_BY_ID]: 123459,
+                            },
+                        },
+                    })
+                    expect(
+                        kayn.config.cacheOptions.ttls[
+                            METHOD_NAMES.STATIC.GET_CHAMPION_LIST
+                        ],
+                    ).to.equal(9877665551)
+                    expect(
+                        kayn.config.cacheOptions.ttls[
+                            METHOD_NAMES.STATIC.GET_CHAMPION_BY_ID
+                        ],
+                    ).to.equal(123459)
+                })
 
-                it('should override defaults, groups, and specifics with old ttls prop', function() {})
+                it('should override defaults, groups, and specifics with old ttls prop', function() {
+                    const kayn = Kayn('123')({
+                        cacheOptions: {
+                            cache: new BasicJSCache(),
+                            timeToLives: {
+                                useDefault: true,
+                                byGroup: {
+                                    STATIC: 1238213,
+                                },
+                                byMethod: {
+                                    [METHOD_NAMES.STATIC
+                                        .GET_CHAMPION_BY_ID]: 9871,
+                                    [METHOD_NAMES.STATIC
+                                        .GET_ITEM_BY_ID]: 9821372173,
+                                },
+                            },
+                            ttls: {
+                                [METHOD_NAMES.STATIC
+                                    .GET_CHAMPION_BY_ID]: 99999999,
+                            },
+                        },
+                    })
+                    expect(
+                        kayn.config.cacheOptions.ttls[
+                            METHOD_NAMES.STATIC.GET_CHAMPION_BY_ID
+                        ],
+                    ).to.equal(99999999)
+                    expect(
+                        kayn.config.cacheOptions.ttls[
+                            METHOD_NAMES.STATIC.GET_ITEM_BY_ID
+                        ],
+                    ).to.equal(9821372173)
+                })
             })
         })
     })
