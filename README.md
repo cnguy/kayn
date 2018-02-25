@@ -108,7 +108,6 @@ const kayn = Kayn('RGAPI-my-api-key')(/*{
     debugOptions: {
         isEnabled: true,
         showKey: false,
-        loggers: {}, // No need to pass anything here. Read the #Configuration#DebugOptions section.
     },
     requestOptions: {
         shouldRetry: true,
@@ -118,7 +117,9 @@ const kayn = Kayn('RGAPI-my-api-key')(/*{
     },
     cacheOptions: {
         cache: null,
-        ttls: {},
+        timeToLives: {
+            useDefault: false,
+        },
     },
 }*/)
 ```
@@ -243,7 +244,7 @@ Disabled by default in favor of `spread`.
 
 ## Cache Options
 
-To cache, firstly create some Cache that has a get/set function, and then pass it to `cacheOptions.cache`.
+To cache, firstly create some cache that implements the `get` and `set` functions that `kayn` interfaces with, and then pass that cache instance to `cacheOptions.cache`.
 
 `ttls` are method ttls. This part is pretty inconvenient right now. Suggestions are welcome.
 
@@ -277,8 +278,14 @@ const kayn = Kayn(/* optional key */)({
     },
     cacheOptions: {
         cache: myCache,
-        ttls: {
-            [METHOD_NAMES.SUMMONER.GET_BY_SUMMONER_NAME]: 1000, // ms
+        timeToLives: {
+            useDefault: true,
+            byGroup: {
+                STATIC: 60 * 24 * 24,
+            },
+            byMethod: {
+                [METHOD_NAMES.SUMMONER.GET_BY_SUMMONER_NAME]: 1000, // ms
+            },
         },
     },
 })
@@ -293,31 +300,99 @@ CACHE HIT @ https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/Cont
 */
 ```
 
+### TTLs???
+
+Check out `Enums/default-ttls` and `Enums/method-names` to find the constants that you can use as keys within `byGroup` and `byMethod`.
+
+Here is the order in which ttl's resolve (highest-priority first):
+1. byMethod
+2. byGroup
+3. useDefault
+
+Note that if you're using the `ttls` prop before v0.8.9, you're perfectly fine. `ttls` is the source of truth, and has the highest priotity over the above 3 ways.
+
+#### byMethod
+
+`byMethod` takes pairs of `Enums/method-names`, which are just unique (string-type) identifiers and the ttl value you desire.
+
+```javascript
+cacheOptions: {
+    timeToLives: {
+        byMethod: {
+            [METHOD_NAMES.SUMMONER.GET_BY_SUMMONER_NAME]: 1000,
+        }
+    }
+}
+
+// Same as passing this:
+// 'SUMMONER.GET_BY_SUMMONER_NAME': 1000,
+// Constants just help for auto-complete.
+```
+
+#### byGroup
+
+`byGroup` takes pairs as well. The key difference is that it follows how Riot groups their API methods on their developer interface. You can check `Enums/method-names` once again to see how methods are grouped toegher.
+
+`byGroup` has lower priority than `byMethod`. This as you'll see is flexible.
+
+```javascript
+cacheOptions: {
+    timeToLives: {
+        byGroup: {
+            MATCH: 60 * 60 * 24 * 30, // 30 days
+        }
+        byMethod: {
+            [METHOD_NAMES.MATCH.GET_MATCHLIST]: 1000,
+        }
+    }
+}
+
+// Enums/method-names
+/*
+const MATCH = {
+    GET_MATCH: 'MATCH.GET_MATCH',
+    GET_MATCHLIST: 'MATCH.GET_MATCHLIST',
+    GET_RECENT_MATCHLIST: 'MATCH.GET_RECENT_MATCHLIST',
+    GET_MATCH_TIMELINE: 'MATCH.GET_MATCH_TIMELINE',
+    GET_MATCH_IDS_BY_TOURNAMENT_CODE: 'MATCH.GET_MATCH_IDS_BY_TOURNAMENT_CODE',
+    GET_MATCH_BY_TOURNAMENT_CODE: 'MATCH.GET_MATCH_BY_TOURNAMENT_CODE',
+}
+*/
+```
+
+What this does is set the cache ttl of every single one of the above match method to 30 days. However, since `byMethod` has higher priority, we are then able to overwrite the `Matchlist.by.accountID` ttl, making it only be cached for a second instead.
+
+This is good because the other match methods rarely change, while matchlists can change every 20 minutes.
+
+#### useDefault
+
+Simply set `useDefault` in `timeToLives` to true. This option basically sets ttls I thought made some sense. `useDefault` has the lowest priority, which means you can set it to `true`, and then overwrite it on a case-by-case basis using `byGroup` and `byMethod`.
+
 ### Flushing the Cache
 
 ```javascript
 // BasicJSCache O(1)
 // synchronous
-kayn.flushCache();
+kayn.flushCache()
 // this has been turned into a promise so that it can be chained.
 // still can just be called normally though.
 // the `data` parameter returns "OK" just like in the RedisCache.
 async1
   .then(() => kayn.flushCache())
   .then(console.log) // prints OK always. there's no way to get an error.
-  .catch(console.err);
+  .catch(console.err)
 
 // RedisCache O(N)
 // asynchronous
 kayn.flushCache(function (err, ok) {
-  console.log(ok === "OK");
-});
+  console.log(ok === "OK")
+})
 
 const flush = async () => {
   try {
-    await kayn.flushCache(); // returns "OK", but not really necessary to store.
+    await kayn.flushCache() // returns "OK", but not really necessary to store.
   } catch (exception) {
-    console.log(exception);
+    console.log(exception)
   }
 }
 
@@ -325,7 +400,7 @@ async1
   .then(() => async2())
   .then(() => kayn.flushCache())
   .then(console.log)
-  .catch(console.log);
+  .catch(console.log)
 ```
 ## Debug Options
 
