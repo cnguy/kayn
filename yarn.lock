@@ -3999,9 +3999,9 @@ sum-up@^1.0.1:
   dependencies:
     chalk "^1.0.0"
 
-superstruct@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/superstruct/-/superstruct-0.5.0.tgz#3743837ee8a621754d49b03f7ed07beb7f2ed537"
+superstruct@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/superstruct/-/superstruct-0.5.1.tgz#cd6ddd7e5ad453440b14c60b9f8264b17fc88e75"
   dependencies:
     clone-deep "^2.0.1"
     kind-of "^6.0.1"
