@@ -119,6 +119,8 @@ const kayn = Kayn('RGAPI-my-api-key')(/*{
         cache: null,
         timeToLives: {
             useDefault: false,
+            byGroup: {},
+            byMethod: {},
         },
     },
 }*/)
