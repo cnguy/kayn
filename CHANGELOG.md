@@ -1,3 +1,7 @@
+# 0.8.9
+
+* Add `cacheOptions.{useDefault, byGroup, byMethod}`.
+
 # 0.8.8
 
 * Remove Leagues.by.summoner related code.
