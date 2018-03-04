@@ -1,6 +1,6 @@
 # 0.8.9
 
-* Add `cacheOptions.{useDefault, byGroup, byMethod}`.
+* Add `cacheOptions.timeToLives.{useDefault, byGroup, byMethod}`.
 
 # 0.8.8
 
