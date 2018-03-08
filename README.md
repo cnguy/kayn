@@ -7,45 +7,71 @@ A small Node.js library to work with Riot's League of Legend's API.
 [![codecov](https://codecov.io/gh/cnguy/kayn/branch/master/graph/badge.svg)](https://codecov.io/gh/cnguy/kayn)
 [![dependencies Status](https://david-dm.org/cnguy/kayn/status.svg)](https://david-dm.org/cnguy/kayn)
 
-# Quick Example
+<details><summary>Simple example using promises and callbacks</summary>
 
-Here's a quick example that shows callbacks, promises, query parameters, and the setting of regions.
+<p>
+
+####
 
 ```javascript
-const Kayn = require('kayn').Kayn
+const _kayn = require('kayn')
+const Kayn = _kayn.Kayn
+const REGIONS = _kayn.REGIONS
 
-const apiKey = 'RGAPI'
-const optionalConfig = {}
+const kayn = Kayn(/* process.env.RIOT_LOL_API_KEY */)(/* optional config */)
 
-const kayn = Kayn(apiKey)(optionalConfig)
-
-kayn.Summoner.by.name('Contractz')
-    .region('na')
-    .callback(function (err, summoner) {
+kayn.Summoner.by
+    .name('Contractz')
+    .region(REGIONS.NORTH_AMERICA) // same as 'na'
+    .callback(function(err, summoner) {
         if (summoner) {
-           const accountID = summoner.accountId
+            const accountID = summoner.accountId
 
-            kayn.Matchlist.by.accountID(accountID)
+            kayn.Matchlist.by
+                .accountID(accountID)
                 /* Note that region falls back to default if unused. */
                 .query({
                     season: 11,
                     champion: 67,
                 })
-                .then(matchlist => {
-                    console.log(matchlist.totalGames)
+                .then(function(matchlist) {
+                    console.log('actual matches:', matchlist.matches)
+                    console.log('total number of games:', matchlist.totalGames)
                 })
                 .catch(console.error)
         } else {
             console.log('Could not find the summoner!')
         }
     })
-
-/*
-    Intentionally mixing callbacks and promises here.
-    Note that I'm trying not to use ES6/7 features here.
-    They're used everywhere else though.
-*/
 ```
+</p>
+</details>
+
+<details><summary>Same example (as the above) using async/await, destructuring, and template strings</summary>
+<p>
+
+####
+
+```javascript
+import { Kayn, REGIONS } from 'kayn'
+
+const kayn = Kayn(/* process.env.RIOT_LOL_API_KEY */)(/* optional config */)
+
+const main = async () => {
+    const { accountId } = await kayn.Summoner.by.name('Contractz')
+    // ^ default region is used, which is `na` unless specified in config
+    const { matches, totalGames } = await kayn.Matchlist.by
+        .accountID(accountId)
+        .query({ season: 11, champion: 67 })
+        .region(REGIONS.NORTH_AMERICA)
+
+    console.log('actual matches:', matches)
+    console.log(`total number of games: ${totalGames}`)
+}
+
+main()
+```
+</details>
 
 # Table of Contents:
 * [Features](#features)
