@@ -12,7 +12,7 @@ const basicCache = new BasicJSCache()
 
 const myCache = basicCache // or basicCache
 
-const kayn = Kayn(/* optional key */)({
+const kayn = Kayn()({
     region: 'na',
     debugOptions: {
         isEnabled: true,
@@ -32,6 +32,11 @@ const kayn = Kayn(/* optional key */)({
             byGroup: {
                 STATIC: 1000,
             },
+            byMethod: {
+                [METHOD_NAMES.STATIC.GET_REFORGED_RUNE_PATH_LIST]: 5000,
+                [METHOD_NAMES.STATIC.GET_REFORGED_RUNE_PATH_BY_ID]: 5000,
+                [METHOD_NAMES.STATIC.GET_TARBALL_LINK]: 5000,
+            },
         },
     },
 })
@@ -43,6 +48,15 @@ import championMasteryExample from './examples/grabbing-specific-champion-scores
 import sortChallengerExample from './examples/sort-challenger-league-by-number-of-wins'
 import currentGameExample from './examples/grabbing-curr-game-info-of-first-featured-games'
 
-const main = async () => {}
+const main = async () => {
+    // await matchlistExample(kayn)
+    const link = await kayn.Static.TarballLinks.get()
+    console.log(link)
+    await kayn.Static.TarballLinks.get()
+    /*
+    const paths = await kayn.Static.ReforgedRunePaths.list()
+    console.log(paths)
+    */
+}
 
 main()
