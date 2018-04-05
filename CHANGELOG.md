@@ -1,6 +1,6 @@
 # 0.8.10
-* kayn's errors now have an additional prop called 'error' that has the rest of the error object besides statusCode and url
-* Add static RunesReforged, RunePathsReforged, and TarballLinks endpoints, along with the type definitions
+* kayn's errors now have an additional prop called 'error' that has the rest of the error object besides statusCode and url.
+* Add static RunesReforged, RunePathsReforged, and TarballLinks endpoints, along with the type definitions.
 * Add API deprecation endpoint to 'getting recent matchlist*. However, even after this officially gets deprecated on April 27th, 2018, the function will still be implemented via the 'get matchlist' endpoint.
 
 # 0.8.9
