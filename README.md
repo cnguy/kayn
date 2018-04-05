@@ -237,6 +237,7 @@ Errors as of v0.8.7 return the following error object:
 {
     statusCode: 42, // some random number
     url: '', // the debug URL that is used in logging as well
+    error: {} // the rest of the error object
 }
 ```
 
