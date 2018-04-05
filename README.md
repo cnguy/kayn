@@ -23,25 +23,19 @@ const kayn = Kayn(/* process.env.RIOT_LOL_API_KEY */)(/* optional config */)
 kayn.Summoner.by
     .name('Contractz')
     .region(REGIONS.NORTH_AMERICA) // same as 'na'
-    .callback(function(err, summoner) {
-        if (summoner) {
-            const accountID = summoner.accountId
-
-            kayn.Matchlist.by
-                .accountID(accountID)
-                /* Note that region falls back to default if unused. */
-                .query({
-                    season: 11,
-                    champion: 67,
-                })
-                .then(function(matchlist) {
-                    console.log('actual matches:', matchlist.matches)
-                    console.log('total number of games:', matchlist.totalGames)
-                })
-                .catch(console.error)
-        } else {
-            console.log('Could not find the summoner!')
-        }
+    .callback(function(unhandledError, summoner) {
+        kayn.Matchlist.by
+            .accountID(summoner.accountId)
+            /* Note that region falls back to default if unused. */
+            .query({
+                season: 11,
+                champion: 67,
+            })
+            .then(function(matchlist) {
+                console.log('actual matches:', matchlist.matches)
+                console.log('total number of games:', matchlist.totalGames)
+            })
+            .catch(console.error)
     })
 ```
 </p>
