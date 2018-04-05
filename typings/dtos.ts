@@ -364,9 +364,9 @@ export interface LolStaticDataV3MapDetailsDto {
 export interface LolStaticDataV3MasteryDto {
     prereq?: string;
     /**
-     * (Legal values:  Cunning,  Ferocity,  Resolve)
+     * (Legal values:  Cunning,  Ferocity,  Resolve,  Defense,  Offense,  Utility)
      */
-    masteryTree?: "Cunning" | "Ferocity" | "Resolve";
+    masteryTree?: "Cunning" | "Ferocity" | "Resolve" | "Defense" | "Offense" | "Utility";
     name?: string;
     ranks?: number; // int32
     image?: LolStaticDataV3ImageDto;
@@ -390,6 +390,9 @@ export interface LolStaticDataV3MasteryListDto {
  */
 export interface LolStaticDataV3MasteryTreeDto {
     Resolve?: LolStaticDataV3MasteryTreeListDto[];
+    Defense?: LolStaticDataV3MasteryTreeListDto[];
+    Utility?: LolStaticDataV3MasteryTreeListDto[];
+    Offense?: LolStaticDataV3MasteryTreeListDto[];
     Ferocity?: LolStaticDataV3MasteryTreeListDto[];
     Cunning?: LolStaticDataV3MasteryTreeListDto[];
 }
@@ -494,6 +497,35 @@ export interface LolStaticDataV3RecommendedDto {
     priority?: boolean;
     mode?: string;
     type?: string;
+}
+/**
+ * This object contains reforged rune data.
+ */
+export interface LolStaticDataV3ReforgedRuneDto {
+    runePathName?: string;
+    runePathId?: number; // int32
+    name?: string;
+    id?: number; // int32
+    key?: string;
+    shortDesc?: string;
+    longDesc?: string;
+    icon?: string;
+}
+/**
+ * This object contains reforged rune path data.
+ */
+export interface LolStaticDataV3ReforgedRunePathDto {
+    slots?: LolStaticDataV3ReforgedRuneSlotDto[];
+    icon?: string;
+    id?: number; // int32
+    key?: string;
+    name?: string;
+}
+/**
+ * This object contains reforged rune slot data.
+ */
+export interface LolStaticDataV3ReforgedRuneSlotDto {
+    runes?: LolStaticDataV3ReforgedRuneDto[];
 }
 /**
  * This object contains rune data.

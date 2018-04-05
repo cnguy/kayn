@@ -4,14 +4,14 @@ declare class KaynClass {
     flushCache(cb?: callback<"OK">): Promise<"OK">;
 
     public ChampionMastery: {
-        list: (summonerID: number) => KaynRequest<dtos.ChampionMasteryV3ChampionMasteryDTO[]>;
         get: (summonerID: number) => (championID: number) => KaynRequest<dtos.ChampionMasteryV3ChampionMasteryDTO>;
+        list: (summonerID: number) => KaynRequest<dtos.ChampionMasteryV3ChampionMasteryDTO[]>;
         totalScore: (summonerID: number) => KaynRequest<number>;
     }
 
     public Champion: {
-        list: () => KaynRequest<dtos.ChampionV3ChampionListDto>;
         get: (summonerID: number) => KaynRequest<dtos.ChampionV3ChampionDto>;
+        list: () => KaynRequest<dtos.ChampionV3ChampionListDto>;
     }
 
     public Challenger: {
@@ -42,12 +42,12 @@ declare class KaynClass {
 
     public Static: {
         Champion: {
-            list: () => KaynRequest<dtos.LolStaticDataV3ChampionListDto>;
             get: (championID: number) => KaynRequest<dtos.LolStaticDataV3ChampionDto>;
+            list: () => KaynRequest<dtos.LolStaticDataV3ChampionListDto>;
         }
         Item: {
-            list: () => KaynRequest<dtos.LolStaticDataV3ItemListDto>;
             get: (itemID: number) => KaynRequest<dtos.LolStaticDataV3ItemDto>;
+            list: () => KaynRequest<dtos.LolStaticDataV3ItemListDto>;
         }
         LanguageString: {
             list: () => KaynRequest<dtos.LolStaticDataV3LanguageStringsDto>;
@@ -59,8 +59,8 @@ declare class KaynClass {
             get: () => KaynRequest<dtos.LolStaticDataV3MapDataDto>;
         }
         Mastery: {
-            list: () => KaynRequest<dtos.LolStaticDataV3MasteryListDto>;
             get: (masteryID: number) => KaynRequest<dtos.LolStaticDataV3MasteryDto>;
+            list: () => KaynRequest<dtos.LolStaticDataV3MasteryListDto>;
         }
         ProfileIcon: {
             list: () => KaynRequest<dtos.LolStaticDataV3ProfileIconDataDto>;
@@ -68,9 +68,20 @@ declare class KaynClass {
         Realm: {
             get: () => KaynRequest<dtos.LolStaticDataV3RealmDto>;
         }
+        ReforgedRunes: {
+            get: (runeID: number) => KaynRequest<dtos.LolStaticDataV3ReforgedRuneDto>;
+            list: () => KaynRequest<dtos.LolStaticDataV3ReforgedRuneDto[]>;
+        }
+        ReforgedRunePaths: {
+            get: (runePathID: number) => KaynRequest<dtos.LolStaticDataV3ReforgedRunePathDto>;
+            list: () => KaynRequest<dtos.LolStaticDataV3ReforgedRunePathDto[]>;
+        }
         SummonerSpell: {
-            list: () => KaynRequest<dtos.LolStaticDataV3SummonerSpellListDto>;
             get: (summonerSpellID: number) => KaynRequest<dtos.LolStaticDataV3SummonerSpellDto>;
+            list: () => KaynRequest<dtos.LolStaticDataV3SummonerSpellListDto>;
+        }
+        TarballLinks: {
+            get: () => KaynRequest<string>;
         }
         Version: {
             list: () => KaynRequest<string[]>;
