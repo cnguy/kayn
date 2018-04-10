@@ -31,7 +31,7 @@ const kayn = Kayn()({
     cacheOptions: {
         cache: myCache,
         ttls: {
-            [METHOD_NAMES.SUMMONER.GET_BY_SUMMONER_NAME]: 1, // ms
+            [METHOD_NAMES.SUMMONER.GET_BY_SUMMONER_NAME]: 1500, // ms
         },
         timeToLives: {
             byGroup: {
@@ -53,26 +53,6 @@ import championMasteryExample from './examples/grabbing-specific-champion-scores
 import sortChallengerExample from './examples/sort-challenger-league-by-number-of-wins'
 import currentGameExample from './examples/grabbing-curr-game-info-of-first-featured-games'
 
-const main = async () => {
-    // await matchlistExample(kayn)
-    console.log('first')
-    await kayn.Summoner.by.name('Contractz')
-    console.log('second')
-    await kayn.Summoner.by.name('Contractz')
-    console.log('third')
-    await kayn.Summoner.by.name('95mcdonalds')
-    console.log('foutrh')
-    await kayn.Summoner.by.name('Contractz')
-    await kayn.Summoner.by.name('95mcdonalds')
-    await kayn.Summoner.by.name('Contractz')
-    await kayn.Summoner.by.name('Contractz')
-    setTimeout(async () => {
-        await kayn.Summoner.by.name('Contractz')
-    }, 2000)
-    /*
-    const paths = await kayn.Static.ReforgedRunePaths.list()
-    console.log(paths)
-    */
-}
+const main = async () => {}
 
 main()

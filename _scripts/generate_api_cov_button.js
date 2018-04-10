@@ -6,7 +6,7 @@ import svgToPng from 'svg-to-png'
 
 import SWAGGER_URL from './swagger_url'
 
-const notDone = [];
+const notDone = []
 
 const ENDPOINTS_DIR_PATH = path.join(__dirname, '..', 'lib', 'Endpoints')
 const PICTURES_PATH = path.join(__dirname, '..', '_pictures')
@@ -45,7 +45,8 @@ request(SWAGGER_URL, async (err, res) => {
                             ENDPOINTS_DIR_PATH,
                             '.js',
                         )
-                        if (Object.keys(f).length === 0) notDone.push(targetEndpoint);
+                        if (Object.keys(f).length === 0)
+                            notDone.push(targetEndpoint)
                         return Object.keys(f).length > 0
                     }),
                 )
