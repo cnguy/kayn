@@ -189,6 +189,14 @@ declare module 'kayn' {
         constructor();
     }
 
+    class LRUCache {
+        constructor(opts?: {
+            max?: number,
+            length?: (value: any, key: any) => number,
+            dispose?: (key: any, value: any) => void,
+        })
+    }
+
     class RedisCache {
         constructor(opts?: {
             host?: string,

@@ -10,6 +10,7 @@ const init = lolapi.Kayn;
 const RedisCache = lolapi.RedisCache;
 const METHOD_NAMES = lolapi.METHOD_NAMES;
 const BasicJSCache = lolapi.BasicJSCache;
+const LRUCache = lolapi.LRUCache;
 
 const kayn = init('123')({
     region: 'na'
@@ -19,6 +20,13 @@ console.log("Hello")
 kayn.Summoner.by.name("test")
 .then(({ accountId }) => console.log(accountId))
 kayn.League.by.uuid("1a3cc7ff-9b40-3927-b646-8d777e97148a")
+
+new LRUCache(
+    {
+        max: 2,
+        dispose: (key, value) => {},
+    }
+)
 
 const main = async () => {
     const summoner = await kayn.Summoner.by.name("Contractz");
