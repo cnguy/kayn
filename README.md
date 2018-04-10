@@ -273,10 +273,11 @@ To cache, firstly create some cache that implements the `get` and `set` function
 
 Current caches:
 * basic in-memory cache 
+* (node) lru-cache
 * Redis cache
 
 ```javascript
-import { Kayn, REGIONS, METHOD_NAMES, BasicJSCache, RedisCache } from 'kayn'
+import { Kayn, REGIONS, METHOD_NAMES, BasicJSCache, LRUCache, RedisCache } from 'kayn'
 
 const redisCache = new RedisCache({
     host: 'localhost',
@@ -284,9 +285,15 @@ const redisCache = new RedisCache({
     keyPrefix: 'kayn',
 })
 
+const lruCache = new LRUCache({
+    max: 500,
+    dispose: (key, value) => {},
+    length: (value, key) => 1,
+})
+
 const basicCache = new BasicJSCache()
 
-const myCache = redisCache // or basicCache
+const myCache = redisCache // or basicCache/lruCache
 
 const kayn = Kayn(/* optional key */)({
     region: 'na',

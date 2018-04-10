@@ -30,7 +30,6 @@ new LRUCache(
 
 const main = async () => {
     const summoner = await kayn.Summoner.by.name("Contractz");
-    const leagues = await kayn.Leagues.by.summonerID(12345)
 
     kayn.Summoner.by.name('Contractz').then(console.log).catch(({ statusCode }) => console.log(statusCode)) 
     try {

@@ -1,3 +1,7 @@
+# 0.8.11
+* Fixed BasicJSCache setting of expiry timers. I used seconds instead of milliseconds.
+* Add [lru-cache](https://www.npmjs.com/package/lru-cache).
+
 # 0.8.10
 * kayn's errors now have an additional prop called 'error' that has the rest of the error object besides statusCode and url.
 * Add static RunesReforged, RunePathsReforged, and TarballLinks endpoints, along with the type definitions.
