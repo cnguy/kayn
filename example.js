@@ -1,4 +1,11 @@
-import { Kayn, REGIONS, METHOD_NAMES, BasicJSCache, RedisCache } from './'
+import {
+    Kayn,
+    REGIONS,
+    METHOD_NAMES,
+    BasicJSCache,
+    LRUCache,
+    RedisCache,
+} from './'
 
 /*
 const redisCache = new RedisCache({
@@ -8,9 +15,7 @@ const redisCache = new RedisCache({
 });
 */
 
-const basicCache = new BasicJSCache()
-
-const myCache = basicCache // or basicCache
+const myCache = new LRUCache({ max: 1 })
 
 const kayn = Kayn()({
     region: 'na',
@@ -26,7 +31,7 @@ const kayn = Kayn()({
     cacheOptions: {
         cache: myCache,
         ttls: {
-            [METHOD_NAMES.SUMMONER.GET_BY_SUMMONER_NAME]: 1000, // ms
+            [METHOD_NAMES.SUMMONER.GET_BY_SUMMONER_NAME]: 1, // ms
         },
         timeToLives: {
             byGroup: {
@@ -50,9 +55,20 @@ import currentGameExample from './examples/grabbing-curr-game-info-of-first-feat
 
 const main = async () => {
     // await matchlistExample(kayn)
-    const link = await kayn.Static.TarballLinks.get()
-    console.log(link)
-    await kayn.Static.TarballLinks.get()
+    console.log('first')
+    await kayn.Summoner.by.name('Contractz')
+    console.log('second')
+    await kayn.Summoner.by.name('Contractz')
+    console.log('third')
+    await kayn.Summoner.by.name('95mcdonalds')
+    console.log('foutrh')
+    await kayn.Summoner.by.name('Contractz')
+    await kayn.Summoner.by.name('95mcdonalds')
+    await kayn.Summoner.by.name('Contractz')
+    await kayn.Summoner.by.name('Contractz')
+    setTimeout(async () => {
+        await kayn.Summoner.by.name('Contractz')
+    }, 2000)
     /*
     const paths = await kayn.Static.ReforgedRunePaths.list()
     console.log(paths)
