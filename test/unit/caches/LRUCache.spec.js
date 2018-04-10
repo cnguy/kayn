@@ -2,7 +2,7 @@ import { expect, should, assert } from 'chai'
 
 import LRUCache from '../../../lib/Caches/LRUCache'
 
-describe.only('LRUCache', function() {
+describe('LRUCache', function() {
     it('should initialize with default options', function() {
         const cache = new LRUCache()
         expect(cache.cache).to.not.be.null
@@ -45,7 +45,7 @@ describe.only('LRUCache', function() {
         })
     })
 
-    it('set & get should fail after expired timer', function() {
+    it('set & get should fail after expired timer', function(done) {
         const cache = new LRUCache()
         const key = 'kayn-key-etc'
         const ttl = 100
@@ -61,6 +61,7 @@ describe.only('LRUCache', function() {
             cache.get({ key }, (err, cached) => {
                 expect(err).to.not.be.null
                 expect(cached).to.be.null
+                done()
             })
         }, 1000)
     })

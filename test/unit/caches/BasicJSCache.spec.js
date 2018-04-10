@@ -35,7 +35,7 @@ describe('BasicJSCache', function() {
         })
     })
 
-    it('set & get should fail after expired timer', function() {
+    it('set & get should fail after expired timer', function(done) {
         const cache = new BasicJSCache()
         const key = 'kayn-key-etc'
         const ttl = 100
@@ -47,10 +47,12 @@ describe('BasicJSCache', function() {
             },
             data,
         )
+
         setTimeout(() => {
             cache.get({ key }, (err, cached) => {
                 expect(err).to.not.be.null
                 expect(cached).to.be.null
+                done()
             })
         }, 1000)
     })
