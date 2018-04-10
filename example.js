@@ -30,9 +30,7 @@ const kayn = Kayn()({
     },
     cacheOptions: {
         cache: myCache,
-        ttls: {
-            [METHOD_NAMES.SUMMONER.GET_BY_SUMMONER_NAME]: 1500, // ms
-        },
+        ttls: {},
         timeToLives: {
             byGroup: {
                 STATIC: 1000,
