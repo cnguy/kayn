@@ -1,6 +1,6 @@
 import { expect, should, assert } from 'chai'
 
-import { BasicJSCache, RedisCache, Kayn } from '../../lib/Kayn'
+import { BasicJSCache, LRUCache, RedisCache, Kayn } from '../../lib/Kayn'
 
 import DEFAULT_TTLS from '../../lib/Enums/default-ttls'
 import METHOD_NAMES from '../../lib/Enums/method-names'
@@ -39,7 +39,32 @@ describe('Kayn', function() {
             })
         })
 
-        it('RedisCache', function(done) {
+        it('LRUCache', function() {
+            const kayn = Kayn('1234')({
+                cacheOptions: {
+                    cache: new LRUCache(),
+                },
+            })
+            kayn.config.cacheOptions.cache.set(
+                {
+                    key: 'cache-test',
+                    ttl: 5,
+                },
+                { foo: 'bar' },
+            )
+            kayn.config.cacheOptions.cache.get(
+                { key: 'cache-test' },
+                async function(err, data) {
+                    expect(err).to.be.null
+                    expect(data).to.not.be.null
+                    expect(data).to.deep.equal({ foo: 'bar' })
+                    const ok = await kayn.flushCache()
+                    expect(ok).to.equal('OK')
+                },
+            )
+        })
+
+        it.skip('RedisCache', function(done) {
             const kayn = Kayn('1234')({
                 cacheOptions: {
                     cache: new RedisCache(),
@@ -65,7 +90,7 @@ describe('Kayn', function() {
             })
         })
 
-        describe.only('TTLs', function() {
+        describe('TTLs', function() {
             it('should set defaults', function() {
                 const kayn = Kayn('cacher')({
                     cacheOptions: {
