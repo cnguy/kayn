@@ -14,7 +14,7 @@ describe('RedisCache', function() {
         expect(redis.prefix).to.equal('kayn-')
     })
 
-    it('should initialize with configured options', function() {
+    it('should initialize with configured options 1', function() {
         const options = {
             host: '192.168.0.1',
             port: 5000,
@@ -24,6 +24,19 @@ describe('RedisCache', function() {
         expect(redis.client.connection_options.host).to.equal(options.host)
         expect(redis.client.connection_options.port).to.equal(options.port)
         expect(redis.prefix).to.equal(options.keyPrefix)
+    })
+
+    it('should initialize with configured options 2', function() {
+        const options = {
+            host: '192.168.0.1',
+            port: 5000,
+            keyPrefix: 'testPrefix-',
+            password: 'abcdefghijklmnopqrstuvwxyz',
+        }
+        const redis = new RedisCache(options)
+        expect(redis.client.connection_options.host).to.equal(options.host)
+        expect(redis.client.connection_options.port).to.equal(options.port)
+        expect(redis.client.options.password).to.equal(options.password)
     })
 
     it('set & get should work', function() {

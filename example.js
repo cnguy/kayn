@@ -32,6 +32,7 @@ const kayn = Kayn()({
         cache: myCache,
         ttls: {},
         timeToLives: {
+            useDefault: true,
             byGroup: {
                 STATIC: 1000,
             },
@@ -51,6 +52,9 @@ import championMasteryExample from './examples/grabbing-specific-champion-scores
 import sortChallengerExample from './examples/sort-challenger-league-by-number-of-wins'
 import currentGameExample from './examples/grabbing-curr-game-info-of-first-featured-games'
 
-const main = async () => {}
+const main = async () => {
+    await kayn.Summoner.by.name('Contractz')
+    await kayn.Summoner.by.name('Contractz')
+}
 
 main()

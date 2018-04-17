@@ -283,6 +283,8 @@ const redisCache = new RedisCache({
     host: 'localhost',
     port: 5000,
     keyPrefix: 'kayn',
+    password: 'hello-world',
+    // etc...
 })
 
 const lruCache = new LRUCache({

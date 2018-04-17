@@ -1,3 +1,6 @@
+# 0.8.12
+* Allow more redis options by just passing the user-defined object straight into redis.createClient().
+
 # 0.8.11
 * Fixed BasicJSCache setting of expiry timers. I used seconds instead of milliseconds.
 * Add [lru-cache](https://www.npmjs.com/package/lru-cache).
