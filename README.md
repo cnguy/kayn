@@ -85,7 +85,7 @@ Handled by [Colorfulstan](https://github.com/Colorfulstan)'s wonderful [riot-rat
 
 ## Caching
 
-Currently supports a basic JS cache (for simple scripts) and Redis for anything more complicated.
+Currently supports a basic JS cache (for simple scripts), node-lru-cache, and Redis.
 
 ## Compatible with Callbacks, Promises, Async / Await
 
@@ -273,8 +273,10 @@ To cache, firstly create some cache that implements the `get` and `set` function
 
 Current caches:
 * basic in-memory cache 
-* (node) lru-cache
-* Redis cache
+* [(node) lru-cache](https://github.com/isaacs/node-lru-cache)
+* [Redis cache](https://github.com/NodeRedis/node_redis)
+
+For the last two caches, the options that they take are the same options that their respective docs list out. In other words, I basically export wrappers that takes in the options and just passes it to the actual cache client.
 
 ```javascript
 import { Kayn, REGIONS, METHOD_NAMES, BasicJSCache, LRUCache, RedisCache } from 'kayn'
@@ -291,6 +293,7 @@ const lruCache = new LRUCache({
     max: 500,
     dispose: (key, value) => {},
     length: (value, key) => 1,
+    // maxAge intentionally is disabled
 })
 
 const basicCache = new BasicJSCache()
