@@ -41,8 +41,8 @@ describe('MatchlistEndpoint', function() {
             expect(payload).to.deep.equal({
                 method: 'GET',
                 serviceName: 'match',
-                endpoint: `matchlists/by-account/${Contractz.accountId}/recent`,
-                query: [],
+                endpoint: `matchlists/by-account/${Contractz.accountId}`,
+                query: [{ beginIndex: 0, endIndex: 20 }],
                 region: '',
                 isTournament: false,
             })

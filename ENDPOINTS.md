@@ -123,7 +123,7 @@ Everything should be in the same order as in the official docs.
 ## MATCH-V3
 - [x] - `Get match by match ID.`
 - [x] - `Get matchlist for games played on given account ID and platform ID and filtered using given filter parameters, if any.`
-- [x] - `Get matchlist for last 20 matches played on given account ID and platform ID.`
+- [x] - `Get matchlist for last 20 matches played on given account ID and platform ID.` (implemented via Get matchlist)
 - [x] - `Get match timeline by match ID.`
 - [x] - `Get match IDs by tournament code.`
 - [x] - `Get match by match ID and tournament code.`

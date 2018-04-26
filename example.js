@@ -53,8 +53,8 @@ import sortChallengerExample from './examples/sort-challenger-league-by-number-o
 import currentGameExample from './examples/grabbing-curr-game-info-of-first-featured-games'
 
 const main = async () => {
-    await kayn.Summoner.by.name('Contractz')
-    await kayn.Summoner.by.name('Contractz')
+    const { accountId } = await kayn.Summoner.by.name('Contractz')
+    console.log(await kayn.Matchlist.Recent.by.accountID(accountId))
 }
 
 main()
