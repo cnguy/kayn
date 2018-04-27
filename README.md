@@ -74,6 +74,7 @@ main()
 * [Configuration](#configuration)
 * [My Project](#my-project)
 * [Bugs / Changelog / Disclaimer](#bugs)
+* [FAQ](#faq)
 
 # Features
 
@@ -516,3 +517,15 @@ As long this library is pre-1.0.0, breaking changes may be made, but will be doc
 # Disclaimer
 
 `kayn` isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.
+
+# FAQ
+
+## My requests seem to take a long time.
+
+Set `requestOptions.burst` to be `true`. Occasionally, if `requestOptions.burst = true`, the rate limiter may get out of sync if you're running thousands of parallel requests (like [onetricks.net](onetricks.net) when building stats), which can cause 429'ss that will propagate until you're blacklisted.
+
+It is thus ideal to use the `spread` strategy (`burst = false` default) when working on apps that process a ton of requests because there is a much lower risk of getting a 429. However, for small or dev scripts, bursting your requests is a lot better.
+
+## I'm getting 429's.
+
+If you're getting 429's, you're most likely processing huge amounts of requests that probably needs to break request chunks into smaller pieces + set `requestOptions.burst` back to `false`, needs effective caching, and/or requires a more powerful, but smaller library like [riot-lol-api](https://github.com/Neamar/riot-lol-api), which also happens to be made by a Riot employee IIRC.
