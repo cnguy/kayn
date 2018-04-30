@@ -522,10 +522,14 @@ As long this library is pre-1.0.0, breaking changes may be made, but will be doc
 
 ## My requests seem to take a long time.
 
-Set `requestOptions.burst` to be `true`. Occasionally, if `requestOptions.burst = true`, the rate limiter may get out of sync if you're running thousands of parallel requests (like [onetricks.net](onetricks.net) when building stats), which can cause 429'ss that will propagate until you're blacklisted.
+You are most likely using the default `spread` rate limiting strategy, which spreads out your requests over rate limit periods.
 
-It is thus ideal to use the `spread` strategy (`burst = false` default) when working on apps that process a ton of requests because there is a much lower risk of getting a 429. However, for small or dev scripts, bursting your requests is a lot better.
+Set `requestOptions.burst` to `false` to burst your requests instead.
 
-## I'm getting 429's.
+## I'm getting (a lot of) 429's.
 
-If you're getting 429's, you're most likely processing huge amounts of requests that probably needs to break request chunks into smaller pieces + set `requestOptions.burst` back to `false`, needs effective caching, and/or requires a more powerful, but smaller library like [riot-lol-api](https://github.com/Neamar/riot-lol-api), which also happens to be made by a Riot employee IIRC.
+If you're getting 429's, you're most likely processing huge amounts of requests that probably needs to be broken into smaller pieces (while also setting `requestOptions.burst` to `false`), needs effective caching, and/or requires a more powerful, but smaller library like [riot-lol-api](https://github.com/Neamar/riot-lol-api), which also happens to be made by a Riot employee IIRC. [TeemoJS](https://github.com/MingweiSamuel/TeemoJS) would probably work well too!
+
+Occasionally, if `requestOptions.burst = true`, the rate limiter may get out of sync if you're running thousands of concurrent requests (like [onetricks.net](onetricks.net) when building stats), which can cause 429's that will propagate until you're blacklisted.
+
+It is thus ideal to use the `spread` strategy when working on apps that process a ton of requests because there is a much lower risk of getting a 429. However, for small or dev scripts, bursting your requests is a lot better.
