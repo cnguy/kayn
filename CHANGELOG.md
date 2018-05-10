@@ -1,6 +1,11 @@
+# 0.8.14
+
+* Move typings into scope (some of the typings were declared outside of the actual 'kayn' module).
+* Strengthen some typings while cleaning up others.
+
 # 0.8.13
 
-* (non-breaking) Replace Matchlist.Recent implementation with regular matchlist query
+* (non-breaking) Replace Matchlist.Recent implementation with regular matchlist query.
 
 # 0.8.12
 
