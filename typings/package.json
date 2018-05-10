@@ -3,9 +3,7 @@
   "version": "0.0.1",
   "main": "index.js",
   "license": "MIT",
-  "scripts": {
-    "build": "tsc"
-  },
+  "scripts": {},
   "devDependencies": {
     "typescript": "^2.4.2"
   },
