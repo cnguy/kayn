@@ -106,7 +106,7 @@ https://github.com/cnguy/kayn/pull/44
 * Add logging config on init.
 * Make logging outcoming requests more explicit (e.g. [GET], [POST]).
 
-# BETA: 0.7.5 / 0.7.4 
+# BETA: 0.7.5 / 0.7.4
 * Bad tournament endpoint implementations.
 
 # 0.6.4
