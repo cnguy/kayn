@@ -135,6 +135,7 @@ const kayn = Kayn('RGAPI-my-api-key')(/*{
         numberOfRetriesBeforeAbort: 3,
         delayBeforeRetry: 1000,
         burst: false,
+        exitOnRateLimitExceed: false,
     },
     cacheOptions: {
         cache: null,
@@ -189,7 +190,7 @@ const main = async () => {
 }
 ```
 
-### Region 
+### Region
 
 This forces a request to target a specific region instead of the default region set in `kayn`'s config. If `.region()` is not used, `kayn` will use the default region to make requests.
 
@@ -266,6 +267,12 @@ Disabled by default in favor of `spread`.
 
 `false` => `riotratelimiter` will use its spread strategy.
 
+### exitOnRateLimitExceed
+
+Default: false.
+
+This option will indicate if the application should force quit if your API key is blacklisted, or if your API Key is invalid
+
 ## Cache Options
 
 To cache, firstly create some cache that implements the `get` and `set` functions that `kayn` interfaces with, and then pass that cache instance to `cacheOptions.cache`.
@@ -273,7 +280,7 @@ To cache, firstly create some cache that implements the `get` and `set` function
 `ttls` are method ttls. This part is pretty inconvenient right now. Suggestions are welcome.
 
 Current caches:
-* basic in-memory cache 
+* basic in-memory cache
 * [(node) lru-cache](https://github.com/isaacs/node-lru-cache)
 * [Redis cache](https://github.com/NodeRedis/node_redis)
 
@@ -444,7 +451,7 @@ async1
 
 When logging, URLs printed out on the screen will also have the API key query string attached to it, allowing the user to conveniently inspect the response if necessary.
 
-### loggers 
+### loggers
 
 `kayn` now uses [debug](https://www.npmjs.com/package/debug) for all logging purposes.
 
@@ -472,7 +479,7 @@ DEBUG=kayn:request:incoming:error <command>
 
 ...where command runs the script/server/whatever (`npm run start`, `yarn start`, `node index.js`).
 
-To enable all loggers, simply run: 
+To enable all loggers, simply run:
 ```sh
 DEBUG=kayn:* <command>
 ```
