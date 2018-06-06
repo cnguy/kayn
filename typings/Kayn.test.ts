@@ -20,7 +20,7 @@ kayn.League.by.uuid('1a3cc7ff-9b40-3927-b646-8d777e97148a')
 
 new LRUCache({
     max: 2,
-    dispose: (key, value) => { },
+    dispose: (key, value) => {},
 })
 
 const main = async () => {
@@ -37,10 +37,10 @@ const main = async () => {
         console.log(kaynError.statusCode)
     }
 
-    kayn.Summoner.by.name('whatever').callback(function (error, data) {
+    kayn.Summoner.by.name('whatever').callback(function(error, data) {
         console.log(data)
         console.log(error.statusCode)
     })
 }
 
-kayn.flushCache(function (err, data) { })
+kayn.flushCache(function(err, data) {})

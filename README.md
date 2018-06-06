@@ -135,7 +135,7 @@ const kayn = Kayn('RGAPI-my-api-key')(/*{
         numberOfRetriesBeforeAbort: 3,
         delayBeforeRetry: 1000,
         burst: false,
-        exitOnRateLimitExceed: false,
+        shouldExitOn403: false,
     },
     cacheOptions: {
         cache: null,
@@ -267,11 +267,11 @@ Disabled by default in favor of `spread`.
 
 `false` => `riotratelimiter` will use its spread strategy.
 
-### exitOnRateLimitExceed
+### shouldExitOn403
 
 Default: false.
 
-This option will indicate if the application should force quit if your API key is blacklisted, or if your API Key is invalid
+This optoin will force the process to quit if your API key is blacklisted or invalid.
 
 ## Cache Options
 
