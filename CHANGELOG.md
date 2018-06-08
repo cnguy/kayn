@@ -1,3 +1,8 @@
+# 0.8.15
+
+* (breaking) Make force-quitting application on 403 configurable.
+ Also set the default behavior from `true` to `false`.
+
 # 0.8.14
 
 * Move typings into scope (some of the typings were declared outside of the actual 'kayn' module).
