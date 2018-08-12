@@ -1,9 +1,6 @@
 import { expect, should, assert } from 'chai'
 
 import Request from '../../lib/RequestClient/Request'
-import TestUtils from '../TestUtils'
-
-const { defaultConfig } = TestUtils
 
 describe('Request', function() {
     it('should initialize correctly #1', function() {
