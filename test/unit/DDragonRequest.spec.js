@@ -6,17 +6,83 @@ import DDragonRequest, {
 } from '../../lib/RequestClient/DDragonRequest'
 
 describe('DDragonRequest', function() {
-    describe('ddragonRequestTypeToUrl', function() {
-        const urlInformation = {
-            endpoint: 'na.json',
-        }
-        const url = ddragonRequestTypeToUrl(
-            DDragonRequestTypes.REALMS,
-            urlInformation,
-        )
-        expect(url).to.equal(
-            'https://ddragon.leagueoflegends.com/realms/na.json',
-        )
+    describe.only('ddragonRequestTypeToUrl', function() {
+        it('should create correct `version` url', function() {
+            const urlInformation = {
+                endpoint: 'na.json',
+            }
+            const url = ddragonRequestTypeToUrl(
+                DDragonRequestTypes.REALMS,
+                urlInformation,
+            )
+            expect(url).to.equal(
+                'https://ddragon.leagueoflegends.com/realms/na.json',
+            )
+        })
+        it('should create correct `data` url', function() {
+            const urlInformation = {
+                endpoint: 'champion.json',
+                version: '8.5.1',
+                locale: 'en_US',
+            }
+            const url = ddragonRequestTypeToUrl(
+                DDragonRequestTypes.CDN.DATA,
+                urlInformation,
+            )
+            expect(url).to.equal(
+                'https://ddragon.leagueoflegends.com/cdn/8.5.1/data/en_US/champion.json',
+            )
+        })
+        it('should create correct `img` url #1', function() {
+            const urlInformation = {
+                endpoint: 'profileicon/588.png',
+                version: '6.24.1',
+            }
+            const url = ddragonRequestTypeToUrl(
+                DDragonRequestTypes.CDN.IMAGE.WITH_VERSION,
+                urlInformation,
+            )
+            expect(url).to.equal(
+                'https://ddragon.leagueoflegends.com/cdn/6.24.1/img/profileicon/588.png',
+            )
+        })
+        it('should create correct `img` url #2', function() {
+            const urlInformation = {
+                endpoint: 'passive/Cryophoenix_Rebirth.png',
+                version: '6.24.1',
+            }
+            const url = ddragonRequestTypeToUrl(
+                DDragonRequestTypes.CDN.IMAGE.WITH_VERSION,
+                urlInformation,
+            )
+            expect(url).to.equal(
+                'https://ddragon.leagueoflegends.com/cdn/6.24.1/img/passive/Cryophoenix_Rebirth.png',
+            )
+        })
+        it('should create correct `img` url #3', function() {
+            const urlInformation = {
+                endpoint: 'champion/splash/Aatrox_0.jpg',
+            }
+            const url = ddragonRequestTypeToUrl(
+                DDragonRequestTypes.CDN.IMAGE.STATIC,
+                urlInformation,
+            )
+            expect(url).to.equal(
+                'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Aatrox_0.jpg',
+            )
+        })
+        it('should create correct `img` url #4', function() {
+            const urlInformation = {
+                endpoint: 'champion/loading/Aatrox_0.jpg',
+            }
+            const url = ddragonRequestTypeToUrl(
+                DDragonRequestTypes.CDN.IMAGE.STATIC,
+                urlInformation,
+            )
+            expect(url).to.equal(
+                'https://ddragon.leagueoflegends.com/cdn/img/champion/loading/Aatrox_0.jpg',
+            )
+        })
     })
     it('should initialize correctly #1', function() {
         //const request = new Request(
