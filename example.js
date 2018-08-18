@@ -53,8 +53,7 @@ import sortChallengerExample from './examples/sort-challenger-league-by-number-o
 import currentGameExample from './examples/grabbing-curr-game-info-of-first-featured-games'
 
 const main = async () => {
-    const realmList = await kayn.DDragon.Realm.list('na')
-    console.log(realmList)
+    console.log(await kayn.DDragon.Version.list())
 }
 
 main()
