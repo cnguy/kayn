@@ -53,7 +53,11 @@ import sortChallengerExample from './examples/sort-challenger-league-by-number-o
 import currentGameExample from './examples/grabbing-curr-game-info-of-first-featured-games'
 
 const main = async () => {
-    console.log(await kayn.DDragon.Version.list())
+    console.log(
+        await kayn.DDragon.Champion.get('Aatrox')
+            .version('8.5.1')
+            .locale('en_US'),
+    )
 }
 
 main()

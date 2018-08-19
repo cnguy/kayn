@@ -6,7 +6,7 @@ import DDragonRequest, {
 } from '../../lib/RequestClient/DDragonRequest'
 
 describe('DDragonRequest', function() {
-    describe.only('ddragonRequestTypeToUrl', function() {
+    describe('ddragonRequestTypeToUrl', function() {
         it('should create correct `version` url', function() {
             const urlInformation = {
                 endpoint: 'na.json',
