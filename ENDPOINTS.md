@@ -83,6 +83,11 @@ TournamentStub.register(providerID: number, name: string?)
 // DDragonRequest uses `version()` and `locale(), NOT `region()` or `query()`.
 // DDragonRequest will have a default version and locale for each endpoint.
 // This will be somehow set in the beginning.
+DDragon.Champion.get(championName: string)
+DDragon.Champion.list()
+DDragon.Item.list()
+DDragon.ProfileIcon.list()
+DDragon.SummonerSpell.list()
 DDragon.Realm.list(region: region? = defaultRegion) // Notice that there is inconsistency here. 
 DDragon.Version.list()
 ```
