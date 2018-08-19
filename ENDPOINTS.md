@@ -86,9 +86,12 @@ TournamentStub.register(providerID: number, name: string?)
 DDragon.Champion.get(championName: string)
 DDragon.Champion.list()
 DDragon.Item.list()
+DDragon.Language.list()
+DDragon.LanguageString.list()
 DDragon.ProfileIcon.list()
+DDragon.Realm.list(region: region? = defaultRegion) // Notice that there is inconsistency here, similarly to my Tournament API.
 DDragon.SummonerSpell.list()
-DDragon.Realm.list(region: region? = defaultRegion) // Notice that there is inconsistency here. 
+DDragon.TarballLinks.Get()
 DDragon.Version.list()
 ```
 
