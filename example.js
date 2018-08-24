@@ -54,8 +54,8 @@ import currentGameExample from './examples/grabbing-curr-game-info-of-first-feat
 
 const main = async () => {
     console.log(
-        await kayn.DDragon.Champion.get('Aatrox')
-            .version('8.5.1')
+        await kayn.DDragon.Language.list()
+            .version('6.24.1')
             .locale('en_US'),
     )
 }
