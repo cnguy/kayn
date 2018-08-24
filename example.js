@@ -53,11 +53,12 @@ import sortChallengerExample from './examples/sort-challenger-league-by-number-o
 import currentGameExample from './examples/grabbing-curr-game-info-of-first-featured-games'
 
 const main = async () => {
-    console.log(
-        await kayn.DDragon.RunesReforged.list()
-            .version('8.15.1')
-            .locale('en_US'),
-    )
+    await kayn.DDragon.RunesReforged.list()
+        .version('8.15.1')
+        .locale('en_US')
+    await kayn.DDragon.RunesReforged.list()
+        .version('8.15.1')
+        .locale('en_US')
 }
 
 main()
