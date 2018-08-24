@@ -51,7 +51,11 @@ import test from './examples/es5/verifying-a-summoner'
 
 const main = async () => {
     try {
-        console.log(await kayn.DDragon.RunesReforged.list().version('8.15.1'))
+        console.log(
+            await kayn.DDragon.Map.list()
+                .version('8.15.1')
+                .locale('es_ES'),
+        )
     } catch (ex) {
         console.log(ex)
     }
