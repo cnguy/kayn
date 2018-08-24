@@ -1,3 +1,7 @@
+# 0.8.16
+
+* Add deprecation warnings to static endpoint methods.
+
 # 0.8.15
 
 * (breaking) Make force-quitting application on 403 configurable.
