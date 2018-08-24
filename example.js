@@ -54,8 +54,8 @@ import currentGameExample from './examples/grabbing-curr-game-info-of-first-feat
 
 const main = async () => {
     console.log(
-        await kayn.DDragon.Language.list()
-            .version('6.24.1')
+        await kayn.DDragon.RunesReforged.list()
+            .version('8.15.1')
             .locale('en_US'),
     )
 }
