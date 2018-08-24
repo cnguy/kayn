@@ -35,11 +35,13 @@ const kayn = Kayn()({
             useDefault: true,
             byGroup: {
                 STATIC: 1000,
+                DDRAGON: 1,
             },
             byMethod: {
                 [METHOD_NAMES.STATIC.GET_REFORGED_RUNE_PATH_LIST]: 5000,
                 [METHOD_NAMES.STATIC.GET_REFORGED_RUNE_PATH_BY_ID]: 5000,
                 [METHOD_NAMES.STATIC.GET_TARBALL_LINK]: 5000,
+                [METHOD_NAMES.DDRAGON.RUNES_REFORGED_LIST]: 1000,
             },
         },
     },
@@ -53,9 +55,7 @@ import sortChallengerExample from './examples/sort-challenger-league-by-number-o
 import currentGameExample from './examples/grabbing-curr-game-info-of-first-featured-games'
 
 const main = async () => {
-    await kayn.DDragon.RunesReforged.list()
-        .version('8.15.1')
-        .locale('en_US')
+    console.log(kayn.config.cacheOptions.ttls)
     await kayn.DDragon.RunesReforged.list()
         .version('8.15.1')
         .locale('en_US')
