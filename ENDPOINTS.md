@@ -19,6 +19,19 @@ League.by.uuid(leagueUUID: string)
 Master.list(queueName: string)
 LeaguePositions.by.summonerID(summonerID: int)
 
+/* DDRAGON */
+DDragon.Champion.get(championName: string)
+DDragon.Champion.list()
+DDragon.Champion.listFull()
+DDragon.Item.list()
+DDragon.Language.list()
+DDragon.LanguageString.list()
+DDragon.ProfileIcon.list()
+DDragon.Realm.list()
+DDragon.RunesReforged.list()
+DDragon.SummonerSpell.list()
+DDragon.Version.list()
+
 /* LOL-STATIC-DATA-V3 */
 Static.Champion.list()
 Static.Champion.get(championID: int)
