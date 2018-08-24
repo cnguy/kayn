@@ -51,22 +51,7 @@ import test from './examples/es5/verifying-a-summoner'
 
 const main = async () => {
     try {
-        await kayn.DDragon.RunesReforged.list()
-            .version('8.15.1')
-            .locale('en_US')
-        await kayn.DDragon.RunesReforged.list()
-            .version('8.15.1')
-            .locale('en_US')
-        setTimeout(async () => {
-            await kayn.DDragon.RunesReforged.list()
-                .version('8.15.1')
-                .locale('en_US')
-        }, 3000)
-        setTimeout(async () => {
-            await kayn.DDragon.RunesReforged.list()
-                .version('8.15.1')
-                .locale('en_US')
-        }, 5000)
+        console.log(await kayn.DDragon.RunesReforged.list().version('8.15.1'))
     } catch (ex) {
         console.log(ex)
     }

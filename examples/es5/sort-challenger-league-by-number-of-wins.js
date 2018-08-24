@@ -5,7 +5,10 @@ function sortByWinsDescending(a, b) {
 }
 
 function main(kayn) {
-    kayn.Challenger.list('RANKED_SOLO_5x5').callback(function (error, challengers) {
+    kayn.Challenger.list('RANKED_SOLO_5x5').callback(function(
+        error,
+        challengers,
+    ) {
         var players = challengers.entries.sort(sortByWinsDescending)
         console.log(players)
         console.log(players[0].wins)
@@ -13,4 +16,3 @@ function main(kayn) {
 }
 
 module.exports = main
-

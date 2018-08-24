@@ -7,12 +7,16 @@ function main(kayn) {
         season: 7,
     }
 
-    kayn.Summoner.by.name('Contractz').callback(function (error, summoner) {
+    kayn.Summoner.by.name('Contractz').callback(function(error, summoner) {
         // Note that the grabbing of a matchlist is currently limited by pagination.
         // This API request only returns the first list.
-        kayn.Matchlist.by.accountID(summoner.accountId).region('na').query(config).callback(function (error, matchlist) {
-            console.log(matchlist.totalGames, matchlist.matches.length)
-        })
+        kayn.Matchlist.by
+            .accountID(summoner.accountId)
+            .region('na')
+            .query(config)
+            .callback(function(error, matchlist) {
+                console.log(matchlist.totalGames, matchlist.matches.length)
+            })
     })
 }
 
