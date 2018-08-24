@@ -4,10 +4,12 @@ function verify(theirCode) {
 }
 
 function main(kayn) {
-    kayn.Summoner.by.name('pYang').callback(function (error, summoner) {
-        kayn.ThirdPartyCode.by.summonerID(summoner.id).callback(function (error, code) {
-            console.log(verify(code))
-        })
+    kayn.Summoner.by.name('pYang').callback(function(error, summoner) {
+        kayn.ThirdPartyCode.by
+            .summonerID(summoner.id)
+            .callback(function(error, code) {
+                console.log(verify(code))
+            })
     })
 }
 

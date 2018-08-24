@@ -19,6 +19,20 @@ League.by.uuid(leagueUUID: string)
 Master.list(queueName: string)
 LeaguePositions.by.summonerID(summonerID: int)
 
+/* DDRAGON */
+DDragon.Champion.get(championName: string)
+DDragon.Champion.list()
+DDragon.Champion.listFull()
+DDragon.Item.list()
+DDragon.Language.list()
+DDragon.LanguageString.list()
+DDragon.Map.list()
+DDragon.ProfileIcon.list()
+DDragon.Realm.list(region: region)
+DDragon.RunesReforged.list()
+DDragon.SummonerSpell.list()
+DDragon.Version.list()
+
 /* LOL-STATIC-DATA-V3 */
 Static.Champion.list()
 Static.Champion.get(championID: int)
@@ -78,6 +92,21 @@ Tournament.get(tournamentCode: string)
 Tournament.lobbyEvents(tournamentCode: string)
 Tournament.registerProviderData(region: string, callbackURL: string)
 TournamentStub.register(providerID: number, name: string?)
+
+/* DDRAGON */
+// DDragonRequest uses `version()` and `locale(), NOT `region()` or `query()`.
+// DDragonRequest will have a default version and locale for each endpoint.
+// This will be somehow set in the beginning.
+DDragon.Champion.get(championName: string)
+DDragon.Champion.list()
+DDragon.Item.list()
+DDragon.Language.list()
+DDragon.LanguageString.list()
+DDragon.ProfileIcon.list()
+DDragon.Realm.list(region: region? = defaultRegion) // Notice that there is inconsistency here, similarly to my Tournament API.
+DDragon.SummonerSpell.list()
+DDragon.TarballLinks.Get()
+DDragon.Version.list()
 ```
 
 # Endpoints 
@@ -150,4 +179,3 @@ Everything should be in the same order as in the official docs.
 - [x] - `Gets a list of lobby events by tournament code.`
 - [x] - `Creates a tournament provider and return its ID.`
 - [x] - `Creates a tournament and return its ID.`
-

@@ -15,7 +15,7 @@ const redisCache = new RedisCache({
 });
 */
 
-const myCache = new LRUCache({ max: 1 })
+const myCache = new LRUCache({ max: 5 })
 
 const kayn = Kayn()({
     region: 'na',
@@ -35,11 +35,13 @@ const kayn = Kayn()({
             useDefault: true,
             byGroup: {
                 STATIC: 1000,
+                DDRAGON: 1,
             },
             byMethod: {
                 [METHOD_NAMES.STATIC.GET_REFORGED_RUNE_PATH_LIST]: 5000,
                 [METHOD_NAMES.STATIC.GET_REFORGED_RUNE_PATH_BY_ID]: 5000,
                 [METHOD_NAMES.STATIC.GET_TARBALL_LINK]: 5000,
+                [METHOD_NAMES.DDRAGON.RUNES_REFORGED_LIST]: 5000,
             },
         },
     },
@@ -48,7 +50,16 @@ const kayn = Kayn()({
 import test from './examples/es5/verifying-a-summoner'
 
 const main = async () => {
-    test(kayn)
+    try {
+        console.log(
+            await kayn.DDragon.Map.list()
+                .version('8.15.1')
+                .locale('es_ES'),
+        )
+    } catch (ex) {
+        console.log(ex)
+    }
+    console.log('hello, keep running')
 }
 
 main()
