@@ -15,7 +15,7 @@ const redisCache = new RedisCache({
 });
 */
 
-const myCache = new LRUCache({ max: 1 })
+const myCache = new LRUCache({ max: 5 })
 
 const kayn = Kayn()({
     region: 'na',
@@ -41,7 +41,7 @@ const kayn = Kayn()({
                 [METHOD_NAMES.STATIC.GET_REFORGED_RUNE_PATH_LIST]: 5000,
                 [METHOD_NAMES.STATIC.GET_REFORGED_RUNE_PATH_BY_ID]: 5000,
                 [METHOD_NAMES.STATIC.GET_TARBALL_LINK]: 5000,
-                [METHOD_NAMES.DDRAGON.RUNES_REFORGED_LIST]: 1000,
+                [METHOD_NAMES.DDRAGON.RUNES_REFORGED_LIST]: 5000,
             },
         },
     },
@@ -55,10 +55,27 @@ import sortChallengerExample from './examples/sort-challenger-league-by-number-o
 import currentGameExample from './examples/grabbing-curr-game-info-of-first-featured-games'
 
 const main = async () => {
-    console.log(kayn.config.cacheOptions.ttls)
-    await kayn.DDragon.RunesReforged.list()
-        .version('8.15.1')
-        .locale('en_US')
+    try {
+        await kayn.DDragon.RunesReforged.list()
+            .version('8.15.1')
+            .locale('en_US')
+        await kayn.DDragon.RunesReforged.list()
+            .version('8.15.1')
+            .locale('en_US')
+        setTimeout(async () => {
+            await kayn.DDragon.RunesReforged.list()
+                .version('8.15.1')
+                .locale('en_US')
+        }, 3000)
+        setTimeout(async () => {
+            await kayn.DDragon.RunesReforged.list()
+                .version('8.15.1')
+                .locale('en_US')
+        }, 5000)
+    } catch (ex) {
+        console.log(ex)
+    }
+    console.log('hello, keep running')
 }
 
 main()
