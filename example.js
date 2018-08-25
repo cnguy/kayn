@@ -53,7 +53,7 @@ const main = async () => {
     try {
         console.log(
             await kayn.DDragon.Map.list()
-                .version('8.15.1')
+                .version('8.20.1')
                 .locale('es_ES'),
         )
     } catch (ex) {
