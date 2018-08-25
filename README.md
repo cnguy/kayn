@@ -267,7 +267,6 @@ const main = async () => {
 
     const { n: { champion: championVersion } } = await kayn.DDragon.Realm.list()
     // Only optional locale is supported at the moment.
-    // Optional version will be supported soon.
     const championList = await kayn.DDragon.Champion.list().version(championVersion)
     console.log(championList)
 }

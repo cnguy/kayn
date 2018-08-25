@@ -25,6 +25,14 @@
   * Version
     * list
 
+Things not handled yet:
+* ~~Optional version via automatic versoin grabbing. Should respect cache options~~ Not possible because regions can have different versions?
+* Tarball tgz or link (not sure what the use case is yet)
+* Rune (do we need this anymore)
+* Mastery (do we need this anymore)
+* TS types (will be added in subsequent releases)
+* cdn/Images? ddragon provides img urls too (is this necessary)
+
 # 0.8.16
 
 * Add deprecation warnings to static endpoint methods.
