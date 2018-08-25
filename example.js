@@ -51,11 +51,13 @@ import test from './examples/es5/verifying-a-summoner'
 
 const main = async () => {
     try {
-        console.log(
-            await kayn.DDragon.Map.list()
-                .version('8.20.1')
-                .locale('es_ES'),
+        const {
+            n: { champion: championVersion },
+        } = await kayn.DDragon.Realm.list()
+        const championList = await kayn.DDragon.Champion.list().version(
+            championVersion,
         )
+        console.log(championList)
     } catch (ex) {
         console.log(ex)
     }

@@ -1,3 +1,30 @@
+# 0.8.17
+
+* Add default `locale` option that can be passed to config
+* Add following DDragon methods, along with caching and debugging:
+  * Champion
+    * get
+    * list
+    * listFull
+  * Item
+    * list
+  * Language
+    * list
+  * LanguageString
+    * list
+  * Map
+    * list
+  * ProfileIcon
+    * list
+  * Realm
+    * list
+  * RunesReforged
+    * list
+  * SummonerSpell
+    * list
+  * Version
+    * list
+
 # 0.8.16
 
 * Add deprecation warnings to static endpoint methods.

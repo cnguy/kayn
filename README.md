@@ -70,7 +70,8 @@ main()
 # Table of Contents:
 * [Features](#features)
 * [Methods](#methods)
-* [Installation & Usage](#installation-and-usage)
+* [Installation & (Riot API) Usage](#installation-and-usage)
+* [DDragon Usage](#ddragon-usage)
 * [Configuration](#configuration)
 * [My Project](#my-project)
 * [Bugs / Changelog / Disclaimer](#bugs)
@@ -126,6 +127,7 @@ yarn add kayn
 const { Kayn, REGIONS } = require('kayn')
 const kayn = Kayn('RGAPI-my-api-key')(/*{
     region: REGIONS.NORTH_AMERICA,
+    locale: 'en_US',
     debugOptions: {
         isEnabled: true,
         showKey: false,
@@ -243,7 +245,43 @@ Errors as of v0.8.7 return the following error object:
 }
 ```
 
+# DDragon Usage
+
+```javascript
+const main = async () => {
+    const kayn = Kayn('RGAPI-my-api-key')({
+        region: REGIONS.NORTH_AMERICA,
+        locale: 'en_US',
+        debugOptions: {
+            isEnabled: true,
+            showKey: false,
+        },
+        requestOptions: {}, // Doesn't apply to DDragon requests
+        cacheOptions: {
+            cache: new LRUCache({ max: 5000 }),
+            timeToLives: {
+                useDefault: true, // Cache DDragon by default!
+            },
+        },
+    })
+
+    const { n: { champion: championVersion } } = await kayn.DDragon.Realm.list()
+    // Only optional locale is supported at the moment.
+    // Optional version will be supported soon.
+    const championList = await kayn.DDragon.Champion.list().version(championVersion)
+    console.log(championList)
+}
+```
+
 # Configuration
+
+### region
+
+Default: 'na'
+
+### locale
+
+Default: 'en_US'
 
 ## Request Options
 
@@ -310,6 +348,7 @@ const myCache = redisCache // or basicCache/lruCache
 
 const kayn = Kayn(/* optional key */)({
     region: 'na',
+    locale: 'en_US',
     debugOptions: {
         isEnabled: true,
         showKey: false,
