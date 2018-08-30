@@ -12,6 +12,7 @@ ChampionMastery.totalScore(summonerID: int)
 /* CHAMPION-V3 */
 Champion.list()
 Champion.get(championID: int)
+ChampionRotation.list()
 
 /* LEAGUE-V3 */
 Challenger.list(queueName: string)
