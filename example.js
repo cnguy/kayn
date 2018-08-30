@@ -42,26 +42,20 @@ const kayn = Kayn()({
                 [METHOD_NAMES.STATIC.GET_REFORGED_RUNE_PATH_BY_ID]: 5000,
                 [METHOD_NAMES.STATIC.GET_TARBALL_LINK]: 5000,
                 [METHOD_NAMES.DDRAGON.RUNES_REFORGED_LIST]: 5000,
+                [METHOD_NAMES.CHAMPION.GET_CHAMPION_ROTATIONS]: 5000,
             },
         },
     },
 })
 
-import test from './examples/es5/verifying-a-summoner'
+import test from './examples/es5/turn-free-to-play-into-ddragon-champion-objects'
 
 const main = async () => {
     try {
-        const {
-            n: { champion: championVersion },
-        } = await kayn.DDragon.Realm.list()
-        const championList = await kayn.DDragon.Champion.list().version(
-            championVersion,
-        )
-        console.log(championList)
+        test(kayn)
     } catch (ex) {
-        console.log(ex)
+        console.error(ex)
     }
-    console.log('hello, keep running')
 }
 
 main()
