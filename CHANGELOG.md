@@ -1,3 +1,9 @@
+# 0.8.18
+
+* Add ChampionRotationEndpoint (no types yet; cache supported)
+* Add deprecation warnings to ChampionEndpoint (get/list)
+* Fix DDragon logging issues
+
 # 0.8.17
 
 * Add default `locale` option that can be passed to config
