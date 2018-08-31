@@ -103,10 +103,11 @@ DDragon.Champion.list()
 DDragon.Item.list()
 DDragon.Language.list()
 DDragon.LanguageString.list()
+DDragon.Map.list()
 DDragon.ProfileIcon.list()
 DDragon.Realm.list(region: region? = defaultRegion) // Notice that there is inconsistency here, similarly to my Tournament API.
 DDragon.SummonerSpell.list()
-DDragon.TarballLinks.Get()
+// DDragon.TarballLinks.Get()
 DDragon.Version.list()
 ```
 
