@@ -72,6 +72,7 @@ main()
 * [Methods](#methods)
 * [Installation & (Riot API) Usage](#installation-and-usage)
 * [DDragon Usage](#ddragon-usage)
+* [More Examples](#more-examples)
 * [Configuration](#configuration)
 * [My Project](#my-project)
 * [Bugs / Changelog / Disclaimer](#bugs)
@@ -271,6 +272,11 @@ const main = async () => {
     console.log(championList)
 }
 ```
+
+# More Examples
+
+* [Regular JavaScript](https://github.com/cnguy/kayn/tree/master/examples/es5)
+* [Async Await](https://github.com/cnguy/kayn/tree/master/examples/async.await)
 
 # Configuration
 
