@@ -52,7 +52,10 @@ import test from './examples/es5/turn-free-to-play-into-ddragon-champion-objects
 
 const main = async () => {
     try {
-        const lala = await kayn.DDragon.Realm.list(/* default region */)
+        const aatrox = await kayn.DDragon.Champion.Helpers.getDataById(
+            'Aatrox',
+        ).version('8.15.1')
+        console.log(aatrox)
     } catch (ex) {
         console.error(ex)
     }
