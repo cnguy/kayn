@@ -52,11 +52,7 @@ import test from './examples/es5/turn-free-to-play-into-ddragon-champion-objects
 
 const main = async () => {
     try {
-        kayn.DDragon.Champion.list()
-            .version('8.15.1')
-            .callback(function(error, champions) {
-                console.log(champions)
-            })
+        const lala = await kayn.DDragon.Realm.list(/* default region */)
     } catch (ex) {
         console.error(ex)
     }

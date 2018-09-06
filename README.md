@@ -272,11 +272,18 @@ kayn.DDragon.Champion.list()
     .callback(function(error, champions) {
         console.log(champions)
     })
+
+kayn.DDragon.Champion.list()
+    .version('8.15.1')
+    /* Locale not specified. Uses default locale, which is 'en_US' in the config and is adjustable. */
+    .callback(function(error, champions) {
+        console.log(champions)
+    })
 ```
 
 ## Realm -> Version Example
 
-This example firstly hits the `Realm` endpoint, which grabs a list of versions where each version corresponds with some type of DDragon endpoint (`Champion`, `Item`, etc). I then grab the version associated with the `Champion` endpoint to get the latest static champion list for the NA region. `kayn.DDragon.Realm.list` uses the default region or takes in a region specified, which is why I am able to avoid passing in extra arguments.
+This example firstly hits the `Realm` endpoint, which grabs a list of versions where each version corresponds with some type of DDragon endpoint (`Champion`, `Item`, etc). I then grab the version associated with the `Champion` endpoint to get the latest static champion list for the NA region. Note that `kayn.DDragon.Realm.list` uses the default region or takes in a region specified, which is why I am able to avoid passing in extra arguments.
 
 ```javascript
 const main = async () => {
@@ -296,6 +303,32 @@ const main = async () => {
         },
     })
 
+    /*
+        kayn.DDragon.Realm.list('na') =>
+        {
+        	"n": {
+        		"item": "8.17.1",
+        		"rune": "7.23.1",
+        		"mastery": "7.23.1",
+        		"summoner": "8.17.1",
+          		"champion": "8.17.1",
+          		"profileicon": "8.17.1",
+        		"map": "8.17.1",
+          		"language": "8.17.1",
+        		"sticker": "8.17.1"
+          	},
+        	"v": "8.17.1",
+          	"l": "en_US",
+          	"cdn": "https://ddragon.leagueoflegends.com/cdn",
+          	"dd": "8.17.1",
+          	"lg": "8.17.1",
+          	"css": "8.17.1",
+          	"profileiconmax": 28,
+          	"store": null
+        }
+    */
+
+    // Same as `const championVersion = data.n.champion`.
     const { n: { champion: championVersion } } = await kayn.DDragon.Realm.list(/* default region */)
     // Only optional locale is supported at the moment.
     const championList = await kayn.DDragon.Champion.list().version(championVersion)
