@@ -248,6 +248,36 @@ Errors as of v0.8.7 return the following error object:
 
 # DDragon Usage
 
+
+### Version
+
+This forces a request to target a specific version and is mandatory at the moment.
+
+```javascript
+kayn.DDragon.Champion.list()
+    .version('8.15.1')
+    .callback(function(error, champions) {
+        console.log(champions)
+    })
+```
+
+### Locale
+
+This forces a request to target a specific locale instead of the default locale set in `kayn`'s config. If `.locale()` is not used, `kayn` will use the default locale to make requests.
+
+```javascript
+kayn.DDragon.Champion.list()
+    .version('8.15.1')
+    .locale('sg_SG')
+    .callback(function(error, champions) {
+        console.log(champions)
+    })
+```
+
+## Realm -> Version Example
+
+This example firstly hits the `Realm` endpoint, which grabs a list of versions where each version corresponds with some type of DDragon endpoint (`Champion`, `Item`, etc). I then grab the version associated with the `Champion` endpoint to get the latest static champion list for the NA region. `kayn.DDragon.Realm.list` uses the default region or takes in a region specified, which is why I am able to avoid passing in extra arguments.
+
 ```javascript
 const main = async () => {
     const kayn = Kayn('RGAPI-my-api-key')({
@@ -266,7 +296,7 @@ const main = async () => {
         },
     })
 
-    const { n: { champion: championVersion } } = await kayn.DDragon.Realm.list()
+    const { n: { champion: championVersion } } = await kayn.DDragon.Realm.list(/* default region */)
     // Only optional locale is supported at the moment.
     const championList = await kayn.DDragon.Champion.list().version(championVersion)
     console.log(championList)

@@ -52,7 +52,11 @@ import test from './examples/es5/turn-free-to-play-into-ddragon-champion-objects
 
 const main = async () => {
     try {
-        test(kayn)
+        kayn.DDragon.Champion.list()
+            .version('8.15.1')
+            .callback(function(error, champions) {
+                console.log(champions)
+            })
     } catch (ex) {
         console.error(ex)
     }
