@@ -19,6 +19,7 @@ Given:
 	"data": {
     ...
 		"Aatrox": {
+      ...
 			"id": "Aatrox",
 			"key": "266"
 		}
@@ -34,6 +35,7 @@ Given:
 	"data": {
     ...
 		"Aatrox": {
+      ...
 			"id": "266",
 			"key": "Aatrox"
 		}
@@ -46,9 +48,10 @@ while `someFunctionDataByIdWithParentAsId` changes the shape to:
 ```json
 {
   ...
-	"266": {
+	"data": {
     ...
-		"Aatrox": {
+		"226": {
+      ...
 			"id": "266",
 			"key": "Aatrox"
 		}
