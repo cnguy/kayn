@@ -393,6 +393,8 @@ while `someFunctionDataByIdWithParentAsId` changes the shape to:
 }
 ```
 
+These functions also cache their own data, separate from the functions that make the actual HTTP requests. They also have their own method names, and are cached under the 'DDRAGON' namespace.
+
 # More Examples
 
 * [Regular JavaScript](https://github.com/cnguy/kayn/tree/master/examples/es5)
