@@ -52,10 +52,13 @@ import test from './examples/es5/turn-free-to-play-into-ddragon-champion-objects
 
 const main = async () => {
     try {
-        const aatrox = await kayn.DDragon.Champion.Helpers.getDataById(
-            'Aatrox',
-        ).version('8.15.1')
-        console.log(aatrox)
+        const list = await kayn.DDragon.Champion.listFullDataByIdWithParentAsId().version(
+            '8.15.1',
+        )
+        const list2 = await kayn.DDragon.Champion.listFullDataByIdWithParentAsId().version(
+            '8.15.1',
+        )
+        console.log(list2.data)
     } catch (ex) {
         console.error(ex)
     }
