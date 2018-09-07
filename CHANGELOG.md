@@ -1,3 +1,63 @@
+# 0.8.19
+
+* Add various new endpoints
+
+```javascript
+DDragon.Champion.getDataById(championName: string)
+DDragon.Champion.getDataByIdWithParentAsId(championName: string)
+DDragon.Champion.listDataById()
+DDragon.Champion.listDataByIdWithParentAsId()
+DDragon.Champion.listFullDataById()
+DDragon.Champion.listFullDataByIdWithParentAsId()
+```
+
+Given:
+
+```json
+{
+  ...
+	"data": {
+    ...
+		"Aatrox": {
+			"id": "Aatrox",
+			"key": "266"
+		}
+	}
+}
+```
+
+`someFunctionDataById` changes the shape to:
+
+```json
+{
+  ...
+	"data": {
+    ...
+		"Aatrox": {
+			"id": "266",
+			"key": "Aatrox"
+		}
+	}
+}
+```
+
+while `someFunctionDataByIdWithParentAsId` changes the shape to:
+
+```json
+{
+  ...
+	"266": {
+    ...
+		"Aatrox": {
+			"id": "266",
+			"key": "Aatrox"
+		}
+	}
+}
+```
+
+These functions are cached differently from the actual HTTP functions too.
+
 # 0.8.18
 
 * Add ChampionRotationEndpoint (no types yet; cache supported)

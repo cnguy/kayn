@@ -248,7 +248,6 @@ Errors as of v0.8.7 return the following error object:
 
 # DDragon Usage
 
-
 ### Version
 
 This forces a request to target a specific version and is mandatory at the moment.
@@ -333,6 +332,64 @@ const main = async () => {
     // Only optional locale is supported at the moment.
     const championList = await kayn.DDragon.Champion.list().version(championVersion)
     console.log(championList)
+}
+```
+
+## dataById and dataByIdWithParentAsId
+
+As of v0.8.19, the following DDragon.Champion functions have been added:
+
+```javascript
+DDragon.Champion.getDataById(championName: string)
+DDragon.Champion.getDataByIdWithParentAsId(championName: string)
+DDragon.Champion.listDataById()
+DDragon.Champion.listDataByIdWithParentAsId()
+DDragon.Champion.listFullDataById()
+DDragon.Champion.listFullDataByIdWithParentAsId()
+```
+
+Given:
+
+```json
+{
+  ...
+	"data": {
+    ...
+		"Aatrox": {
+			"id": "Aatrox",
+			"key": "266"
+		}
+	}
+}
+```
+
+`someFunctionDataById` changes the shape to:
+
+```json
+{
+  ...
+	"data": {
+    ...
+		"Aatrox": {
+			"id": "266",
+			"key": "Aatrox"
+		}
+	}
+}
+```
+
+while `someFunctionDataByIdWithParentAsId` changes the shape to:
+
+```json
+{
+  ...
+	"266": {
+    ...
+		"Aatrox": {
+			"id": "266",
+			"key": "Aatrox"
+		}
+	}
 }
 ```
 
