@@ -33,6 +33,18 @@ describe('DDragonRequest', function() {
                 'https://ddragon.leagueoflegends.com/cdn/8.5.1/data/en_US/champion.json',
             )
         })
+        it('should throw an error if `data` url does not have a version', function() {
+            const urlInformation = {
+                endpoint: 'champion.json',
+                locale: 'en_US',
+            }
+            expect(() =>
+                ddragonRequestTypeToUrl(
+                    DDragonRequestTypes.CDN.DATA,
+                    urlInformation,
+                ),
+            ).to.throw()
+        })
         it('should create correct `img` url #1', function() {
             const urlInformation = {
                 endpoint: 'profileicon/588.png',
@@ -84,6 +96,7 @@ describe('DDragonRequest', function() {
             )
         })
     })
+
     it('should initialize correctly #1', function() {
         //const request = new Request(
         //    defaultConfig,

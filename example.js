@@ -34,13 +34,9 @@ const kayn = Kayn()({
         timeToLives: {
             useDefault: true,
             byGroup: {
-                STATIC: 1000,
                 DDRAGON: 1,
             },
             byMethod: {
-                [METHOD_NAMES.STATIC.GET_REFORGED_RUNE_PATH_LIST]: 5000,
-                [METHOD_NAMES.STATIC.GET_REFORGED_RUNE_PATH_BY_ID]: 5000,
-                [METHOD_NAMES.STATIC.GET_TARBALL_LINK]: 5000,
                 [METHOD_NAMES.DDRAGON.RUNES_REFORGED_LIST]: 5000,
                 [METHOD_NAMES.CHAMPION.GET_CHAMPION_ROTATIONS]: 5000,
             },
@@ -52,10 +48,8 @@ import test from './examples/es5/turn-free-to-play-into-ddragon-champion-objects
 
 const main = async () => {
     try {
-        const blah = await kayn.DDragon.Champion.getDataById('Aatrox').version(
-            '8.15.1',
-        )
-        console.log(blah)
+        const data = await kayn.DDragon.Champion.list().version('8.15.1')
+        console.log(data)
     } catch (ex) {
         console.error(ex)
     }

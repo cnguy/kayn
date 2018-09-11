@@ -1,3 +1,7 @@
+# 0.8.21
+
+* Throw an error if no `version` is provided to `DDragon` `data` methods (listing champions, runes,etc). This should help out users in case if they don't read all the docs
+
 # 0.8.20 (BREAKING if you have anything related to Static endpoints)
 
 * Remove all static endpoints

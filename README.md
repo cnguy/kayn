@@ -250,7 +250,7 @@ Errors as of v0.8.7 return the following error object:
 
 ### Version
 
-This forces a request to target a specific version and is mandatory at the moment.
+This forces a request to target a specific version and is *mandatory* at the moment.
 
 ```javascript
 kayn.DDragon.Champion.list()

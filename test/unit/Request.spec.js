@@ -4,8 +4,8 @@ import Request from '../../lib/RequestClient/Request'
 import TestUtils from '../TestUtils'
 const { defaultConfig } = TestUtils
 
-describe('Request', function () {
-    it('should initialize correctly #1', function () {
+describe('Request', function() {
+    it('should initialize correctly #1', function() {
         const request = new Request(
             defaultConfig,
             'summoner',
@@ -25,7 +25,7 @@ describe('Request', function () {
         })
     })
 
-    it('should initialize correctly #2', function () {
+    it('should initialize correctly #2', function() {
         const request = new Request(
             defaultConfig,
             'summoner',
@@ -50,7 +50,7 @@ describe('Request', function () {
         })
     })
 
-    it('should initialize correctly #3', function () {
+    it('should initialize correctly #3', function() {
         const request = new Request(
             defaultConfig,
             'summoner',
@@ -75,7 +75,7 @@ describe('Request', function () {
         })
     })
 
-    it('should add query parameters correctly', function () {
+    it('should add query parameters correctly', function() {
         const request = new Request(
             defaultConfig,
             'summoner',
@@ -94,7 +94,7 @@ describe('Request', function () {
         ])
     })
 
-    it('should throw if query is passed non-object', function () {
+    it('should throw if query is passed non-object', function() {
         const request = new Request(
             defaultConfig,
             'summoner',
@@ -106,7 +106,7 @@ describe('Request', function () {
         expect(() => request.query(() => 'abc')).to.throw()
     })
 
-    it('should set region correctly', function () {
+    it('should set region correctly', function() {
         const request = new Request(
             defaultConfig,
             'summoner',
@@ -117,7 +117,7 @@ describe('Request', function () {
         expect(request.payload.region).to.equal('na')
     })
 
-    it('should throw if region is set twice', function () {
+    it('should throw if region is set twice', function() {
         const request = new Request(
             defaultConfig,
             'summoner',
@@ -129,7 +129,7 @@ describe('Request', function () {
         expect(() => request.region('kr')).to.throw()
     })
 
-    it('should throw on bad region', function () {
+    it('should throw on bad region', function() {
         const request = new Request(
             defaultConfig,
             'summoner',
@@ -139,8 +139,8 @@ describe('Request', function () {
         expect(() => request.region('abcdefgjijklmnopqrstuvwxyz')).to.throw()
     })
 
-    describe('regionNoThrow', function () {
-        it('should not throw on bad region', function () {
+    describe('regionNoThrow', function() {
+        it('should not throw on bad region', function() {
             const request = new Request(
                 defaultConfig,
                 'summoner',
@@ -153,7 +153,7 @@ describe('Request', function () {
             ).to.not.throw()
         })
 
-        it('should fallback to default region', function () {
+        it('should fallback to default region', function() {
             const request = new Request(
                 defaultConfig,
                 'summoner',
