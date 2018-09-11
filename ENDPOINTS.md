@@ -42,29 +42,6 @@ DDragon.RunesReforged.list()
 DDragon.SummonerSpell.list()
 DDragon.Version.list()
 
-/* LOL-STATIC-DATA-V3 */
-Static.Champion.list()
-Static.Champion.get(championID: int)
-Static.Item.list()
-Static.Item.get(itemID: int)
-Static.LanguageString.list()
-Static.Language.list()
-Static.Map.get()
-Static.Mastery.list()
-Static.Mastery.get(masteryID: int)
-Static.ProfileIcon.list()
-Static.Realm.get()
-Static.ReforgedRunePaths.list()
-Static.ReforgedRunePaths.get(runePathID: int)
-Static.ReforgedRunes.list()
-Static.ReforgedRunes.get(runeID: int)
-Static.Rune.list()
-Static.Rune.get(runeID: int)
-Static.SummonerSpell.list()
-Static.SummonerSpell.get(summonerSpellID: int)
-Static.TarballLinks.get()
-Static.Version.list()
-
 /* LOL-STATUS-V3 */
 Status.get()
 
@@ -137,24 +114,6 @@ Everything should be in the same order as in the official docs.
 - [x] - `Get league with given ID, including inactive entries.`
 - [x] - `Get the master league for given queue.`
 - [x] - `Get league positions in all queues for given summoner ID.`
-
-## LOL-STATIC-DATA-V3
-- [x] - `Retrieves champion list.`
-- [x] - `Retrieves champion by ID.`
-- [x] - `Retrieves item list.`
-- [x] - `Retrieves item by ID.`
-- [x] - `Retrieve language strings data.`
-- [x] - `Retrieve supported languages data.`
-- [x] - `Retrieve map data.`
-- [x] - `Retrieves mastery list.`
-- [x] - `Retrieves mastery item by ID.`
-- [x] - `Retrieve profile icons.`
-- [x] - `Retrieve realm data.`
-- [x] - `Retrieves rune list.`
-- [x] - `Retrieves rune by ID.`
-- [x] - `Retrieves summoner spell list.`
-- [x] - `Retrieves summoner spell by ID.`
-- [x] - `Retrieve version data.`
 
 ## LOL-STATUS-V3
 - [x] - `Get League of Legends status for the given shard.`

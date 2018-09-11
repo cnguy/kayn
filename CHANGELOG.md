@@ -1,3 +1,7 @@
+# 0.8.20 (BREAKING if you have anything related to Static endpoints)
+
+* Remove all static endpoints
+
 # 0.8.19
 
 * Add various new endpoints

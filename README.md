@@ -493,7 +493,7 @@ const kayn = Kayn(/* optional key */)({
         timeToLives: {
             useDefault: true,
             byGroup: {
-                STATIC: 1000 * 60 * 60 * 24 * 30, // cache for a month
+                DDRAGON: 1000 * 60 * 60 * 24 * 30, // cache for a month
             },
             byMethod: {
                 [METHOD_NAMES.SUMMONER.GET_BY_SUMMONER_NAME]: 1000, // ms
