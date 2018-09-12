@@ -20,7 +20,10 @@ League.by.uuid(leagueUUID: string)
 Master.list(queueName: string)
 LeaguePositions.by.summonerID(summonerID: int)
 
-/* DDRAGON */
+/* DDRAGON
+    DDragonRequest uses `version()` and `locale()`, NOT `region()` or `query()`.
+    Only `locale()` is optional.
+*/
 DDragon.Champion.get(championName: string)
 DDragon.Champion.list()
 DDragon.Champion.listFull()
@@ -78,22 +81,6 @@ Tournament.get(tournamentCode: string)
 Tournament.lobbyEvents(tournamentCode: string)
 Tournament.registerProviderData(region: string, callbackURL: string)
 TournamentStub.register(providerID: number, name: string?)
-
-/* DDRAGON */
-// DDragonRequest uses `version()` and `locale(), NOT `region()` or `query()`.
-// DDragonRequest will have a default version and locale for each endpoint.
-// This will be somehow set in the beginning.
-DDragon.Champion.get(championName: string)
-DDragon.Champion.list()
-DDragon.Item.list()
-DDragon.Language.list()
-DDragon.LanguageString.list()
-DDragon.Map.list()
-DDragon.ProfileIcon.list()
-DDragon.Realm.list(region: region? = defaultRegion) // Notice that there is inconsistency here, similarly to my Tournament API.
-DDragon.SummonerSpell.list()
-// DDragon.TarballLinks.Get()
-DDragon.Version.list()
 ```
 
 # Endpoints 
