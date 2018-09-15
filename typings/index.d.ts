@@ -57,70 +57,6 @@ declare module 'kayn' {
             }
         }
 
-        public Static: {
-            Champion: {
-                get: (
-                    championID: number,
-                ) => KaynRequest<dtos.LolStaticDataV3ChampionDto>
-                list: () => KaynRequest<dtos.LolStaticDataV3ChampionListDto>
-            }
-            Item: {
-                get: (
-                    itemID: number,
-                ) => KaynRequest<dtos.LolStaticDataV3ItemDto>
-                list: () => KaynRequest<dtos.LolStaticDataV3ItemListDto>
-            }
-            LanguageString: {
-                list: () => KaynRequest<dtos.LolStaticDataV3LanguageStringsDto>
-            }
-            Language: {
-                list: () => KaynRequest<string[]>
-            }
-            Map: {
-                get: () => KaynRequest<dtos.LolStaticDataV3MapDataDto>
-            }
-            Mastery: {
-                get: (
-                    masteryID: number,
-                ) => KaynRequest<dtos.LolStaticDataV3MasteryDto>
-                list: () => KaynRequest<dtos.LolStaticDataV3MasteryListDto>
-            }
-            ProfileIcon: {
-                list: () => KaynRequest<dtos.LolStaticDataV3ProfileIconDataDto>
-            }
-            Realm: {
-                get: () => KaynRequest<dtos.LolStaticDataV3RealmDto>
-            }
-            ReforgedRunes: {
-                get: (
-                    runeID: number,
-                ) => KaynRequest<dtos.LolStaticDataV3ReforgedRuneDto>
-                list: () => KaynRequest<dtos.LolStaticDataV3ReforgedRuneDto[]>
-            }
-            ReforgedRunePaths: {
-                get: (
-                    runePathID: number,
-                ) => KaynRequest<dtos.LolStaticDataV3ReforgedRunePathDto>
-                list: () => KaynRequest<
-                    dtos.LolStaticDataV3ReforgedRunePathDto[]
-                >
-            }
-            SummonerSpell: {
-                get: (
-                    summonerSpellID: number,
-                ) => KaynRequest<dtos.LolStaticDataV3SummonerSpellDto>
-                list: () => KaynRequest<
-                    dtos.LolStaticDataV3SummonerSpellListDto
-                >
-            }
-            TarballLinks: {
-                get: () => KaynRequest<string>
-            }
-            Version: {
-                list: () => KaynRequest<string[]>
-            }
-        }
-
         public Status: {
             get: () => KaynRequest<dtos.LolStatusV3ShardStatus>
         }
@@ -315,25 +251,6 @@ declare module 'kayn' {
             const GET_MASTER_LEAGUE = 'LEAGUE.GET_MASTER_LEAGUE'
             const GET_ALL_LEAGUE_POSITIONS_FOR_SUMMONER =
                 'LEAGUE.GET_ALL_LEAGUE_POSITIONS_FOR_SUMMONER'
-        }
-
-        namespace STATIC {
-            const GET_CHAMPION_LIST = 'STATIC.GET_CHAMPION_LIST'
-            const GET_CHAMPION_BY_ID = 'STATIC.GET_CHAMPION_BY_ID'
-            const GET_ITEM_LIST = 'STATIC.GET_ITEM_LIST'
-            const GET_ITEM_BY_ID = 'STATIC.GET_ITEM_BY_ID'
-            const GET_LANGUAGE_STRINGS = 'STATIC.GET_LANGUAGE_STRINGS'
-            const GET_LANGUAGES = 'STATIC.GET_LANGUAGES'
-            const GET_MAP_DATA = 'STATIC.GET_MAP_DATA'
-            const GET_MASTERY_LIST = 'STATIC.GET_MASTERY_LIST'
-            const GET_MASTERY_BY_ID = 'STATIC.GET_MASTERY_BY_ID'
-            const GET_PROFILE_ICONS = 'STATIC.GET_PROFILE_ICONS'
-            const GET_REALM = 'STATIC.GET_REALM'
-            const GET_RUNE_LIST = 'STATIC.GET_RUNE_LIST'
-            const GET_RUNE_BY_ID = 'STATIC.GET_RUNE_BY_ID'
-            const GET_SUMMONER_SPELL_LIST = 'STATIC.GET_SUMMONER_SPELL_LIST'
-            const GET_SUMMONER_SPELL_BY_ID = 'STATIC.GET_SUMMONER_SPELL_BY_ID'
-            const GET_VERSIONS = 'STATIC.GET_VERSIONS'
         }
 
         namespace LOL_STATUS {
