@@ -34,7 +34,7 @@ const kayn = Kayn()({
         timeToLives: {
             useDefault: true,
             byGroup: {
-                DDRAGON: 1,
+                DDRAGON: 10000,
             },
             byMethod: {
                 [METHOD_NAMES.DDRAGON.RUNES_REFORGED_LIST]: 5000,
@@ -48,8 +48,8 @@ import test from './examples/es5/turn-free-to-play-into-ddragon-champion-objects
 
 const main = async () => {
     try {
-        const data = await kayn.DDragon.Champion.list().version('8.15.1')
-        console.log(data)
+        //await kayn.DDragon.Realm.list()
+        const data = await kayn.DDragon.Champion.list()
     } catch (ex) {
         console.error(ex)
     }
