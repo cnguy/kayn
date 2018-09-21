@@ -250,14 +250,41 @@ Errors as of v0.8.7 return the following error object:
 
 ### Version
 
-This forces a request to target a specific version and is *mandatory* at the moment.
+This forces a request to target a specific version and is no longer mandatory as of `v0.8.22`.
 
 ```javascript
 kayn.DDragon.Champion.list()
-    .version('8.15.1')
+    .version('8.15.1') /* Explicit */
     .callback(function(error, champions) {
         console.log(champions)
     })
+
+// Let's say the config region is North America and that the latest version
+// for the champion endpoint in NA is 8.15.1
+kayn.DDragon.Champion.list() // Implicitly targets 8.15.1
+    .callback(function(error, champions) {
+        console.log(champions)
+    })
+```
+
+#### Notes about Optional Version Argument
+
+Whenever you make a request that does not have a version passed in, `kayn` will automatically grab all the JSON versions associated with your default region.
+
+If you do not have caching enabled, note that each request with no version passed will always send an additional request for grabbing the version. Otherwise, it follows standard caching.
+
+##### No Cache Example
+```javascript
+// Calls the Realm list endpoint to get the version for North America's champion data. It then gets the champions.
+kaynWithNoCache.DDragon.Champion.list()
+```
+
+##### Cache Example
+```javascript
+// Calls Kayn.Realm.list(), caches it, and then gets the version for North America's champion data. It then gets the champions. 
+kaynWithCache.DDragon.Champion.list()
+// Retrieves the cached version (because we already called the realm endpoint under the hood) for North America's champion data and then gets the champions.
+kaynWithCache.DDragon.Champion.list()
 ```
 
 ### Locale

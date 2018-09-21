@@ -1,3 +1,8 @@
+# 0.8.22
+
+* Add optional version that works off your default region (should I add a region handler to DDragonRequest too?)
+* Remove Static-related code from type definitions
+
 # 0.8.21
 
 * Throw an error if no `version` is provided to `DDragon` `data` methods (listing champions, runes,etc). This should help out users in case if they don't read all the docs
