@@ -19,6 +19,7 @@ describe('DDragonRequest', function() {
                 'https://ddragon.leagueoflegends.com/realms/na.json',
             )
         })
+
         it('should create correct `data` url', function() {
             const urlInformation = {
                 endpoint: 'champion.json',
@@ -33,6 +34,7 @@ describe('DDragonRequest', function() {
                 'https://ddragon.leagueoflegends.com/cdn/8.5.1/data/en_US/champion.json',
             )
         })
+
         it('should throw an error if `data` url does not have a version', function() {
             const urlInformation = {
                 endpoint: 'champion.json',
@@ -45,6 +47,7 @@ describe('DDragonRequest', function() {
                 ),
             ).to.throw()
         })
+
         it('should create correct `img` url #1', function() {
             const urlInformation = {
                 endpoint: 'profileicon/588.png',
@@ -58,6 +61,7 @@ describe('DDragonRequest', function() {
                 'https://ddragon.leagueoflegends.com/cdn/6.24.1/img/profileicon/588.png',
             )
         })
+
         it('should create correct `img` url #2', function() {
             const urlInformation = {
                 endpoint: 'passive/Cryophoenix_Rebirth.png',
@@ -71,6 +75,7 @@ describe('DDragonRequest', function() {
                 'https://ddragon.leagueoflegends.com/cdn/6.24.1/img/passive/Cryophoenix_Rebirth.png',
             )
         })
+
         it('should create correct `img` url #3', function() {
             const urlInformation = {
                 endpoint: 'champion/splash/Aatrox_0.jpg',
@@ -83,6 +88,7 @@ describe('DDragonRequest', function() {
                 'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Aatrox_0.jpg',
             )
         })
+
         it('should create correct `img` url #4', function() {
             const urlInformation = {
                 endpoint: 'champion/loading/Aatrox_0.jpg',

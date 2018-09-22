@@ -22,8 +22,9 @@ describe('DDragonChampionEndpoint', function() {
                 .locale('en_SG')
             expect(payload).to.deep.equal({
                 endpoint: 'champion/Aatrox.json',
-                locale: 'en_SG',
                 version: '8.15.1',
+                locale: 'en_SG',
+                region: '',
                 type: 'cdn_data',
             })
         })
@@ -36,8 +37,9 @@ describe('DDragonChampionEndpoint', function() {
                 .locale('en_SG')
             expect(payload).to.deep.equal({
                 endpoint: 'champion.json',
-                locale: 'en_SG',
                 version: '8.15.1',
+                locale: 'en_SG',
+                region: '',
                 type: 'cdn_data',
             })
         })

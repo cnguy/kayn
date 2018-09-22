@@ -18,8 +18,9 @@ describe('DDragonRealmEndpoint', function() {
             const { payload } = this.DDragonRealmEndpoint.list('euw')
             expect(payload).to.deep.equal({
                 endpoint: 'euw.json',
-                locale: '', // irrelevant
                 version: '', // irrelevant
+                locale: '', // irrelevant
+                region: '', // irrelevant
                 type: 'realms',
             })
         })
@@ -28,8 +29,9 @@ describe('DDragonRealmEndpoint', function() {
             const { payload } = this.DDragonRealmEndpoint.list()
             expect(payload).to.deep.equal({
                 endpoint: 'na.json',
-                locale: '', // irrelevant
                 version: '', // irrelevant
+                locale: '', // irrelevant
+                region: '', // irrelevant
                 type: 'realms',
             })
         })

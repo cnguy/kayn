@@ -18,8 +18,9 @@ describe('DDragonVersionEndpoint', function() {
             const { payload } = this.DDragonVersionEndpoint.list()
             expect(payload).to.deep.equal({
                 endpoint: 'versions.json',
-                locale: '', // irrelevant
                 version: '', // irrelevant
+                locale: '', // irrelevant
+                region: '', // irrelevant
                 type: 'api',
             })
         })
