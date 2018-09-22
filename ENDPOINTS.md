@@ -21,8 +21,11 @@ Master.list(queueName: string)
 LeaguePositions.by.summonerID(summonerID: int)
 
 /* DDRAGON
-    DDragonRequest uses `version()` and `locale()`, NOT `region()` or `query()`.
-    Only `locale()` is optional.
+    At its core, DDragonRequest uses `version()` and `locale()`.
+
+    DDragonRequest as of v0.8.22 now also uses `region()` to automatically grab the correct version for the current request (only for data requests like champion lists). DDragonRequest does not use `query()`.
+
+    Both `version()` and `locale()` are optional.
 */
 DDragon.Champion.get(championName: string)
 DDragon.Champion.list()

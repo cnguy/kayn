@@ -50,6 +50,8 @@ const main = async () => {
     try {
         //await kayn.DDragon.Realm.list()
         const data = await kayn.DDragon.Champion.list()
+            .region('kr')
+            .locale('ko_KR')
     } catch (ex) {
         console.error(ex)
     }

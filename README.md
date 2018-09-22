@@ -265,11 +265,17 @@ kayn.DDragon.Champion.list() // Implicitly targets 8.15.1
     .callback(function(error, champions) {
         console.log(champions)
     })
+
+// Same thing as above, but gets the versions for a different region from the configuration.
+kayn.DDragon.Champion.list().region('br')
+    .callback(function(error, champions) {
+        console.log(champions)
+    })
 ```
 
 #### Notes about Optional Version Argument
 
-Whenever you make a request that does not have a version passed in, `kayn` will automatically grab all the JSON versions associated with your default region.
+Whenever you make a request that does not have a version passed in, `kayn` will automatically grab all the JSON versions associated with your default region or through the `region()` method.
 
 If you do not have caching enabled, note that each request with no version passed will always send an additional request for grabbing the version. Otherwise, it follows standard caching.
 
@@ -277,6 +283,9 @@ If you do not have caching enabled, note that each request with no version passe
 ```javascript
 // Calls the Realm list endpoint to get the version for North America's champion data. It then gets the champions.
 kaynWithNoCache.DDragon.Champion.list()
+
+// Gets versions for 'kr' instead of default region.
+kaynWithNoCache.DDragon.Champion.list().region('kr')
 ```
 
 ##### Cache Example
@@ -285,6 +294,16 @@ kaynWithNoCache.DDragon.Champion.list()
 kaynWithCache.DDragon.Champion.list()
 // Retrieves the cached version (because we already called the realm endpoint under the hood) for North America's champion data and then gets the champions.
 kaynWithCache.DDragon.Champion.list()
+```
+
+### Region
+
+This is only for /cdn/data/___/___.json-esque requests. It is a helper method that allows `kayn` to not force the user to have to pass in a version.
+
+```javascript
+kayn.DDragon.Champion.list()
+    .region('kr')
+    .locale('ko_KR')
 ```
 
 ### Locale
