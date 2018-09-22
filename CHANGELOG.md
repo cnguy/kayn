@@ -1,7 +1,7 @@
 # 0.8.22
 
-* Add optional version that works off your default region (should I add a region handler to DDragonRequest too?)
-* Add optional version that can be extracted from appending `region` to your call
+* Add automatic version handling that works off your default region
+* Add automatic version handling that can be extracted from the region passed to `region()`
 * Remove Static-related code from type definitions
 
 # 0.8.21
