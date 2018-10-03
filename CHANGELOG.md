@@ -1,3 +1,7 @@
+# 0.8.23
+
+* Fixed bug regarding interaction between implicit versioning and helper methods such as `kayn.DDragon.Champion.listDataById()`
+
 # 0.8.22
 
 * Add automatic version handling that works off your default region
