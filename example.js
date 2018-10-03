@@ -44,17 +44,10 @@ const kayn = Kayn()({
     },
 })
 
-import test from './examples/es5/turn-free-to-play-into-ddragon-champion-objects'
+import test from './examples/async.await/getting-banned-champions-of-a-game'
 
 const main = async () => {
-    try {
-        //await kayn.DDragon.Realm.list()
-        const data = await kayn.DDragon.Champion.list()
-            .region('kr')
-            .locale('ko_KR')
-    } catch (ex) {
-        console.error(ex)
-    }
+    test(kayn)
 }
 
 main()

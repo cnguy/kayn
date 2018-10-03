@@ -42,6 +42,7 @@ kayn.Summoner.by
 </details>
 
 <details><summary>Same example (as the above) using async/await, destructuring, and template strings</summary>
+
 <p>
 
 ####
@@ -65,6 +66,26 @@ const main = async () => {
 
 main()
 ```
+</p>
+</details>
+
+<details><summary>Example of getting DDragon information of banned champions in a game</summary>
+
+<p>
+
+####
+
+```javascript
+const main = async (kayn) => {
+    const match = await kayn.Match.get(2877485196)
+    const bans = match.teams.map(m => m.bans).reduce((t, c) => t.concat(c), [])
+    const ids = bans.map(b => b.championId)
+    const ddragonChampions = await kayn.DDragon.Champion.listDataByIdWithParentAsId()
+    const champions = ids.map(id => ddragonChampions.data[id])
+    console.log(champions)
+}
+```
+</p>
 </details>
 
 # Table of Contents:
