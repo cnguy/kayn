@@ -4,24 +4,24 @@ import TestUtils from '../../TestUtils'
 const { kaynInstance, defaultConfig } = TestUtils
 
 const { kayn, REGIONS, METHOD_TYPES } = kaynInstance
-import ChampionEndpoint from '../../../lib/Endpoints/ChampionEndpoint'
+import ChampionRotationEndpoint from '../../../lib/Endpoints/ChampionRotationEndpoint'
 import mocks from '../../mocks'
 
 describe('ChampionEndpoint', function() {
     this.timeout(0)
 
     beforeEach(function() {
-        this.Champion = new ChampionEndpoint(defaultConfig)
+        this.Champion = {}
+        this.Champion.Rotation = new ChampionRotationEndpoint(defaultConfig)
     })
 
-    describe('.get', function() {
+    describe('.Rotation.list', function() {
         it('should have the correct payload #1', function() {
-            const championID = 67
-            const { payload } = this.Champion.get(championID)
+            const { payload } = this.Champion.Rotation.list()
             expect(payload).to.deep.equal({
                 method: 'GET',
                 serviceName: 'platform',
-                endpoint: `champions/${championID}`,
+                endpoint: `champion-rotations`,
                 query: [],
                 region: '',
                 isTournament: false,
