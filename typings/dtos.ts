@@ -39,43 +39,10 @@ export interface ChampionMasteryV3ChampionMasteryDTO {
      */
     lastPlayTime?: number // int64
 }
-/**
- * This object contains champion information.
- */
-export interface ChampionV3ChampionDto {
-    /**
-     * Ranked play enabled flag.
-     */
-    rankedPlayEnabled?: boolean
-    /**
-     * Bot enabled flag (for custom games).
-     */
-    botEnabled?: boolean
-    /**
-     * Bot Match Made enabled flag (for Co-op vs. AI games).
-     */
-    botMmEnabled?: boolean
-    /**
-     * Indicates if the champion is active.
-     */
-    active?: boolean
-    /**
-     * Indicates if the champion is free to play. Free to play champions are rotated periodically.
-     */
-    freeToPlay?: boolean
-    /**
-     * Champion ID. For static information correlating to champion IDs, please refer to the LoL Static Data API.
-     */
-    id?: number // int64
-}
-/**
- * This object contains a collection of champion information.
- */
-export interface ChampionV3ChampionListDto {
-    /**
-     * The collection of champion information.
-     */
-    champions?: ChampionV3ChampionDto[]
+export interface ChampionV3ChampionInfo {
+    freeChampionIdsForNewPlayers?: number /* int32 */[]
+    freeChampionIds?: number /* int32 */[]
+    maxNewPlayerLevel?: number // int32
 }
 export interface Error {
     status?: {
@@ -112,606 +79,6 @@ export interface LeagueV3MiniSeriesDTO {
     losses?: number // int32
     target?: number // int32
     progress?: string
-}
-/**
- * This object contains champion recommended block data.
- */
-export interface LolStaticDataV3BlockDto {
-    items?: LolStaticDataV3BlockItemDto[]
-    recMath?: boolean
-    type?: string
-}
-/**
- * This object contains champion recommended block item data.
- */
-export interface LolStaticDataV3BlockItemDto {
-    count?: number // int32
-    id?: number // int32
-}
-/**
- * This object contains champion data.
- */
-export interface LolStaticDataV3ChampionDto {
-    info?: LolStaticDataV3InfoDto
-    enemytips?: string[]
-    stats?: LolStaticDataV3StatsDto
-    name?: string
-    title?: string
-    image?: LolStaticDataV3ImageDto
-    tags?: string[]
-    partype?: string
-    skins?: LolStaticDataV3SkinDto[]
-    passive?: LolStaticDataV3PassiveDto
-    recommended?: LolStaticDataV3RecommendedDto[]
-    allytips?: string[]
-    key?: string
-    lore?: string
-    id?: number // int32
-    blurb?: string
-    spells?: LolStaticDataV3ChampionSpellDto[]
-}
-/**
- * This object contains champion list data.
- */
-export interface LolStaticDataV3ChampionListDto {
-    keys?: {
-        [name: string]: string
-    }
-    data?: {
-        [name: string]: LolStaticDataV3ChampionDto
-    }
-    version?: string
-    type?: string
-    format?: string
-}
-/**
- * This object contains champion spell data.
- */
-export interface LolStaticDataV3ChampionSpellDto {
-    cooldownBurn?: string
-    resource?: string
-    leveltip?: LolStaticDataV3LevelTipDto
-    vars?: LolStaticDataV3SpellVarsDto[]
-    costType?: string
-    image?: LolStaticDataV3ImageDto
-    sanitizedDescription?: string
-    sanitizedTooltip?: string
-    /**
-     * This field is a List of List of Double.
-     */
-    effect?: number /* double */[][]
-    tooltip?: string
-    maxrank?: number // int32
-    costBurn?: string
-    rangeBurn?: string
-    /**
-     * This field is either a List of Integer or the String 'self' for spells that target one's own champion.
-     */
-    range?: number /* int32 */[]
-    cooldown?: number /* double */[]
-    cost?: number /* int32 */[]
-    key?: string
-    description?: string
-    effectBurn?: string[]
-    altimages?: LolStaticDataV3ImageDto[]
-    name?: string
-}
-/**
- * This object contains item gold data.
- */
-export interface LolStaticDataV3GoldDto {
-    sell?: number // int32
-    total?: number // int32
-    base?: number // int32
-    purchasable?: boolean
-}
-/**
- * This object contains item group data.
- */
-export interface LolStaticDataV3GroupDto {
-    MaxGroupOwnable?: string
-    key?: string
-}
-/**
- * This object contains image data.
- */
-export interface LolStaticDataV3ImageDto {
-    full?: string
-    group?: string
-    sprite?: string
-    h?: number // int32
-    w?: number // int32
-    y?: number // int32
-    x?: number // int32
-}
-/**
- * This object contains champion information.
- */
-export interface LolStaticDataV3InfoDto {
-    difficulty?: number // int32
-    attack?: number // int32
-    defense?: number // int32
-    magic?: number // int32
-}
-/**
- * This object contains stats for inventory (e.g., runes and items).
- */
-export interface LolStaticDataV3InventoryDataStatsDto {
-    PercentCritDamageMod?: number // double
-    PercentSpellBlockMod?: number // double
-    PercentHPRegenMod?: number // double
-    PercentMovementSpeedMod?: number // double
-    FlatSpellBlockMod?: number // double
-    FlatCritDamageMod?: number // double
-    FlatEnergyPoolMod?: number // double
-    PercentLifeStealMod?: number // double
-    FlatMPPoolMod?: number // double
-    FlatMovementSpeedMod?: number // double
-    PercentAttackSpeedMod?: number // double
-    FlatBlockMod?: number // double
-    PercentBlockMod?: number // double
-    FlatEnergyRegenMod?: number // double
-    PercentSpellVampMod?: number // double
-    FlatMPRegenMod?: number // double
-    PercentDodgeMod?: number // double
-    FlatAttackSpeedMod?: number // double
-    FlatArmorMod?: number // double
-    FlatHPRegenMod?: number // double
-    PercentMagicDamageMod?: number // double
-    PercentMPPoolMod?: number // double
-    FlatMagicDamageMod?: number // double
-    PercentMPRegenMod?: number // double
-    PercentPhysicalDamageMod?: number // double
-    FlatPhysicalDamageMod?: number // double
-    PercentHPPoolMod?: number // double
-    PercentArmorMod?: number // double
-    PercentCritChanceMod?: number // double
-    PercentEXPBonus?: number // double
-    FlatHPPoolMod?: number // double
-    FlatCritChanceMod?: number // double
-    FlatEXPBonus?: number // double
-}
-/**
- * This object contains item data.
- */
-export interface LolStaticDataV3ItemDto {
-    gold?: LolStaticDataV3GoldDto
-    plaintext?: string
-    hideFromAll?: boolean
-    inStore?: boolean
-    into?: string[]
-    id?: number // int32
-    stats?: LolStaticDataV3InventoryDataStatsDto
-    colloq?: string
-    maps?: {
-        [name: string]: boolean
-    }
-    specialRecipe?: number // int32
-    image?: LolStaticDataV3ImageDto
-    description?: string
-    tags?: string[]
-    effect?: {
-        [name: string]: string
-    }
-    requiredChampion?: string
-    from?: string[]
-    group?: string
-    consumeOnFull?: boolean
-    name?: string
-    consumed?: boolean
-    sanitizedDescription?: string
-    depth?: number // int32
-    stacks?: number // int32
-}
-/**
- * This object contains item list data.
- */
-export interface LolStaticDataV3ItemListDto {
-    data?: {
-        [name: string]: LolStaticDataV3ItemDto
-    }
-    version?: string
-    tree?: LolStaticDataV3ItemTreeDto[]
-    groups?: LolStaticDataV3GroupDto[]
-    type?: string
-}
-/**
- * This object contains item tree data.
- */
-export interface LolStaticDataV3ItemTreeDto {
-    header?: string
-    tags?: string[]
-}
-/**
- * This object contains language strings data.
- */
-export interface LolStaticDataV3LanguageStringsDto {
-    data?: {
-        [name: string]: string
-    }
-    version?: string
-    type?: string
-}
-/**
- * This object contains champion level tip data.
- */
-export interface LolStaticDataV3LevelTipDto {
-    effect?: string[]
-    label?: string[]
-}
-/**
- * This object contains map data.
- */
-export interface LolStaticDataV3MapDataDto {
-    data?: {
-        [name: string]: LolStaticDataV3MapDetailsDto
-    }
-    version?: string
-    type?: string
-}
-/**
- * This object contains map details data.
- */
-export interface LolStaticDataV3MapDetailsDto {
-    mapName?: string
-    image?: LolStaticDataV3ImageDto
-    mapId?: number // int64
-    unpurchasableItemList?: number /* int64 */[]
-}
-/**
- * This object contains mastery data.
- */
-export interface LolStaticDataV3MasteryDto {
-    prereq?: string
-    /**
-     * (Legal values:  Cunning,  Ferocity,  Resolve,  Defense,  Offense,  Utility)
-     */
-    masteryTree?:
-        | 'Cunning'
-        | 'Ferocity'
-        | 'Resolve'
-        | 'Defense'
-        | 'Offense'
-        | 'Utility'
-    name?: string
-    ranks?: number // int32
-    image?: LolStaticDataV3ImageDto
-    sanitizedDescription?: string[]
-    id?: number // int32
-    description?: string[]
-}
-/**
- * This object contains mastery list data.
- */
-export interface LolStaticDataV3MasteryListDto {
-    data?: {
-        [name: string]: LolStaticDataV3MasteryDto
-    }
-    version?: string
-    tree?: LolStaticDataV3MasteryTreeDto
-    type?: string
-}
-/**
- * This object contains mastery tree data.
- */
-export interface LolStaticDataV3MasteryTreeDto {
-    Resolve?: LolStaticDataV3MasteryTreeListDto[]
-    Defense?: LolStaticDataV3MasteryTreeListDto[]
-    Utility?: LolStaticDataV3MasteryTreeListDto[]
-    Offense?: LolStaticDataV3MasteryTreeListDto[]
-    Ferocity?: LolStaticDataV3MasteryTreeListDto[]
-    Cunning?: LolStaticDataV3MasteryTreeListDto[]
-}
-/**
- * This object contains mastery tree item data.
- */
-export interface LolStaticDataV3MasteryTreeItemDto {
-    masteryId?: number // int32
-    prereq?: string
-}
-/**
- * This object contains mastery tree list data.
- */
-export interface LolStaticDataV3MasteryTreeListDto {
-    masteryTreeItems?: LolStaticDataV3MasteryTreeItemDto[]
-}
-/**
- * This object contains meta data.
- */
-export interface LolStaticDataV3MetaDataDto {
-    tier?: string
-    type?: string
-    isRune?: boolean
-}
-/**
- * This object contains champion passive data.
- */
-export interface LolStaticDataV3PassiveDto {
-    image?: LolStaticDataV3ImageDto
-    sanitizedDescription?: string
-    name?: string
-    description?: string
-}
-/**
- * This object contains profile icon data.
- */
-export interface LolStaticDataV3ProfileIconDataDto {
-    data?: {
-        [name: string]: LolStaticDataV3ProfileIconDetailsDto
-    }
-    version?: string
-    type?: string
-}
-/**
- * This object contains profile icon details data.
- */
-export interface LolStaticDataV3ProfileIconDetailsDto {
-    image?: LolStaticDataV3ImageDto
-    id?: number // int64
-}
-/**
- * This object contains realm data.
- */
-export interface LolStaticDataV3RealmDto {
-    /**
-     * Legacy script mode for IE6 or older.
-     */
-    lg?: string
-    /**
-     * Latest changed version of Dragon Magic.
-     */
-    dd?: string
-    /**
-     * Default language for this realm.
-     */
-    l?: string
-    /**
-     * Latest changed version for each data type listed.
-     */
-    n?: {
-        [name: string]: string
-    }
-    /**
-     * Special behavior number identifying the largest profile icon ID that can be used under 500. Any profile icon that is requested between this number and 500 should be mapped to 0.
-     */
-    profileiconmax?: number // int32
-    /**
-     * Additional API data drawn from other sources that may be related to Data Dragon functionality.
-     */
-    store?: string
-    /**
-     * Current version of this file for this realm.
-     */
-    v?: string
-    /**
-     * The base CDN URL.
-     */
-    cdn?: string
-    /**
-     * Latest changed version of Dragon Magic's CSS file.
-     */
-    css?: string
-}
-/**
- * This object contains champion recommended data.
- */
-export interface LolStaticDataV3RecommendedDto {
-    map?: string
-    blocks?: LolStaticDataV3BlockDto[]
-    champion?: string
-    title?: string
-    priority?: boolean
-    mode?: string
-    type?: string
-}
-/**
- * This object contains reforged rune data.
- */
-export interface LolStaticDataV3ReforgedRuneDto {
-    runePathName?: string
-    runePathId?: number // int32
-    name?: string
-    id?: number // int32
-    key?: string
-    shortDesc?: string
-    longDesc?: string
-    icon?: string
-}
-/**
- * This object contains reforged rune path data.
- */
-export interface LolStaticDataV3ReforgedRunePathDto {
-    slots?: LolStaticDataV3ReforgedRuneSlotDto[]
-    icon?: string
-    id?: number // int32
-    key?: string
-    name?: string
-}
-/**
- * This object contains reforged rune slot data.
- */
-export interface LolStaticDataV3ReforgedRuneSlotDto {
-    runes?: LolStaticDataV3ReforgedRuneDto[]
-}
-/**
- * This object contains rune data.
- */
-export interface LolStaticDataV3RuneDto {
-    stats?: LolStaticDataV3RuneStatsDto
-    name?: string
-    tags?: string[]
-    image?: LolStaticDataV3ImageDto
-    sanitizedDescription?: string
-    rune?: LolStaticDataV3MetaDataDto
-    id?: number // int32
-    description?: string
-}
-/**
- * This object contains rune list data.
- */
-export interface LolStaticDataV3RuneListDto {
-    data?: {
-        [name: string]: LolStaticDataV3RuneDto
-    }
-    version?: string
-    type?: string
-}
-/**
- * This object contains stats for runes.
- */
-export interface LolStaticDataV3RuneStatsDto {
-    PercentTimeDeadModPerLevel?: number // double
-    PercentArmorPenetrationModPerLevel?: number // double
-    PercentCritDamageMod?: number // double
-    PercentSpellBlockMod?: number // double
-    PercentHPRegenMod?: number // double
-    PercentMovementSpeedMod?: number // double
-    FlatSpellBlockMod?: number // double
-    FlatEnergyRegenModPerLevel?: number // double
-    FlatEnergyPoolMod?: number // double
-    FlatMagicPenetrationModPerLevel?: number // double
-    PercentLifeStealMod?: number // double
-    FlatMPPoolMod?: number // double
-    PercentCooldownMod?: number // double
-    PercentMagicPenetrationMod?: number // double
-    FlatArmorPenetrationModPerLevel?: number // double
-    FlatMovementSpeedMod?: number // double
-    FlatTimeDeadModPerLevel?: number // double
-    FlatArmorModPerLevel?: number // double
-    PercentAttackSpeedMod?: number // double
-    FlatDodgeModPerLevel?: number // double
-    PercentMagicDamageMod?: number // double
-    PercentBlockMod?: number // double
-    FlatDodgeMod?: number // double
-    FlatEnergyRegenMod?: number // double
-    FlatHPModPerLevel?: number // double
-    PercentAttackSpeedModPerLevel?: number // double
-    PercentSpellVampMod?: number // double
-    FlatMPRegenMod?: number // double
-    PercentHPPoolMod?: number // double
-    PercentDodgeMod?: number // double
-    FlatAttackSpeedMod?: number // double
-    FlatArmorMod?: number // double
-    FlatMagicDamageModPerLevel?: number // double
-    FlatHPRegenMod?: number // double
-    PercentPhysicalDamageMod?: number // double
-    FlatCritChanceModPerLevel?: number // double
-    FlatSpellBlockModPerLevel?: number // double
-    PercentTimeDeadMod?: number // double
-    FlatBlockMod?: number // double
-    PercentMPPoolMod?: number // double
-    FlatMagicDamageMod?: number // double
-    PercentMPRegenMod?: number // double
-    PercentMovementSpeedModPerLevel?: number // double
-    PercentCooldownModPerLevel?: number // double
-    FlatMPModPerLevel?: number // double
-    FlatEnergyModPerLevel?: number // double
-    FlatPhysicalDamageMod?: number // double
-    FlatHPRegenModPerLevel?: number // double
-    FlatCritDamageMod?: number // double
-    PercentArmorMod?: number // double
-    FlatMagicPenetrationMod?: number // double
-    PercentCritChanceMod?: number // double
-    FlatPhysicalDamageModPerLevel?: number // double
-    PercentArmorPenetrationMod?: number // double
-    PercentEXPBonus?: number // double
-    FlatMPRegenModPerLevel?: number // double
-    PercentMagicPenetrationModPerLevel?: number // double
-    FlatTimeDeadMod?: number // double
-    FlatMovementSpeedModPerLevel?: number // double
-    FlatGoldPer10Mod?: number // double
-    FlatArmorPenetrationMod?: number // double
-    FlatCritDamageModPerLevel?: number // double
-    FlatHPPoolMod?: number // double
-    FlatCritChanceMod?: number // double
-    FlatEXPBonus?: number // double
-}
-/**
- * This object contains champion skin data.
- */
-export interface LolStaticDataV3SkinDto {
-    num?: number // int32
-    name?: string
-    id?: number // int32
-}
-/**
- * This object contains spell vars data.
- */
-export interface LolStaticDataV3SpellVarsDto {
-    ranksWith?: string
-    dyn?: string
-    link?: string
-    coeff?: number /* double */[]
-    key?: string
-}
-/**
- * This object contains champion stats data.
- */
-export interface LolStaticDataV3StatsDto {
-    armorperlevel?: number // double
-    hpperlevel?: number // double
-    attackdamage?: number // double
-    mpperlevel?: number // double
-    attackspeedoffset?: number // double
-    armor?: number // double
-    hp?: number // double
-    hpregenperlevel?: number // double
-    spellblock?: number // double
-    attackrange?: number // double
-    movespeed?: number // double
-    attackdamageperlevel?: number // double
-    mpregenperlevel?: number // double
-    mp?: number // double
-    spellblockperlevel?: number // double
-    crit?: number // double
-    mpregen?: number // double
-    attackspeedperlevel?: number // double
-    hpregen?: number // double
-    critperlevel?: number // double
-}
-/**
- * This object contains summoner spell data.
- */
-export interface LolStaticDataV3SummonerSpellDto {
-    vars?: LolStaticDataV3SpellVarsDto[]
-    image?: LolStaticDataV3ImageDto
-    costBurn?: string
-    cooldown?: number /* double */[]
-    effectBurn?: string[]
-    id?: number // int32
-    cooldownBurn?: string
-    tooltip?: string
-    maxrank?: number // int32
-    rangeBurn?: string
-    description?: string
-    /**
-     * This field is a List of List of Double.
-     */
-    effect?: number /* double */[][]
-    key?: string
-    leveltip?: LolStaticDataV3LevelTipDto
-    modes?: string[]
-    resource?: string
-    name?: string
-    costType?: string
-    sanitizedDescription?: string
-    sanitizedTooltip?: string
-    /**
-     * This field is either a List of Integer or the String 'self' for spells that target one's own champion.
-     */
-    range?: number /* int32 */[]
-    cost?: number /* int32 */[]
-    summonerLevel?: number // int32
-}
-/**
- * This object contains summoner spell list data.
- */
-export interface LolStaticDataV3SummonerSpellListDto {
-    data?: {
-        [name: string]: LolStaticDataV3SummonerSpellDto
-    }
-    version?: string
-    type?: string
 }
 export interface LolStatusV3Incident {
     active?: boolean
@@ -752,18 +119,54 @@ export interface MatchV3MasteryDto {
     rank?: number // int32
 }
 export interface MatchV3MatchDto {
+    /**
+     * Please refer to the Game Constants documentation.
+     */
     seasonId?: number // int32
+    /**
+     * Please refer to the Game Constants documentation.
+     */
     queueId?: number // int32
     gameId?: number // int64
+    /**
+     * Participant identity information.
+     */
     participantIdentities?: MatchV3ParticipantIdentityDto[]
+    /**
+     * The major.minor version typically indicates the patch the match was played on.
+     */
     gameVersion?: string
+    /**
+     * Platform where the match was played.
+     */
     platformId?: string
+    /**
+     * Please refer to the Game Constants documentation.
+     */
     gameMode?: string
+    /**
+     * Please refer to the Game Constants documentation.
+     */
     mapId?: number // int32
+    /**
+     * Please refer to the Game Constants documentation.
+     */
     gameType?: string
+    /**
+     * Team information.
+     */
     teams?: MatchV3TeamStatsDto[]
+    /**
+     * Participant information.
+     */
     participants?: MatchV3ParticipantDto[]
+    /**
+     * Match duration in seconds.
+     */
     gameDuration?: number // int64
+    /**
+     * Designates the timestamp when champion select ended and the loading screen appeared, NOT when the game timer was at 0:00.
+     */
     gameCreation?: number // int64
 }
 export interface MatchV3MatchEventDto {
@@ -851,117 +254,296 @@ export interface MatchV3MatchlistDto {
     endIndex?: number // int32
 }
 export interface MatchV3ParticipantDto {
+    /**
+     * Participant statistics.
+     */
     stats?: MatchV3ParticipantStatsDto
     participantId?: number // int32
+    /**
+     * List of legacy Rune information. Not included for matches played with Runes Reforged.
+     */
     runes?: MatchV3RuneDto[]
+    /**
+     * Participant timeline data.
+     */
     timeline?: MatchV3ParticipantTimelineDto
+    /**
+     * 100 for blue side. 200 for red side.
+     */
     teamId?: number // int32
+    /**
+     * Second Summoner Spell id.
+     */
     spell2Id?: number // int32
+    /**
+     * List of legacy Mastery information. Not included for matches played with Runes Reforged.
+     */
     masteries?: MatchV3MasteryDto[]
-    highestAchievedSeasonTier?: string
+    /**
+     * Highest ranked tier achieved for the previous season in a specific subset of queueIds, if any, otherwise null. Used to display border in game loading screen. Please refer to the Ranked Info documentation.
+     *              (Legal values:  CHALLENGER,  MASTER,  DIAMOND,  PLATINUM,  GOLD,  SILVER,  BRONZE,  UNRANKED)
+     */
+    highestAchievedSeasonTier?:
+        | 'CHALLENGER'
+        | 'MASTER'
+        | 'DIAMOND'
+        | 'PLATINUM'
+        | 'GOLD'
+        | 'SILVER'
+        | 'BRONZE'
+        | 'UNRANKED'
+    /**
+     * First Summoner Spell id.
+     */
     spell1Id?: number // int32
     championId?: number // int32
 }
 export interface MatchV3ParticipantIdentityDto {
+    /**
+     * Player information.
+     */
     player?: MatchV3PlayerDto
     participantId?: number // int32
 }
 export interface MatchV3ParticipantStatsDto {
-    physicalDamageDealt?: number // int64
-    neutralMinionsKilledTeamJungle?: number // int32
-    magicDamageDealt?: number // int64
-    totalPlayerScore?: number // int32
-    deaths?: number // int32
-    win?: boolean
-    neutralMinionsKilledEnemyJungle?: number // int32
-    altarsCaptured?: number // int32
-    largestCriticalStrike?: number // int32
-    totalDamageDealt?: number // int64
+    firstBloodAssist?: boolean
+    visionScore?: number // int64
     magicDamageDealtToChampions?: number // int64
-    visionWardsBoughtInGame?: number // int32
     damageDealtToObjectives?: number // int64
-    largestKillingSpree?: number // int32
-    item1?: number // int32
-    quadraKills?: number // int32
-    teamObjective?: number // int32
     totalTimeCrowdControlDealt?: number // int32
     longestTimeSpentLiving?: number // int32
+    /**
+     * Post game rune stats.
+     */
+    perk1Var1?: number // int32
+    /**
+     * Post game rune stats.
+     */
+    perk1Var3?: number // int32
+    /**
+     * Post game rune stats.
+     */
+    perk1Var2?: number // int32
+    tripleKills?: number // int32
+    /**
+     * Post game rune stats.
+     */
+    perk3Var3?: number // int32
+    nodeNeutralizeAssist?: number // int32
+    /**
+     * Post game rune stats.
+     */
+    perk3Var2?: number // int32
+    playerScore9?: number // int32
+    playerScore8?: number // int32
+    kills?: number // int32
+    playerScore1?: number // int32
+    playerScore0?: number // int32
+    playerScore3?: number // int32
+    playerScore2?: number // int32
+    playerScore5?: number // int32
+    playerScore4?: number // int32
+    playerScore7?: number // int32
+    playerScore6?: number // int32
+    /**
+     * Post game rune stats.
+     */
+    perk5Var1?: number // int32
+    /**
+     * Post game rune stats.
+     */
+    perk5Var3?: number // int32
+    /**
+     * Post game rune stats.
+     */
+    perk5Var2?: number // int32
+    totalScoreRank?: number // int32
+    neutralMinionsKilled?: number // int32
+    damageDealtToTurrets?: number // int64
+    physicalDamageDealtToChampions?: number // int64
+    nodeCapture?: number // int32
+    largestMultiKill?: number // int32
+    /**
+     * Post game rune stats.
+     */
+    perk2Var2?: number // int32
+    /**
+     * Post game rune stats.
+     */
+    perk2Var3?: number // int32
+    totalUnitsHealed?: number // int32
+    /**
+     * Post game rune stats.
+     */
+    perk2Var1?: number // int32
+    /**
+     * Post game rune stats.
+     */
+    perk4Var1?: number // int32
+    /**
+     * Post game rune stats.
+     */
+    perk4Var2?: number // int32
+    /**
+     * Post game rune stats.
+     */
+    perk4Var3?: number // int32
     wardsKilled?: number // int32
-    firstTowerAssist?: boolean
-    firstTowerKill?: boolean
+    largestCriticalStrike?: number // int32
+    largestKillingSpree?: number // int32
+    quadraKills?: number // int32
+    teamObjective?: number // int32
+    magicDamageDealt?: number // int64
     item2?: number // int32
     item3?: number // int32
     item0?: number // int32
-    firstBloodAssist?: boolean
-    visionScore?: number // int64
-    wardsPlaced?: number // int32
+    neutralMinionsKilledTeamJungle?: number // int32
+    item6?: number // int32
     item4?: number // int32
     item5?: number // int32
-    item6?: number // int32
-    turretKills?: number // int32
-    tripleKills?: number // int32
+    /**
+     * Primary path rune.
+     */
+    perk1?: number // int32
+    /**
+     * Primary path keystone rune.
+     */
+    perk0?: number // int32
+    /**
+     * Primary path rune.
+     */
+    perk3?: number // int32
+    /**
+     * Primary path rune.
+     */
+    perk2?: number // int32
+    /**
+     * Secondary path rune.
+     */
+    perk5?: number // int32
+    /**
+     * Secondary path rune.
+     */
+    perk4?: number // int32
+    /**
+     * Post game rune stats.
+     */
+    perk3Var1?: number // int32
     damageSelfMitigated?: number // int64
-    champLevel?: number // int32
-    nodeNeutralizeAssist?: number // int32
-    firstInhibitorKill?: boolean
-    goldEarned?: number // int32
     magicalDamageTaken?: number // int64
-    kills?: number // int32
-    doubleKills?: number // int32
-    nodeCaptureAssist?: number // int32
+    firstInhibitorKill?: boolean
     trueDamageTaken?: number // int64
     nodeNeutralize?: number // int32
-    firstInhibitorAssist?: boolean
     assists?: number // int32
-    unrealKills?: number // int32
-    neutralMinionsKilled?: number // int32
-    objectivePlayerScore?: number // int32
     combatPlayerScore?: number // int32
-    damageDealtToTurrets?: number // int64
-    altarsNeutralized?: number // int32
-    physicalDamageDealtToChampions?: number // int64
+    /**
+     * Primary rune path
+     */
+    perkPrimaryStyle?: number // int32
     goldSpent?: number // int32
     trueDamageDealt?: number // int64
-    trueDamageDealtToChampions?: number // int64
     participantId?: number // int32
+    totalDamageTaken?: number // int64
+    physicalDamageDealt?: number // int64
+    sightWardsBoughtInGame?: number // int32
+    totalDamageDealtToChampions?: number // int64
+    physicalDamageTaken?: number // int64
+    totalPlayerScore?: number // int32
+    win?: boolean
+    objectivePlayerScore?: number // int32
+    totalDamageDealt?: number // int64
+    item1?: number // int32
+    neutralMinionsKilledEnemyJungle?: number // int32
+    deaths?: number // int32
+    wardsPlaced?: number // int32
+    /**
+     * Secondary rune path
+     */
+    perkSubStyle?: number // int32
+    turretKills?: number // int32
+    firstBloodKill?: boolean
+    trueDamageDealtToChampions?: number // int64
+    goldEarned?: number // int32
+    killingSprees?: number // int32
+    unrealKills?: number // int32
+    altarsCaptured?: number // int32
+    firstTowerAssist?: boolean
+    firstTowerKill?: boolean
+    champLevel?: number // int32
+    doubleKills?: number // int32
+    nodeCaptureAssist?: number // int32
+    inhibitorKills?: number // int32
+    firstInhibitorAssist?: boolean
+    /**
+     * Post game rune stats.
+     */
+    perk0Var1?: number // int32
+    /**
+     * Post game rune stats.
+     */
+    perk0Var2?: number // int32
+    /**
+     * Post game rune stats.
+     */
+    perk0Var3?: number // int32
+    visionWardsBoughtInGame?: number // int32
+    altarsNeutralized?: number // int32
     pentaKills?: number // int32
     totalHeal?: number // int64
     totalMinionsKilled?: number // int32
-    firstBloodKill?: boolean
-    nodeCapture?: number // int32
-    largestMultiKill?: number // int32
-    sightWardsBoughtInGame?: number // int32
-    totalDamageDealtToChampions?: number // int64
-    totalUnitsHealed?: number // int32
-    inhibitorKills?: number // int32
-    totalScoreRank?: number // int32
-    totalDamageTaken?: number // int64
-    killingSprees?: number // int32
     timeCCingOthers?: number // int64
-    physicalDamageTaken?: number // int64
 }
 export interface MatchV3ParticipantTimelineDto {
-    lane?: string
+    /**
+     * Participant's calculated lane. MID and BOT are legacy values.
+     *              (Legal values:  MID,  MIDDLE,  TOP,  JUNGLE,  BOT,  BOTTOM)
+     */
+    lane?: 'MID' | 'MIDDLE' | 'TOP' | 'JUNGLE' | 'BOT' | 'BOTTOM'
     participantId?: number // int32
+    /**
+     * Creep score difference versus the calculated lane opponent(s) for a specified period.
+     */
     csDiffPerMinDeltas?: {
         [name: string]: number // double
     }
+    /**
+     * Gold for a specified period.
+     */
     goldPerMinDeltas?: {
         [name: string]: number // double
     }
+    /**
+     * Experience difference versus the calculated lane opponent(s) for a specified period.
+     */
     xpDiffPerMinDeltas?: {
         [name: string]: number // double
     }
+    /**
+     * Creeps for a specified period.
+     */
     creepsPerMinDeltas?: {
         [name: string]: number // double
     }
+    /**
+     * Experience change for a specified period.
+     */
     xpPerMinDeltas?: {
         [name: string]: number // double
     }
-    role?: string
+    /**
+     * Participant's calculated role.
+     *              (Legal values:  DUO,  NONE,  SOLO,  DUO_CARRY,  DUO_SUPPORT)
+     */
+    role?: 'DUO' | 'NONE' | 'SOLO' | 'DUO_CARRY' | 'DUO_SUPPORT'
+    /**
+     * Damage taken difference versus the calculated lane opponent(s) for a specified period.
+     */
     damageTakenDiffPerMinDeltas?: {
         [name: string]: number // double
     }
+    /**
+     * Damage taken for a specified period.
+     */
     damageTakenPerMinDeltas?: {
         [name: string]: number // double
     }
@@ -970,10 +552,16 @@ export interface MatchV3PlayerDto {
     currentPlatformId?: string
     summonerName?: string
     matchHistoryUri?: string
+    /**
+     * Original platformId.
+     */
     platformId?: string
     currentAccountId?: number // int64
     profileIcon?: number // int32
     summonerId?: number // int64
+    /**
+     * Original accountId.
+     */
     accountId?: number // int64
 }
 export interface MatchV3RuneDto {
@@ -981,25 +569,80 @@ export interface MatchV3RuneDto {
     rank?: number // int32
 }
 export interface MatchV3TeamBansDto {
+    /**
+     * Turn during which the champion was banned.
+     */
     pickTurn?: number // int32
+    /**
+     * Banned championId.
+     */
     championId?: number // int32
 }
 export interface MatchV3TeamStatsDto {
+    /**
+     * Flag indicating whether or not the team scored the first Dragon kill.
+     */
     firstDragon?: boolean
+    /**
+     * Flag indicating whether or not the team destroyed the first inhibitor.
+     */
     firstInhibitor?: boolean
+    /**
+     * If match queueId has a draft, contains banned champion data, otherwise empty.
+     */
     bans?: MatchV3TeamBansDto[]
+    /**
+     * Number of times the team killed Baron.
+     */
     baronKills?: number // int32
+    /**
+     * Flag indicating whether or not the team scored the first Rift Herald kill.
+     */
     firstRiftHerald?: boolean
+    /**
+     * Flag indicating whether or not the team scored the first Baron kill.
+     */
     firstBaron?: boolean
+    /**
+     * Number of times the team killed Rift Herald.
+     */
     riftHeraldKills?: number // int32
+    /**
+     * Flag indicating whether or not the team scored the first blood.
+     */
     firstBlood?: boolean
+    /**
+     * 100 for blue side. 200 for red side.
+     */
     teamId?: number // int32
+    /**
+     * Flag indicating whether or not the team destroyed the first tower.
+     */
     firstTower?: boolean
+    /**
+     * Number of times the team killed Vilemaw.
+     */
     vilemawKills?: number // int32
+    /**
+     * Number of inhibitors the team destroyed.
+     */
     inhibitorKills?: number // int32
+    /**
+     * Number of towers the team destroyed.
+     */
     towerKills?: number // int32
+    /**
+     * For Dominion matches, specifies the points the team had at game end.
+     */
     dominionVictoryScore?: number // int32
-    win?: string
+    /**
+     * String indicating whether or not the team won. There are only two values visibile in public match history.
+     *              (Legal values:  Fail,  Win)
+     */
+    win?: 'Fail' | 'Win'
+    /**
+     * Number of times the team killed Dragon.
+     */
     dragonKills?: number // int32
 }
 export interface SpectatorV3BannedChampion {

@@ -17,8 +17,9 @@ declare module 'kayn' {
         }
 
         public Champion: {
-            get: (summonerID: number) => KaynRequest<dtos.ChampionV3ChampionDto>
-            list: () => KaynRequest<dtos.ChampionV3ChampionListDto>
+            Rotation: {
+                list: () => KaynRequest<dtos.ChampionV3ChampionInfo>
+            }
         }
 
         public Challenger: {

@@ -1,3 +1,14 @@
+# 0.8.24
+
+* Remove deprecated champion endpoints
+* Add new namespace `Champion.Rotation`
+
+I made a mistake when I implemented the champion rotation endpoint. It's part of the champion endpoints and so it should have been under the `Champion` namespace instead. However, I'll keep both for now since this isn't really a big deal.
+
+* Types
+  * Regenerate dto typings (champion and static data dtos are removed)
+  * Remove extra champion endpoint typings and add `Champion.Rotation` typing
+
 # 0.8.23
 
 * Fixed bug regarding interaction between implicit versioning and helper methods such as `kayn.DDragon.Champion.listDataById()`
