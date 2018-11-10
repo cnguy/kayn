@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "debug": "^3.1.0",
-    "dotenv": "^4.0.0",
+    "dotenv": "^6.1.0",
     "lodash.assign": "^4.2.0",
     "lodash.merge": "^4.6.0",
     "lru-cache": "^4.1.2",
