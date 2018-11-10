@@ -1,3 +1,7 @@
+# 0.8.25
+
+* Add deprecation warnings regarding V3 endpoints on initialization
+
 # 0.8.24
 
 * Remove deprecated champion endpoints
