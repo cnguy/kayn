@@ -1,3 +1,9 @@
+# 0.8.26
+
+* Updated the following packages: `debug`, `dotenv`, `superstruct`
+
+Does not affect `kayn` in any noticeable way
+
 # 0.8.25
 
 * Add deprecation warnings regarding V3 endpoints on initialization
