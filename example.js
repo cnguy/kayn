@@ -44,7 +44,7 @@ const kayn = Kayn()({
     },
 })
 
-import test from './examples/async.await/getting-banned-champions-of-a-game'
+import test from './examples/async.await/helper-for-updating-summoner-to-v4'
 
 const main = async () => {
     test(kayn)
