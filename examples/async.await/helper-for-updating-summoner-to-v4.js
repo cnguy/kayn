@@ -17,9 +17,9 @@ const main = async kayn => {
         },
         {
             id: 20411671,
-            name: "Heisendong",
+            name: 'Heisendong',
             accountId: 33373091,
-            region: "na"
+            region: 'na',
         },
     ]
 
