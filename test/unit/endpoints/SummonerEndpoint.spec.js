@@ -26,6 +26,7 @@ describe('SummonerEndpoint', function() {
                 query: [],
                 region: '',
                 isTournament: false,
+                version: 3,
             })
         })
 
@@ -48,6 +49,7 @@ describe('SummonerEndpoint', function() {
                 query: [],
                 region: '',
                 isTournament: false,
+                version: 3,
             })
         })
     })
@@ -66,6 +68,7 @@ describe('SummonerEndpoint', function() {
                 query: [],
                 region: '',
                 isTournament: false,
+                version: 3,
             })
         })
     })

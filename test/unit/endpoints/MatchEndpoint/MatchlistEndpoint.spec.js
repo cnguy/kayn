@@ -28,6 +28,7 @@ describe('MatchlistEndpoint', function() {
                 query: [],
                 region: '',
                 isTournament: false,
+                version: 3,
             })
         })
     })
@@ -45,6 +46,7 @@ describe('MatchlistEndpoint', function() {
                 query: [{ beginIndex: 0, endIndex: 20 }],
                 region: '',
                 isTournament: false,
+                version: 3,
             })
         })
     })

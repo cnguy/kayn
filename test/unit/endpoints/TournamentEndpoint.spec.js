@@ -27,6 +27,7 @@ describe('TournamentEndpoint', function() {
                 region: '',
                 isTournament: true,
                 body: { hello: 'world' },
+                version: 3,
             })
         })
     })
@@ -44,6 +45,7 @@ describe('TournamentEndpoint', function() {
                 region: '',
                 isTournament: true,
                 body: { hello: 'world' },
+                version: 3,
             })
         })
 
@@ -66,6 +68,7 @@ describe('TournamentEndpoint', function() {
                 query: [],
                 region: '',
                 isTournament: true,
+                version: 3,
             })
         })
     })
@@ -81,6 +84,7 @@ describe('TournamentEndpoint', function() {
                 region: '',
                 isTournament: true,
                 body: { providerId: 379 },
+                version: 3,
             })
         })
 
@@ -97,6 +101,7 @@ describe('TournamentEndpoint', function() {
                 region: '',
                 isTournament: true,
                 body: { providerId: 379, name: 'My First Tournament' },
+                version: 3,
             })
         })
     })
@@ -118,6 +123,7 @@ describe('TournamentEndpoint', function() {
                     region: REGIONS.NORTH_AMERICA.toUpperCase(),
                     url: 'https://github.com/kayn',
                 },
+                version: 3,
             })
         })
     })
@@ -132,6 +138,7 @@ describe('TournamentEndpoint', function() {
                 query: [],
                 region: '',
                 isTournament: true,
+                version: 3,
             })
         })
     })

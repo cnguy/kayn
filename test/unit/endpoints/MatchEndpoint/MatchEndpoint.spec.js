@@ -25,6 +25,7 @@ describe('MatchEndpoint', function() {
                 query: [],
                 region: '',
                 isTournament: false,
+                version: 3,
             })
         })
     })
@@ -40,6 +41,7 @@ describe('MatchEndpoint', function() {
                 query: [],
                 region: '',
                 isTournament: false,
+                version: 3,
             })
         })
     })
@@ -55,6 +57,7 @@ describe('MatchEndpoint', function() {
                     query: [],
                     region: '',
                     isTournament: false,
+                    version: 3,
                 })
             })
         })
@@ -69,6 +72,7 @@ describe('MatchEndpoint', function() {
                     query: [],
                     region: '',
                     isTournament: false,
+                    version: 3,
                 })
             })
         })

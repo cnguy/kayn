@@ -24,6 +24,7 @@ describe('MasterEndpoint', function() {
                 query: [],
                 region: '',
                 isTournament: false,
+                version: 3,
             })
         })
     })

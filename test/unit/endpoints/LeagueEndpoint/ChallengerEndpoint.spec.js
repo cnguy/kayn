@@ -24,6 +24,7 @@ describe('ChallengerEndpoint', function() {
                 query: [],
                 region: '',
                 isTournament: false,
+                version: 3,
             })
         })
     })

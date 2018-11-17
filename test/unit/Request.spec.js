@@ -22,6 +22,7 @@ describe('Request', function() {
             query: [],
             region: '',
             isTournament: false,
+            version: 3,
         })
     })
 
@@ -35,6 +36,7 @@ describe('Request', function() {
             null,
             { hello: 'world' },
             true,
+            3,
         )
         const { config, methodName, payload } = request
         expect(config).to.deep.equal(defaultConfig)
@@ -47,6 +49,7 @@ describe('Request', function() {
             region: '',
             body: { hello: 'world' },
             isTournament: true,
+            version: 3,
         })
     })
 
@@ -60,6 +63,7 @@ describe('Request', function() {
             null,
             { hello: 'world' },
             true,
+            3,
         )
         const { config, methodName, payload } = request
         expect(config).to.deep.equal(defaultConfig)
@@ -72,6 +76,7 @@ describe('Request', function() {
             region: '',
             body: { hello: 'world' },
             isTournament: true,
+            version: 3,
         })
     })
 

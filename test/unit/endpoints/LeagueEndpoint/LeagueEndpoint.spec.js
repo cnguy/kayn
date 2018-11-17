@@ -24,6 +24,7 @@ describe('LeagueEndpoint', function() {
                 query: [],
                 region: '',
                 isTournament: false,
+                version: 3,
             })
         })
     })
