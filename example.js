@@ -47,7 +47,11 @@ const kayn = Kayn()({
 import test from './examples/async.await/helper-for-updating-summoner-to-v4'
 
 const main = async () => {
-    test(kayn)
+    const contractz = await kayn.SummonerV4.by.name('Contractz')
+    const contractz2 = await kayn.SummonerV4.by.puuid(contractz.puuid)
+    const contractz3 = await kayn.SummonerV4.by.accountID(contractz2.accountId)
+    const contractz4 = await kayn.SummonerV4.by.id(contractz3.id)
+    console.log(contractz4)
 }
 
 main()
