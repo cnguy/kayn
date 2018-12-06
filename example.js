@@ -52,6 +52,8 @@ const main = async () => {
     const contractz3 = await kayn.SummonerV4.by.accountID(contractz2.accountId)
     const contractz4 = await kayn.SummonerV4.by.id(contractz3.id)
     console.log(contractz4)
+    const challengers = await kayn.ChallengerV4.list('RANKED_SOLO_5x5')
+    console.log(challengers)
 }
 
 main()

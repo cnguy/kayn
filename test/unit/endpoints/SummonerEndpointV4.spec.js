@@ -7,7 +7,7 @@ const { kayn, REGIONS, METHOD_TYPES } = kaynInstance
 import SummonerEndpointV4 from '../../../lib/Endpoints/SummonerEndpointV4'
 import mocks from '../../mocks'
 
-describe.only('SummonerEndpointV4', function() {
+describe('SummonerEndpointV4', function() {
     this.timeout(0)
 
     beforeEach(function() {
