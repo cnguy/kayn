@@ -4,23 +4,25 @@ import TestUtils from '../../../TestUtils'
 const { kaynInstance, defaultConfig } = TestUtils
 
 const { kayn, REGIONS, METHOD_TYPES } = kaynInstance
-import GrandmasterEndpointV4 from '../../../../lib/Endpoints/LeagueEndpoint/GrandmasterEndpointV4'
+import LeaguePositionsEndpointV4 from '../../../../lib/Endpoints/LeagueEndpoint/LeaguePositionsEndpointV4'
 import mocks from '../../../mocks'
 
-describe('GrandmasterEndpointV4', function() {
+describe('LeaguePositionsEndpointV4', function() {
     this.timeout(0)
 
     beforeEach(function() {
-        this.GrandmasterEndpoint = new GrandmasterEndpointV4(defaultConfig)
+        this.LeaguePositions = new LeaguePositionsEndpointV4(defaultConfig)
     })
 
-    describe('.list', function() {
+    describe('.by.summonerID', function() {
         it('should have the correct payload #1', function() {
-            const { payload } = this.GrandmasterEndpoint.list('RANKED_SOLO_5x5')
+            const { payload } = this.LeaguePositions.by.summonerID(
+                'encryptedSummonerId',
+            )
             expect(payload).to.deep.equal({
                 method: 'GET',
                 serviceName: 'league',
-                endpoint: 'grandmasterleagues/by-queue/RANKED_SOLO_5x5',
+                endpoint: 'positions/by-summoner/encryptedSummonerId',
                 query: [],
                 region: '',
                 isTournament: false,
