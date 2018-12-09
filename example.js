@@ -54,6 +54,7 @@ const main = async () => {
     console.log(contractz4)
     const challengers = await kayn.ChallengerV4.list('RANKED_SOLO_5x5')
     console.log(challengers)
+    const grandmasters = await kayn.GrandmasterV4.list('RANKED_SOLO_5x5')
 }
 
 main()
