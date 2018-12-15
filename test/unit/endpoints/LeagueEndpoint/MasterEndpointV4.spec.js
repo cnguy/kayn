@@ -14,7 +14,7 @@ describe('MasterEndpointV4', function() {
         this.Master = new MasterEndpointV4(defaultConfig)
     })
 
-    describe.only('.list', function() {
+    describe('.list', function() {
         it('should have the correct payload #1', function() {
             const { payload } = this.Master.list('RANKED_SOLO_5x5')
             expect(payload).to.deep.equal({
