@@ -31,8 +31,7 @@ describe('MatchlistEndpointV4', function() {
 
     describe('.Recent.by.accountID', function() {
         it('should have the correct payload #1', function() {
-            const { payload } = this.Matchlist.Recent.by.accountID(abcdefg)
-            const { Contractz } = mocks.summoner
+            const { payload } = this.Matchlist.Recent.by.accountID('abcdefg')
             expect(payload).to.deep.equal({
                 method: 'GET',
                 serviceName: 'match',

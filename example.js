@@ -62,6 +62,12 @@ const main = async () => {
             .accountID(inori.accountId)
             .query({ season: 11 })).matches[0],
     )
+    const featuredGames = await kayn.FeaturedGamesV4.list()
+    const summoner = await kayn.SummonerV4.by.name(
+        featuredGames.gameList[0].participants[0].summonerName,
+    )
+    const currentGame = await kayn.CurrentGameV4.by.summonerID(summoner.id)
+    console.log(currentGame)
 }
 
 main()
