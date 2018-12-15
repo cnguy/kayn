@@ -68,6 +68,9 @@ const main = async () => {
     )
     const currentGame = await kayn.CurrentGameV4.by.summonerID(summoner.id)
     console.log(currentGame)
+    const chau = await kayn.SummonerV4.by.name('9 5 mcdonalds')
+    console.log(chau.id)
+    // const code = await kayn.ThirdPartyCodeV4.by.summonerID(chau.id) // should be 404
 }
 
 main()
