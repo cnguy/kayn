@@ -7,7 +7,7 @@ const { kayn, REGIONS, METHOD_TYPES } = kaynInstance
 import ThirdPartyCodeEndpointV4 from '../../../lib/Endpoints/ThirdPartyCodeEndpointV4'
 import mocks from '../../mocks'
 
-describe.only('ThirdPartyCodeEndpointV4', function() {
+describe('ThirdPartyCodeEndpointV4', function() {
     this.timeout(0)
 
     beforeEach(function() {
