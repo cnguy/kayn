@@ -44,9 +44,7 @@ const main = async kayn => {
     console.log(mockDatabase)
 
     // Batch update
-    const newSummoners = await Promise.all(
-        mockDatabase.map(summoner => getV4FromV3(summoner)),
-    )
+    const newSummoners = await Promise.all(mockDatabase.map(getV4FromV3))
     for (let i = 0; i < mockDatabase.length; ++i) {
         storeSummoner(i, newSummoners[i], mockDatabase[i].region)
     }
