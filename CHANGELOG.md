@@ -1,3 +1,23 @@
+# 0.9.0
+
+* Add `ChampionMasteriesV4`, `LeagueV4`, `MatchV4`, `SpectatorV4`, `SummonerV4`, `ThirdPartyCodeV4`
+
+## Notes:
+* No types
+* No `TournamentStubV4`, `TournamentV4` 
+
+The above will be added in the next version! Just need to release the core endpoints first for everyone. :)
+
+## Migration:
+
+All the V3 endpoints still work until the deprecation date. Riot did not change the field names of `accountId` and `id`, even though they are encrypted, which makes the developer do less work fortunately.
+
+I think the easiest thing most developers can do is updating all their summoner V3 objects to V4:
+
+https://github.com/cnguy/kayn/blob/v4/examples/async.await/helper-for-updating-summoner-to-v4.js
+
+This code uses a mock database to update a bunch of random summoners to V4, with their regions intact. Your database objects may be shaped differently, but the flow is probably somewhat similar.
+
 # 0.8.26
 
 * Updated the following packages: `debug`, `dotenv`, `superstruct`
