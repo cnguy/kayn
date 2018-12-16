@@ -4,49 +4,42 @@ import TestUtils from '../../../TestUtils'
 const { kaynInstance, defaultConfig } = TestUtils
 
 const { kayn, REGIONS, METHOD_TYPES } = kaynInstance
-import MatchlistEndpoint from '../../../../lib/Endpoints/MatchEndpoint/MatchlistEndpoint'
+import MatchlistEndpointV4 from '../../../../lib/Endpoints/MatchEndpoint/MatchlistEndpointV4'
 import mocks from '../../../mocks'
 
-describe('MatchlistEndpoint', function() {
+describe('MatchlistEndpointV4', function() {
     this.timeout(0)
 
     beforeEach(function() {
-        this.Matchlist = new MatchlistEndpoint(defaultConfig)
+        this.Matchlist = new MatchlistEndpointV4(defaultConfig)
     })
 
     describe('.by.accountID', function() {
         it('should have the correct payload #1', function() {
-            const { payload } = this.Matchlist.by.accountID(
-                mocks.summoner.Contractz.accountId,
-            )
+            const { payload } = this.Matchlist.by.accountID('abcdefg')
             expect(payload).to.deep.equal({
                 method: 'GET',
                 serviceName: 'match',
-                endpoint: `matchlists/by-account/${
-                    mocks.summoner.Contractz.accountId
-                }`,
+                endpoint: 'matchlists/by-account/abcdefg',
                 query: [],
                 region: '',
                 isTournament: false,
-                version: 3,
+                version: 4,
             })
         })
     })
 
     describe('.Recent.by.accountID', function() {
         it('should have the correct payload #1', function() {
-            const { payload } = this.Matchlist.Recent.by.accountID(
-                mocks.summoner.Contractz.accountId,
-            )
-            const { Contractz } = mocks.summoner
+            const { payload } = this.Matchlist.Recent.by.accountID('abcdefg')
             expect(payload).to.deep.equal({
                 method: 'GET',
                 serviceName: 'match',
-                endpoint: `matchlists/by-account/${Contractz.accountId}`,
+                endpoint: 'matchlists/by-account/abcdefg',
                 query: [{ beginIndex: 0, endIndex: 20 }],
                 region: '',
                 isTournament: false,
-                version: 3,
+                version: 4,
             })
         })
     })

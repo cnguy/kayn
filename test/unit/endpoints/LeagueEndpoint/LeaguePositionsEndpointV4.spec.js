@@ -4,28 +4,29 @@ import TestUtils from '../../../TestUtils'
 const { kaynInstance, defaultConfig } = TestUtils
 
 const { kayn, REGIONS, METHOD_TYPES } = kaynInstance
-import LeaguePositionsEndpoint from '../../../../lib/Endpoints/LeagueEndpoint/LeaguePositionsEndpoint'
+import LeaguePositionsEndpointV4 from '../../../../lib/Endpoints/LeagueEndpoint/LeaguePositionsEndpointV4'
 import mocks from '../../../mocks'
 
-describe('LeaguePositionsEndpoint', function() {
+describe('LeaguePositionsEndpointV4', function() {
     this.timeout(0)
 
     beforeEach(function() {
-        this.LeaguePositions = new LeaguePositionsEndpoint(defaultConfig)
+        this.LeaguePositions = new LeaguePositionsEndpointV4(defaultConfig)
     })
 
     describe('.by.summonerID', function() {
         it('should have the correct payload #1', function() {
-            const { Contractz } = mocks.summoner
-            const { payload } = this.LeaguePositions.by.summonerID(Contractz.id)
+            const { payload } = this.LeaguePositions.by.summonerID(
+                'encryptedSummonerId',
+            )
             expect(payload).to.deep.equal({
                 method: 'GET',
                 serviceName: 'league',
-                endpoint: `positions/by-summoner/${Contractz.id}`,
+                endpoint: 'positions/by-summoner/encryptedSummonerId',
                 query: [],
                 region: '',
                 isTournament: false,
-                version: 3,
+                version: 4,
             })
         })
     })

@@ -4,31 +4,27 @@ import TestUtils from '../../TestUtils'
 const { kaynInstance, defaultConfig } = TestUtils
 
 const { kayn, REGIONS, METHOD_TYPES } = kaynInstance
-import ThirdPartyCodeEndpoint from '../../../lib/Endpoints/ThirdPartyCodeEndpoint'
+import ThirdPartyCodeEndpointV4 from '../../../lib/Endpoints/ThirdPartyCodeEndpointV4'
 import mocks from '../../mocks'
 
-describe('ThirdPartyCodeEndpoint', function() {
+describe('ThirdPartyCodeEndpointV4', function() {
     this.timeout(0)
 
     beforeEach(function() {
-        this.ThirdPartyCode = new ThirdPartyCodeEndpoint(defaultConfig)
+        this.ThirdPartyCode = new ThirdPartyCodeEndpointV4(defaultConfig)
     })
 
     describe('.by.summonerID', function() {
         it('should have the correct payload #1', function() {
-            const { payload } = this.ThirdPartyCode.by.summonerID(
-                mocks.summoner.Contractz.id,
-            )
+            const { payload } = this.ThirdPartyCode.by.summonerID('abcdefg')
             expect(payload).to.deep.equal({
                 method: 'GET',
                 serviceName: 'platform',
-                endpoint: `third-party-code/by-summoner/${
-                    mocks.summoner.Contractz.id
-                }`,
+                endpoint: 'third-party-code/by-summoner/abcdefg',
                 query: [],
                 region: '',
                 isTournament: false,
-                version: 3,
+                version: 4,
             })
         })
     })

@@ -4,14 +4,14 @@ import TestUtils from '../../../TestUtils'
 const { kaynInstance, defaultConfig } = TestUtils
 
 const { kayn, REGIONS, METHOD_TYPES } = kaynInstance
-import MatchEndpoint from '../../../../lib/Endpoints/MatchEndpoint/MatchEndpoint'
+import MatchEndpointV4 from '../../../../lib/Endpoints/MatchEndpoint/MatchEndpointV4'
 import mocks from '../../../mocks'
 
-describe('MatchEndpoint', function() {
+describe('MatchEndpointV4', function() {
     this.timeout(0)
 
     beforeEach(function() {
-        this.Match = new MatchEndpoint(defaultConfig)
+        this.Match = new MatchEndpointV4(defaultConfig)
     })
 
     describe('.get', function() {
@@ -25,7 +25,7 @@ describe('MatchEndpoint', function() {
                 query: [],
                 region: '',
                 isTournament: false,
-                version: 3,
+                version: 4,
             })
         })
     })
@@ -41,7 +41,7 @@ describe('MatchEndpoint', function() {
                 query: [],
                 region: '',
                 isTournament: false,
-                version: 3,
+                version: 4,
             })
         })
     })
@@ -57,7 +57,7 @@ describe('MatchEndpoint', function() {
                     query: [],
                     region: '',
                     isTournament: false,
-                    version: 3,
+                    version: 4,
                 })
             })
         })
@@ -72,7 +72,7 @@ describe('MatchEndpoint', function() {
                     query: [],
                     region: '',
                     isTournament: false,
-                    version: 3,
+                    version: 4,
                 })
             })
         })

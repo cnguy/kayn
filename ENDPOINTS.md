@@ -8,6 +8,10 @@
 ChampionMastery.list(summonerID: int)
 ChampionMastery.get(summonerID: int)(championID: int)
 ChampionMastery.totalScore(summonerID: int)
+/* CHAMPION-MASTERY-V4 */
+ChampionMasteryV4.list(summonerID: string)
+ChampionMasteryV4.get(summonerID: string)(championID: int)
+ChampionMasteryV4.totalScore(summonerID: string)
 
 /* CHAMPION-V3 */
 Champion.Rotation.list()
@@ -17,6 +21,11 @@ Challenger.list(queueName: string)
 League.by.uuid(leagueUUID: string)
 Master.list(queueName: string)
 LeaguePositions.by.summonerID(summonerID: int)
+/* LEAGUE-V4 */
+ChallengerV4.list(queueName: string)
+LeagueV4.by.uuid(leagueUUID: string)
+MasterV4.list(queueName: string)
+LeaguePositionsV4.by.summonerID(summonerID: string)
 
 /* DDRAGON
     At its core, DDragonRequest uses `version()` and `locale()`.
@@ -56,18 +65,32 @@ Matchlist.Recent.by.accountID(accountID: int) /* April 27th deprecation by Riot,
 Match.timeline(matchID: int)
 Match.Tournament.listMatchIDs(tournamentCode: string)
 Match.Tournament.get(matchID: int, tournamentCode: string)
+/* MATCH-V4 */
+MatchV4.get(matchID: string)
+MatchV4.by.accountID(accountID: string)
+MatchV4.Recent.by.accountID(accountID: string) /* April 27th deprecation by Riot, but will still work via the above endpoint */
+MatchV4.timeline(matchID: int)
 
 /* SPECTATOR-V3 */
 CurrentGame.by.summonerID(summonerID: int)
 FeaturedGames.list()
+/* SPECTATOR-V4 */
+CurrentGameV4.by.summonerID(summonerID: string)
+FeaturedGamesV4.list()
 
 /* SUMMONER-V3 */
 Summoner.by.name(summonerName: string)
 Summoner.by.id(summonerID: int)
 Summoner.by.accountID(accountID: int)
+/* SUMMONER-V4 */
+SummonerV4.by.name(summonerName: string)
+SummonerV4.by.id(summonerID: string)
+SummonerV4.by.accountID(accountID: string)
 
 /* THIRD-PARTY-CODE-V3 */
 ThirdPartyCode.by.summonerID(summonerID: int)
+/* THIRD-PARTY-CODE-V4 */
+ThirdPartyCodeV4.by.summonerID(summonerID: string)
 
 /* TOURNAMENT-STUB-V3 */
 TournamentStub.create(tournamentID: number, body: object?)

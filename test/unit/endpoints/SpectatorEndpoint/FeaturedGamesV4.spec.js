@@ -4,28 +4,27 @@ import TestUtils from '../../../TestUtils'
 const { kaynInstance, defaultConfig } = TestUtils
 
 const { kayn, REGIONS, METHOD_TYPES } = kaynInstance
-import LeaguePositionsEndpoint from '../../../../lib/Endpoints/LeagueEndpoint/LeaguePositionsEndpoint'
+import FeaturedGamesEndpointV4 from '../../../../lib/Endpoints/SpectatorEndpoint/FeaturedGamesEndpointV4'
 import mocks from '../../../mocks'
 
-describe('LeaguePositionsEndpoint', function() {
+describe('FeaturedGamesEndpointV4', function() {
     this.timeout(0)
 
     beforeEach(function() {
-        this.LeaguePositions = new LeaguePositionsEndpoint(defaultConfig)
+        this.FeaturedGames = new FeaturedGamesEndpointV4(defaultConfig)
     })
 
-    describe('.by.summonerID', function() {
+    describe('.list', function() {
         it('should have the correct payload #1', function() {
-            const { Contractz } = mocks.summoner
-            const { payload } = this.LeaguePositions.by.summonerID(Contractz.id)
+            const { payload } = this.FeaturedGames.list()
             expect(payload).to.deep.equal({
                 method: 'GET',
-                serviceName: 'league',
-                endpoint: `positions/by-summoner/${Contractz.id}`,
+                serviceName: 'spectator',
+                endpoint: 'featured-games',
                 query: [],
                 region: '',
                 isTournament: false,
-                version: 3,
+                version: 4,
             })
         })
     })

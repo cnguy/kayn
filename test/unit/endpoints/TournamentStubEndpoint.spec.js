@@ -27,6 +27,7 @@ describe('TournamentStubEndpoint', function() {
                 region: '',
                 isTournament: true,
                 body: { hello: 'world' },
+                version: 3,
             })
         })
     })
@@ -42,6 +43,7 @@ describe('TournamentStubEndpoint', function() {
                 region: '',
                 isTournament: true,
                 body: { providerId: 379 },
+                version: 3,
             })
         })
 
@@ -58,6 +60,7 @@ describe('TournamentStubEndpoint', function() {
                 region: '',
                 isTournament: true,
                 body: { providerId: 379, name: 'My First Tournament (Stub)' },
+                version: 3,
             })
         })
     })
@@ -79,6 +82,7 @@ describe('TournamentStubEndpoint', function() {
                     region: REGIONS.NORTH_AMERICA.toUpperCase(),
                     url: 'https://github.com/kayn',
                 },
+                version: 3,
             })
         })
     })
@@ -93,6 +97,7 @@ describe('TournamentStubEndpoint', function() {
                 query: [],
                 region: '',
                 isTournament: true,
+                version: 3,
             })
         })
     })

@@ -25,6 +25,7 @@ describe('ChampionEndpoint', function() {
                 query: [],
                 region: '',
                 isTournament: false,
+                version: 3,
             })
         })
     })
