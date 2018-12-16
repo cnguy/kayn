@@ -44,8 +44,6 @@ const kayn = Kayn()({
     },
 })
 
-import test from './examples/async.await/helper-for-updating-summoner-to-v4'
-
 const main = async () => {
     const contractz = await kayn.SummonerV4.by.name('Contractz')
     const contractz2 = await kayn.SummonerV4.by.puuid(contractz.puuid)
