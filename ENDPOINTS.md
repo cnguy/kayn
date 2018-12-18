@@ -67,8 +67,8 @@ Match.Tournament.listMatchIDs(tournamentCode: string)
 Match.Tournament.get(matchID: int, tournamentCode: string)
 /* MATCH-V4 */
 MatchV4.get(matchID: string)
-MatchV4.by.accountID(accountID: string)
-MatchV4.Recent.by.accountID(accountID: string) /* April 27th deprecation by Riot, but will still work via the above endpoint */
+MatchlistV4.by.accountID(accountID: string)
+MatchlistV4.Recent.by.accountID(accountID: string) /* April 27th deprecation by Riot, but will still work via the above endpoint */
 MatchV4.timeline(matchID: int)
 
 /* SPECTATOR-V3 */
