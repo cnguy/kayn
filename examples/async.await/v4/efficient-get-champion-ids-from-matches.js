@@ -1,8 +1,7 @@
 const getChampionIdFromMatch = (match, accountId) => {
     for (let i in match.participantIdentities) {
         if (
-            match.participantIdentities[i].player.currentAccountId ===
-            accountId
+            match.participantIdentities[i].player.currentAccountId === accountId
         ) {
             return match.participants[parseInt(i)].championId
         }
