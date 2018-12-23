@@ -71,6 +71,8 @@ MatchV4.get(matchID: string)
 MatchlistV4.by.accountID(accountID: string)
 MatchlistV4.Recent.by.accountID(accountID: string) /* April 27th deprecation by Riot, but will still work via the above endpoint */
 MatchV4.timeline(matchID: int)
+MatchV4.Tournament.listMatchIDs(tournamentCode: string)
+MatchV4.Tournament.get(matchID: int, tournamentCode: string)
 
 /* SPECTATOR-V3 */
 CurrentGame.by.summonerID(summonerID: int)
