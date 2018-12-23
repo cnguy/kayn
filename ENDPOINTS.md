@@ -98,6 +98,11 @@ TournamentStub.create(tournamentID: number, body: object?)
 TournamentStub.lobbyEvents(tournamentCode: string)
 TournamentStub.registerProviderData(region: string, callbackURL: string)
 TournamentStub.register(providerID: number, name: string?)
+/* TOURNAMENT-STUB-V4 */
+TournamentStubV4.create(tournamentID: number, body: object?)
+TournamentStubV4.lobbyEvents(tournamentCode: string)
+TournamentStubV4.registerProviderData(region: string, callbackURL: string)
+TournamentStubV4.register(providerID: number, name: string?)
 
 /* TOURNAMENT-V3 */
 Tournament.create(tournamentID: number, body: object?)
@@ -105,7 +110,14 @@ Tournament.update(tournamentCode: string, body: object)
 Tournament.get(tournamentCode: string)
 Tournament.lobbyEvents(tournamentCode: string)
 Tournament.registerProviderData(region: string, callbackURL: string)
-TournamentStub.register(providerID: number, name: string?)
+Tournament.register(providerID: number, name: string?)
+/* TOURNAMENT-V4 */
+TournamentV4.create(tournamentID: number, body: object?)
+TournamentV4.update(tournamentCode: string, body: object)
+TournamentV4.get(tournamentCode: string)
+TournamentV4.lobbyEvents(tournamentCode: string)
+TournamentV4.registerProviderData(region: string, callbackURL: string)
+TournamentV4.register(providerID: number, name: string?)
 ```
 
 # Endpoints 
@@ -113,7 +125,11 @@ TournamentStub.register(providerID: number, name: string?)
 Everything should be in the same order as in the official docs.
 
 ## CHAMPION-MASTERY-V3
-- [x] `Get all champion mastery entries sorted by number of champion points descending,`
+- [x] `Get all champion mastery entries sorted by number of champion points descending.`
+- [x] `Get a champion mastery by player ID and champion ID.`
+- [x] `Get a player's total champion mastery score, which is the sum of individual champion mastery levels.`
+## CHAMPION-MASTERY-V4
+- [x] `Get all champion mastery entries sorted by number of champion points descending.`
 - [x] `Get a champion mastery by player ID and champion ID.`
 - [x] `Get a player's total champion mastery score, which is the sum of individual champion mastery levels.`
 
@@ -122,41 +138,73 @@ Everything should be in the same order as in the official docs.
 - [x] `Retrieve champion by ID.`
 
 ## LEAGUE-V3
-- [x] - `Get the challenger league for given queue.`
-- [x] - `Get league with given ID, including inactive entries.`
-- [x] - `Get the master league for given queue.`
-- [x] - `Get league positions in all queues for given summoner ID.`
+- [x] `Get the challenger league for given queue.`
+- [x] `Get league with given ID, including inactive entries.`
+- [x] `Get the master league for given queue.`
+- [x] `Get league positions in all queues for given summoner ID.`
+## LEAGUE-V4
+- [x] `Get a player's total champion mastery score, which is the sum of individual champion mastery levels.`
+- [x] `Get the grandmaster league of a specific queue.`
+- [x] `Get league with given ID, including inactive entries.`
+- [x] `Get the master league for given queue.`
+- [x] `Get league positions in all queues for a given summoner ID.`
 
 ## LOL-STATUS-V3
-- [x] - `Get League of Legends status for the given shard.`
+- [x] `Get League of Legends status for the given shard.`
 
 ## MATCH-V3
-- [x] - `Get match by match ID.`
-- [x] - `Get matchlist for games played on given account ID and platform ID and filtered using given filter parameters, if any.`
-- [x] - `Get matchlist for last 20 matches played on given account ID and platform ID.` (implemented via Get matchlist)
-- [x] - `Get match timeline by match ID.`
-- [x] - `Get match IDs by tournament code.`
-- [x] - `Get match by match ID and tournament code.`
+- [x] `Get match by match ID.`
+- [x] `Get matchlist for games played on given account ID and platform ID and filtered using given filter parameters, if any.`
+- [x] `Get matchlist for last 20 matches played on given account ID and platform ID.` (implemented via Get matchlist)
+- [x] `Get match timeline by match ID.`
+- [x] `Get match IDs by tournament code.`
+- [x] `Get match by match ID and tournament code.`
+## MATCH-V4
+- [x] `Get match by match ID.`
+- [x] `Get matchlist for games played on given account ID and platform ID and filtered using given filter parameters, if any.`
+- [x] `Get match timeline by match ID.`
+- [x] `Get match IDs by tournament code.`
+- [x] `Get match by match ID and tournament code.`
 
 ## SPECTATOR-V3
-- [x] - `Get current game information for the given summoner ID.`
-- [x] - `Get list of featured games.`
+- [x] `Get current game information for the given summoner ID.`
+- [x] `Get list of featured games.`
+## SPECTATOR-V4
+- [x] `Get current game information for the given summoner ID.`
+- [x] `Get list of featured games.`
 
 ## SUMMONER-V3
-- [x] - `Get a summoner by account ID.`
-- [x] - `Get a summoner by summoner name.`
-- [x] - `Get a summoner by summoner ID.`
+- [x] `Get a summoner by account ID.`
+- [x] `Get a summoner by summoner name.`
+- [x] `Get a summoner by summoner ID.`
+## SUMMONER-V4
+- [x] `Get a summoner by account ID.`
+- [x] `Get a summoner by summoner name.`
+- [x] `Get a summoner by PUUID.`
+- [x] `Get a summoner by summoner ID.`
 
 ## TOURNAMENT-STUB-V3
-- [x] - `Create a mock tournament code for the given tournament.`
-- [x] - `Gets a mock list of lobby events by tournament code.`
-- [x] - `Creates a mock tournament provider and return its ID.`
-- [x] - `Creates a mock tournament and return its ID.`
+- [x] `Create a mock tournament code for the given tournament.`
+- [x] `Gets a mock list of lobby events by tournament code.`
+- [x] `Creates a mock tournament provider and return its ID.`
+- [x] `Creates a mock tournament and return its ID.`
+## TOURNAMENT-STUB-V4
+- [x] `Create a mock tournament code for the given tournament.`
+- [x] `Gets a mock list of lobby events by tournament code.`
+- [x] `Creates a mock tournament provider and returns its ID.`
+- [x] `Creates a mock tournament and returns its ID.`
 
 ## TOURNAMENT-V3
-- [x] - `Create a tournament code for the given tournament.`
-- [x] - `Update the pick type, map, spectator type, or allowed summoners for a code.`
-- [x] - `Returns the tournament code DTO associated with a tournament code string.`
-- [x] - `Gets a list of lobby events by tournament code.`
-- [x] - `Creates a tournament provider and return its ID.`
-- [x] - `Creates a tournament and return its ID.`
+- [x] `Create a tournament code for the given tournament.`
+- [x] `Update the pick type, map, spectator type, or allowed summoners for a code.`
+- [x] `Returns the tournament code DTO associated with a tournament code string.`
+- [x] `Gets a list of lobby events by tournament code.`
+- [x] `Creates a tournament provider and return its ID.`
+- [x] `Creates a tournament and return its ID.`
+## TOURNAMENT-V4
+- [x] `Create a tournament code for the given tournament.`
+- [x] `Returns the tournament code DTO associated with a tournament code string.`
+- [x] `Update the pick type, map, spectator type, or allowed summoners for a code.`
+- [x] `Gets a list of lobby events by tournament code.`
+- [x] `Creates a tournament provider and returns its ID.`
+- [x] `Creates a tournament and returns its ID.`
