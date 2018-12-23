@@ -23,6 +23,7 @@ Master.list(queueName: string)
 LeaguePositions.by.summonerID(summonerID: int)
 /* LEAGUE-V4 */
 ChallengerV4.list(queueName: string)
+GrandmasterV4.list(queueName: string)
 LeagueV4.by.uuid(leagueUUID: string)
 MasterV4.list(queueName: string)
 LeaguePositionsV4.by.summonerID(summonerID: string)
