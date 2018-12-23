@@ -1,6 +1,6 @@
 {
   "name": "kayn",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "main": "index.js",
   "scripts": {
     "example": "yarn lint-example; yarn build && babel ./example.js -o ./example.babel.js && node example.babel.js",
