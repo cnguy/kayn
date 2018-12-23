@@ -1,3 +1,7 @@
+# 0.9.1
+* Add `TournamentV4` and `TournamentStubV4`
+* Add TypeScript bindings for V4 endpoints and finish up incomplete METHOD_NAMES
+
 # 0.9.0
 
 * Add `ChampionMasteriesV4`, `LeagueV4`, `MatchV4`, `SpectatorV4`, `SummonerV4`, `ThirdPartyCodeV4`
