@@ -315,8 +315,8 @@ kayn.DDragon.Champion.list()
     })
 
 // Let's say the config region is North America and that the latest version
-// for the champion endpoint in NA is 8.15.1
-kayn.DDragon.Champion.list() // Implicitly targets 8.15.1
+// for the champion endpoint in NA is 8.24.1
+kayn.DDragon.Champion.list() // Implicitly targets 8.24.1
     .callback(function(error, champions) {
         console.log(champions)
     })

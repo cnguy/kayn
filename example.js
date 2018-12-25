@@ -29,18 +29,7 @@ const kayn = Kayn()({
         delayBeforeRetry: 1000,
     },
     cacheOptions: {
-        cache: myCache,
-        ttls: {},
-        timeToLives: {
-            useDefault: true,
-            byGroup: {
-                DDRAGON: 10000,
-            },
-            byMethod: {
-                [METHOD_NAMES.DDRAGON.RUNES_REFORGED_LIST]: 5000,
-                [METHOD_NAMES.CHAMPION.GET_CHAMPION_ROTATIONS]: 5000,
-            },
-        },
+        cache: new BasicJSCache(),
     },
 })
 
@@ -55,8 +44,9 @@ const main = async () => {
         const challengers = await kayn.ChallengerV4.list('RANKED_SOLO_5x5')
         const grandmasters = await kayn.GrandmasterV4.list('RANKED_SOLO_5x5')
         // const inori = await kayn.SummonerV4.by.name('ìnori')
-        console.log(kayn.TournamentV4.create('123', { test: 'boo' }))
-        console.log(kayn.TournamentStubV4.create('123', { test: 'boo' }))
+        kayn.DDragon.Champion.list().callback(function(error, champions) {
+            console.log(Object.keys(champions).length)
+        })
     } catch (ex) {
         console.log(ex)
     }
