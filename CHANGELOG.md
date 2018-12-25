@@ -1,3 +1,6 @@
+# 0.9.2
+* Fix DDragonRequest [case](https://github.com/cnguy/kayn/issues/60) where a cache is not used and the version is unspecified / implicit
+
 # 0.9.1
 * Add `TournamentV4` and `TournamentStubV4`
 * Add TypeScript bindings for V4 endpoints and finish up incomplete METHOD_NAMES
