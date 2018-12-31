@@ -1,6 +1,8 @@
 import * as dtos from './dtos'
 
 declare module 'kayn' {
+    export function Kayn(key?: string): (config?: KaynConfig) => KaynClass
+
     class KaynClass {
         flushCache(cb?: callback<'OK'>): Promise<'OK'>
 
@@ -290,7 +292,7 @@ type KaynError = {
     error: any
 }
 
-class KaynRequest<T> {
+declare class KaynRequest<T> {
     region(region: region): KaynRequest<T>
     query(query: Object): KaynRequest<T>
     then(
@@ -332,13 +334,12 @@ interface KaynConfig {
 
 type region = string
 type queueName = string
-export function Kayn(key?: string): (config?: KaynConfig) => KaynClass
 
-class BasicJSCache {
+declare class BasicJSCache {
     constructor()
 }
 
-class LRUCache {
+declare class LRUCache {
     constructor(opts?: {
         max?: number
         length?: (value: any, key: any) => number
@@ -346,7 +347,7 @@ class LRUCache {
     })
 }
 
-class RedisCache {
+declare class RedisCache {
     constructor(opts?: {
         host?: string
         port?: number
@@ -355,7 +356,7 @@ class RedisCache {
     })
 }
 
-enum REGIONS {
+declare enum REGIONS {
     BRAZIL = 'br',
     EUROPE = 'eune',
     EUROPE_WEST = 'euw',
