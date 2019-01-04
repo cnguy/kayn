@@ -1,3 +1,10 @@
+# 0.9.4
+
+* Upgrade riot-rate-limiter fork
+  * Fixes hanging issue: https://github.com/Colorfulstan/RiotRateLimiter-node/pull/13
+  * Also removes the "Creating sync ratelimiter..." messages that are meant for debug mode
+* Update deprecation warning to [1/28/2019](https://www.riotgames.com/en/DevRel/player-universally-unique-identifiers-and-a-new-security-layer)
+
 # 0.9.3 (possibly breaking for TypeScript V2 users)
 
 * Upgrade TypeScript to latest (v3.2.2) and fix bindings for the upgrade
