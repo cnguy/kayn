@@ -48,7 +48,7 @@
     "lru-cache": "^4.1.2",
     "redis": "^2.8.0",
     "request": "^2.83.0",
-    "riot-ratelimiter-temp": "0.0.1",
+    "riot-ratelimiter-temp": "^0.0.2",
     "superstruct": "^0.6.0",
     "supports-color": "^5.1.0"
   }
