@@ -33,20 +33,11 @@ const kayn = Kayn()({
     },
 })
 
+import run from './examples/async.await/v4/grabbing-matches-by-champions-out-of-a-ranked-matchlist'
+
 const main = async () => {
     try {
-        const contractz = await kayn.SummonerV4.by.name('Contractz')
-        const contractz2 = await kayn.SummonerV4.by.puuid(contractz.puuid)
-        const contractz3 = await kayn.SummonerV4.by.accountID(
-            contractz2.accountId,
-        )
-        const contractz4 = await kayn.SummonerV4.by.id(contractz3.id)
-        const challengers = await kayn.ChallengerV4.list('RANKED_SOLO_5x5')
-        const grandmasters = await kayn.GrandmasterV4.list('RANKED_SOLO_5x5')
-        // const inori = await kayn.SummonerV4.by.name('ìnori')
-        kayn.DDragon.Champion.list().callback(function(error, champions) {
-            console.log(Object.keys(champions).length)
-        })
+        run(kayn)
     } catch (ex) {
         console.log(ex)
     }
