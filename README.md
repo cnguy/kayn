@@ -430,7 +430,6 @@ const main = async () => {
 
     // Same as `const championVersion = data.n.champion`.
     const { n: { champion: championVersion } } = await kayn.DDragon.Realm.list(/* default region */)
-    // Only optional locale is supported at the moment.
     const championList = await kayn.DDragon.Champion.list().version(championVersion)
     console.log(championList)
 }
@@ -785,6 +784,23 @@ to run the various files in `./examples`
 to build. `yarn example` runs this command
 * `yarn test`
 
+## General Workflow
+
+Here's my general workflow when it comes to `kayn`.
+
+Note: You don't have to worry about editor configuration as long as you follow the steps.
+
+* If possible, create a unit test (make more if applicable)
+* Set `describe.only` on your test(s)
+* Run `yarn test` to make sure test is failing
+* Write implementation and run `yarn test` on completion
+* You can manually test requests in `example.js` using your own API key
+    * Preferrable just to use a .env file with kayn's default key (RIOT_API_KEY)
+    * Run `yarn example` and verify behavior manually
+* Remove `describe.only` from your tests and run the entire test suite
+* When tests pass and manual testing went well, run `yarn lint`
+* Commit and push! For forks, make sure you check out a new branch
+
 # Changelog
 
 [CHANGELOG.md](https://github.com/cnguy/kayn/blob/master/CHANGELOG.md).
@@ -810,3 +826,7 @@ If you're getting 429's, you're most likely processing huge amounts of requests 
 Occasionally, if `requestOptions.burst = true`, the rate limiter may get out of sync if you're running thousands of concurrent requests (like [onetricks.net](onetricks.net) when building stats), which can cause 429's that will propagate until you're blacklisted.
 
 It is thus ideal to use the `spread` strategy when working on apps that process a ton of requests because there is a much lower risk of getting a 429. However, for small or dev scripts, bursting your requests is a lot better.
+
+# External Links
+
+* [Batching Node.js Asynchronous Requests via Promises using Riot League of Legends API](http://chau.codes/batching-node-js-asynchronous-requests-via-promises-using-riot-league-of-legends-api/)
