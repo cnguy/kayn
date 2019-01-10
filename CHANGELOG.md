@@ -1,3 +1,7 @@
+# 0.9.5
+
+* Revert rate limiter dependency (downgrade) for now due to this [issue](https://github.com/cnguy/kayn/issues/62)
+
 # 0.9.4
 
 * Upgrade riot-rate-limiter fork

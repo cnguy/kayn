@@ -19,7 +19,7 @@ const main = async kayn => {
             return getChampionIdFromMatch(matchDetail, accountId)
         }),
     )
-    console.log(championIds.slice(0, 5), championIds.length)
+    console.log(championIds, championIds.length)
 }
 
 module.exports = main

@@ -33,7 +33,7 @@ const kayn = Kayn()({
     },
 })
 
-import run from './examples/async.await/v4/grabbing-matches-by-champions-out-of-a-ranked-matchlist'
+import run from './examples/async.await/v4/get-last-10-ranked-matches-efficiently'
 
 const main = async () => {
     try {
