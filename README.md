@@ -122,12 +122,24 @@ const main = async (kayn) => {
 </p>
 </details>
 
+[More Examples](#more-examples)
+<details><summary>Example Selected Implementations</summary>
+
+<p>
+
+####
+- [Get last 10 matches asynchronously and efficiently](https://github.com/cnguy/kayn/blob/master/examples/async.await/v4/get-last-10-ranked-matches-efficiently.js)
+
+... [More Examples](#more-examples)
+
+</p>
+</details>
+
 # Table of Contents:
 * [Features](#features)
 * [Methods](#methods)
 * [Installation & (Riot API) Usage](#installation-and-usage)
 * [DDragon Usage](#ddragon-usage)
-* [More Examples](#more-examples)
 * [Configuration](#configuration)
 * [My Project](#my-project)
 * [Bugs / Changelog / Disclaimer](#bugs)
