@@ -33,11 +33,12 @@ const kayn = Kayn()({
     },
 })
 
-import run from './examples/async.await/v4/get-last-10-ranked-matches-efficiently'
+import run from './examples/async.await/v4/get-detailed-info-from-last-5-ranked-matches'
 
 const main = async () => {
     try {
-        run(kayn)
+        await run(kayn)
+        console.log('done')
     } catch (ex) {
         console.log(ex)
     }

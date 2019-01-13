@@ -7,7 +7,7 @@ const efficiently = async kayn => {
         .accountID(accountId)
         .query({ queue: 420 })
     const gameIds = matches.slice(0, 10).map(({ gameId }) => gameId)
-    const requests = gameIds.map(kayn.Match.get)
+    const requests = gameIds.map(kayn.MatchV4.get)
     const results = await Promise.all(requests)
     console.log(results[0], results.length)
     console.timeEnd('efficiently')
@@ -24,7 +24,7 @@ const slowly = async kayn => {
     const gameIds = matches.slice(0, 10).map(({ gameId }) => gameId)
     const results = []
     for (let i = 0; i < gameIds.length; ++i) {
-        results.push(await kayn.Match.get(gameIds[i]))
+        results.push(await kayn.MatchV4.get(gameIds[i]))
     }
     console.log(results[0], results.length)
     console.timeEnd('slowly')

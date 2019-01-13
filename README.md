@@ -128,7 +128,8 @@ const main = async (kayn) => {
 <p>
 
 ####
-- [Get last 10 matches asynchronously and efficiently](https://github.com/cnguy/kayn/blob/master/examples/async.await/v4/get-last-10-ranked-matches-efficiently.js)
+- [Get last 10 matches asynchronously and efficiently (vs slower version as well)](https://github.com/cnguy/kayn/blob/master/examples/async.await/v4/get-last-10-ranked-matches-efficiently.js)
+- [Get champion name, win status, season id, and game date for past 5 ranked games of a player](https://github.com/cnguy/kayn/blob/master/examples/async.await/v4/get-detailed-info-from-last-5-ranked-matches.js)
 
 ... [More Examples](#more-examples)
 
