@@ -1,3 +1,9 @@
+# 0.9.6
+
+Fixes:
+* Move V4 warning to `initLogger`
+* Hide "creating sync rate limiter" with updated `riot-ratelimiter-tmp`
+
 # 0.9.5
 
 * Revert rate limiter dependency (downgrade) for now due to this [issue](https://github.com/cnguy/kayn/issues/62)
