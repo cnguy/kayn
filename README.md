@@ -830,7 +830,7 @@ As long this library is pre-1.0.0, breaking changes may be made, but will be doc
 
 You are most likely using the default `spread` rate limiting strategy, which spreads out your requests over rate limit periods.
 
-Set `requestOptions.burst` to `false` to burst your requests instead.
+Set `requestOptions.burst` to `true` to burst your requests instead.
 
 ## I'm getting (a lot of) 429's.
 
