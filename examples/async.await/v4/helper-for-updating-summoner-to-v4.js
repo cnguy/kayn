@@ -33,7 +33,7 @@ const main = async kayn => {
     }
 
     const getV4FromV3 = summonerV3 =>
-        kayn.SummonerV4.by.name(summonerV3.name).region(summonerV3.region)
+        kayn.Summoner.by.name(summonerV3.name).region(summonerV3.region)
 
     // Single update
     const indexToUpdate = 0

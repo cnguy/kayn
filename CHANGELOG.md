@@ -1,3 +1,13 @@
+# 0.9.7 (REMOVE ALL V3, nonbreaking to V4)
+
+Fixes:
+* Replace all V3 namespaces with V4 namespaces (while keeping the V4 namespaces)*
+* Update typings
+
+Notes:
+* All previous namespaces now use the V4 namespaces, which means it won't break your code
+  * e.g. `kayn.Summoner` calls `kayn.SummonerV4`, and `kayn.SummonerV4` still calls the V4 API
+
 # 0.9.6
 
 Fixes:

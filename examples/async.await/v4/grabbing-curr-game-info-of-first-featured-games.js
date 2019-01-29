@@ -2,11 +2,11 @@
 // calls the current game endpoint on the first game's, first participant's id.
 
 const main = async kayn => {
-    const { gameList } = await kayn.FeaturedGamesV4.list()
+    const { gameList } = await kayn.FeaturedGames.list()
     if (gameList.length > 0) {
         const { summonerName: firstPlayer } = gameList[0].participants[0]
-        const { id } = await kayn.SummonerV4.by.name(firstPlayer)
-        const currentGameInfo = await kayn.CurrentGameV4.by.summonerID(id)
+        const { id } = await kayn.Summoner.by.name(firstPlayer)
+        const currentGameInfo = await kayn.CurrentGame.by.summonerID(id)
         console.log(currentGameInfo)
     }
 }

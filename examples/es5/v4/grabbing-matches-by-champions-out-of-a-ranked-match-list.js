@@ -7,10 +7,10 @@ function main(kayn) {
         season: 7,
     }
 
-    kayn.SummonerV4.by.name('Contractz').callback(function(error, summoner) {
+    kayn.Summoner.by.name('Contractz').callback(function(error, summoner) {
         // Note that the grabbing of a matchlist is currently limited by pagination.
         // This API request only returns the first list.
-        kayn.MatchlistV4.by
+        kayn.Matchlist.by
             .accountID(summoner.accountId)
             .region('na')
             .query(config)

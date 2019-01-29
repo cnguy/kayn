@@ -5,7 +5,7 @@ function sortByWinsDescending(a, b) {
 }
 
 function main(kayn) {
-    kayn.ChallengerV4.list('RANKED_SOLO_5x5').callback(function(
+    kayn.Challenger.list('RANKED_SOLO_5x5').callback(function(
         error,
         challengers,
     ) {

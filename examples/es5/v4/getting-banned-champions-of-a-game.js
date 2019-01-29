@@ -1,5 +1,5 @@
 function main(kayn) {
-    kayn.MatchV4.get(2877485196).callback(function(err, match) {
+    kayn.Match.get(2877485196).callback(function(err, match) {
         const bans = match.teams
             .map(function(m) {
                 return m.bans

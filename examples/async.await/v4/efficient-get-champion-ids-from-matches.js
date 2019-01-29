@@ -9,13 +9,13 @@ const getChampionIdFromMatch = (match, accountId) => {
 }
 
 const main = async kayn => {
-    const { accountId } = await kayn.SummonerV4.by.name('Contractz')
-    const rankGameIds = (await kayn.MatchlistV4.by
+    const { accountId } = await kayn.Summoner.by.name('Contractz')
+    const rankGameIds = (await kayn.Matchlist.by
         .accountID(accountId)
         .query({ queue: 420 })).matches.map(el => el.gameId)
     const championIds = await Promise.all(
         rankGameIds.map(async gameId => {
-            const matchDetail = await kayn.MatchV4.get(gameId).region('na')
+            const matchDetail = await kayn.Match.get(gameId).region('na')
             return getChampionIdFromMatch(matchDetail, accountId)
         }),
     )

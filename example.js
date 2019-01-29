@@ -33,15 +33,10 @@ const kayn = Kayn()({
     },
 })
 
-import run from './examples/async.await/v4/get-detailed-info-from-last-5-ranked-matches'
+import run from './examples/async.await/v4/get-last-10-ranked-matches-efficiently'
 
 const main = async () => {
-    try {
-        await run(kayn)
-        console.log('done')
-    } catch (ex) {
-        console.log(ex)
-    }
+    console.log(await kayn.Summoner.by.name('Contractz'))
 }
 
 main()

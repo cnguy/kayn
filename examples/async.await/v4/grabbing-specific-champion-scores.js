@@ -4,8 +4,8 @@
 const championIDs = [40, 67, 3, 4, 5, 6]
 
 const main = async kayn => {
-    const { id } = await kayn.SummonerV4.by.name('Contractz')
-    const getChampionMasteryFromCtz = kayn.ChampionMasteryV4.get(id)
+    const { id } = await kayn.Summoner.by.name('Contractz')
+    const getChampionMasteryFromCtz = kayn.ChampionMastery.get(id)
     const requests = championIDs.map(getChampionMasteryFromCtz)
     const result = await Promise.all(requests)
     const scores = result.map(cm => cm.championPoints)

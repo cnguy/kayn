@@ -18,12 +18,12 @@ const processMatch = (championIdMap, summonerId, match) => {
 
 const main = async kayn => {
     const championIdMap = await kayn.DDragon.Champion.listDataByIdWithParentAsId()
-    const { id, accountId } = await kayn.SummonerV4.by.name('Jeongsik Oh')
-    const { matches } = await kayn.MatchlistV4.by
+    const { id, accountId } = await kayn.Summoner.by.name('Jeongsik Oh')
+    const { matches } = await kayn.Matchlist.by
         .accountID(accountId)
         .query({ queue: 420 })
     const gameIds = matches.slice(0, 10).map(({ gameId }) => gameId)
-    const matchDtos = await Promise.all(gameIds.map(kayn.MatchV4.get))
+    const matchDtos = await Promise.all(gameIds.map(kayn.Match.get))
     // `processor` is a helper function to make the subsequent `map` cleaner.
     const processor = match => processMatch(championIdMap, id, match)
     const results = await Promise.all(matchDtos.map(processor))

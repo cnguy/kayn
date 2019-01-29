@@ -3,7 +3,7 @@
 const sortByIncWins = (a, b) => b.wins - a.wins
 
 const main = async kayn => {
-    const challengerLeague = await kayn.ChallengerV4.list('RANKED_SOLO_5x5')
+    const challengerLeague = await kayn.Challenger.list('RANKED_SOLO_5x5')
     const players = challengerLeague.entries.sort(sortByIncWins)
     console.log(players)
     console.log(players[0].wins)

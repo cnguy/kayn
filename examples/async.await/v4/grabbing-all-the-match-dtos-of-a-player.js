@@ -55,13 +55,13 @@ const getAllMatchIDsInBatch = async (matchlistDTO, accountID, getFn) => {
 
 const main = async kayn => {
     const getRankedMatchesForSummoner = async (accountID, indexQuery) =>
-        kayn.MatchlistV4.by
+        kayn.Matchlist.by
             .accountID(accountID)
             .region('na')
             .query({ queue: 420, season: 11 })
             .query(indexQuery || {})
 
-    const { accountId: accountID } = await kayn.SummonerV4.by.name(
+    const { accountId: accountID } = await kayn.Summoner.by.name(
         '9 5 mcdonalds',
     )
 
@@ -75,7 +75,7 @@ const main = async kayn => {
 
     // Now we have all the match ids!
     // Can batch process them now.
-    const matches = await Promise.all(matchIDs.map(kayn.MatchV4.get))
+    const matches = await Promise.all(matchIDs.map(kayn.Match.get))
     console.log(matches)
     console.log(`${matches.length} matches processed.`)
 }
