@@ -36,7 +36,9 @@ request(SWAGGER_URL, async (err, res) => {
 
         const resultsPromises = Promise.all(
             pathsKeys.map(async pathKey => {
-                const methodTypes = Object.keys(paths[pathKey])
+                const methodTypes = Object.keys(paths[pathKey]).filter(
+                    t => t === 'get',
+                )
                 const tmp = await Promise.all(
                     methodTypes.map(async k => {
                         const targetEndpoint = `${k.toUpperCase()} \`${pathKey}\``

@@ -1,3 +1,9 @@
+# 0.9.8
+
+Feats:
+* Add `/lol/league/v4/positional-rank-queues`
+* Add `/lol/league/v4/positions/{positionalQueue}/{tier}/{division}/{position}/{page}`
+
 # 0.9.7 (REMOVE ALL V3, nonbreaking to V4)
 
 Fixes:

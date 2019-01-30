@@ -44,6 +44,10 @@ declare module 'kayn' {
                     leagueUUID: string,
                 ) => KaynRequest<dtos.LeagueV4LeagueListDTO>
             }
+
+            PositionalRankQueue: {
+                list: () => KaynRequest<string[]>
+            }
         }
 
         public Master: {
@@ -185,6 +189,10 @@ declare module 'kayn' {
                     leagueUUID: string,
                 ) => KaynRequest<dtos.LeagueV4LeagueListDTO>
             }
+
+            PositionalRankQueue: {
+                list: () => KaynRequest<string[]>
+            }
         }
 
         public MasterV4: {
@@ -205,6 +213,14 @@ declare module 'kayn' {
                     summonerID: string,
                 ) => KaynRequest<dtos.LeagueV4LeaguePositionDTO[]>
             }
+
+            list: (
+                positionalQueue: string, // make more constrained
+                tier: string, // make more constrained
+                division: string, // make more constrained
+                position: string, // make more constrained
+                page: number,
+            ) => KaynRequest<dtos.LeagueV4LeaguePositionDTO[]>
         }
 
         public MatchV4: {
