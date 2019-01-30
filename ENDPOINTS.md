@@ -17,7 +17,7 @@ Challenger.list(queueName: string)
 Grandmaster.list(queueName: string)
 League.by.uuid(leagueUUID: string)
 Master.list(queueName: string)
-League.PositionalRankedQueue.list()
+League.PositionalRankQueue.list()
 LeaguePositions.by.summonerID(summonerID: string)
 LeaguePositions.list(
     positionalQueue: queueName | string,
