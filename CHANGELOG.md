@@ -5,7 +5,7 @@ Feats:
 * Add `/lol/league/v4/positions/{positionalQueue}/{tier}/{division}/{position}/{page}`
 
 Fix:
-* Remove no longer necssary deprecation warning
+* Remove no longer necessary deprecation warning
 
 # 0.9.7 (REMOVE ALL V3, nonbreaking to V4)
 
