@@ -999,7 +999,7 @@ export interface TournamentStubV4TournamentCodeParameters {
     /**
      * Optional list of encrypted summonerIds in order to validate the players eligible to join the lobby. NOTE: We currently do not enforce participants at the team level, but rather the aggregate of teamOne and teamTwo. We may add the ability to enforce at the team level in the future.
      */
-    allowedSummonerIds: string[]
+    allowedSummonerIds?: string[]
     /**
      * The map type of the game.
      *              (Legal values:  SUMMONERS_RIFT,  TWISTED_TREELINE,  HOWLING_ABYSS)
@@ -1008,7 +1008,7 @@ export interface TournamentStubV4TournamentCodeParameters {
     /**
      * Optional string that may contain any data in any format, if specified at all. Used to denote any custom information about the game.
      */
-    metadata: string
+    metadata?: string
 }
 export interface TournamentStubV4TournamentRegistrationParameters {
     /**
@@ -1018,7 +1018,7 @@ export interface TournamentStubV4TournamentRegistrationParameters {
     /**
      * The optional name of the tournament.
      */
-    name: string
+    name?: string
 }
 export interface TournamentV4LobbyEventDTO {
     /**
@@ -1143,7 +1143,7 @@ export interface TournamentV4TournamentCodeParameters {
     /**
      * Optional list of encrypted summonerIds in order to validate the players eligible to join the lobby. NOTE: We currently do not enforce participants at the team level, but rather the aggregate of teamOne and teamTwo. We may add the ability to enforce at the team level in the future.
      */
-    allowedSummonerIds: string[]
+    allowedSummonerIds?: string[]
     /**
      * The map type of the game.
      *              (Legal values:  SUMMONERS_RIFT,  TWISTED_TREELINE,  HOWLING_ABYSS)
@@ -1152,7 +1152,7 @@ export interface TournamentV4TournamentCodeParameters {
     /**
      * Optional string that may contain any data in any format, if specified at all. Used to denote any custom information about the game.
      */
-    metadata: string
+    metadata?: string
 }
 export interface TournamentV4TournamentCodeUpdateParameters {
     /**
@@ -1168,7 +1168,7 @@ export interface TournamentV4TournamentCodeUpdateParameters {
     /**
      * Optional list of encrypted summonerIds in order to validate the players eligible to join the lobby. NOTE: We currently do not enforce participants at the team level, but rather the aggregate of teamOne and teamTwo. We may add the ability to enforce at the team level in the future.
      */
-    allowedSummonerIds: string[]
+    allowedSummonerIds?: string[]
     /**
      * The map type
      *              (Legal values:  SUMMONERS_RIFT,  TWISTED_TREELINE,  HOWLING_ABYSS)
@@ -1183,5 +1183,5 @@ export interface TournamentV4TournamentRegistrationParameters {
     /**
      * The optional name of the tournament.
      */
-    name: string
+    name?: string
 }

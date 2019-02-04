@@ -3,7 +3,7 @@ info:
   title: 'Riot API'
   description: "\nOpenAPI/Swagger version of the [Riot API](https://developer.riotgames.com/). Automatically generated daily.\n## Download OpenAPI Spec File\nThe following versions of the Riot API spec file are available:\n- `openapi-3.0.0.json` ([download file](../openapi-3.0.0.json), [view ui](?openapi-3.0.0.json))\n- `openapi-3.0.0.min.json` ([download file](../openapi-3.0.0.min.json), [view ui](?openapi-3.0.0.min.json))\n- `openapi-3.0.0.yml` ([download file](../openapi-3.0.0.yml), [view ui](?openapi-3.0.0.yml))\n- `openapi-3.0.0.min.yml` ([download file](../openapi-3.0.0.min.yml), [view ui](?openapi-3.0.0.min.yml))\n- `swaggerspec-2.0.json` ([download file](../swaggerspec-2.0.json), [view ui](?swaggerspec-2.0.json))\n- `swaggerspec-2.0.min.json` ([download file](../swaggerspec-2.0.min.json), [view ui](?swaggerspec-2.0.min.json))\n- `swaggerspec-2.0.yml` ([download file](../swaggerspec-2.0.yml), [view ui](?swaggerspec-2.0.yml))\n- `swaggerspec-2.0.min.yml` ([download file](../swaggerspec-2.0.min.yml), [view ui](?swaggerspec-2.0.min.yml))\n## Source Code\nSource code on [GitHub](https://github.com/MingweiSamuel/riotapi-schema). Pull requests welcome!\n## Automatically Generated\nRebuilt on [Travis CI](https://travis-ci.org/MingweiSamuel/riotapi-schema/builds) daily.\n***\n"
   termsOfService: 'https://developer.riotgames.com/terms-and-conditions.html'
-  version: a6116ff21a5e231ce4badf0838d5420875d54876
+  version: ad6ebb5de8195ac12f2bbc954a8a0cf0c6d43eea
 host: na1.api.riotgames.com
 x-host-platform:
   - br1
@@ -4413,9 +4413,7 @@ definitions:
       - spectatorType
       - teamSize
       - pickType
-      - allowedSummonerIds
       - mapType
-      - metadata
   tournament-stub-v4.LobbyEventDTOWrapper:
     type: object
     title: LobbyEventDTOWrapper
@@ -4490,7 +4488,6 @@ definitions:
         description: 'The optional name of the tournament.'
     required:
       - providerId
-      - name
   tournament-v4.TournamentCodeParameters:
     type: object
     title: TournamentCodeParameters
@@ -4542,9 +4539,7 @@ definitions:
       - spectatorType
       - teamSize
       - pickType
-      - allowedSummonerIds
       - mapType
-      - metadata
   tournament-v4.TournamentCodeDTO:
     type: object
     title: TournamentCodeDTO
@@ -4673,7 +4668,6 @@ definitions:
     required:
       - spectatorType
       - pickType
-      - allowedSummonerIds
       - mapType
   tournament-v4.LobbyEventDTOWrapper:
     type: object
@@ -4749,7 +4743,6 @@ definitions:
         description: 'The optional name of the tournament.'
     required:
       - providerId
-      - name
 securityDefinitions:
   api_key:
     type: apiKey
