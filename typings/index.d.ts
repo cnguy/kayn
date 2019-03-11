@@ -1,4 +1,5 @@
 import * as dtos from './dtos'
+import DDragonRequest from '../lib/RequestClient/DDragonRequest'
 
 declare module 'kayn' {
     export function Kayn(key?: string): (config?: KaynConfig) => KaynClass
@@ -35,6 +36,47 @@ declare module 'kayn' {
                 summonerID: (
                     summonerID: string,
                 ) => KaynRequest<dtos.SpectatorV4CurrentGameInfo>
+            }
+        }
+
+        public DDragon: {
+            Champion: {
+                get: (championName: string) => DDragonRequest
+                list: () => DDragonRequest
+                listFull: () => DDragonRequest
+                getDataById: () => DDragonRequest
+                getDataByIdWithParentAsId: () => DDragonRequest
+                listDataById: () => DDragonRequest
+                listDataByIdWithParentAsId: () => DDragonRequest
+                listFullDataById: () => DDragonRequest
+                listFullDataByIdWithParentAsId: () => DDragonRequest
+            }
+            Item: {
+                list: () => DDragonRequest
+            }
+            Language: {
+                list: () => DDragonRequest
+            }
+            LanguageString: {
+                list: () => DDragonRequest
+            }
+            Map: {
+                list: () => DDragonRequest
+            }
+            ProfileIcon: {
+                list: () => DDragonRequest
+            }
+            Realm: {
+                list: (region: region) => DDragonRequest
+            }
+            RunesReforged: {
+                list: () => DDragonRequest
+            }
+            SummonerSpell: {
+                list: () => DDragonRequest
+            }
+            Version: {
+                list: () => DDragonRequest
             }
         }
 
