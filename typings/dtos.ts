@@ -1231,6 +1231,18 @@ export interface MatchV4ParticipantStatsDto {
     totalHeal?: number // int64
     totalMinionsKilled?: number // int32
     timeCCingOthers?: number // int64
+    /**
+     * Offense rune stat bonus
+     */
+    statPerk0: number // int32
+    /**
+     * Flex rune stat bonus
+     */
+    statPerk1: number // int32
+    /**
+     * Deffense rune stat bonus
+     */
+    statPerk2: number // int32
 }
 /**
  * ParticipantTimelineDto
