@@ -37,7 +37,7 @@
     "mocha": "^4.0.1",
     "prettier": "^1.10.2",
     "rimraf": "^2.6.2",
-    "svg-to-png": "^3.1.2",
+    "svg-to-png": "^4.0.0",
     "sw2dts": "^2.5.0"
   },
   "dependencies": {
