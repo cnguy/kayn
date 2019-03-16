@@ -1,4 +1,5 @@
 /**
+ * ChampionMasteryDTO
  * This object contains single Champion Mastery information for player and champion combination.
  */
 export interface ChampionMasteryV4ChampionMasteryDTO {
@@ -39,6 +40,9 @@ export interface ChampionMasteryV4ChampionMasteryDTO {
      */
     summonerId?: string
 }
+/**
+ * ChampionInfo
+ */
 export interface ChampionV3ChampionInfo {
     freeChampionIdsForNewPlayers?: number /* int32 */[]
     freeChampionIds?: number /* int32 */[]
@@ -50,6 +54,9 @@ export interface Error {
         message?: string
     }
 }
+/**
+ * LeagueItemDTO
+ */
 export interface LeagueV4LeagueItemDTO {
     summonerName?: string
     hotStreak?: boolean
@@ -66,6 +73,9 @@ export interface LeagueV4LeagueItemDTO {
     summonerId?: string
     leaguePoints?: number // int32
 }
+/**
+ * LeagueListDTO
+ */
 export interface LeagueV4LeagueListDTO {
     leagueId?: string
     tier?: string
@@ -73,6 +83,9 @@ export interface LeagueV4LeagueListDTO {
     queue?: string
     name?: string
 }
+/**
+ * LeaguePositionDTO
+ */
 export interface LeagueV4LeaguePositionDTO {
     queueType?: string
     summonerName?: string
@@ -104,18 +117,27 @@ export interface LeagueV4LeaguePositionDTO {
     summonerId?: string
     leaguePoints?: number // int32
 }
+/**
+ * MiniSeriesDTO
+ */
 export interface LeagueV4MiniSeriesDTO {
     progress?: string
     losses?: number // int32
     target?: number // int32
     wins?: number // int32
 }
+/**
+ * Incident
+ */
 export interface LolStatusV3Incident {
     active?: boolean
     created_at?: string
     id?: number // int64
     updates?: LolStatusV3Message[]
 }
+/**
+ * Message
+ */
 export interface LolStatusV3Message {
     severity?: string
     author?: string
@@ -125,12 +147,18 @@ export interface LolStatusV3Message {
     content?: string
     id?: string
 }
+/**
+ * Service
+ */
 export interface LolStatusV3Service {
     status?: string
     incidents?: LolStatusV3Incident[]
     name?: string
     slug?: string
 }
+/**
+ * ShardStatus
+ */
 export interface LolStatusV3ShardStatus {
     name?: string
     region_tag?: string
@@ -139,15 +167,24 @@ export interface LolStatusV3ShardStatus {
     slug?: string
     locales?: string[]
 }
+/**
+ * Translation
+ */
 export interface LolStatusV3Translation {
     locale?: string
     content?: string
     heading?: string
 }
+/**
+ * MasteryDto
+ */
 export interface MatchV4MasteryDto {
     masteryId?: number // int32
     rank?: number // int32
 }
+/**
+ * MatchDto
+ */
 export interface MatchV4MatchDto {
     /**
      * Please refer to the Game Constants documentation.
@@ -199,6 +236,9 @@ export interface MatchV4MatchDto {
      */
     gameCreation?: number // int64
 }
+/**
+ * MatchEventDto
+ */
 export interface MatchV4MatchEventDto {
     eventType?: string
     towerType?: string
@@ -240,6 +280,9 @@ export interface MatchV4MatchEventDto {
     position?: MatchV4MatchPositionDto
     beforeId?: number // int32
 }
+/**
+ * MatchFrameDto
+ */
 export interface MatchV4MatchFrameDto {
     timestamp?: number // int64
     participantFrames?: {
@@ -247,6 +290,9 @@ export interface MatchV4MatchFrameDto {
     }
     events?: MatchV4MatchEventDto[]
 }
+/**
+ * MatchParticipantFrameDto
+ */
 export interface MatchV4MatchParticipantFrameDto {
     totalGold?: number // int32
     teamScore?: number // int32
@@ -259,10 +305,16 @@ export interface MatchV4MatchParticipantFrameDto {
     xp?: number // int32
     jungleMinionsKilled?: number // int32
 }
+/**
+ * MatchPositionDto
+ */
 export interface MatchV4MatchPositionDto {
     y?: number // int32
     x?: number // int32
 }
+/**
+ * MatchReferenceDto
+ */
 export interface MatchV4MatchReferenceDto {
     lane?: string
     gameId?: number // int64
@@ -273,16 +325,25 @@ export interface MatchV4MatchReferenceDto {
     role?: string
     timestamp?: number // int64
 }
+/**
+ * MatchTimelineDto
+ */
 export interface MatchV4MatchTimelineDto {
     frames?: MatchV4MatchFrameDto[]
     frameInterval?: number // int64
 }
+/**
+ * MatchlistDto
+ */
 export interface MatchV4MatchlistDto {
     matches?: MatchV4MatchReferenceDto[]
     totalGames?: number // int32
     startIndex?: number // int32
     endIndex?: number // int32
 }
+/**
+ * ParticipantDto
+ */
 export interface MatchV4ParticipantDto {
     /**
      * Participant statistics.
@@ -328,6 +389,9 @@ export interface MatchV4ParticipantDto {
     spell1Id?: number // int32
     championId?: number // int32
 }
+/**
+ * ParticipantIdentityDto
+ */
 export interface MatchV4ParticipantIdentityDto {
     /**
      * Player information.
@@ -335,6 +399,9 @@ export interface MatchV4ParticipantIdentityDto {
     player?: MatchV4PlayerDto
     participantId?: number // int32
 }
+/**
+ * ParticipantStatsDto
+ */
 export interface MatchV4ParticipantStatsDto {
     firstBloodAssist?: boolean
     visionScore?: number // int64
@@ -522,7 +589,22 @@ export interface MatchV4ParticipantStatsDto {
     totalHeal?: number // int64
     totalMinionsKilled?: number // int32
     timeCCingOthers?: number // int64
+	/**
+     * Offense rune stat bonus
+     */
+    statPerk0: number // int32
+    /**
+     * Flex rune stat bonus
+     */
+    statPerk1: number // int32
+    /**
+     * Deffense rune stat bonus
+     */
+    statPerk2: number // int32
 }
+/**
+ * ParticipantTimelineDto
+ */
 export interface MatchV4ParticipantTimelineDto {
     /**
      * Participant's calculated lane. MID and BOT are legacy values.
@@ -578,6 +660,9 @@ export interface MatchV4ParticipantTimelineDto {
         [name: string]: number // double
     }
 }
+/**
+ * PlayerDto
+ */
 export interface MatchV4PlayerDto {
     currentPlatformId?: string
     summonerName?: string
@@ -600,10 +685,16 @@ export interface MatchV4PlayerDto {
      */
     accountId?: string
 }
+/**
+ * RuneDto
+ */
 export interface MatchV4RuneDto {
     runeId?: number // int32
     rank?: number // int32
 }
+/**
+ * TeamBansDto
+ */
 export interface MatchV4TeamBansDto {
     /**
      * Turn during which the champion was banned.
@@ -614,6 +705,9 @@ export interface MatchV4TeamBansDto {
      */
     championId?: number // int32
 }
+/**
+ * TeamStatsDto
+ */
 export interface MatchV4TeamStatsDto {
     /**
      * Flag indicating whether or not the team scored the first Dragon kill.
@@ -681,6 +775,9 @@ export interface MatchV4TeamStatsDto {
      */
     dragonKills?: number // int32
 }
+/**
+ * BannedChampion
+ */
 export interface SpectatorV4BannedChampion {
     /**
      * The turn during which the champion was banned
@@ -695,6 +792,9 @@ export interface SpectatorV4BannedChampion {
      */
     teamId?: number // int64
 }
+/**
+ * CurrentGameInfo
+ */
 export interface SpectatorV4CurrentGameInfo {
     /**
      * The ID of the game
@@ -741,6 +841,9 @@ export interface SpectatorV4CurrentGameInfo {
      */
     gameQueueConfigId?: number // int64
 }
+/**
+ * CurrentGameParticipant
+ */
 export interface SpectatorV4CurrentGameParticipant {
     /**
      * The ID of the profile icon used by this participant
@@ -783,6 +886,9 @@ export interface SpectatorV4CurrentGameParticipant {
      */
     summonerId?: string
 }
+/**
+ * FeaturedGameInfo
+ */
 export interface SpectatorV4FeaturedGameInfo {
     /**
      * The ID of the game
@@ -839,6 +945,9 @@ export interface SpectatorV4FeaturedGameInfo {
      */
     gameQueueConfigId?: number // int64
 }
+/**
+ * FeaturedGames
+ */
 export interface SpectatorV4FeaturedGames {
     /**
      * The suggested interval to wait before requesting FeaturedGames again
@@ -849,6 +958,9 @@ export interface SpectatorV4FeaturedGames {
      */
     gameList?: SpectatorV4FeaturedGameInfo[]
 }
+/**
+ * GameCustomizationObject
+ */
 export interface SpectatorV4GameCustomizationObject {
     /**
      * Category identifier for Game Customization
@@ -859,12 +971,18 @@ export interface SpectatorV4GameCustomizationObject {
      */
     content?: string
 }
+/**
+ * Observer
+ */
 export interface SpectatorV4Observer {
     /**
      * Key used to decrypt the spectator grid game data for playback
      */
     encryptionKey?: string
 }
+/**
+ * Participant
+ */
 export interface SpectatorV4Participant {
     /**
      * The ID of the profile icon used by this participant
@@ -895,6 +1013,9 @@ export interface SpectatorV4Participant {
      */
     spell1Id?: number // int64
 }
+/**
+ * Perks
+ */
 export interface SpectatorV4Perks {
     /**
      * Primary runes path
@@ -910,6 +1031,7 @@ export interface SpectatorV4Perks {
     perkSubStyle?: number // int64
 }
 /**
+ * SummonerDTO
  * represents a summoner
  */
 export interface SummonerV4SummonerDTO {
@@ -942,6 +1064,9 @@ export interface SummonerV4SummonerDTO {
      */
     accountId?: string
 }
+/**
+ * LobbyEventDTO
+ */
 export interface TournamentStubV4LobbyEventDTO {
     /**
      * The type of event that was triggered
@@ -956,9 +1081,15 @@ export interface TournamentStubV4LobbyEventDTO {
      */
     timestamp?: string
 }
+/**
+ * LobbyEventDTOWrapper
+ */
 export interface TournamentStubV4LobbyEventDTOWrapper {
     eventList?: TournamentStubV4LobbyEventDTO[]
 }
+/**
+ * ProviderRegistrationParameters
+ */
 export interface TournamentStubV4ProviderRegistrationParameters {
     /**
      * The provider's callback URL to which tournament game results in this region should be posted. The URL must be well-formed, use the http or https protocol, and use the default port for the protocol (http URLs must use port 80, https URLs must use port 443).
@@ -981,6 +1112,9 @@ export interface TournamentStubV4ProviderRegistrationParameters {
         | 'RU'
         | 'TR'
 }
+/**
+ * TournamentCodeParameters
+ */
 export interface TournamentStubV4TournamentCodeParameters {
     /**
      * The spectator type of the game.
@@ -1010,6 +1144,9 @@ export interface TournamentStubV4TournamentCodeParameters {
      */
     metadata?: string
 }
+/**
+ * TournamentRegistrationParameters
+ */
 export interface TournamentStubV4TournamentRegistrationParameters {
     /**
      * The provider ID to specify the regional registered provider data to associate this tournament.
@@ -1020,6 +1157,9 @@ export interface TournamentStubV4TournamentRegistrationParameters {
      */
     name?: string
 }
+/**
+ * LobbyEventDTO
+ */
 export interface TournamentV4LobbyEventDTO {
     /**
      * Timestamp from the event
@@ -1034,9 +1174,15 @@ export interface TournamentV4LobbyEventDTO {
      */
     eventType?: string
 }
+/**
+ * LobbyEventDTOWrapper
+ */
 export interface TournamentV4LobbyEventDTOWrapper {
     eventList?: TournamentV4LobbyEventDTO[]
 }
+/**
+ * ProviderRegistrationParameters
+ */
 export interface TournamentV4ProviderRegistrationParameters {
     /**
      * The provider's callback URL to which tournament game results in this region should be posted. The URL must be well-formed, use the http or https protocol, and use the default port for the protocol (http URLs must use port 80, https URLs must use port 443).
@@ -1059,6 +1205,9 @@ export interface TournamentV4ProviderRegistrationParameters {
         | 'RU'
         | 'TR'
 }
+/**
+ * TournamentCodeDTO
+ */
 export interface TournamentV4TournamentCodeDTO {
     /**
      * The game map for the tournament code game
@@ -1125,6 +1274,9 @@ export interface TournamentV4TournamentCodeDTO {
      */
     metaData?: string
 }
+/**
+ * TournamentCodeParameters
+ */
 export interface TournamentV4TournamentCodeParameters {
     /**
      * The spectator type of the game.
@@ -1154,6 +1306,9 @@ export interface TournamentV4TournamentCodeParameters {
      */
     metadata?: string
 }
+/**
+ * TournamentCodeUpdateParameters
+ */
 export interface TournamentV4TournamentCodeUpdateParameters {
     /**
      * The spectator type
@@ -1175,6 +1330,9 @@ export interface TournamentV4TournamentCodeUpdateParameters {
      */
     mapType: 'SUMMONERS_RIFT' | 'TWISTED_TREELINE' | 'HOWLING_ABYSS'
 }
+/**
+ * TournamentRegistrationParameters
+ */
 export interface TournamentV4TournamentRegistrationParameters {
     /**
      * The provider ID to specify the regional registered provider data to associate this tournament.
