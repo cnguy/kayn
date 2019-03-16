@@ -10,8 +10,8 @@ declare module 'kayn' {
             get: (
                 summonerID: string,
             ) => (
-                    championID: number,
-                ) => KaynRequest<dtos.ChampionMasteryV4ChampionMasteryDTO>
+                championID: number,
+            ) => KaynRequest<dtos.ChampionMasteryV4ChampionMasteryDTO>
             list: (
                 summonerID: number,
             ) => KaynRequest<dtos.ChampionMasteryV4ChampionMasteryDTO[]>
