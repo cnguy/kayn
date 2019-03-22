@@ -41,42 +41,42 @@ declare module 'kayn' {
 
         public DDragon: {
             Champion: {
-                get: (championName: string) => DDragonRequest
-                list: () => DDragonRequest
-                listFull: () => DDragonRequest
-                getDataById: () => DDragonRequest
-                getDataByIdWithParentAsId: () => DDragonRequest
-                listDataById: () => DDragonRequest
-                listDataByIdWithParentAsId: () => DDragonRequest
-                listFullDataById: () => DDragonRequest
-                listFullDataByIdWithParentAsId: () => DDragonRequest
+                get: (championName: string) => KaynDDragonRequest<any>
+                list: () => KaynDDragonRequest<any>
+                listFull: () => KaynDDragonRequest<any>
+                getDataById: () => KaynDDragonRequest<any>
+                getDataByIdWithParentAsId: () => KaynDDragonRequest<any>
+                listDataById: () => KaynDDragonRequest<any>
+                listDataByIdWithParentAsId: () => KaynDDragonRequest<any>
+                listFullDataById: () => KaynDDragonRequest<any>
+                listFullDataByIdWithParentAsId: () => KaynDDragonRequest<any>
             }
             Item: {
-                list: () => DDragonRequest
+                list: () => KaynDDragonRequest<any>
             }
             Language: {
-                list: () => DDragonRequest
+                list: () => KaynDDragonRequest<any>
             }
             LanguageString: {
-                list: () => DDragonRequest
+                list: () => KaynDDragonRequest<any>
             }
             Map: {
-                list: () => DDragonRequest
+                list: () => KaynDDragonRequest<any>
             }
             ProfileIcon: {
-                list: () => DDragonRequest
+                list: () => KaynDDragonRequest<any>
             }
             Realm: {
-                list: (region: region) => DDragonRequest
+                list: (region: region) => KaynDDragonRequest<any>
             }
             RunesReforged: {
-                list: () => DDragonRequest
+                list: () => KaynDDragonRequest<any>
             }
             SummonerSpell: {
-                list: () => DDragonRequest
+                list: () => KaynDDragonRequest<any>
             }
             Version: {
-                list: () => DDragonRequest
+                list: () => KaynDDragonRequest<any>
             }
         }
 
@@ -214,6 +214,47 @@ declare class KaynRequest<T> {
         resolve: (data: T) => void,
         reject?: (err: KaynError) => void,
     ): KaynRequest<T>
+    catch(callback: (err: KaynError) => void): void
+    callback(callback: callback<T>): void
+}
+
+type locale =
+    | 'en_US'
+    | 'cs_CZ'
+    | 'de_DE'
+    | 'el_GR'
+    | 'en_AU'
+    | 'en_GB'
+    | 'en_PH'
+    | 'en_SG'
+    | 'es_AR'
+    | 'es_ES'
+    | 'es_MX'
+    | 'fr_FR'
+    | 'hu_HU'
+    | 'id_ID'
+    | 'it_IT'
+    | 'ja_JP'
+    | 'ko_KR'
+    | 'pl_PL'
+    | 'pt_BR'
+    | 'ro_RO'
+    | 'ru_RU'
+    | 'th_TH'
+    | 'tr_TR'
+    | 'vn_VN'
+    | 'zh_CN'
+    | 'zh_MY'
+    | 'zh_TW'
+
+declare class KaynDDragonRequest<T> {
+    version(version: string): KaynDDragonRequest<T>
+    locale(locale: locale): KaynDDragonRequest<T>
+    region(region: region): KaynDDragonRequest<T>
+    then(
+        resolve: (data: T) => void,
+        reject?: (err: KaynError) => void,
+    ): KaynDDragonRequest<T>
     catch(callback: (err: KaynError) => void): void
     callback(callback: callback<T>): void
 }

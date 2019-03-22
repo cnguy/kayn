@@ -42,6 +42,8 @@ const main = async () => {
         console.log(data)
         console.log(error.statusCode)
     })
+
+    const test = await kayn.DDragon.Champion.get('test').locale('en_US')
 }
 
 kayn.flushCache(function(err, data) {})
