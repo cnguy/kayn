@@ -44,6 +44,16 @@ const main = async () => {
     })
 
     const test = await kayn.DDragon.Champion.get('test').locale('en_US')
+    const leagueEntries = await kayn.League.Entries.bySummonerID('test')
+    if (leagueEntries[0].veteran) {
+        console.log('do something')
+    }
+
+    const leagueEntries2 = await kayn.League.Entries.list(
+        'RANKED_SOLO_5x5',
+        'DIAMOND',
+        'I',
+    )
 }
 
 kayn.flushCache(function(err, data) {})

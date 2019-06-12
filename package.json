@@ -16,7 +16,7 @@
     "test": "yarn build && yarn lint; yarn lint-test; yarn test-only",
     "test-only": "node_modules/.bin/babel-node ./node_modules/.bin/babel-istanbul cover ./node_modules/mocha/bin/_mocha -- --require babel-register \"test/unit/**/*.spec.js\"",
     "test-integration": "yarn build && yarn lint; yarn lint-test; ./node_modules/.bin/babel-istanbul cover ./node_modules/mocha/bin/_mocha -- --require babel-register \"test/integration/**/*.spec.js\"",
-    "swagger": "babel-node ./_scripts/generate_ts_from_swagger",
+    "swagger": "babel-node ./_scripts/generate_ts_from_swagger && yarn lint",
     "generate-api-cov": "babel-node ./_scripts/generate_api_cov_button"
   },
   "types": "./typings/index.d.ts",

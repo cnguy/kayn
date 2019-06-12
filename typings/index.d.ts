@@ -90,6 +90,17 @@ declare module 'kayn' {
             PositionalRankQueue: {
                 list: () => KaynRequest<string[]>
             }
+
+            Entries: {
+                bySummonerID: (
+                    encryptedSummonerID: string,
+                ) => KaynRequest<dtos.LeagueV4LeagueEntryDTO[]>
+                list: (
+                    queue: queueName,
+                    tier: string,
+                    division: string,
+                ) => KaynRequest<dtos.LeagueV4LeagueEntryDTO[]>
+            }
         }
 
         public Master: {

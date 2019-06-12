@@ -6,6 +6,7 @@
   "scripts": {},
   "devDependencies": {
     "kayn": "^0.9.0",
+    "tslint": "^5.17.0",
     "typescript": "^3.2.2"
   },
   "dependencies": {
