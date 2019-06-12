@@ -14,6 +14,8 @@ ChampionMastery.totalScore(summonerID: string)
 
 /* LEAGUE-V4 */
 Challenger.list(queueName: string)
+League.Entries.by.summonerID(summonerID: string)
+League.Entries.list(queue: string, tier: string, division: string)
 Grandmaster.list(queueName: string)
 League.by.uuid(leagueUUID: string)
 Master.list(queueName: string)
@@ -107,7 +109,9 @@ Everything should be in the same order as in the official docs.
 - [x] `Retrieve champion by ID.`
 
 ## LEAGUE-V4
-- [x] `Get a player's total champion mastery score, which is the sum of individual champion mastery levels.`
+- [x] `Get the challenger league for given queue.`
+- [x] `Get league entries in all queues for a given summoner ID.`
+- [x] `Get all the league entries.`
 - [x] `Get the grandmaster league of a specific queue.`
 - [x] `Get league with given ID, including inactive entries.`
 - [x] `Get the master league for given queue.`
@@ -117,7 +121,6 @@ Everything should be in the same order as in the official docs.
 
 ## LOL-STATUS-V3
 - [x] `Get League of Legends status for the given shard.`
-
 - [x] `Get matchlist for games played on given account ID and platform ID and filtered using given filter parameters, if any.`
 - [x] `Get match timeline by match ID.`
 - [x] `Get match IDs by tournament code.`

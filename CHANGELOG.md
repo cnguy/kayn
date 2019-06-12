@@ -1,3 +1,14 @@
+# 0.9.9
+
+Feats:
+* Add `/lol/league/v4/entries/by-summoner/{encryptedSummonerId}`
+* Add `/lol/league/v4/entries/{queue}/{tier}/{division}`
+* Add typings for above
+* Update DDragon endpoints to return `KaynDDragonRequest<any>`, which has basic typings
+
+Notes:
+* Did not remove other June 17th endpoints yet
+
 # 0.9.8
 
 Feats:
