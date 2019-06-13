@@ -1,5 +1,4 @@
 import * as dtos from './dtos'
-import DDragonRequest from '../lib/RequestClient/DDragonRequest'
 
 declare module 'kayn' {
     export function Kayn(key?: string): (config?: KaynConfig) => KaynClass

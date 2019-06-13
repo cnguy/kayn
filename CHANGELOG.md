@@ -1,3 +1,9 @@
+# 0.9.11
+
+Fixes:
+
+* Fix TS support by removing random DDragonRequest import in `index.d.ts` entry point
+
 # 0.9.10 (BREAKING)
 
 Removals:
@@ -8,6 +14,9 @@ Feats:
 
 * Upgrade package.json requirements for `dotenv`, `supports-color`, and `lru-cache`
 
+Notes:
+
+After releasing, I noticed that TS support is messed up because of a random JavaScript import, probably from my editor. This will be fixed in `v0.9.11`.
 
 # 0.9.9
 

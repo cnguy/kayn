@@ -17,7 +17,6 @@ kayn.Summoner.by.name('test').callback((p1, p2) => console.log('hey world'))
 console.log('Hello')
 kayn.Summoner.by.name('test').then(({ accountId }) => console.log(accountId))
 kayn.League.by.uuid('1a3cc7ff-9b40-3927-b646-8d777e97148a')
-kayn.SummonerV4.by.id('test')
 
 new LRUCache({
     max: 2,
