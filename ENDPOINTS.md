@@ -19,15 +19,15 @@ League.Entries.list(queue: string, tier: string, division: string)
 Grandmaster.list(queueName: string)
 League.by.uuid(leagueUUID: string)
 Master.list(queueName: string)
-League.PositionalRankQueue.list()
-LeaguePositions.by.summonerID(summonerID: string)
+League.PositionalRankQueue.list() // deprecated June 17th and in `v0.9.10`
+LeaguePositions.by.summonerID(summonerID: string) // deprecated June 17th and in `v0.9.10`
 LeaguePositions.list(
     positionalQueue: queueName | string,
     tier: tierName | string,
     division: divisionName | string,
     position: positionName | string,
     page: int,
-)
+) // deprecated June 17th and in 'v0.9.10`
 
 /* DDRAGON
     At its core, DDragonRequest uses `version()` and `locale()`.
@@ -115,9 +115,9 @@ Everything should be in the same order as in the official docs.
 - [x] `Get the grandmaster league of a specific queue.`
 - [x] `Get league with given ID, including inactive entries.`
 - [x] `Get the master league for given queue.`
-- [x] `Get the queues that have positional ranks enabled.`
-- [x] `Get league positions in all queues for a given summoner ID.`
-- [x] `Get all the positional league entries.`
+- [x] `Get the queues that have positional ranks enabled.` (deprecated June 17th and in `v0.9.10`)
+- [x] `Get league positions in all queues for a given summoner ID.` (deprecated June 17th and in `v0.9.10`)
+- [x] `Get all the positional league entries.` (deprecated June 17th and in `v0.9.10`)
 
 ## LOL-STATUS-V3
 - [x] `Get League of Legends status for the given shard.`

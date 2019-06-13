@@ -87,10 +87,6 @@ declare module 'kayn' {
                 ) => KaynRequest<dtos.LeagueV4LeagueListDTO>
             }
 
-            PositionalRankQueue: {
-                list: () => KaynRequest<string[]>
-            }
-
             Entries: {
                 bySummonerID: (
                     encryptedSummonerID: string,
@@ -113,14 +109,6 @@ declare module 'kayn' {
             list: (
                 queueName: queueName,
             ) => KaynRequest<dtos.LeagueV4LeagueListDTO>
-        }
-
-        public LeaguePositions: {
-            by: {
-                summonerID: (
-                    summonerID: string,
-                ) => KaynRequest<dtos.LeagueV4LeaguePositionDTO[]>
-            }
         }
 
         public Match: {

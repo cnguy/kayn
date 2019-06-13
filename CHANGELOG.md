@@ -1,3 +1,14 @@
+# 0.9.10 (BREAKING)
+
+Removals:
+
+* Deprecate position ranking-related endpoints as per Riot's [instructions](https://www.riotgames.com/en/DevRel/riot-api-update-190417). Stay on v0.9.9 if you need time
+
+Feats:
+
+* Upgrade package.json requirements for `dotenv`, `supports-color`, and `lru-cache`
+
+
 # 0.9.9
 
 Feats:
