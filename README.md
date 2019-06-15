@@ -29,7 +29,7 @@ kayn.Summoner.by
             /* Note that region falls back to default if unused. */
             .query({
                 season: 11,
-                champion: 67,
+                queue: [420, 440],
             })
             .then(function(matchlist) {
                 console.log('actual matches:', matchlist.matches)
@@ -151,6 +151,8 @@ const main = async (kayn) => {
 ## Rate Limiting
 
 Handled by [Colorfulstan](https://github.com/Colorfulstan)'s wonderful [riot-ratelimiter](https://github.com/Colorfulstan/RiotRateLimiter-node).
+
+See [RATELIMITING.md](https://github.com/cnguy/kayn/blob/master/RATELIMITING.md).
 
 ## All Endpoints Covered
 
@@ -290,12 +292,14 @@ kayn.Summoner.by.name('hide on bush')
 
 ### Query Parameters
 
+You can pass in strings, numbers, or arrays as values. Just pass in whatever Riot expects. :)
+
 ```javascript
 kayn.Matchlist.by.accountID(3440481)
     .region(REGIONS.KOREA)
     .query({
-        champion: 67,
         season: 9,
+        queue: [420, 440],
     })
     .callback(function(err, matchlist) {
         console.log(matchlist.matches.length)
