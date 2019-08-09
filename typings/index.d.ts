@@ -40,7 +40,9 @@ declare module 'kayn' {
 
         public DDragon: {
             Champion: {
-                get: (championName: string) => KaynDDragonRequest<dtos.DDragonChampionDTO>
+                get: (
+                    championName: string,
+                ) => KaynDDragonRequest<dtos.DDragonChampionDTO>
                 list: () => KaynDDragonRequest<dtos.DDragonChampionListDTO>
                 listFull: () => KaynDDragonRequest<dtos.DDragonChampionDTO>
                 getDataById: () => KaynDDragonRequest<dtos.DDragonChampionDTO>
@@ -66,7 +68,9 @@ declare module 'kayn' {
                 list: () => KaynDDragonRequest<dtos.DDragonProfileIconDTO>
             }
             Realm: {
-                list: (region: region) => KaynDDragonRequest<dtos.DDragonRealmsDTO>
+                list: (
+                    region: region,
+                ) => KaynDDragonRequest<dtos.DDragonRealmsDTO>
             }
             RunesReforged: {
                 list: () => KaynDDragonRequest<dtos.DDragonRunesReforgedDTO>
