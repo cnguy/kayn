@@ -40,42 +40,42 @@ declare module 'kayn' {
 
         public DDragon: {
             Champion: {
-                get: (championName: string) => KaynDDragonRequest<any>
-                list: () => KaynDDragonRequest<any>
-                listFull: () => KaynDDragonRequest<any>
-                getDataById: () => KaynDDragonRequest<any>
-                getDataByIdWithParentAsId: () => KaynDDragonRequest<any>
-                listDataById: () => KaynDDragonRequest<any>
-                listDataByIdWithParentAsId: () => KaynDDragonRequest<any>
-                listFullDataById: () => KaynDDragonRequest<any>
-                listFullDataByIdWithParentAsId: () => KaynDDragonRequest<any>
+                get: (championName: string) => KaynDDragonRequest<dtos.DDragonChampionDTO>
+                list: () => KaynDDragonRequest<dtos.DDragonChampionListDTO>
+                listFull: () => KaynDDragonRequest<dtos.DDragonChampionDTO>
+                getDataById: () => KaynDDragonRequest<dtos.DDragonChampionDTO>
+                getDataByIdWithParentAsId: () => KaynDDragonRequest<dtos.DDragonChampionDTO>
+                listDataById: () => KaynDDragonRequest<dtos.DDragonChampionListDTO>
+                listDataByIdWithParentAsId: () => KaynDDragonRequest<dtos.DDragonChampionListDTO>
+                listFullDataById: () => KaynDDragonRequest<dtos.DDragonChampionDTO>
+                listFullDataByIdWithParentAsId: () => KaynDDragonRequest<dtos.DDragonChampionDTO>
             }
             Item: {
-                list: () => KaynDDragonRequest<any>
+                list: () => KaynDDragonRequest<dtos.DDragonItemWrapperDTO>
             }
             Language: {
-                list: () => KaynDDragonRequest<any>
+                list: () => KaynDDragonRequest<string[]>
             }
             LanguageString: {
-                list: () => KaynDDragonRequest<any>
+                list: () => KaynDDragonRequest<dtos.DDragonLanguageStringDTO>
             }
             Map: {
-                list: () => KaynDDragonRequest<any>
+                list: () => KaynDDragonRequest<dtos.DDragonMapDTO>
             }
             ProfileIcon: {
-                list: () => KaynDDragonRequest<any>
+                list: () => KaynDDragonRequest<dtos.DDragonProfileIconDTO>
             }
             Realm: {
-                list: (region: region) => KaynDDragonRequest<any>
+                list: (region: region) => KaynDDragonRequest<dtos.DDragonRealmsDTO>
             }
             RunesReforged: {
-                list: () => KaynDDragonRequest<any>
+                list: () => KaynDDragonRequest<dtos.DDragonRunesReforgedDTO>
             }
             SummonerSpell: {
-                list: () => KaynDDragonRequest<any>
+                list: () => KaynDDragonRequest<dtos.DDragonSummonerSpellDataDTO>
             }
             Version: {
-                list: () => KaynDDragonRequest<any>
+                list: () => KaynDDragonRequest<string[]>
             }
         }
 
@@ -111,17 +111,17 @@ declare module 'kayn' {
         }
 
         public Match: {
-            get: (matchID: number) => KaynRequest<dtos.MatchV4MatchDto>
+            get: (matchID: number) => KaynRequest<dtos.MatchV4MatchDTO>
             timeline: (
                 matchID: number,
-            ) => KaynRequest<dtos.MatchV4MatchTimelineDto>
+            ) => KaynRequest<dtos.MatchV4MatchTimelineDTO>
 
             Tournament: {
                 listMatchIDs: (tournamentCode: string) => KaynRequest<number[]>
                 get: (
                     matchID: number,
                     tournamentCode: string,
-                ) => KaynRequest<dtos.MatchV4MatchDto>
+                ) => KaynRequest<dtos.MatchV4MatchDTO>
             }
         }
 
@@ -129,13 +129,13 @@ declare module 'kayn' {
             by: {
                 accountID: (
                     accountID: string,
-                ) => KaynRequest<dtos.MatchV4MatchlistDto>
+                ) => KaynRequest<dtos.MatchV4MatchlistDTO>
             }
             Recent: {
                 by: {
                     accountID: (
                         accountID: string,
-                    ) => KaynRequest<dtos.MatchV4MatchlistDto>
+                    ) => KaynRequest<dtos.MatchV4MatchlistDTO>
                 }
             }
         }
