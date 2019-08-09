@@ -1231,10 +1231,10 @@ interface DDragonWrapper {
     version: string
 }
 interface DDragonDataWrapper<T> extends DDragonWrapper {
-    data: {[key:string]: T}
+    data: { [key: string]: T }
 }
 export interface DDragonImageDTO {
-    id?: number; // Only really used for the ProfileIcon. Should we create an entire interface just for that or leave it here as an optional?
+    id?: number // Only really used for the ProfileIcon. Should we create an entire interface just for that or leave it here as an optional?
     full: string
     sprite: string
     group: string
@@ -1271,7 +1271,8 @@ export interface DDragonChampionStatsDTO {
     attackspeedperlevel: number
     attackspeed: number
 }
-export interface DDragonChampionListDTO extends DDragonDataWrapper<DDragonChampionListDataDTO>{ }
+export interface DDragonChampionListDTO
+    extends DDragonDataWrapper<DDragonChampionListDataDTO> {}
 export interface DDragonChampionListDataDTO {
     version: string
     id: string
@@ -1285,7 +1286,8 @@ export interface DDragonChampionListDataDTO {
     partype: string
     stats: DDragonChampionStatsDTO
 }
-export interface DDragonChampionDTO extends DDragonDataWrapper<DDragonChampionDataDTO> { }
+export interface DDragonChampionDTO
+    extends DDragonDataWrapper<DDragonChampionDataDTO> {}
 interface DDragonSpellWrapper {
     id: string
     name: string
@@ -1375,7 +1377,8 @@ export interface DDragonChampionDataDTO {
         }[]
     }[]
 }
-export interface DDragonItemWrapperDTO extends DDragonDataWrapper<DDragonItemDTO> {
+export interface DDragonItemWrapperDTO
+    extends DDragonDataWrapper<DDragonItemDTO> {
     basic: DDragonItemDTO
     groups: {
         id: string
@@ -1483,23 +1486,23 @@ export interface DDragonItemDTO {
         PercentSpellVampMod?: number
     }
     tags: string[]
-    maps: {[key:string]: boolean}
-    effect?: {[key:string]: string}
+    maps: { [key: string]: boolean }
+    effect?: { [key: string]: string }
 }
 export interface DDragonLanguageStringDTO extends DDragonDataWrapper<string> {
     tree: {
         searchKeyIgnore: string
         searchKeyRemap: string
     }
-
 }
-export interface DDragonMapDTO extends DDragonDataWrapper<DDragonMapDataDTO> { }
+export interface DDragonMapDTO extends DDragonDataWrapper<DDragonMapDataDTO> {}
 export interface DDragonMapDataDTO {
     MapName: string
     MapId: string
     image: DDragonImageDTO
 }
-export interface DDragonProfileIconDTO extends DDragonDataWrapper<DDragonImageDTO> { }
+export interface DDragonProfileIconDTO
+    extends DDragonDataWrapper<DDragonImageDTO> {}
 export interface DDragonRealmsDTO {
     n: {
         item: string
@@ -1521,7 +1524,8 @@ export interface DDragonRealmsDTO {
     profileiconmax: number
     store: null // This is just null on every server I checked. Always exists, but always null.
 }
-export interface DDragonSummonerSpellDTO extends DDragonDataWrapper<DDragonSummonerSpellDataDTO> { }
+export interface DDragonSummonerSpellDTO
+    extends DDragonDataWrapper<DDragonSummonerSpellDataDTO> {}
 export interface DDragonSummonerSpellDataDTO extends DDragonSpellWrapper {
     costBurn: string
     key: string
