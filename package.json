@@ -3,6 +3,7 @@
   "version": "0.9.11",
   "main": "index.js",
   "scripts": {
+    "postinstall": "npm run build",
     "example": "yarn lint-example; yarn build && babel ./example.js -o ./example.babel.js && node example.babel.js",
     "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
     "lint-src": "prettier --no-semi --single-quote --list-different --trailing-comma all --tab-width 4 --write \"./lib/**/*.js\"",
