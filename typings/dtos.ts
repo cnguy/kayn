@@ -1205,9 +1205,6 @@ export interface TournamentV4TournamentRegistrationParameters {
     name?: string
 }
 export interface DDragonRunesReforgedDTO {
-    runeStyles: DDragonRunesReforgedRuneStyleDTO[]
-}
-export interface DDragonRunesReforgedRuneStyleDTO {
     id: number
     key: string
     icon: string
