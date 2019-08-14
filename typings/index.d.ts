@@ -73,7 +73,7 @@ declare module 'kayn' {
                 ) => KaynDDragonRequest<dtos.DDragonRealmsDTO>
             }
             RunesReforged: {
-                list: () => KaynDDragonRequest<dtos.DDragonRunesReforgedDTO>
+                list: () => KaynDDragonRequest<dtos.DDragonRunesReforgedDTO[]>
             }
             SummonerSpell: {
                 list: () => KaynDDragonRequest<dtos.DDragonSummonerSpellDTO>
