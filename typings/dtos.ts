@@ -108,14 +108,7 @@ export interface LeagueV4LeaguePositionDTO {
     /**
      * (Legal values:  APEX,  TOP,  JUNGLE,  MIDDLE,  BOTTOM,  UTILITY,  NONE)
      */
-    position?:
-        | 'APEX'
-        | 'TOP'
-        | 'JUNGLE'
-        | 'MIDDLE'
-        | 'BOTTOM'
-        | 'UTILITY'
-        | 'NONE'
+    position?: 'APEX' | 'TOP' | 'JUNGLE' | 'MIDDLE' | 'BOTTOM' | 'UTILITY' | 'NONE'
     tier?: string
     /**
      * Player's summonerId (Encrypted)
@@ -332,15 +325,7 @@ export interface MatchV4ParticipantDTO {
      * Highest ranked tier achieved for the previous season in a specific subset of queueIds, if any, otherwise null. Used to display border in game loading screen. Please refer to the Ranked Info documentation.
      *              (Legal values:  CHALLENGER,  MASTER,  DIAMOND,  PLATINUM,  GOLD,  SILVER,  BRONZE,  UNRANKED)
      */
-    highestAchievedSeasonTier?:
-        | 'CHALLENGER'
-        | 'MASTER'
-        | 'DIAMOND'
-        | 'PLATINUM'
-        | 'GOLD'
-        | 'SILVER'
-        | 'BRONZE'
-        | 'UNRANKED'
+    highestAchievedSeasonTier?: 'CHALLENGER' | 'MASTER' | 'DIAMOND' | 'PLATINUM' | 'GOLD' | 'SILVER' | 'BRONZE' | 'UNRANKED'
     /**
      * First Summoner Spell id.
      */
@@ -819,15 +804,7 @@ export interface SpectatorV4FeaturedGameInfo {
      * The game mode
      *              (Legal values:  CLASSIC,  ODIN,  ARAM,  TUTORIAL,  ONEFORALL,  ASCENSION,  FIRSTBLOOD,  KINGPORO)
      */
-    gameMode?:
-        | 'CLASSIC'
-        | 'ODIN'
-        | 'ARAM'
-        | 'TUTORIAL'
-        | 'ONEFORALL'
-        | 'ASCENSION'
-        | 'FIRSTBLOOD'
-        | 'KINGPORO'
+    gameMode?: 'CLASSIC' | 'ODIN' | 'ARAM' | 'TUTORIAL' | 'ONEFORALL' | 'ASCENSION' | 'FIRSTBLOOD' | 'KINGPORO'
     /**
      * The ID of the map
      */
@@ -987,18 +964,7 @@ export interface TournamentStubV4ProviderRegistrationParameters {
      * The region in which the provider will be running tournaments.
      *              (Legal values:  BR,  EUNE,  EUW,  JP,  LAN,  LAS,  NA,  OCE,  PBE,  RU,  TR)
      */
-    region:
-        | 'BR'
-        | 'EUNE'
-        | 'EUW'
-        | 'JP'
-        | 'LAN'
-        | 'LAS'
-        | 'NA'
-        | 'OCE'
-        | 'PBE'
-        | 'RU'
-        | 'TR'
+    region: 'BR' | 'EUNE' | 'EUW' | 'JP' | 'LAN' | 'LAS' | 'NA' | 'OCE' | 'PBE' | 'RU' | 'TR'
 }
 export interface TournamentStubV4TournamentCodeParameters {
     /**
@@ -1065,18 +1031,7 @@ export interface TournamentV4ProviderRegistrationParameters {
      * The region in which the provider will be running tournaments.
      *              (Legal values:  BR,  EUNE,  EUW,  JP,  LAN,  LAS,  NA,  OCE,  PBE,  RU,  TR)
      */
-    region:
-        | 'BR'
-        | 'EUNE'
-        | 'EUW'
-        | 'JP'
-        | 'LAN'
-        | 'LAS'
-        | 'NA'
-        | 'OCE'
-        | 'PBE'
-        | 'RU'
-        | 'TR'
+    region: 'BR' | 'EUNE' | 'EUW' | 'JP' | 'LAN' | 'LAS' | 'NA' | 'OCE' | 'PBE' | 'RU' | 'TR'
 }
 export interface TournamentV4TournamentCodeDTO {
     /**
@@ -1095,18 +1050,7 @@ export interface TournamentV4TournamentCodeDTO {
      * The tournament code's region.
      *              (Legal values:  BR,  EUNE,  EUW,  JP,  LAN,  LAS,  NA,  OCE,  PBE,  RU,  TR)
      */
-    region?:
-        | 'BR'
-        | 'EUNE'
-        | 'EUW'
-        | 'JP'
-        | 'LAN'
-        | 'LAS'
-        | 'NA'
-        | 'OCE'
-        | 'PBE'
-        | 'RU'
-        | 'TR'
+    region?: 'BR' | 'EUNE' | 'EUW' | 'JP' | 'LAN' | 'LAS' | 'NA' | 'OCE' | 'PBE' | 'RU' | 'TR'
     /**
      * The provider's ID.
      */

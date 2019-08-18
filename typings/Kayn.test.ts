@@ -48,11 +48,7 @@ const main = async () => {
         console.log('do something')
     }
 
-    const leagueEntries2 = await kayn.League.Entries.list(
-        'RANKED_SOLO_5x5',
-        'DIAMOND',
-        'I',
-    )
+    const leagueEntries2 = await kayn.League.Entries.list('RANKED_SOLO_5x5', 'DIAMOND', 'I')
 
     const ddragonChampion = await kayn.DDragon.Champion.get('test')
 }

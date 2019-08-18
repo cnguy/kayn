@@ -59,7 +59,10 @@ describe('TournamentStubEndpointV4', function() {
                 query: [],
                 region: '',
                 isTournament: true,
-                body: { providerId: 379, name: 'My First Tournament (Stub)' },
+                body: {
+                    providerId: 379,
+                    name: 'My First Tournament (Stub)',
+                },
                 version: 4,
             })
         })

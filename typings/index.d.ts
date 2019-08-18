@@ -8,14 +8,8 @@ declare module 'kayn' {
         flushCache(cb?: callback<'OK'>): Promise<'OK'>
 
         public ChampionMastery: {
-            get: (
-                summonerID: string,
-            ) => (
-                championID: number,
-            ) => KaynRequest<dtos.ChampionMasteryV4ChampionMasteryDTO>
-            list: (
-                summonerID: number,
-            ) => KaynRequest<dtos.ChampionMasteryV4ChampionMasteryDTO[]>
+            get: (summonerID: string) => (championID: number) => KaynRequest<dtos.ChampionMasteryV4ChampionMasteryDTO>
+            list: (summonerID: number) => KaynRequest<dtos.ChampionMasteryV4ChampionMasteryDTO[]>
             totalScore: (summonerID: number) => KaynRequest<number>
         }
 
@@ -26,84 +20,50 @@ declare module 'kayn' {
         }
 
         public Challenger: {
-            list: (
-                queueName: queueName,
-            ) => KaynRequest<dtos.LeagueV4LeagueListDTO>
+            list: (queueName: queueName) => KaynRequest<dtos.LeagueV4LeagueListDTO>
         }
 
         public CurrentGame: {
             by: {
-                summonerID: (
-                    summonerID: string,
-                ) => KaynRequest<dtos.SpectatorV4CurrentGameInfo>
+                summonerID: (summonerID: string) => KaynRequest<dtos.SpectatorV4CurrentGameInfo>
             }
         }
 
         public DDragon: {
             Champion: {
-                get: (
-                    championName: string,
-                ) => KaynDDragonRequest<ddragonDtos.DDragonChampionDTO>
-                list: () => KaynDDragonRequest<
-                    ddragonDtos.DDragonChampionListDTO
-                >
-                listFull: () => KaynDDragonRequest<
-                    ddragonDtos.DDragonChampionDTO
-                >
-                getDataById: () => KaynDDragonRequest<
-                    ddragonDtos.DDragonChampionDTO
-                >
-                getDataByIdWithParentAsId: () => KaynDDragonRequest<
-                    ddragonDtos.DDragonChampionDTO
-                >
-                listDataById: () => KaynDDragonRequest<
-                    ddragonDtos.DDragonChampionListDTO
-                >
-                listDataByIdWithParentAsId: () => KaynDDragonRequest<
-                    ddragonDtos.DDragonChampionListDTO
-                >
-                listFullDataById: () => KaynDDragonRequest<
-                    ddragonDtos.DDragonChampionDTO
-                >
-                listFullDataByIdWithParentAsId: () => KaynDDragonRequest<
-                    ddragonDtos.DDragonChampionDTO
-                >
+                get: (championName: string) => KaynDDragonRequest<ddragonDtos.DDragonChampionDTO>
+                list: () => KaynDDragonRequest<ddragonDtos.DDragonChampionListDTO>
+                listFull: () => KaynDDragonRequest<ddragonDtos.DDragonChampionDTO>
+                getDataById: () => KaynDDragonRequest<ddragonDtos.DDragonChampionDTO>
+                getDataByIdWithParentAsId: () => KaynDDragonRequest<ddragonDtos.DDragonChampionDTO>
+                listDataById: () => KaynDDragonRequest<ddragonDtos.DDragonChampionListDTO>
+                listDataByIdWithParentAsId: () => KaynDDragonRequest<ddragonDtos.DDragonChampionListDTO>
+                listFullDataById: () => KaynDDragonRequest<ddragonDtos.DDragonChampionDTO>
+                listFullDataByIdWithParentAsId: () => KaynDDragonRequest<ddragonDtos.DDragonChampionDTO>
             }
             Item: {
-                list: () => KaynDDragonRequest<
-                    ddragonDtos.DDragonItemWrapperDTO
-                >
+                list: () => KaynDDragonRequest<ddragonDtos.DDragonItemWrapperDTO>
             }
             Language: {
                 list: () => KaynDDragonRequest<string[]>
             }
             LanguageString: {
-                list: () => KaynDDragonRequest<
-                    ddragonDtos.DDragonLanguageStringDTO
-                >
+                list: () => KaynDDragonRequest<ddragonDtos.DDragonLanguageStringDTO>
             }
             Map: {
                 list: () => KaynDDragonRequest<ddragonDtos.DDragonMapDTO>
             }
             ProfileIcon: {
-                list: () => KaynDDragonRequest<
-                    ddragonDtos.DDragonProfileIconDTO
-                >
+                list: () => KaynDDragonRequest<ddragonDtos.DDragonProfileIconDTO>
             }
             Realm: {
-                list: (
-                    region: region,
-                ) => KaynDDragonRequest<ddragonDtos.DDragonRealmsDTO>
+                list: (region: region) => KaynDDragonRequest<ddragonDtos.DDragonRealmsDTO>
             }
             RunesReforged: {
-                list: () => KaynDDragonRequest<
-                    ddragonDtos.DDragonRunesReforgedDTO[]
-                >
+                list: () => KaynDDragonRequest<ddragonDtos.DDragonRunesReforgedDTO[]>
             }
             SummonerSpell: {
-                list: () => KaynDDragonRequest<
-                    ddragonDtos.DDragonSummonerSpellDTO
-                >
+                list: () => KaynDDragonRequest<ddragonDtos.DDragonSummonerSpellDTO>
             }
             Version: {
                 list: () => KaynDDragonRequest<string[]>
@@ -112,61 +72,40 @@ declare module 'kayn' {
 
         public League: {
             by: {
-                uuid: (
-                    leagueUUID: string,
-                ) => KaynRequest<dtos.LeagueV4LeagueListDTO>
+                uuid: (leagueUUID: string) => KaynRequest<dtos.LeagueV4LeagueListDTO>
             }
 
             Entries: {
-                bySummonerID: (
-                    encryptedSummonerID: string,
-                ) => KaynRequest<dtos.LeagueV4LeagueEntryDTO[]>
-                list: (
-                    queue: queueName,
-                    tier: string,
-                    division: string,
-                ) => KaynRequest<dtos.LeagueV4LeagueEntryDTO[]>
+                bySummonerID: (encryptedSummonerID: string) => KaynRequest<dtos.LeagueV4LeagueEntryDTO[]>
+                list: (queue: queueName, tier: string, division: string) => KaynRequest<dtos.LeagueV4LeagueEntryDTO[]>
             }
         }
 
         public Master: {
-            list: (
-                queueName: queueName,
-            ) => KaynRequest<dtos.LeagueV4LeagueListDTO>
+            list: (queueName: queueName) => KaynRequest<dtos.LeagueV4LeagueListDTO>
         }
 
         public Grandmaster: {
-            list: (
-                queueName: queueName,
-            ) => KaynRequest<dtos.LeagueV4LeagueListDTO>
+            list: (queueName: queueName) => KaynRequest<dtos.LeagueV4LeagueListDTO>
         }
 
         public Match: {
             get: (matchID: number) => KaynRequest<dtos.MatchV4MatchDTO>
-            timeline: (
-                matchID: number,
-            ) => KaynRequest<dtos.MatchV4MatchTimelineDTO>
+            timeline: (matchID: number) => KaynRequest<dtos.MatchV4MatchTimelineDTO>
 
             Tournament: {
                 listMatchIDs: (tournamentCode: string) => KaynRequest<number[]>
-                get: (
-                    matchID: number,
-                    tournamentCode: string,
-                ) => KaynRequest<dtos.MatchV4MatchDTO>
+                get: (matchID: number, tournamentCode: string) => KaynRequest<dtos.MatchV4MatchDTO>
             }
         }
 
         public Matchlist: {
             by: {
-                accountID: (
-                    accountID: string,
-                ) => KaynRequest<dtos.MatchV4MatchlistDTO>
+                accountID: (accountID: string) => KaynRequest<dtos.MatchV4MatchlistDTO>
             }
             Recent: {
                 by: {
-                    accountID: (
-                        accountID: string,
-                    ) => KaynRequest<dtos.MatchV4MatchlistDTO>
+                    accountID: (accountID: string) => KaynRequest<dtos.MatchV4MatchlistDTO>
                 }
             }
         }
@@ -179,9 +118,7 @@ declare module 'kayn' {
             by: {
                 name: (name: string) => KaynRequest<dtos.SummonerV4SummonerDTO>
                 id: (id: string) => KaynRequest<dtos.SummonerV4SummonerDTO>
-                accountID: (
-                    accountID: string,
-                ) => KaynRequest<dtos.SummonerV4SummonerDTO>
+                accountID: (accountID: string) => KaynRequest<dtos.SummonerV4SummonerDTO>
             }
         }
 
@@ -192,39 +129,18 @@ declare module 'kayn' {
         }
 
         public TournamentStub: {
-            create: (
-                tournamentID: number,
-                body?: dtos.TournamentStubV4TournamentCodeParameters,
-            ) => KaynRequest<string[]>
-            lobbyEvents: (
-                tournamentCode: string,
-            ) => KaynRequest<dtos.TournamentStubV4LobbyEventDTOWrapper>
-            registerProviderData: (
-                region: string,
-                callbackURL: string,
-            ) => KaynRequest<number>
+            create: (tournamentID: number, body?: dtos.TournamentStubV4TournamentCodeParameters) => KaynRequest<string[]>
+            lobbyEvents: (tournamentCode: string) => KaynRequest<dtos.TournamentStubV4LobbyEventDTOWrapper>
+            registerProviderData: (region: string, callbackURL: string) => KaynRequest<number>
             register: (providerID: number, name?: string) => KaynRequest<number>
         }
 
         public Tournament: {
-            create: (
-                tournamentID: number,
-                body?: dtos.TournamentV4TournamentCodeParameters,
-            ) => KaynRequest<string[]>
-            update: (
-                tournamentCode: string,
-                body: dtos.TournamentV4TournamentCodeUpdateParameters,
-            ) => KaynRequest<void>
-            get: (
-                tournamentCode: string,
-            ) => KaynRequest<dtos.TournamentV4TournamentCodeDTO>
-            lobbyEvents: (
-                tournamentCode: string,
-            ) => KaynRequest<dtos.TournamentV4LobbyEventDTOWrapper>
-            registerProviderData: (
-                region: string,
-                callbackURL: string,
-            ) => KaynRequest<number>
+            create: (tournamentID: number, body?: dtos.TournamentV4TournamentCodeParameters) => KaynRequest<string[]>
+            update: (tournamentCode: string, body: dtos.TournamentV4TournamentCodeUpdateParameters) => KaynRequest<void>
+            get: (tournamentCode: string) => KaynRequest<dtos.TournamentV4TournamentCodeDTO>
+            lobbyEvents: (tournamentCode: string) => KaynRequest<dtos.TournamentV4LobbyEventDTOWrapper>
+            registerProviderData: (region: string, callbackURL: string) => KaynRequest<number>
             register: (providerID: number, name?: string) => KaynRequest<number>
         }
     }
@@ -239,10 +155,7 @@ type KaynError = {
 declare class KaynRequest<T> {
     region(region: region): KaynRequest<T>
     query(query: Object): KaynRequest<T>
-    then(
-        resolve: (data: T) => void,
-        reject?: (err: KaynError) => void,
-    ): KaynRequest<T>
+    then(resolve: (data: T) => void, reject?: (err: KaynError) => void): KaynRequest<T>
     catch(callback: (err: KaynError) => void): void
     callback(callback: callback<T>): void
 }
@@ -280,10 +193,7 @@ declare class KaynDDragonRequest<T> {
     version(version: string): KaynDDragonRequest<T>
     locale(locale: locale): KaynDDragonRequest<T>
     region(region: region): KaynDDragonRequest<T>
-    then(
-        resolve: (data: T) => void,
-        reject?: (err: KaynError) => void,
-    ): KaynDDragonRequest<T>
+    then(resolve: (data: T) => void, reject?: (err: KaynError) => void): KaynDDragonRequest<T>
     catch(callback: (err: KaynError) => void): void
     callback(callback: callback<T>): void
 }
@@ -325,20 +235,11 @@ declare class BasicJSCache {
 }
 
 declare class LRUCache {
-    constructor(opts?: {
-        max?: number
-        length?: (value: any, key: any) => number
-        dispose?: (key: any, value: any) => void
-    })
+    constructor(opts?: { max?: number; length?: (value: any, key: any) => number; dispose?: (key: any, value: any) => void })
 }
 
 declare class RedisCache {
-    constructor(opts?: {
-        host?: string
-        port?: number
-        keyPrefix?: string
-        password?: string
-    })
+    constructor(opts?: { host?: string; port?: number; keyPrefix?: string; password?: string })
 }
 
 declare enum REGIONS {
@@ -357,18 +258,14 @@ declare enum REGIONS {
 
 export namespace METHOD_NAMES {
     namespace CHAMPION_MASTERY {
-        const GET_ALL_CHAMPION_MASTERIES =
-            'CHAMPION_MASTERY.GET_ALL_CHAMPION_MASTERIES'
+        const GET_ALL_CHAMPION_MASTERIES = 'CHAMPION_MASTERY.GET_ALL_CHAMPION_MASTERIES'
         const GET_CHAMPION_MASTERY = 'CHAMPION_MASTERY.GET_CHAMPION_MASTERY'
         const GET_CHAMPION_MASTERY_SCORE = 'GET_CHAMPION_MASTERY_SCORE'
 
         // V4
-        const GET_ALL_CHAMPION_MASTERIES_V4 =
-            'CHAMPION_MASTERY.GET_ALL_CHAMPION_MASTERIES_V4'
-        const GET_CHAMPION_MASTERY_V4 =
-            'CHAMPION_MASTERY.GET_CHAMPION_MASTERY_V4'
-        const GET_CHAMPION_MASTERY_SCORE_V4 =
-            'CHAMPION_MASTERY.GET_CHAMPION_MASTERY_SCORE_V4'
+        const GET_ALL_CHAMPION_MASTERIES_V4 = 'CHAMPION_MASTERY.GET_ALL_CHAMPION_MASTERIES_V4'
+        const GET_CHAMPION_MASTERY_V4 = 'CHAMPION_MASTERY.GET_CHAMPION_MASTERY_V4'
+        const GET_CHAMPION_MASTERY_SCORE_V4 = 'CHAMPION_MASTERY.GET_CHAMPION_MASTERY_SCORE_V4'
     }
 
     namespace CHAMPION {
@@ -378,20 +275,17 @@ export namespace METHOD_NAMES {
 
     namespace LEAGUE {
         const GET_CHALLENGER_LEAGUE = 'LEAGUE.GET_CHALLENGER_LEAGUE'
-        const GET_ALL_LEAGUES_FOR_SUMMONER =
-            'LEAGUE.GET_ALL_LEAGUES_FOR_SUMMONER'
+        const GET_ALL_LEAGUES_FOR_SUMMONER = 'LEAGUE.GET_ALL_LEAGUES_FOR_SUMMONER'
         const GET_LEAGUE_BY_ID = 'LEAGUE.GET_BY_ID'
         const GET_MASTER_LEAGUE = 'LEAGUE.GET_MASTER_LEAGUE'
-        const GET_ALL_LEAGUE_POSITIONS_FOR_SUMMONER =
-            'LEAGUE.GET_ALL_LEAGUE_POSITIONS_FOR_SUMMONER'
+        const GET_ALL_LEAGUE_POSITIONS_FOR_SUMMONER = 'LEAGUE.GET_ALL_LEAGUE_POSITIONS_FOR_SUMMONER'
 
         // V4
         const GET_CHALLENGER_LEAGUE_V4 = 'LEAGUE.GET_CHALLENGER_LEAGUE_V4'
         const GET_GRANDMASTER_LEAGUE_V4 = 'LEAGUE.GET_GRANDMASTER_LEAGUE_V4'
         const GET_LEAGUE_BY_ID_V4 = 'LEAGUE.GET_BY_ID_V4'
         const GET_MASTER_LEAGUE_V4 = 'LEAGUE.GET_MASTER_LEAGUE_V4'
-        const GET_ALL_LEAGUE_POSITIONS_FOR_SUMMONER_V4 =
-            'LEAGUE.GET_ALL_LEAGUE_POSITIONS_FOR_SUMMONER_V4'
+        const GET_ALL_LEAGUE_POSITIONS_FOR_SUMMONER_V4 = 'LEAGUE.GET_ALL_LEAGUE_POSITIONS_FOR_SUMMONER_V4'
     }
 
     namespace LOL_STATUS {
@@ -403,27 +297,22 @@ export namespace METHOD_NAMES {
         const GET_MATCHLIST = 'MATCH.GET_MATCHLIST'
         const GET_RECENT_MATCHLIST = 'MATCH.GET_MATCHLIST'
         const GET_MATCH_TIMELINE = 'MATCH.GET_MATCH_TIMELINE'
-        const GET_MATCH_BY_TOURNAMENT_CODE =
-            'MATCH.GET_MATCH_BY_TOURNAMENT_CODE'
+        const GET_MATCH_BY_TOURNAMENT_CODE = 'MATCH.GET_MATCH_BY_TOURNAMENT_CODE'
 
         // V4
         const GET_MATCH_V4 = 'MATCH.GET_MATCH_V4'
         const GET_MATCHLIST_V4 = 'MATCH.GET_MATCHLIST_V4'
         const GET_MATCH_TIMELINE_V4 = 'MATCH.GET_MATCH_TIMELINE_V4'
-        const GET_MATCH_IDS_BY_TOURNAMENT_CODE_V4 =
-            'MATCH.GET_MATCH_IDS_BY_TOURNAMENT_CODE_V4'
-        const GET_MATCH_BY_TOURNAMENT_CODE_V4 =
-            'MATCH.GET_MATCH_BY_TOURNAMENT_CODE_V4'
+        const GET_MATCH_IDS_BY_TOURNAMENT_CODE_V4 = 'MATCH.GET_MATCH_IDS_BY_TOURNAMENT_CODE_V4'
+        const GET_MATCH_BY_TOURNAMENT_CODE_V4 = 'MATCH.GET_MATCH_BY_TOURNAMENT_CODE_V4'
     }
 
     namespace SPECTATOR {
-        const GET_CURRENT_GAME_INFO_BY_SUMMONER =
-            'SPECTATOR.GET_CURRENT_GAME_INFO_BY_SUMMONER'
+        const GET_CURRENT_GAME_INFO_BY_SUMMONER = 'SPECTATOR.GET_CURRENT_GAME_INFO_BY_SUMMONER'
         const GET_FEATURED_GAMES = 'SPECTATOR.GET_FEATURED_GAMES'
 
         // V4
-        const GET_CURRENT_GAME_INFO_BY_SUMMONER_V4 =
-            'SPECTATOR.GET_CURRENT_GAME_INFO_BY_SUMMONER_V4'
+        const GET_CURRENT_GAME_INFO_BY_SUMMONER_V4 = 'SPECTATOR.GET_CURRENT_GAME_INFO_BY_SUMMONER_V4'
         const GET_FEATURED_GAMES_V4 = 'SPECTATOR.GET_FEATURED_GAMES_V4'
     }
 
@@ -450,17 +339,13 @@ export namespace METHOD_NAMES {
         const CREATE_TOURNAMENT_CODE = 'TOURNAMENT_STUB.CREATE_TOURNAMENT_CODE'
         const REGISTER_TOURNAMENT = 'TOURNAMENT.STUB.REGISTER_TOURNAMENT'
         const REGISTER_PROVIDER_DATA = 'TOURNAMENT_STUB.REGISTER_PROVIDER_DATA'
-        const GET_LOBBY_EVENTS_BY_CODE =
-            'TOURNAMENT_STUB.GET_LOBBY_EVENTS_BY_CODE'
+        const GET_LOBBY_EVENTS_BY_CODE = 'TOURNAMENT_STUB.GET_LOBBY_EVENTS_BY_CODE'
 
         // V4
-        const CREATE_TOURNAMENT_CODE_V4 =
-            'TOURNAMENT_STUB.CREATE_TOURNAMENT_CODE_V4'
+        const CREATE_TOURNAMENT_CODE_V4 = 'TOURNAMENT_STUB.CREATE_TOURNAMENT_CODE_V4'
         const REGISTER_TOURNAMENT_V4 = 'TOURNAMENT.STUB.REGISTER_TOURNAMENT_V4'
-        const REGISTER_PROVIDER_DATA_V4 =
-            'TOURNAMENT_STUB.REGISTER_PROVIDER_DATA_V4'
-        const GET_LOBBY_EVENTS_BY_CODE_V4 =
-            'TOURNAMENT_STUB.GET_LOBBY_EVENTS_BY_CODE_V4'
+        const REGISTER_PROVIDER_DATA_V4 = 'TOURNAMENT_STUB.REGISTER_PROVIDER_DATA_V4'
+        const GET_LOBBY_EVENTS_BY_CODE_V4 = 'TOURNAMENT_STUB.GET_LOBBY_EVENTS_BY_CODE_V4'
     }
 
     namespace TOURNAMENT {
@@ -475,8 +360,7 @@ export namespace METHOD_NAMES {
         const CREATE_TOURNAMENT_CODE_V4 = 'TOURNAMENT.CREATE_TOURNAMENT_CODE_V4'
         const UPDATE_TOURNAMENT_V4 = 'TOURNAMENT.UPDATE_TOURNAMENT_V4'
         const GET_TOURNAMENT_CODE_V4 = 'TOURNAMENT.GET_TOURNAMENT_CODE_V4'
-        const GET_LOBBY_EVENTS_BY_CODE_V4 =
-            'TOURNAMENT.GET_LOBBY_EVENTS_BY_CODE_V4'
+        const GET_LOBBY_EVENTS_BY_CODE_V4 = 'TOURNAMENT.GET_LOBBY_EVENTS_BY_CODE_V4'
         const REGISTER_PROVIDER_DATA_V4 = 'TOURNAMENT.REGISTER_PROVIDER_DATA_V4'
         const REGISTER_TOURNAMENT_V4 = 'TOURNAMENT.REGISTER_TOURNAMENT_V4'
     }
