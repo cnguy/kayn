@@ -1,3 +1,8 @@
+# 0.10.0 (breaking for TypeScript users)
+
+* (BREAKING) TypeScript: Rename all types named 'SomeObjectDto' -> 'SomeObjectDTO' to be consistent
+* TypeScript: Add new DDragon typings
+
 # 0.9.11
 
 Fixes:
