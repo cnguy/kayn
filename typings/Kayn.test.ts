@@ -53,6 +53,8 @@ const main = async () => {
         'DIAMOND',
         'I',
     )
+
+    const ddragonChampion = await kayn.DDragon.Champion.get('test')
 }
 
 kayn.flushCache(function(err, data) {})

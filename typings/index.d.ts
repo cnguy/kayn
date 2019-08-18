@@ -1,4 +1,5 @@
 import * as dtos from './dtos'
+import * as ddragonDtos from './ddragon-dtos'
 
 declare module 'kayn' {
     export function Kayn(key?: string): (config?: KaynConfig) => KaynClass
@@ -42,41 +43,67 @@ declare module 'kayn' {
             Champion: {
                 get: (
                     championName: string,
-                ) => KaynDDragonRequest<dtos.DDragonChampionDTO>
-                list: () => KaynDDragonRequest<dtos.DDragonChampionListDTO>
-                listFull: () => KaynDDragonRequest<dtos.DDragonChampionDTO>
-                getDataById: () => KaynDDragonRequest<dtos.DDragonChampionDTO>
-                getDataByIdWithParentAsId: () => KaynDDragonRequest<dtos.DDragonChampionDTO>
-                listDataById: () => KaynDDragonRequest<dtos.DDragonChampionListDTO>
-                listDataByIdWithParentAsId: () => KaynDDragonRequest<dtos.DDragonChampionListDTO>
-                listFullDataById: () => KaynDDragonRequest<dtos.DDragonChampionDTO>
-                listFullDataByIdWithParentAsId: () => KaynDDragonRequest<dtos.DDragonChampionDTO>
+                ) => KaynDDragonRequest<ddragonDtos.DDragonChampionDTO>
+                list: () => KaynDDragonRequest<
+                    ddragonDtos.DDragonChampionListDTO
+                >
+                listFull: () => KaynDDragonRequest<
+                    ddragonDtos.DDragonChampionDTO
+                >
+                getDataById: () => KaynDDragonRequest<
+                    ddragonDtos.DDragonChampionDTO
+                >
+                getDataByIdWithParentAsId: () => KaynDDragonRequest<
+                    ddragonDtos.DDragonChampionDTO
+                >
+                listDataById: () => KaynDDragonRequest<
+                    ddragonDtos.DDragonChampionListDTO
+                >
+                listDataByIdWithParentAsId: () => KaynDDragonRequest<
+                    ddragonDtos.DDragonChampionListDTO
+                >
+                listFullDataById: () => KaynDDragonRequest<
+                    ddragonDtos.DDragonChampionDTO
+                >
+                listFullDataByIdWithParentAsId: () => KaynDDragonRequest<
+                    ddragonDtos.DDragonChampionDTO
+                >
             }
             Item: {
-                list: () => KaynDDragonRequest<dtos.DDragonItemWrapperDTO>
+                list: () => KaynDDragonRequest<
+                    ddragonDtos.DDragonItemWrapperDTO
+                >
             }
             Language: {
                 list: () => KaynDDragonRequest<string[]>
             }
             LanguageString: {
-                list: () => KaynDDragonRequest<dtos.DDragonLanguageStringDTO>
+                list: () => KaynDDragonRequest<
+                    ddragonDtos.DDragonLanguageStringDTO
+                >
             }
             Map: {
-                list: () => KaynDDragonRequest<dtos.DDragonMapDTO>
+                list: () => KaynDDragonRequest<ddragonDtos.DDragonMapDTO>
             }
             ProfileIcon: {
-                list: () => KaynDDragonRequest<dtos.DDragonProfileIconDTO>
+                list: () => KaynDDragonRequest<
+                    ddragonDtos.DDragonProfileIconDTO
+                >
             }
             Realm: {
                 list: (
                     region: region,
-                ) => KaynDDragonRequest<dtos.DDragonRealmsDTO>
+                ) => KaynDDragonRequest<ddragonDtos.DDragonRealmsDTO>
             }
             RunesReforged: {
-                list: () => KaynDDragonRequest<dtos.DDragonRunesReforgedDTO[]>
+                list: () => KaynDDragonRequest<
+                    ddragonDtos.DDragonRunesReforgedDTO[]
+                >
             }
             SummonerSpell: {
-                list: () => KaynDDragonRequest<dtos.DDragonSummonerSpellDTO>
+                list: () => KaynDDragonRequest<
+                    ddragonDtos.DDragonSummonerSpellDTO
+                >
             }
             Version: {
                 list: () => KaynDDragonRequest<string[]>
