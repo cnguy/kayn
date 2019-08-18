@@ -50,13 +50,50 @@ export interface Error {
         message?: string
     }
 }
+export interface LeagueExpV4LeagueEntryDTO {
+    queueType?: string
+    summonerName?: string
+    hotStreak?: boolean
+    miniSeries?: LeagueExpV4MiniSeriesDTO
+    /**
+     * Winning team on Summoners Rift. First placement in Teamfight Tactics.
+     */
+    wins?: number // int32
+    veteran?: boolean
+    /**
+     * Losing team on Summoners Rift. Second through eighth placement in Teamfight Tactics.
+     */
+    losses?: number // int32
+    rank?: string
+    leagueId?: string
+    inactive?: boolean
+    freshBlood?: boolean
+    tier?: string
+    /**
+     * Player's summonerId (Encrypted)
+     */
+    summonerId?: string
+    leaguePoints?: number // int32
+}
+export interface LeagueExpV4MiniSeriesDTO {
+    progress?: string
+    losses?: number // int32
+    target?: number // int32
+    wins?: number // int32
+}
 export interface LeagueV4LeagueEntryDTO {
     queueType?: string
     summonerName?: string
     hotStreak?: boolean
     miniSeries?: LeagueV4MiniSeriesDTO
+    /**
+     * Winning team on Summoners Rift. First placement in Teamfight Tactics.
+     */
     wins?: number // int32
     veteran?: boolean
+    /**
+     * Losing team on Summoners Rift. Second through eighth placement in Teamfight Tactics.
+     */
     losses?: number // int32
     rank?: string
     leagueId?: string
@@ -73,8 +110,14 @@ export interface LeagueV4LeagueItemDTO {
     summonerName?: string
     hotStreak?: boolean
     miniSeries?: LeagueV4MiniSeriesDTO
+    /**
+     * Winning team on Summoners Rift. First placement in Teamfight Tactics.
+     */
     wins?: number // int32
     veteran?: boolean
+    /**
+     * Losing team on Summoners Rift. Second through eighth placement in Teamfight Tactics.
+     */
     losses?: number // int32
     freshBlood?: boolean
     inactive?: boolean
@@ -91,30 +134,6 @@ export interface LeagueV4LeagueListDTO {
     entries?: LeagueV4LeagueItemDTO[]
     queue?: string
     name?: string
-}
-export interface LeagueV4LeaguePositionDTO {
-    queueType?: string
-    summonerName?: string
-    hotStreak?: boolean
-    miniSeries?: LeagueV4MiniSeriesDTO
-    wins?: number // int32
-    veteran?: boolean
-    losses?: number // int32
-    rank?: string
-    leagueId?: string
-    inactive?: boolean
-    freshBlood?: boolean
-    leagueName?: string
-    /**
-     * (Legal values:  APEX,  TOP,  JUNGLE,  MIDDLE,  BOTTOM,  UTILITY,  NONE)
-     */
-    position?: 'APEX' | 'TOP' | 'JUNGLE' | 'MIDDLE' | 'BOTTOM' | 'UTILITY' | 'NONE'
-    tier?: string
-    /**
-     * Player's summonerId (Encrypted)
-     */
-    summonerId?: string
-    leaguePoints?: number // int32
 }
 export interface LeagueV4MiniSeriesDTO {
     progress?: string
