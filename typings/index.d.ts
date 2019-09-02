@@ -206,6 +206,7 @@ type methodName = string
 type endpoint = string
 interface KaynConfig {
     region?: region
+    apiURLPrefix?: string
     debugOptions?: {
         isEnabled?: boolean
         showKey?: boolean
