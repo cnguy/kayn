@@ -1,3 +1,7 @@
+# 0.10.1
+
+* Add `apiURLPrefix` to config, which allows developers to set a URL for testing or update the URL when necessary (if lib hasn't been updated)
+
 # 0.10.0 (breaking for TypeScript users)
 
 * (BREAKING) TypeScript: Rename all types named 'SomeObjectDto' -> 'SomeObjectDTO' to be consistent

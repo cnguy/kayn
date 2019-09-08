@@ -531,6 +531,10 @@ Default: 'na'
 
 Default: 'en_US'
 
+### apiURLPrefix
+
+Default: '`https://%s.api.riotgames.com`'
+
 ## Request Options
 
 ### numberOfRetriesBeforeAbort
@@ -557,7 +561,7 @@ Disabled by default in favor of `spread`.
 
 Default: false.
 
-This optoin will force the process to quit if your API key is blacklisted or invalid.
+This option will force the process to quit if your API key is blacklisted or invalid.
 
 ## Cache Options
 
