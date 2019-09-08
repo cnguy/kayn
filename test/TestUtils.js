@@ -13,8 +13,12 @@ const kayn = Kayn()({
     },
 })
 
+// Kayn normally initializes some default config. However, for tests, we hav eto explicit because
+// there is no `kayn` object to initialize stuffs, and so we'll end up with a bunch of undefineds if we don't pass
+// in what we want to test. :P
 const defaultConfig = {
     region: 'na',
+    apiURLPrefix: 'https://%s.api.riotgames.com',
     debugOptions: {
         isEnabled: true,
         showKey: false,

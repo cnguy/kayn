@@ -26,6 +26,7 @@ describe('ChampionEndpoint', function() {
                 region: '',
                 isTournament: false,
                 version: 3,
+                apiURLPrefix: 'https://%s.api.riotgames.com',
             })
         })
     })

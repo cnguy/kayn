@@ -25,6 +25,7 @@ describe('MasterEndpointV4', function() {
                 region: '',
                 isTournament: false,
                 version: 4,
+                apiURLPrefix: 'https://%s.api.riotgames.com',
             })
         })
     })

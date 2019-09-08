@@ -25,6 +25,7 @@ describe('LeagueEntriesEndpointV4', function() {
                 region: '',
                 isTournament: false,
                 version: 4,
+                apiURLPrefix: 'https://%s.api.riotgames.com',
             })
         })
 
@@ -53,6 +54,7 @@ describe('LeagueEntriesEndpointV4', function() {
                 region: 'kr',
                 isTournament: false,
                 version: 4,
+                apiURLPrefix: 'https://%s.api.riotgames.com',
             })
         })
 

@@ -28,6 +28,7 @@ describe('TournamentStubEndpointV4', function() {
                 isTournament: true,
                 body: { hello: 'world' },
                 version: 4,
+                apiURLPrefix: 'https://%s.api.riotgames.com',
             })
         })
     })
@@ -44,6 +45,7 @@ describe('TournamentStubEndpointV4', function() {
                 isTournament: true,
                 body: { providerId: 379 },
                 version: 4,
+                apiURLPrefix: 'https://%s.api.riotgames.com',
             })
         })
 
@@ -64,6 +66,7 @@ describe('TournamentStubEndpointV4', function() {
                     name: 'My First Tournament (Stub)',
                 },
                 version: 4,
+                apiURLPrefix: 'https://%s.api.riotgames.com',
             })
         })
     })
@@ -86,6 +89,7 @@ describe('TournamentStubEndpointV4', function() {
                     url: 'https://github.com/kayn',
                 },
                 version: 4,
+                apiURLPrefix: 'https://%s.api.riotgames.com',
             })
         })
     })
@@ -101,6 +105,7 @@ describe('TournamentStubEndpointV4', function() {
                 region: '',
                 isTournament: true,
                 version: 4,
+                apiURLPrefix: 'https://%s.api.riotgames.com',
             })
         })
     })

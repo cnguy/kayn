@@ -23,6 +23,7 @@ describe('Request', function() {
             region: '',
             isTournament: false,
             version: 3,
+            apiURLPrefix: 'https://%s.api.riotgames.com',
         })
     })
 
@@ -50,6 +51,7 @@ describe('Request', function() {
             body: { hello: 'world' },
             isTournament: true,
             version: 3,
+            apiURLPrefix: 'https://%s.api.riotgames.com',
         })
     })
 
@@ -77,6 +79,7 @@ describe('Request', function() {
             body: { hello: 'world' },
             isTournament: true,
             version: 3,
+            apiURLPrefix: 'https://%s.api.riotgames.com',
         })
     })
 
