@@ -41,4 +41,44 @@ describe('URLHelper', function() {
             expect(actual).to.equal('?name=T%C3%A9st&rank=%C3%B3h%20no')
         })
     })
+
+    describe('createRequestURL', function() {
+        it('should create a request URL', function() {
+            const url = URLHelper.createRequestURL(
+                'na1',
+                'tournament',
+                'endpoint',
+                '1',
+            )
+            expect(actual).to.equal(
+                'https://na1.api.riotgames.com/lol/tournament/v4/endpoint',
+            )
+        })
+
+        it('should create a request URL with a custom API URL prefix', function() {
+            const url = URLHelper.createRequestURL(
+                'na1',
+                'tournament',
+                'endpoint',
+                '1',
+                'http://%s.localhost',
+            )
+            expect(actual).to.equal(
+                'http://na1.localhost/lol/tournament/v4/endpoint',
+            )
+        })
+
+        it('should create a request URL with a custom API URL prefix with no platform ID', function() {
+            const url = URLHelper.createRequestURL(
+                'na1',
+                'tournament',
+                'endpoint',
+                '1',
+                'http://localhost',
+            )
+            expect(actual).to.equal(
+                'http://localhost/lol/tournament/v4/endpoint',
+            )
+        })
+    })
 })

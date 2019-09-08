@@ -198,6 +198,7 @@ yarn add kayn
 const { Kayn, REGIONS } = require('kayn')
 const kayn = Kayn('RGAPI-my-api-key')(/*{
     region: REGIONS.NORTH_AMERICA,
+    apiURLPrefix: 'https://%s.api.riotgames.com',
     locale: 'en_US',
     debugOptions: {
         isEnabled: true,

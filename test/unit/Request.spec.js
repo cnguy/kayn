@@ -80,6 +80,35 @@ describe('Request', function() {
         })
     })
 
+    it('should initialize correctly #4', function() {
+        const request = new Request(
+            defaultConfig,
+            'summoner',
+            'by-name/chaullenger',
+            'abc',
+            'PUT',
+            null,
+            { hello: 'world' },
+            true,
+            3,
+            'http://localhost',
+        )
+        const { config, methodName, payload } = request
+        expect(config).to.deep.equal(defaultConfig)
+        expect(methodName).to.deep.equal('abc')
+        expect(payload).to.deep.equal({
+            method: 'PUT',
+            serviceName: 'summoner',
+            endpoint: 'by-name/chaullenger',
+            query: [],
+            region: '',
+            body: { hello: 'world' },
+            isTournament: true,
+            version: 3,
+            apiURLPrefix: 'http://localhost',
+        })
+    })
+
     it('should add query parameters correctly', function() {
         const request = new Request(
             defaultConfig,
