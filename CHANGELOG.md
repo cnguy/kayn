@@ -1,4 +1,10 @@
-# 0.10.1
+# 0.10.2 (NPM PACKAGE FIXED)
+
+* Released 0.10.1 features
+
+# 0.10.1 (BROKEN)
+
+broken as shown here: https://github.com/cnguy/kayn/issues/79
 
 * Add `apiURLPrefix` to config, which allows developers to set a URL for testing or update the URL when necessary (if lib hasn't been updated)
 
