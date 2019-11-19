@@ -119,6 +119,7 @@ declare module 'kayn' {
                 name: (name: string) => KaynRequest<dtos.SummonerV4SummonerDTO>
                 id: (id: string) => KaynRequest<dtos.SummonerV4SummonerDTO>
                 accountID: (accountID: string) => KaynRequest<dtos.SummonerV4SummonerDTO>
+                puuid: (puuid: string) => KaynRequest<dtos.SummonerV4SummonerDTO>
             }
         }
 
