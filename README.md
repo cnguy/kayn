@@ -817,7 +817,7 @@ Note: You don't have to worry about editor configuration as long as you follow t
 * Run `yarn test` to make sure test is failing
 * Write implementation and run `yarn test` on completion
 * You can manually test requests in `example.js` using your own API key
-    * Preferrable just to use a .env file with kayn's default key (RIOT_API_KEY)
+    * Preferrable just to use a .env file with kayn's default key (RIOT_LOL_API_KEY)
     * Run `yarn example` and verify behavior manually
 * Remove `describe.only` from your tests and run the entire test suite
 * When tests pass and manual testing went well, run `yarn lint`
