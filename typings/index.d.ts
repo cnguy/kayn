@@ -9,8 +9,8 @@ declare module 'kayn' {
 
         public ChampionMastery: {
             get: (summonerID: string) => (championID: number) => KaynRequest<dtos.ChampionMasteryV4ChampionMasteryDTO>
-            list: (summonerID: number) => KaynRequest<dtos.ChampionMasteryV4ChampionMasteryDTO[]>
-            totalScore: (summonerID: number) => KaynRequest<number>
+            list: (summonerID: string) => KaynRequest<dtos.ChampionMasteryV4ChampionMasteryDTO[]>
+            totalScore: (summonerID: string) => KaynRequest<number>
         }
 
         public Champion: {
