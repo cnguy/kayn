@@ -48,7 +48,7 @@
     "lodash.assign": "^4.2.0",
     "lodash.merge": "^4.6.0",
     "lru-cache": "^5.1.1",
-    "redis": "^2.8.0",
+    "redis": "^3.1.1",
     "request": "^2.83.0",
     "riot-ratelimiter-temp": "0.0.5",
     "superstruct": "^0.6.0",
