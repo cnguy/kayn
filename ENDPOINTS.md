@@ -61,12 +61,17 @@ DDragon.Version.list()
 Status.get()
 
 /* MATCH-V4 */
-Match.get(matchID: int)
+MatchV4.get(matchID: int)
 Matchlist.by.accountID(accountID: string)
 Matchlist.Recent.by.accountID(accountID: string) /* April 27th deprecation by Riot, but will still work via the above endpoint */
+MatchV4.timeline(matchID: int)
+MatchV4.Tournament.listMatchIDs(tournamentCode: string)
+MatchV4.Tournament.get(matchID: int, tournamentCode: string)
+
+/* MATCH-V5 */
+Match.get(matchID: int)
+Match.by.puuid(puuid: string)
 Match.timeline(matchID: int)
-Match.Tournament.listMatchIDs(tournamentCode: string)
-Match.Tournament.get(matchID: int, tournamentCode: string)
 
 /* SPECTATOR-V4 */
 CurrentGame.by.summonerID(summonerID: string)
